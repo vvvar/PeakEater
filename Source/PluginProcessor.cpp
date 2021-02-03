@@ -19,9 +19,40 @@ MultiShaperAudioProcessor::MultiShaperAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
 #endif
+    waveShaper(new waveshaping::OversampledWaveShaper<float>()),
+    waveShaperController(waveShaper)
 {
+    addParameter (inputGain = new juce::AudioParameterFloat("inputgain",
+                                                        "Input Gain",
+                                                        juce::NormalisableRange<float>(-12.0f, 12.0f, 0.1f),
+                                                        0.0f)
+                  );
+    addParameter (outputGain = new juce::AudioParameterFloat("outputgain",
+                                                        "Output Gain",
+                                                        juce::NormalisableRange<float>(-12.0f, 12.0f, 0.1f),
+                                                        0.0f)
+                  );
+    addParameter (linkInOut = new juce::AudioParameterBool("linkinout",
+                                                        "Link input & output gain",
+                                                        false)
+                  );
+    addParameter (ceiling = new juce::AudioParameterFloat("ceiling",
+                                                        "Ceiling",
+                                                        juce::NormalisableRange<float>(-40.0f, -0.1f, 0.1f),
+                                                        -0.1f)
+                  );
+    addParameter (clippingType = new juce::AudioParameterChoice("clippingtype",
+                                                        "Clipping Type",
+                                                        juce::StringArray{ "Logarythmic", "Hard", "Quintic", "Cubic Basic", "Hyperbolic Tan", "Algebraic", "Arctangent", "Sin", "Limit" },
+                                                        0)
+                  );
+    addParameter (oversampleRate = new juce::AudioParameterChoice("oversamplerate",
+                                                        "Oversampling Rate",
+                                                        juce::StringArray{ "x2", "x4", "x8", "x16" },
+                                                        0)
+                  );
 }
 
 MultiShaperAudioProcessor::~MultiShaperAudioProcessor()
@@ -93,8 +124,7 @@ void MultiShaperAudioProcessor::changeProgramName (int index, const juce::String
 //==============================================================================
 void MultiShaperAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    waveShaper->prepare({ sampleRate, static_cast<juce::uint32>(samplesPerBlock), 2 });
 }
 
 void MultiShaperAudioProcessor::releaseResources()
@@ -132,30 +162,23 @@ bool MultiShaperAudioProcessor::isBusesLayoutSupported (const BusesLayout& layou
 void MultiShaperAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
+    
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
-
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
+        buffer.clear (i, 0, buffer.getNumSamples());
     }
+    
+    waveShaperController.handleParametersChange({
+        *linkInOut,
+        *inputGain,
+        *outputGain,
+        *ceiling,
+        clippingType->getIndex(),
+        oversampleRate->getIndex()
+    });
+    waveShaper->process(buffer);
 }
 
 //==============================================================================

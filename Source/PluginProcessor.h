@@ -9,6 +9,8 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "WaveShaping/OversampledWaveShaper.h"
+#include "WaveShaperController.h"
 
 //==============================================================================
 /**
@@ -54,6 +56,18 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    //==============================================================================
+    juce::AudioParameterFloat* inputGain;
+    juce::AudioParameterFloat* outputGain;
+    juce::AudioParameterBool* linkInOut;
+    juce::AudioParameterFloat* ceiling;
+    juce::AudioParameterChoice* clippingType;
+    juce::AudioParameterChoice* oversampleRate;
+    
+    //==============================================================================
+    std::shared_ptr<waveshaping::OversampledWaveShaper<float>> waveShaper;
+    controller::WaveShaperController<float> waveShaperController;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MultiShaperAudioProcessor)
 };
