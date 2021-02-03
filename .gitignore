@@ -1,0 +1,9 @@
+# MacOS indexing files
+/.DS_Store
+/Source/.DS_Store
+
+# Build dir
+/Builds
+
+# Projucer auto-gen files
+/JuceLibraryCode
