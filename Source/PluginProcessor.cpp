@@ -9,6 +9,47 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
+{
+    using NormalisableRange = juce::NormalisableRange<float>;
+    return
+    {
+        std::make_unique<juce::AudioParameterFloat> (Parameters::InputGain.Id,
+                                                    Parameters::InputGain.Label,
+                                                    NormalisableRange (-24.0f, 24.0f, 0.1f),
+                                                    0.0f),
+        std::make_unique<juce::AudioParameterFloat> (Parameters::OutputGain.Id,
+                                                    Parameters::OutputGain.Label,
+                                                    NormalisableRange (-24.0f, 24.0f, 0.1f),
+                                                    0.0f),
+        std::make_unique<juce::AudioParameterBool> (Parameters::LinkInOut.Id,
+                                                   Parameters::LinkInOut.Label,
+                                                   false),
+        std::make_unique<juce::AudioParameterFloat> (Parameters::Ceiling.Id,
+                                                    Parameters::Ceiling.Label,
+                                                    NormalisableRange (-36.0f, -0.1f, 0.1f),
+                                                    -0.1f),
+        std::make_unique<juce::AudioParameterChoice> (Parameters::ClippingType.Id,
+                                                     Parameters::ClippingType.Label,
+                                                     juce::StringArray {
+                                                        "Logarythmic",
+                                                        "Hard",
+                                                        "Quintic",
+                                                        "Cubic Basic",
+                                                        "Hyperbolic Tan",
+                                                        "Algebraic",
+                                                        "Arctangent",
+                                                        "Sin",
+                                                        "Limit"
+                                                    },
+                                                     0),
+        std::make_unique<juce::AudioParameterChoice> (Parameters::OversampleRate.Id,
+                                                     Parameters::OversampleRate.Label,
+                                                     juce::StringArray { "x2", "x4", "x8", "x16" },
+                                                     0)
+    };
+}
+
 //==============================================================================
 MultiShaperAudioProcessor::MultiShaperAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -21,39 +62,16 @@ MultiShaperAudioProcessor::MultiShaperAudioProcessor()
                      #endif
                        ),
 #endif
-    waveShaper(new waveshaping::OversampledWaveShaper<float>()),
-    waveShaperController(waveShaper)
-{
-    addParameter (inputGain = new juce::AudioParameterFloat("inputgain",
-                                                        "Input Gain",
-                                                        juce::NormalisableRange<float>(-12.0f, 12.0f, 0.1f),
-                                                        0.0f)
-                  );
-    addParameter (outputGain = new juce::AudioParameterFloat("outputgain",
-                                                        "Output Gain",
-                                                        juce::NormalisableRange<float>(-12.0f, 12.0f, 0.1f),
-                                                        0.0f)
-                  );
-    addParameter (linkInOut = new juce::AudioParameterBool("linkinout",
-                                                        "Link input & output gain",
-                                                        false)
-                  );
-    addParameter (ceiling = new juce::AudioParameterFloat("ceiling",
-                                                        "Ceiling",
-                                                        juce::NormalisableRange<float>(-40.0f, -0.1f, 0.1f),
-                                                        -0.1f)
-                  );
-    addParameter (clippingType = new juce::AudioParameterChoice("clippingtype",
-                                                        "Clipping Type",
-                                                        juce::StringArray{ "Logarythmic", "Hard", "Quintic", "Cubic Basic", "Hyperbolic Tan", "Algebraic", "Arctangent", "Sin", "Limit" },
-                                                        0)
-                  );
-    addParameter (oversampleRate = new juce::AudioParameterChoice("oversamplerate",
-                                                        "Oversampling Rate",
-                                                        juce::StringArray{ "x2", "x4", "x8", "x16" },
-                                                        0)
-                  );
-}
+    parameters (*this, nullptr, juce::Identifier (JucePlugin_Name), createParameterLayout()),
+    inputGain (static_cast<juce::AudioParameterFloat*> (parameters.getParameter (Parameters::InputGain.Id))),
+    outputGain (static_cast<juce::AudioParameterFloat*> (parameters.getParameter (Parameters::OutputGain.Id))),
+    linkInOut (static_cast<juce::AudioParameterBool*> (parameters.getParameter (Parameters::LinkInOut.Id))),
+    ceiling (static_cast<juce::AudioParameterFloat*> (parameters.getParameter (Parameters::Ceiling.Id))),
+    clippingType (static_cast<juce::AudioParameterChoice*> (parameters.getParameter (Parameters::ClippingType.Id))),
+    oversampleRate (static_cast<juce::AudioParameterChoice*> (parameters.getParameter (Parameters::OversampleRate.Id))),
+    waveShaper (new waveshaping::OversampledWaveShaper<float>()),
+    waveShaperController (waveShaper)
+{}
 
 MultiShaperAudioProcessor::~MultiShaperAudioProcessor()
 {
@@ -125,12 +143,21 @@ void MultiShaperAudioProcessor::changeProgramName (int index, const juce::String
 void MultiShaperAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     waveShaper->prepare({ sampleRate, static_cast<juce::uint32>(samplesPerBlock), 2 });
+    waveShaperController.setup({
+        *linkInOut,
+        *inputGain,
+        *outputGain,
+        *ceiling,
+        *clippingType,
+        *oversampleRate
+    });
 }
 
 void MultiShaperAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    waveShaper->reset();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -170,15 +197,15 @@ void MultiShaperAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         buffer.clear (i, 0, buffer.getNumSamples());
     }
     
-    waveShaperController.handleParametersChange({
+    waveShaperController.handleParametersChange ({
         *linkInOut,
         *inputGain,
         *outputGain,
         *ceiling,
-        clippingType->getIndex(),
-        oversampleRate->getIndex()
+        *clippingType,
+        *oversampleRate
     });
-    waveShaper->process(buffer);
+    waveShaper->process (buffer);
 }
 
 //==============================================================================
@@ -189,7 +216,7 @@ bool MultiShaperAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* MultiShaperAudioProcessor::createEditor()
 {
-    return new MultiShaperAudioProcessorEditor (*this);
+    return new MultiShaperAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
@@ -198,12 +225,24 @@ void MultiShaperAudioProcessor::getStateInformation (juce::MemoryBlock& destData
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    auto state = parameters.copyState();
+    std::unique_ptr<juce::XmlElement> xml (state.createXml());
+    copyXmlToBinary (*xml, destData);
 }
 
 void MultiShaperAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+     
+    if (xmlState.get() != nullptr)
+    {
+        if (xmlState->hasTagName (parameters.state.getType()))
+        {
+            parameters.replaceState (juce::ValueTree::fromXml (*xmlState));
+        }
+    }
 }
 
 //==============================================================================

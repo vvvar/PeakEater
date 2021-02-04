@@ -19,79 +19,79 @@ namespace waveshaping
 using JMath = juce::dsp::FastMathApproximations;
 
 template<typename T>
-T logiclip(T s) noexcept
+T logiclip (T x) noexcept
 {
-    return 2.0f / (1.0f + JMath::exp(-2.0f * s)) - 1.0f;
+    return 2.0f / (1.0f + JMath::exp (-2.0f * x)) - 1.0f;
 }
 
 template<typename T>
-T hardclip(T s) noexcept
+T hardclip (T x) noexcept
 {
-    return sgn(s) * std::fminf(std::fabsf(s), 1.0f);
+    return sgn (x) * std::fminf (std::fabsf(x), 1.0f);
 }
 
 template<typename T>
-T tanclip(T s) noexcept
+T tanclip (T x) noexcept
 {
     float soft = 0.0f;
-    return JMath::tanh((1.0f - 0.5f * soft) * s);
+    return JMath::tanh ((1.0f - 0.5f * soft) * x);
 }
 
 template<typename T>
-T quintic(T s) noexcept
+T quintic (T x) noexcept
 {
-    if (std::fabsf(s) < 1.25f)
+    if (std::fabsf (x) < 1.25f)
     {
-        return s - (256.0f / 3125.0f) * std::powf(s, 5.0f);
+        return x - (256.0f / 3125.0f) * std::powf (x, 5.0f);
     } else
     {
-        return sgn(s) * 1.0f;
+        return sgn (x) * 1.0f;
     }
 }
 
 template<typename T>
-T cubicBasic(T s) noexcept
+T cubicBasic (T x) noexcept
 {
-    if (std::fabsf(s) < 1.5f)
+    if (std::fabsf (x) < 1.5f)
     {
-        return s - (4.0f / 27.0f) * std::powf(s, 3.0f);
+        return x - (4.0f / 27.0f) * std::powf (x, 3.0f);
     } else
     {
-        return sgn(s) * 1.0f;
+        return sgn (x) * 1.0f;
     }
 }
 
 template<typename T>
-T algclip(T s) noexcept
+T algclip (T x) noexcept
 {
     float soft = 0.0f;
-    return s / std::sqrtf((1.0f + 2.0f * soft + std::powf(s, 2.0f)));
+    return x / std::sqrtf ((1.0f + 2.0f * soft + std::powf (x, 2.0f)));
 }
 
 template<typename T>
-T arcClip(T s) noexcept
+T arcClip (T x) noexcept
 {
     float soft = 0.0f;
-    return (2.0f / juce::MathConstants<T>::pi) * std::atanf((1.6f - soft * 0.6f) * s);
+    return (2.0f / juce::MathConstants<T>::pi) * std::atanf ((1.6f - soft * 0.6f) * x);
 }
 
 template<typename T>
-T sinclip(T s) noexcept
+T sinclip (T x) noexcept
 {
-    if (std::fabsf(s) < M_PI)
+    if (std::fabsf (x) < M_PI)
     {
-        return JMath::sin(s);
+        return JMath::sin (x);
     }
     else
     {
-        return sgn(s) * 1.0f;
+        return sgn (x) * 1.0f;
     }
 }
 
 template<typename T>
-T limitclip(T x) noexcept
+T limitclip (T x) noexcept
 {
-    return juce::jlimit(-0.1f, 0.1f, x);
+    return juce::jlimit (-0.1f, 0.1f, x);
 }
 
 }

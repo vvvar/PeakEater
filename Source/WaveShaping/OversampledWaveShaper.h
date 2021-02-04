@@ -38,11 +38,11 @@ public:
     
     //==============================================================================
     OversampledWaveShaper() noexcept :
-        clipper2x(1),
-        clipper4x(2),
-        clipper8x(3),
-        clipper16x(4),
-        clipper(&clipper2x)
+        clipper2x (1),
+        clipper4x (2),
+        clipper8x (3),
+        clipper16x (4),
+        clipper (&clipper2x)
     {}
     
     ~OversampledWaveShaper()
@@ -57,10 +57,10 @@ public:
         setInputGain (DEFAULT_INPUT_GAIN);
         
         /** Setup clipper */
-        clipper2x.prepare(spec);
-        clipper4x.prepare(spec);
-        clipper8x.prepare(spec);
-        clipper16x.prepare(spec);
+        clipper2x.prepare (spec);
+        clipper4x.prepare (spec);
+        clipper8x.prepare (spec);
+        clipper16x.prepare (spec);
         
         /** Setup output gain */
         outputGain.prepare (spec);
@@ -86,36 +86,36 @@ public:
     
     void process (AudioBuffer& buffer) noexcept
     {
-        auto ioBlock = AudioBlock(buffer);
-        process(ProcessContextReplacing(ioBlock));
+        auto ioBlock = AudioBlock (buffer);
+        process (ProcessContextReplacing (ioBlock));
     }
     
     // ==============================================================================
     /** Public interface */
     void setInputGain (float gainDbValue) noexcept
     {
-        inputGain.setGainDecibels(gainDbValue);
+        inputGain.setGainDecibels (gainDbValue);
     }
     
     void setOutputGain (float gainDbValue) noexcept
     {
-        outputGain.setGainDecibels(gainDbValue);
+        outputGain.setGainDecibels (gainDbValue);
     }
     
     void setCeiling (float ceilingDbValue) noexcept
     {
-        clipper2x.setCeiling(ceilingDbValue);
-        clipper4x.setCeiling(ceilingDbValue);
-        clipper8x.setCeiling(ceilingDbValue);
-        clipper16x.setCeiling(ceilingDbValue);
+        clipper2x.setCeiling (ceilingDbValue);
+        clipper4x.setCeiling (ceilingDbValue);
+        clipper8x.setCeiling (ceilingDbValue);
+        clipper16x.setCeiling (ceilingDbValue);
     }
     
     void setClippingType (ClippingType clippingType) noexcept
     {
-        clipper2x.setClippingType(clippingType);
-        clipper4x.setClippingType(clippingType);
-        clipper8x.setClippingType(clippingType);
-        clipper16x.setClippingType(clippingType);
+        clipper2x.setClippingType (clippingType);
+        clipper4x.setClippingType (clippingType);
+        clipper8x.setClippingType (clippingType);
+        clipper16x.setClippingType (clippingType);
     }
     
     void setOversamplingRate (OversamplingRate oversamplingRate) noexcept

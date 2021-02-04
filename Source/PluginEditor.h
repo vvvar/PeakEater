@@ -17,7 +17,7 @@
 class MultiShaperAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    MultiShaperAudioProcessorEditor (MultiShaperAudioProcessor&);
+    MultiShaperAudioProcessorEditor (MultiShaperAudioProcessor&, juce::AudioProcessorValueTreeState&);
     ~MultiShaperAudioProcessorEditor() override;
 
     //==============================================================================
@@ -25,9 +25,39 @@ public:
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    //==============================================================================
+    using SliderAttachment   = juce::AudioProcessorValueTreeState::SliderAttachment;
+    using ButtonAttachment   = juce::AudioProcessorValueTreeState::ButtonAttachment;
+    using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
+
+    //==============================================================================
     MultiShaperAudioProcessor& audioProcessor;
+    juce::AudioProcessorValueTreeState& valueTreeState;
+    
+    //==============================================================================
+    juce::Label  inputGainLabel;
+    juce::Slider inputGainSlider;
+    std::unique_ptr<SliderAttachment> inputGainAttachment;
+    
+    juce::Label  outputGainLabel;
+    juce::Slider outputGainSlider;
+    std::unique_ptr<SliderAttachment> outputGainAttachment;
+    
+    juce::Label        linkInOutLabel;
+    juce::ToggleButton linkInOutToggle;
+    std::unique_ptr<ButtonAttachment> linkInOutAttachment;
+    
+    juce::Label  ceilingLabel;
+    juce::Slider ceilingSlider;
+    std::unique_ptr<SliderAttachment> ceilingAttachment;
+    
+    juce::Label  clippingTypeLabel;
+    juce::Slider clippingTypeSlider;
+    std::unique_ptr<SliderAttachment> clippingTypeAttachment;
+    
+    juce::Label  oversampleRateLabel;
+    juce::Slider oversampleRateSlider;
+    std::unique_ptr<SliderAttachment> oversampleRateAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MultiShaperAudioProcessorEditor)
 };

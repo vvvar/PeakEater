@@ -27,8 +27,8 @@ public:
     using ProcessorSpec = juce::dsp::ProcessSpec;
     
     //==============================================================================
-    OversampledClipper(const unsigned int factor = 1) noexcept :
-        oversampler(2, factor, Oversampling::filterHalfBandFIREquiripple, false)
+    OversampledClipper (const unsigned int factor = 1) noexcept :
+        oversampler (2, factor, Oversampling::filterHalfBandFIREquiripple, false)
     {}
     
     ~OversampledClipper()
@@ -40,26 +40,26 @@ public:
     {
         /** Setup oversampler */
         oversampler.reset();
-        oversampler.initProcessing(spec.maximumBlockSize);
+        oversampler.initProcessing (spec.maximumBlockSize);
         
-        const auto oversampledSpec = createOversampledSpec(spec);
+        const auto oversampledSpec = createOversampledSpec (spec);
         
         /** Setup pre-filter*/
-        preFilter.prepare(oversampledSpec);
-        preFilter.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
-        preFilter.setCutoffFrequency(calculateCutoff(oversampledSpec.sampleRate));
-        preFilter.setResonance(calculateQ(DEFAULT_FILTER_Q_OCTAVES));
+        preFilter.prepare (oversampledSpec);
+        preFilter.setType (juce::dsp::StateVariableTPTFilterType::lowpass);
+        preFilter.setCutoffFrequency (calculateCutoff (oversampledSpec.sampleRate));
+        preFilter.setResonance (calculateQ(DEFAULT_FILTER_Q_OCTAVES));
         
         /** Setup clipper*/
-        clipper.prepare(oversampledSpec);
-        setCeiling(DEFAULT_CEILING);
-        setClippingType(DEFAULT_CLIPPING_TYPE);
+        clipper.prepare (oversampledSpec);
+        setCeiling (DEFAULT_CEILING);
+        setClippingType (DEFAULT_CLIPPING_TYPE);
         
         /** Setup post-filter*/
-        postFilter.prepare(oversampledSpec);
-        postFilter.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
-        postFilter.setCutoffFrequency(calculateCutoff(oversampledSpec.sampleRate));
-        postFilter.setResonance(calculateQ(DEFAULT_FILTER_Q_OCTAVES));
+        postFilter.prepare (oversampledSpec);
+        postFilter.setType (juce::dsp::StateVariableTPTFilterType::lowpass);
+        postFilter.setCutoffFrequency (calculateCutoff (oversampledSpec.sampleRate));
+        postFilter.setResonance (calculateQ(DEFAULT_FILTER_Q_OCTAVES));
     }
     
     void reset() noexcept override
@@ -72,26 +72,26 @@ public:
     
     void process (const juce::dsp::ProcessContextReplacing<T>& context) noexcept override
     {
-        auto oversampledAudioBlock = oversampler.processSamplesUp(context.getInputBlock());
-        auto oversampledContext = juce::dsp::ProcessContextReplacing<T>(oversampledAudioBlock);
+        auto oversampledAudioBlock = oversampler.processSamplesUp (context.getInputBlock());
+        auto oversampledContext = juce::dsp::ProcessContextReplacing<T> (oversampledAudioBlock);
 
-        preFilter.process(oversampledContext);
-        clipper.process(oversampledContext);
-        postFilter.process(oversampledContext);
+        preFilter.process (oversampledContext);
+        clipper.process (oversampledContext);
+        postFilter.process (oversampledContext);
         
-        oversampler.processSamplesDown(context.getOutputBlock());
+        oversampler.processSamplesDown (context.getOutputBlock());
     }
     
     // ==============================================================================
     /** Public interface */
-    void setCeiling(float ceilingDbValue) noexcept
+    void setCeiling (float ceilingDbValue) noexcept
     {
-        clipper.setThreshold(ceilingDbValue);
+        clipper.setThreshold (ceilingDbValue);
     }
     
-    void setClippingType(ClippingType clippingType) noexcept
+    void setClippingType (ClippingType clippingType) noexcept
     {
-        clipper.setClippingType(clippingType);
+        clipper.setClippingType (clippingType);
     }
     
 private:
@@ -115,16 +115,16 @@ private:
         return (sampleRate / 2) * 0.98;
     }
     
-    double calculateQ(float octave = 4.0f) const noexcept
+    double calculateQ (float octave = 4.0f) const noexcept
     {
-        return 1.0f / std::sqrtf(octave);
+        return 1.0f / std::sqrtf (octave);
     }
     
     //==============================================================================
     /** Helper builders */
     const ProcessorSpec createOversampledSpec (const ProcessorSpec& src) const noexcept
     {
-        const unsigned int xOversample = std::sqrt(oversampler.getOversamplingFactor());
+        const unsigned int xOversample = std::sqrt (oversampler.getOversamplingFactor());
         return { src.sampleRate * xOversample, src.maximumBlockSize * xOversample, src.numChannels };
     }
 

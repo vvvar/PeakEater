@@ -55,9 +55,9 @@ public:
     
     void process (const juce::dsp::ProcessContextReplacing<T>& context) noexcept override
     {
-        preGain.process(context);
-        waveshaper.process(context);
-        postGain.process(context);
+        preGain.process (context);
+        waveshaper.process (context);
+        postGain.process (context);
     }
     
     // ==============================================================================
@@ -65,9 +65,9 @@ public:
      * Change clipping function
      * that will be used to process signal
      */
-    void setClippingType(ClippingType type) noexcept
+    void setClippingType (ClippingType type) noexcept
     {
-        switch(type)
+        switch (type)
         {
             case LOGARYTHMIC:
                 waveshaper.functionToUse = logiclip;
@@ -105,10 +105,10 @@ public:
     /*
      * Set threshold(in decibels) when clipping will occur
      */
-    void setThreshold(float threshold) noexcept
+    void setThreshold (float threshold) noexcept
     {
-        preGain.setGainDecibels(std::fabs(threshold));
-        postGain.setGainDecibels(threshold);
+        preGain.setGainDecibels (std::fabs (threshold));
+        postGain.setGainDecibels (threshold);
     }
 private:
     // ==============================================================================

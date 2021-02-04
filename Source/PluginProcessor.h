@@ -13,6 +13,30 @@
 #include "WaveShaperController.h"
 
 //==============================================================================
+/*
+ * Helper namespace to keep consistent parameter info
+ * across all project. For example, to keep label text similar
+ * in the automation section and in the UI.
+ */
+namespace Parameters
+{
+
+struct ParameterInfo
+{
+    juce::String Id;
+    juce::String Label;
+};
+
+static const ParameterInfo InputGain      { "InputGain", "Input Gain" };
+static const ParameterInfo OutputGain     { "OutputGain", "Output Gain" };
+static const ParameterInfo LinkInOut      { "LinkInOut", "Link In & Out" };
+static const ParameterInfo Ceiling        { "Ceiling", "Ceiling" };
+static const ParameterInfo ClippingType   { "ClippingType", "Clipping Type" };
+static const ParameterInfo OversampleRate { "OversampleRate", "Oversample Rate" };
+
+}
+
+//==============================================================================
 /**
 */
 class MultiShaperAudioProcessor  : public juce::AudioProcessor
@@ -57,10 +81,11 @@ public:
 
 private:
     //==============================================================================
-    juce::AudioParameterFloat* inputGain;
-    juce::AudioParameterFloat* outputGain;
-    juce::AudioParameterBool* linkInOut;
-    juce::AudioParameterFloat* ceiling;
+    juce::AudioProcessorValueTreeState parameters;
+    juce::AudioParameterFloat*  inputGain;
+    juce::AudioParameterFloat*  outputGain;
+    juce::AudioParameterBool*   linkInOut;
+    juce::AudioParameterFloat*  ceiling;
     juce::AudioParameterChoice* clippingType;
     juce::AudioParameterChoice* oversampleRate;
     
