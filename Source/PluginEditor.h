@@ -12,9 +12,23 @@
 #include "PluginProcessor.h"
 
 //==============================================================================
+namespace AppColors
+{
+
+static const juce::Colour Paper   { 250, 250, 250 };
+static const juce::Colour Paper2  { 241, 241, 230 };
+static const juce::Colour Red     { 210, 14, 44 };
+static const juce::Colour Navy    { 0, 29, 45 };
+static const juce::Colour Blue    { 156, 174, 188 };
+static const juce::Colour Yellow  { 234, 153, 39 };
+static const juce::Colour Pastele { 255, 235, 204 };
+
+};
+
+//==============================================================================
 /**
 */
-class MultiShaperAudioProcessorEditor  : public juce::AudioProcessorEditor
+class MultiShaperAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::Button::Listener
 {
 public:
     MultiShaperAudioProcessorEditor (MultiShaperAudioProcessor&, juce::AudioProcessorValueTreeState&);
@@ -23,6 +37,10 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    //==============================================================================
+    void buttonClicked (juce::Button *) override;
+    void buttonStateChanged (juce::Button *) override;
 
 private:
     //==============================================================================
@@ -35,6 +53,9 @@ private:
     juce::AudioProcessorValueTreeState& valueTreeState;
     
     //==============================================================================
+    juce::ImageButton logo;
+    juce::ImageButton logo_placeholder;
+    
     juce::Label  inputGainLabel;
     juce::Slider inputGainSlider;
     std::unique_ptr<SliderAttachment> inputGainAttachment;

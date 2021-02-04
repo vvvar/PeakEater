@@ -28,6 +28,9 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="c58FfL" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <GROUP id="{4871CAE9-74EF-8C63-E174-4E80748CCAB8}" name="Resources">
+      <FILE id="UzSp15" name="logo_full.png" compile="0" resource="1" file="Resources/logo_full.png"/>
+    </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

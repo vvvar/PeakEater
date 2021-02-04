@@ -31,8 +31,8 @@ static const ParameterInfo InputGain      { "InputGain", "Input Gain" };
 static const ParameterInfo OutputGain     { "OutputGain", "Output Gain" };
 static const ParameterInfo LinkInOut      { "LinkInOut", "Link In & Out" };
 static const ParameterInfo Ceiling        { "Ceiling", "Ceiling" };
-static const ParameterInfo ClippingType   { "ClippingType", "Clipping Type" };
-static const ParameterInfo OversampleRate { "OversampleRate", "Oversample Rate" };
+static const ParameterInfo ClippingType   { "ClippingType", "Algorythm" };
+static const ParameterInfo OversampleRate { "OversampleRate", "Oversample" };
 
 }
 
