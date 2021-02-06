@@ -25,6 +25,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
         std::make_unique<juce::AudioParameterBool> (Parameters::LinkInOut.Id,
                                                     Parameters::LinkInOut.Label,
                                                     Parameters::LinkInOut.BoolInfo.DefaultValue),
+        std::make_unique<juce::AudioParameterBool> (Parameters::Bypass.Id,
+                                                    Parameters::Bypass.Label,
+                                                    Parameters::Bypass.BoolInfo.DefaultValue),
         std::make_unique<juce::AudioParameterFloat> (Parameters::Ceiling.Id,
                                                      Parameters::Ceiling.Label,
                                                      Parameters::Ceiling.RangeInfo.Range,
@@ -56,6 +59,7 @@ MultiShaperAudioProcessor::MultiShaperAudioProcessor()
     inputGain (static_cast<juce::AudioParameterFloat*> (parameters.getParameter (Parameters::InputGain.Id))),
     outputGain (static_cast<juce::AudioParameterFloat*> (parameters.getParameter (Parameters::OutputGain.Id))),
     linkInOut (static_cast<juce::AudioParameterBool*> (parameters.getParameter (Parameters::LinkInOut.Id))),
+    bypass (static_cast<juce::AudioParameterBool*> (parameters.getParameter (Parameters::Bypass.Id))),
     ceiling (static_cast<juce::AudioParameterFloat*> (parameters.getParameter (Parameters::Ceiling.Id))),
     clippingType (static_cast<juce::AudioParameterChoice*> (parameters.getParameter (Parameters::ClippingType.Id))),
     oversampleRate (static_cast<juce::AudioParameterChoice*> (parameters.getParameter (Parameters::OversampleRate.Id))),
@@ -200,7 +204,10 @@ void MultiShaperAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         *clippingType,
         *oversampleRate
     });
-    waveShaper->process (buffer);
+    if (!*bypass)
+    {
+        waveShaper->process (buffer);
+    }
 }
 
 //==============================================================================

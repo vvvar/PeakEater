@@ -70,6 +70,7 @@ static const ChoiceInfo OversampleRateInfo = { { "x2", "x4", "x8", "x16" }, 0 };
 static const ParameterInfo InputGain      { "InputGain", "Input Gain", InputGainRange };
 static const ParameterInfo OutputGain     { "OutputGain", "Output Gain", OutputGainRange };
 static const ParameterInfo LinkInOut      { "LinkInOut", "Link In & Out" };
+static const ParameterInfo Bypass         { "Bypass", "Bypass" };
 static const ParameterInfo Ceiling        { "Ceiling", "Ceiling", CeilingRange };
 static const ParameterInfo ClippingType   { "ClippingType", "Algorythm", {}, ClippingTypeInfo };
 static const ParameterInfo OversampleRate { "OversampleRate", "Oversample", {}, OversampleRateInfo };
@@ -153,6 +154,7 @@ private:
     juce::AudioParameterFloat*  inputGain;
     juce::AudioParameterFloat*  outputGain;
     juce::AudioParameterBool*   linkInOut;
+    juce::AudioParameterBool*   bypass;
     juce::AudioParameterFloat*  ceiling;
     juce::AudioParameterChoice* clippingType;
     juce::AudioParameterChoice* oversampleRate;

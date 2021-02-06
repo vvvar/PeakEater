@@ -533,9 +533,11 @@ class Footer : public juce::Component
 public:
     Footer(MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
         linkInOut(Parameters::LinkInOut, vts),
+        bypass(Parameters::Bypass, vts),
         peaksEaten(p)
     {
         addAndMakeVisible(linkInOut);
+        addAndMakeVisible(bypass);
         addAndMakeVisible(peaksEaten);
     }
     
@@ -553,9 +555,9 @@ public:
         Grid grid;
 
         grid.templateRows = { Track (Fr (1)) };
-        grid.templateColumns = { Track (Fr (1)), Track (Fr (1)) };
+        grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (3)) };
         grid.items = {
-            Item(linkInOut), Item(peaksEaten)
+            Item(linkInOut), Item(bypass), Item(peaksEaten)
         };
          
         grid.performLayout (getLocalBounds());
@@ -570,6 +572,7 @@ public:
 private:
     //==============================================================================
     CheckBox     linkInOut;
+    CheckBox     bypass;
     PeakAnalyzer peaksEaten;
     
     //==============================================================================
