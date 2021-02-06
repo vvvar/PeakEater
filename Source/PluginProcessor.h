@@ -21,18 +21,58 @@
 namespace Parameters
 {
 
-struct ParameterInfo
+using String            = juce::String;
+using NormalisableRange = juce::NormalisableRange<float>;
+using StringArray       = juce::StringArray;
+
+struct RangeInfo
 {
-    juce::String Id;
-    juce::String Label;
+    NormalisableRange Range        { -1.0f, 1.0f, 0.1f };
+    float             DefaultValue { 0.0f };
 };
 
-static const ParameterInfo InputGain      { "InputGain", "Input Gain" };
-static const ParameterInfo OutputGain     { "OutputGain", "Output Gain" };
+struct ChoiceInfo
+{
+    StringArray Choices { " " };
+    int         DefaultChoiceId { 0 };
+};
+
+struct BoolInfo
+{
+    bool DefaultValue { false };
+};
+
+struct ParameterInfo
+{
+    String     Id;
+    String     Label;
+    RangeInfo  RangeInfo;
+    ChoiceInfo ChoicesInfo;
+    BoolInfo   BoolInfo;
+};
+ 
+static const RangeInfo  InputGainRange   = { { -36.0f, 36.0f, 0.1f } };
+static const RangeInfo  OutputGainRange  = { { -36.0f, 36.0f, 0.1f } };
+static const RangeInfo  CeilingRange     = { { -36.0f, -0.1f, 0.1f }, -0.1f };
+static const ChoiceInfo ClippingTypeInfo = { {
+    "Logarythmic",
+    "Hard",
+    "Quintic",
+    "Cubic Basic",
+    "Hyperbolic Tan",
+    "Algebraic",
+    "Arctangent",
+    "Sin",
+    "Limit"
+}, 0 };
+static const ChoiceInfo OversampleRateInfo = { { "x2", "x4", "x8", "x16" }, 0 };
+
+static const ParameterInfo InputGain      { "InputGain", "Input Gain", InputGainRange };
+static const ParameterInfo OutputGain     { "OutputGain", "Output Gain", OutputGainRange };
 static const ParameterInfo LinkInOut      { "LinkInOut", "Link In & Out" };
-static const ParameterInfo Ceiling        { "Ceiling", "Ceiling" };
-static const ParameterInfo ClippingType   { "ClippingType", "Algorythm" };
-static const ParameterInfo OversampleRate { "OversampleRate", "Oversample" };
+static const ParameterInfo Ceiling        { "Ceiling", "Ceiling", CeilingRange };
+static const ParameterInfo ClippingType   { "ClippingType", "Algorythm", {}, ClippingTypeInfo };
+static const ParameterInfo OversampleRate { "OversampleRate", "Oversample", {}, OversampleRateInfo };
 
 }
 
