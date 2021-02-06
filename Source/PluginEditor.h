@@ -228,13 +228,13 @@ public:
         };
         
         grid.templateColumns = {
-            Track (Fr (1)), Track (Fr (2)),
-            Track (Fr (1)), Track (Fr (2)),
-            Track (Fr (1)), Track (Fr (2))
+            Track (Fr (1)), Track (Fr (1)),
+            Track (Fr (1)), Track (Fr (1)),
+            Track (Fr (1)), Track (Fr (1))
         };
         
         grid.items = {
-            Item (inputMagnitudeLabel),   Item (Item(inputMagnitudeValue)),
+            Item (inputMagnitudeLabel),   Item (inputMagnitudeValue),
             Item (outputMagnitudeLabel),  Item (outputMagnitudeValue),
             Item (clippedMagnitudeLabel), Item (clippedMagnitudeValue)
         };
