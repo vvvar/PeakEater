@@ -14,62 +14,37 @@ MultiShaperAudioProcessorEditor::MultiShaperAudioProcessorEditor (MultiShaperAud
     :
     AudioProcessorEditor (&p),
     audioProcessor (p),
-    valueTreeState (vts)
+    valueTreeState (vts),
+    main(p, vts)
 {
-    addAndMakeVisible (logo);
-    addAndMakeVisible(logo_placeholder);
-    juce::Image logoImage = juce::ImageCache::getFromMemory (BinaryData::logo_full_png, BinaryData::logo_full_pngSize);
-    logo.setImages(false, true, true, logoImage, 1.0f, {}, logoImage, 1.0f, {}, logoImage, 1.0f, {});
+    lnf.setColour (foleys::LevelMeter::lmTextColour,             AppColors::Paper);
+    lnf.setColour (foleys::LevelMeter::lmTextClipColour,         juce::Colours::white);
+    lnf.setColour (foleys::LevelMeter::lmTextDeactiveColour,     juce::Colours::darkgrey);
+    lnf.setColour (foleys::LevelMeter::lmTicksColour,            AppColors::Navy);
+    lnf.setColour (foleys::LevelMeter::lmOutlineColour,          juce::Colours::orange);
+    lnf.setColour (foleys::LevelMeter::lmBackgroundColour,       AppColors::Paper);
+    lnf.setColour (foleys::LevelMeter::lmBackgroundClipColour,   juce::Colours::red);
+    lnf.setColour (foleys::LevelMeter::lmMeterForegroundColour,  juce::Colours::green);
+    lnf.setColour (foleys::LevelMeter::lmMeterOutlineColour,     AppColors::Paper);
+    lnf.setColour (foleys::LevelMeter::lmMeterBackgroundColour,  AppColors::Grey);
+    lnf.setColour (foleys::LevelMeter::lmMeterMaxNormalColour,   juce::Colours::lightgrey);
+    lnf.setColour (foleys::LevelMeter::lmMeterMaxWarnColour,     juce::Colours::orange);
+    lnf.setColour (foleys::LevelMeter::lmMeterMaxOverColour,     juce::Colours::darkred);
+    lnf.setColour (foleys::LevelMeter::lmMeterGradientLowColour, AppColors::Green);
+    lnf.setColour (foleys::LevelMeter::lmMeterGradientMidColour, AppColors::Green2);
+    lnf.setColour (foleys::LevelMeter::lmMeterGradientMaxColour, AppColors::Red);
+    lnf.setColour (foleys::LevelMeter::lmMeterReductionColour,   juce::Colours::orange);
+    inputMeter.setLookAndFeel(&lnf);
+    outputMeter.setLookAndFeel(&lnf);
     
-    inputGainLabel.setText (Parameters::InputGain.Label, juce::dontSendNotification);
-    addAndMakeVisible (inputGainLabel);
-    addAndMakeVisible (inputGainSlider);
-    inputGainAttachment.reset (new SliderAttachment (valueTreeState, Parameters::InputGain.Id, inputGainSlider));
+    inputMeter.setMeterSource (&audioProcessor.getInputMeterSource());
+    outputMeter.setMeterSource (&audioProcessor.getOutputMeterSource());
     
-    outputGainLabel.setText (Parameters::OutputGain.Label, juce::dontSendNotification);
-    addAndMakeVisible (outputGainLabel);
-    addAndMakeVisible (outputGainSlider);
-    outputGainAttachment.reset (new SliderAttachment (valueTreeState, Parameters::OutputGain.Id, outputGainSlider));
+    addAndMakeVisible(inputMeter);
+    addAndMakeVisible(main);
+    addAndMakeVisible(outputMeter);
     
-    linkInOutLabel.setText (Parameters::LinkInOut.Label, juce::dontSendNotification);
-    addAndMakeVisible (linkInOutLabel);
-    addAndMakeVisible (linkInOutToggle);
-    linkInOutAttachment.reset (new ButtonAttachment (valueTreeState, Parameters::LinkInOut.Id, linkInOutToggle));
-    
-    ceilingLabel.setText (Parameters::Ceiling.Label, juce::dontSendNotification);
-    addAndMakeVisible (ceilingLabel);
-    addAndMakeVisible (ceilingSlider);
-    ceilingAttachment.reset (new SliderAttachment (valueTreeState, Parameters::Ceiling.Id, ceilingSlider));
-    
-    clippingTypeLabel.setText (Parameters::ClippingType.Label, juce::dontSendNotification);
-    addAndMakeVisible (clippingTypeLabel);
-    addAndMakeVisible (clippingTypeSlider);
-    clippingTypeAttachment.reset (new SliderAttachment (valueTreeState, Parameters::ClippingType.Id, clippingTypeSlider));
-    
-    oversampleRateLabel.setText (Parameters::OversampleRate.Label, juce::dontSendNotification);
-    addAndMakeVisible (oversampleRateLabel);
-    addAndMakeVisible (oversampleRateSlider);
-    oversampleRateAttachment.reset (new SliderAttachment (valueTreeState, Parameters::OversampleRate.Id, oversampleRateSlider));
-    
-    getLookAndFeel().setColour (juce::Slider::thumbColourId, AppColors::Red);
-    getLookAndFeel().setColour (juce::Slider::trackColourId, AppColors::Navy);
-    getLookAndFeel().setColour (juce::Slider::backgroundColourId, AppColors::Blue);
-    getLookAndFeel().setColour (juce::Slider::textBoxOutlineColourId, AppColors::Blue);
-    getLookAndFeel().setColour (juce::Slider::textBoxBackgroundColourId, AppColors::Paper);
-    getLookAndFeel().setColour (juce::Slider::textBoxHighlightColourId, AppColors::Navy);
-    getLookAndFeel().setColour (juce::ToggleButton::tickColourId, AppColors::Navy);
-    getLookAndFeel().setColour (juce::ToggleButton::tickDisabledColourId, AppColors::Navy);
-    getLookAndFeel().setColour (juce::Label::textColourId, AppColors::Navy);
-    
-    linkInOutToggle.addListener(this);
-
-    inputGainSlider.setColour (juce::Slider::textBoxTextColourId, AppColors::Navy);
-    outputGainSlider.setColour (juce::Slider::textBoxTextColourId, AppColors::Navy);
-    ceilingSlider.setColour (juce::Slider::textBoxTextColourId, AppColors::Navy);
-    clippingTypeSlider.setColour (juce::Slider::textBoxTextColourId, AppColors::Navy);
-    oversampleRateSlider.setColour (juce::Slider::textBoxTextColourId, AppColors::Navy);
-    
-    setSize (400, 300);
+    setSize (640, 400);
 }
 
 MultiShaperAudioProcessorEditor::~MultiShaperAudioProcessorEditor()
@@ -91,45 +66,12 @@ void MultiShaperAudioProcessorEditor::resized()
     
     grid.templateRows = {
         Track (Fr (1)),
-        Track (Fr (1)),
-        Track (Fr (1)),
-        Track (Fr (1)),
-        Track (Fr (1)),
-        Track (Fr (1)),
-        Track (Fr (1))
     };
-    grid.templateColumns = { Track (Fr (1)), Track (Fr (3)) };
+    grid.templateColumns = { Track (Fr (1)), Track (Fr (6)), Track (Fr (1)) };
     
     grid.items = {
-        Item (logo_placeholder), Item (logo).withMargin (Item::Margin (10, 0, 0, 130)),
-        Item (inputGainLabel), Item (inputGainSlider),
-        Item (outputGainLabel), Item (outputGainSlider),
-        Item (linkInOutLabel), Item (linkInOutToggle),
-        Item (ceilingLabel), Item (ceilingSlider),
-        Item (clippingTypeLabel), Item (clippingTypeSlider),
-        Item (oversampleRateLabel), Item (oversampleRateSlider)
+        Item (inputMeter), Item (main), Item (outputMeter)
     };
      
     grid.performLayout (getLocalBounds());
-}
-
-//==============================================================================
-void MultiShaperAudioProcessorEditor::buttonClicked (juce::Button*)
-{}
-
-void MultiShaperAudioProcessorEditor::buttonStateChanged (juce::Button* button)
-{
-    if (button->getToggleState())
-    {
-        outputGainSlider.setEnabled(false);
-        outputGainLabel.setColour (juce::Label::textColourId, AppColors::Blue);
-        outputGainSlider.setColour (juce::Slider::thumbColourId, AppColors::Blue);
-        outputGainSlider.setColour (juce::Slider::trackColourId, AppColors::Blue);
-    } else
-    {
-        outputGainSlider.setEnabled(true);
-        outputGainLabel.setColour (juce::Label::textColourId, AppColors::Navy);
-        outputGainSlider.setColour (juce::Slider::thumbColourId, AppColors::Red);
-        outputGainSlider.setColour (juce::Slider::trackColourId, AppColors::Navy);
-    }
 }

@@ -71,7 +71,9 @@ MultiShaperAudioProcessor::MultiShaperAudioProcessor()
     oversampleRate (static_cast<juce::AudioParameterChoice*> (parameters.getParameter (Parameters::OversampleRate.Id))),
     waveShaper (new waveshaping::OversampledWaveShaper<float>()),
     waveShaperController (waveShaper)
-{}
+{
+    waveShaper->addListener(this);
+}
 
 MultiShaperAudioProcessor::~MultiShaperAudioProcessor()
 {
@@ -151,6 +153,9 @@ void MultiShaperAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
         *clippingType,
         *oversampleRate
     });
+    inputMeterSource.resize (getTotalNumOutputChannels(), sampleRate * 0.1f / samplesPerBlock);
+    ceilingMeterSource.resize (getTotalNumOutputChannels(), sampleRate * 0.1f / samplesPerBlock);
+    outputMeterSource.resize (getTotalNumOutputChannels(), sampleRate * 0.1f / samplesPerBlock);
 }
 
 void MultiShaperAudioProcessor::releaseResources()

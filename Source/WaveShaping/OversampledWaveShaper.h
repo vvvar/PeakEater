@@ -25,6 +25,17 @@ enum OversamplingRate
 };
 
 // ==============================================================================
+class OversampledWaveShaperListener
+{
+public:
+    virtual ~OversampledWaveShaperListener() = default;
+    
+    virtual void onPostInputGain(juce::AudioBuffer<float>&) = 0;
+    virtual void onPostCeiling(juce::AudioBuffer<float>&) = 0;
+    virtual void onPostOutputGain(juce::AudioBuffer<float>&) = 0;
+};
+
+// ==============================================================================
 template<typename T>
 class OversampledWaveShaper : public juce::dsp::ProcessorBase
 {
@@ -87,11 +98,30 @@ public:
     void process (AudioBuffer& buffer) noexcept
     {
         auto ioBlock = AudioBlock (buffer);
-        process (ProcessContextReplacing (ioBlock));
+        ProcessContextReplacing context(ioBlock);
+        
+        inputGain.process (context);
+        listenersList.call ([&buffer] (OversampledWaveShaperListener& listener)
+        {
+            listener.onPostInputGain (buffer);
+        });
+        clipper->process (context);
+        listenersList.call ([&buffer] (OversampledWaveShaperListener& listener) {
+            listener.onPostCeiling (buffer);
+        });
+        outputGain.process (context);
+        listenersList.call ([&buffer] (OversampledWaveShaperListener& listener) {
+            listener.onPostOutputGain (buffer);
+        });
     }
     
     // ==============================================================================
     /** Public interface */
+    void addListener (OversampledWaveShaperListener* listener) noexcept
+    {
+        listenersList.add(listener);
+    }
+    
     void setInputGain (float gainDbValue) noexcept
     {
         inputGain.setGainDecibels (gainDbValue);
@@ -154,6 +184,10 @@ private:
     OversampledClipper<T>  clipper8x;
     OversampledClipper<T>  clipper16x;
     OversampledClipper<T>* clipper;
+    
+    //==============================================================================
+    /* Listeners */
+    juce::ListenerList<OversampledWaveShaperListener> listenersList;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OversampledWaveShaper)
