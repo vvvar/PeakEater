@@ -50,7 +50,7 @@ public:
             previousOutputGain = previousInputGain;
             
             waveShaperPtr->setInputGain (previousInputGain);
-            waveShaperPtr->setOutputGain (previousInputGain);
+            setupOutputGain();
         }
         if (previousLinkInOut)
         {
@@ -58,7 +58,7 @@ public:
             {
                 previousInputGain = parameters.inputGain;
                 waveShaperPtr->setInputGain (previousInputGain);
-                waveShaperPtr->setOutputGain (previousInputGain);
+                setupOutputGain();
             }
         } else
         {
@@ -70,7 +70,7 @@ public:
             if (parameters.outputGain != previousOutputGain)
             {
                 previousOutputGain = parameters.outputGain;
-                waveShaperPtr->setOutputGain (previousOutputGain);
+                setupOutputGain();
             }
         }
         if (parameters.ceiling != previousCeiling)
@@ -100,7 +100,7 @@ public:
         previousOversampleRate = parameters.oversampleRate;
         
         waveShaperPtr->setInputGain (previousInputGain);
-        waveShaperPtr->setOutputGain (previousInputGain);
+        setupOutputGain();
         waveShaperPtr->setCeiling (previousCeiling);
         setupClippingType();
         setupOversampleRate();
@@ -117,7 +117,8 @@ private:
     float previousCeiling        = -0.1f;
     int   previousClippingType   = 0;
     int   previousOversampleRate = 0;
-        
+    
+    //==============================================================================
     void setupClippingType()
     {
         switch (previousClippingType)
@@ -173,6 +174,26 @@ private:
             default:
                 waveShaperPtr->setOversamplingRate(waveshaping::OversamplingRate::X2);
                 break;
+        }
+    }
+    
+    void setupOutputGain()
+    {
+        if (previousLinkInOut)
+        {
+            if (previousInputGain > 0)
+            {
+                waveShaperPtr->setOutputGain (-previousInputGain);
+            } else if (previousInputGain < 0)
+            {
+                waveShaperPtr->setOutputGain (std::fabs (previousInputGain));
+            } else // input is 0
+            {
+                waveShaperPtr->setOutputGain (previousInputGain);
+            }
+        } else
+        {
+            waveShaperPtr->setOutputGain (previousOutputGain);
         }
     }
 };
