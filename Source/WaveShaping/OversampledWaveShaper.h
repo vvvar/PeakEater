@@ -65,6 +65,7 @@ public:
     {
         /** Setup input gain */
         inputGain.prepare (spec);
+        inputGain.setRampDurationSeconds(0.5f);
         setInputGain (DEFAULT_INPUT_GAIN);
         
         /** Setup clipper */
@@ -75,6 +76,7 @@ public:
         
         /** Setup output gain */
         outputGain.prepare (spec);
+        outputGain.setRampDurationSeconds(0.5f);
         setOutputGain (DEFAULT_OUTPUT_GAIN);
     }
     

@@ -40,7 +40,9 @@ public:
     void prepare (const juce::dsp::ProcessSpec& spec) noexcept override
     {
         preGain.prepare(spec);
+        preGain.setRampDurationSeconds(0.5f);
         postGain.prepare(spec);
+        postGain.setRampDurationSeconds(0.5f);
         setThreshold(1.0f);
         waveshaper.prepare(spec);
         setClippingType(ClippingType::LOGARYTHMIC);
