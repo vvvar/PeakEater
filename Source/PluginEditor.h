@@ -135,7 +135,7 @@ public:
             }
         }
     private:
-        const float ROUNDING = 3.0f;
+        const float ROUNDING = 2.0f;
     };
     
     MeterSlider(
@@ -187,6 +187,9 @@ private:
     
     CustomMeterLookAndFeel lnf;
     foleys::LevelMeter meter { foleys::LevelMeter::Horizontal };
+    
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MeterSlider)
 };
 
 //==============================================================================
@@ -265,6 +268,9 @@ private:
     {
         return juce::String (std::roundf (db * 100) / 100) + " dB";
     }
+    
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeakAnalyzer)
 };
 
 //==============================================================================
@@ -316,23 +322,267 @@ private:
     juce::Label                       label;
     juce::ToggleButton                toggle;
     std::unique_ptr<ButtonAttachment> attachment;
+    
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CheckBox)
 };
 
 //==============================================================================
-class MainWindow : public juce::Component, public juce::Button::Listener
+class LabledVerticalMeter : public juce::Component
 {
 public:
     //==============================================================================
-    MainWindow(MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
-        ceilingSlider(p.getCeilingMeterSource(), vts, Parameters::Ceiling),
-        linkInOut(Parameters::LinkInOut, vts),
-        peaksEaten(p)
+    class LabledVerticalMeterLnf : public foleys::LevelMeterLookAndFeel
     {
-        addAndMakeVisible (logo);
-        addAndMakeVisible(logo_placeholder);
+    public:
+        //==============================================================================
+        LabledVerticalMeterLnf()
+        {
+            foleys::LevelMeterLookAndFeel();
+            setColour (LevelMeter::lmTextColour,             AppColors::Paper);
+            setColour (LevelMeter::lmTicksColour,            AppColors::Navy);
+            setColour (LevelMeter::lmBackgroundColour,       AppColors::Paper);
+            setColour (LevelMeter::lmMeterOutlineColour,     AppColors::Paper);
+            setColour (LevelMeter::lmMeterBackgroundColour,  AppColors::Grey);
+            setColour (LevelMeter::lmMeterGradientLowColour, AppColors::Green);
+            setColour (LevelMeter::lmMeterGradientMidColour, AppColors::Green2);
+            setColour (LevelMeter::lmMeterGradientMaxColour, AppColors::Red);
+        }
+    private:
+        //==============================================================================
+        using LevelMeter = foleys::LevelMeter;
+        
+        //==============================================================================
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LabledVerticalMeterLnf)
+    };
+    
+    LabledVerticalMeter(juce::String labelText, foleys::LevelMeterSource& meterSource)
+    {
+        meter.setLookAndFeel(&meterLookAndFeel);
+        meter.setMeterSource (&meterSource);
+        label.setText(labelText, juce::dontSendNotification);
+        addAndMakeVisible(meter);
+        addAndMakeVisible(label);
+    }
+    
+    ~LabledVerticalMeter()
+    {
+        meter.setLookAndFeel(nullptr);
+    }
+    
+    //==============================================================================
+    void paint (juce::Graphics&) override
+    {}
+    
+    void resized() override
+    {
+        juce::Grid grid;
+         
+        using Track = juce::Grid::TrackInfo;
+        using Fr = juce::Grid::Fr;
+        using Item = juce::GridItem;
+        
+        grid.templateRows = {
+            Track (Fr (1)),
+            Track (Fr (18))
+        };
+        grid.templateColumns = { Track (Fr (1)) };
+
+        grid.items = {
+            Item (label),
+            Item (meter)
+        };
+         
+        grid.performLayout (getLocalBounds());
+    }
+    
+private:
+    //==============================================================================
+    using LevelMeter = foleys::LevelMeter;
+    
+    //==============================================================================
+    juce::Label label;
+    LevelMeter  meter { LevelMeter::Default };
+    LabledVerticalMeterLnf meterLookAndFeel;
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LabledVerticalMeter)
+};
+
+//==============================================================================
+class LeftPanel : public juce::Component
+{
+public:
+    //==============================================================================
+    LeftPanel(MultiShaperAudioProcessor& p):
+        inputMeter("Input", p.getInputMeterSource())
+    {
+        addAndMakeVisible(inputMeter);
+    }
+    
+    //==============================================================================
+    void paint (juce::Graphics&) override
+    {}
+    
+    void resized() override
+    {
+        using Grid  = juce::Grid;
+        using Track = Grid::TrackInfo;
+        using Fr    = Grid::Fr;
+        using Item  = juce::GridItem;
+        
+        Grid grid;
+
+        grid.templateRows = { Track (Fr (1)) };
+        grid.templateColumns = { Track (Fr (1)) };
+        grid.items = { Item (inputMeter) };
+         
+        grid.performLayout (getLocalBounds());
+    }
+    
+private:
+    //==============================================================================
+    LabledVerticalMeter inputMeter;
+    
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LeftPanel)
+};
+
+//==============================================================================
+class RightPanel : public juce::Component
+{
+public:
+    //==============================================================================
+    RightPanel(MultiShaperAudioProcessor& p):
+        outputMeter("Output", p.getOutputMeterSource())
+    {
+        addAndMakeVisible(outputMeter);
+    }
+    
+    //==============================================================================
+    void paint (juce::Graphics&) override
+    {}
+    
+    void resized() override
+    {
+        using Grid  = juce::Grid;
+        using Track = Grid::TrackInfo;
+        using Fr    = Grid::Fr;
+        using Item  = juce::GridItem;
+        
+        Grid grid;
+
+        grid.templateRows = { Track (Fr (1)) };
+        grid.templateColumns = { Track (Fr (1)) };
+        grid.items = { Item (outputMeter) };
+         
+        grid.performLayout (getLocalBounds());
+    }
+    
+private:
+    //==============================================================================
+    LabledVerticalMeter outputMeter;
+    
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RightPanel)
+};
+
+//==============================================================================
+class Header : public juce::Component
+{
+public:
+    //==============================================================================
+    Header()
+    {
         juce::Image logoImage = juce::ImageCache::getFromMemory (BinaryData::logo_full_png, BinaryData::logo_full_pngSize);
         logo.setImages(false, true, true, logoImage, 1.0f, {}, logoImage, 1.0f, {}, logoImage, 1.0f, {});
         
+        addAndMakeVisible (logo);
+    }
+    
+    //==============================================================================
+    void paint (juce::Graphics&) override
+    {}
+    
+    void resized() override
+    {
+        using Grid  = juce::Grid;
+        using Track = Grid::TrackInfo;
+        using Fr    = Grid::Fr;
+        using Item  = juce::GridItem;
+        
+        Grid grid;
+
+        grid.templateRows = { Track (Fr (1)) };
+        grid.templateColumns = { Track (Fr (1)) };
+        grid.items = { Item(logo) };
+         
+        grid.performLayout (getLocalBounds());
+    }
+    
+private:
+    //==============================================================================
+    juce::ImageButton logo;
+    
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Header)
+};
+
+//==============================================================================
+class Footer : public juce::Component
+{
+public:
+    Footer(MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
+        linkInOut(Parameters::LinkInOut, vts),
+        peaksEaten(p)
+    {
+        addAndMakeVisible(linkInOut);
+        addAndMakeVisible(peaksEaten);
+    }
+    
+    //==============================================================================
+    void paint (juce::Graphics&) override
+    {}
+    
+    void resized() override
+    {
+        using Grid  = juce::Grid;
+        using Track = Grid::TrackInfo;
+        using Fr    = Grid::Fr;
+        using Item  = juce::GridItem;
+        
+        Grid grid;
+
+        grid.templateRows = { Track (Fr (1)) };
+        grid.templateColumns = { Track (Fr (1)), Track (Fr (1)) };
+        grid.items = {
+            Item(linkInOut), Item(peaksEaten)
+        };
+         
+        grid.performLayout (getLocalBounds());
+    }
+    
+    //==============================================================================
+    void addLinkInOutListener(juce::Button::Listener* listener)
+    {
+        linkInOut.addListener(listener);
+    }
+    
+private:
+    //==============================================================================
+    CheckBox     linkInOut;
+    PeakAnalyzer peaksEaten;
+    
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Footer)
+};
+
+//==============================================================================
+class WorkingArea : public juce::Component
+{
+public:
+    WorkingArea(MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
+        ceilingSlider(p.getCeilingMeterSource(), vts, Parameters::Ceiling)
+    {
         inputGainLabel.setText (Parameters::InputGain.Label, juce::dontSendNotification);
         addAndMakeVisible (inputGainLabel);
         addAndMakeVisible (inputGainSlider);
@@ -357,35 +607,49 @@ public:
         addAndMakeVisible (oversampleRateSlider);
         oversampleRateAttachment.reset (new SliderAttachment (vts, Parameters::OversampleRate.Id, oversampleRateSlider));
         
-        getLookAndFeel().setColour (juce::Slider::thumbColourId, AppColors::Red);
-        getLookAndFeel().setColour (juce::Slider::trackColourId, AppColors::Navy);
-        getLookAndFeel().setColour (juce::Slider::backgroundColourId, AppColors::Blue);
-        getLookAndFeel().setColour (juce::Slider::textBoxOutlineColourId, AppColors::Blue);
-        getLookAndFeel().setColour (juce::Slider::textBoxBackgroundColourId, AppColors::Paper);
-        getLookAndFeel().setColour (juce::Slider::textBoxHighlightColourId, AppColors::Navy);
-        getLookAndFeel().setColour (juce::ToggleButton::tickColourId, AppColors::Navy);
-        getLookAndFeel().setColour (juce::ToggleButton::tickDisabledColourId, AppColors::Navy);
-        getLookAndFeel().setColour (juce::Label::textColourId, AppColors::Navy);
-        
         inputGainSlider.setColour (juce::Slider::textBoxTextColourId, AppColors::Navy);
         outputGainSlider.setColour (juce::Slider::textBoxTextColourId, AppColors::Navy);
         ceilingSlider.setColour (juce::Slider::textBoxTextColourId, AppColors::Navy);
         clippingTypeSlider.setColour (juce::Slider::textBoxTextColourId, AppColors::Navy);
         oversampleRateSlider.setColour (juce::Slider::textBoxTextColourId, AppColors::Navy);
-        
-        addAndMakeVisible(linkInOut);
-        linkInOut.addListener(this);
-        
-        addAndMakeVisible(peaksEaten);
     }
     
     //==============================================================================
-    void buttonClicked (juce::Button *) override
+    void paint (juce::Graphics&) override
     {}
     
-    void buttonStateChanged (juce::Button* button) override
+    void resized() override
     {
-        if (button->getToggleState())
+        using Grid  = juce::Grid;
+        using Track = Grid::TrackInfo;
+        using Fr    = Grid::Fr;
+        using Item  = juce::GridItem;
+        
+        Grid grid;
+
+        grid.templateRows = {
+            Track (Fr (1)),
+            Track (Fr (1)),
+            Track (Fr (1)),
+            Track (Fr (1)),
+            Track (Fr (1))
+        };
+        grid.templateColumns = { Track (Fr (1)), Track (Fr (5)) };
+        grid.items = {
+            Item(inputGainLabel),      Item(inputGainSlider),
+            Item(outputGainLabel),     Item(outputGainSlider),
+            Item(ceilingLabel),        Item(ceilingSlider),
+            Item(clippingTypeLabel),   Item(clippingTypeSlider),
+            Item(oversampleRateLabel), Item(oversampleRateSlider),
+        };
+         
+        grid.performLayout (getLocalBounds());
+    }
+    
+    //==============================================================================
+    void setOutputGainEnabled(bool isEnabled)
+    {
+        if (isEnabled)
         {
             outputGainSlider.setEnabled(false);
             outputGainLabel.setColour (juce::Label::textColourId, AppColors::Blue);
@@ -400,53 +664,12 @@ public:
         }
     }
     
-    void paint (juce::Graphics&) override
-    {
-        
-    }
-    
-    void resized() override
-    {
-        juce::Grid grid;
-         
-        using Track = juce::Grid::TrackInfo;
-        using Fr = juce::Grid::Fr;
-        using Item = juce::GridItem;
-        
-        grid.templateRows = {
-            Track (Fr (1)),
-            Track (Fr (1)),
-            Track (Fr (1)),
-            Track (Fr (1)),
-            Track (Fr (1)),
-            Track (Fr (1)),
-            Track (Fr (1))
-        };
-        grid.templateColumns = { Track (Fr (1)), Track (Fr (5)) };
-        
-        grid.items = {
-            Item (logo_placeholder), Item (logo).withMargin(juce::GridItem::Margin (5, 0, 0, 170)),
-            Item (inputGainLabel), Item (inputGainSlider),
-            Item (outputGainLabel), Item (outputGainSlider),
-            Item (ceilingLabel), Item (ceilingSlider),
-            Item (clippingTypeLabel), Item (clippingTypeSlider),
-            Item (oversampleRateLabel), Item (oversampleRateSlider),
-            Item (linkInOut), Item (peaksEaten),
-        };
-         
-        grid.performLayout (getLocalBounds());
-    }
-    
 private:
     //==============================================================================
     using SliderAttachment   = juce::AudioProcessorValueTreeState::SliderAttachment;
-    
     using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
     
     //==============================================================================
-    juce::ImageButton logo;
-    juce::ImageButton logo_placeholder;
-    
     juce::Label inputGainLabel;
     juce::Slider inputGainSlider { juce::Slider::SliderStyle::LinearHorizontal, juce::Slider::TextEntryBoxPosition::TextBoxRight };
     std::unique_ptr<SliderAttachment> inputGainAttachment;
@@ -466,9 +689,127 @@ private:
     juce::Slider oversampleRateSlider { juce::Slider::SliderStyle::LinearHorizontal, juce::Slider::TextEntryBoxPosition::TextBoxRight };
     std::unique_ptr<SliderAttachment> oversampleRateAttachment;
     
-    CheckBox linkInOut;
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WorkingArea)
+};
+
+//==============================================================================
+class CentralPanel : public juce::Component, public juce::Button::Listener
+{
+public:
+    //==============================================================================
+    CentralPanel(MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
+        workingArea(p, vts),
+        footer(p, vts)
+    {
+        addAndMakeVisible(header);
+        addAndMakeVisible(workingArea);
+        addAndMakeVisible(footer);
+        
+        footer.addLinkInOutListener(this);
+    }
     
-    PeakAnalyzer peaksEaten;
+    //==============================================================================
+    void paint (juce::Graphics&) override
+    {}
+    
+    void resized() override
+    {
+        using Grid  = juce::Grid;
+        using Track = Grid::TrackInfo;
+        using Fr    = Grid::Fr;
+        using Item  = juce::GridItem;
+        
+        Grid grid;
+
+        grid.templateRows = {
+            Track (Fr (1)),
+            Track (Fr (5)),
+            Track (Fr (1))
+        };
+        grid.templateColumns = { Track (Fr (1)) };
+        grid.items = {
+            Item(header),
+            Item(workingArea),
+            Item(footer)
+        };
+         
+        grid.performLayout (getLocalBounds());
+    }
+    
+    //==============================================================================
+    void buttonClicked (juce::Button *) override
+    {}
+    
+    void buttonStateChanged (juce::Button* button) override
+    {
+        workingArea.setOutputGainEnabled(button->getToggleState());
+    }
+    
+private:
+    Header      header;
+    WorkingArea workingArea;
+    Footer      footer;
+    
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentralPanel)
+};
+
+//==============================================================================
+class MainWindow : public juce::Component
+{
+public:
+    //==============================================================================
+    MainWindow(MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
+        leftPanel(p),
+        centralPanel(p, vts),
+        rightPanel(p)
+    {
+        getLookAndFeel().setColour (juce::Slider::thumbColourId, AppColors::Red);
+        getLookAndFeel().setColour (juce::Slider::trackColourId, AppColors::Navy);
+        getLookAndFeel().setColour (juce::Slider::backgroundColourId, AppColors::Blue);
+        getLookAndFeel().setColour (juce::Slider::textBoxOutlineColourId, AppColors::Blue);
+        getLookAndFeel().setColour (juce::Slider::textBoxBackgroundColourId, AppColors::Paper);
+        getLookAndFeel().setColour (juce::Slider::textBoxHighlightColourId, AppColors::Navy);
+        getLookAndFeel().setColour (juce::ToggleButton::tickColourId, AppColors::Navy);
+        getLookAndFeel().setColour (juce::ToggleButton::tickDisabledColourId, AppColors::Navy);
+        getLookAndFeel().setColour (juce::Label::textColourId, AppColors::Navy);
+        
+        addAndMakeVisible(leftPanel);
+        addAndMakeVisible(centralPanel);
+        addAndMakeVisible(rightPanel);
+    }
+    
+    void paint (juce::Graphics&) override
+    {
+        
+    }
+    
+    void resized() override
+    {
+        juce::Grid grid;
+         
+        using Track = juce::Grid::TrackInfo;
+        using Fr = juce::Grid::Fr;
+        using Item = juce::GridItem;
+        
+        grid.templateRows = {
+            Track (Fr (1))
+        };
+        grid.templateColumns = { Track (Fr (1)), Track (Fr (6)), Track (Fr (1)) };
+        
+        grid.items = {
+            Item (leftPanel), Item (centralPanel), Item (rightPanel)
+        };
+         
+        grid.performLayout (getLocalBounds());
+    }
+    
+private:
+    //==============================================================================
+    LeftPanel    leftPanel;
+    CentralPanel centralPanel;
+    RightPanel   rightPanel;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainWindow)
@@ -490,11 +831,8 @@ private:
     MultiShaperAudioProcessor& audioProcessor;
     juce::AudioProcessorValueTreeState& valueTreeState;
     
+    //==============================================================================
     MainWindow main;
-    
-    foleys::LevelMeterLookAndFeel lnf;
-    foleys::LevelMeter inputMeter  { foleys::LevelMeter::Default };
-    foleys::LevelMeter outputMeter { foleys::LevelMeter::Default };
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MultiShaperAudioProcessorEditor)
