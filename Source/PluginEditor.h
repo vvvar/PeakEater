@@ -176,8 +176,15 @@ public:
     
     void setEnabled(bool isEnabled)
     {
-        slider.setEnabled(isEnabled);
-        meter.setEnabled(isEnabled);
+        meter.setEnabled (isEnabled);
+        slider.setEnabled (isEnabled);
+        if (isEnabled)
+        {
+            slider.setColour (juce::Slider::thumbColourId, AppColors::Red);
+        } else
+        {
+            slider.setColour (juce::Slider::thumbColourId, AppColors::Blue);
+        }
     }
 private:
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
@@ -221,22 +228,22 @@ public:
         using Fr = juce::Grid::Fr;
         using Item = juce::GridItem;
         
-        grid.alignContent = juce::Grid::AlignContent::start;
+        grid.justifyContent = juce::Grid::JustifyContent::end;
         
         grid.templateRows = {
             Track (Fr (1))
         };
         
         grid.templateColumns = {
-            Track (Fr (1)), Track (Fr (1)),
-            Track (Fr (1)), Track (Fr (1)),
-            Track (Fr (1)), Track (Fr (1))
+            Track (Fr (1)), Track (Fr (2)),
+            Track (Fr (1)), Track (Fr (2)),
+            Track (Fr (1)), Track (Fr (2))
         };
         
         grid.items = {
             Item (inputMagnitudeLabel),   Item (inputMagnitudeValue),
+            Item (clippedMagnitudeLabel), Item (clippedMagnitudeValue),
             Item (outputMagnitudeLabel),  Item (outputMagnitudeValue),
-            Item (clippedMagnitudeLabel), Item (clippedMagnitudeValue)
         };
          
         grid.performLayout (getLocalBounds());
@@ -278,9 +285,16 @@ class CheckBox : public juce::Component
 {
 public:
     //==============================================================================
-    CheckBox(const Parameters::ParameterInfo& parameter, juce::AudioProcessorValueTreeState& vts) noexcept
+    CheckBox(
+             const Parameters::ParameterInfo& parameter,
+             juce::AudioProcessorValueTreeState& vts,
+             juce::String labelText = ""
+             ) noexcept :
+        toggle(parameter.Id)
     {
-        label.setText (parameter.Label, juce::dontSendNotification);
+        label.setText (labelText.isNotEmpty() ? labelText : parameter.Label, juce::dontSendNotification);
+        label.setFont (juce::Font(11));
+        toggle.setColour (juce::ToggleButton::tickDisabledColourId, AppColors::Blue);
         addAndMakeVisible (label);
         addAndMakeVisible (toggle);
         attachment.reset (new ButtonAttachment (vts, parameter.Id, toggle));
@@ -310,10 +324,30 @@ public:
         grid.performLayout (getLocalBounds());
     }
     
+    //==============================================================================
     void addListener(juce::Button::Listener* listener)
     {
         toggle.addListener(listener);
     }
+    
+    //==============================================================================
+    void setEnabled(bool isEnabled)
+    {
+        label.setEnabled (isEnabled);
+        toggle.setEnabled (isEnabled);
+    }
+    
+    void toggleClick()
+    {
+        // @TODO - why it won't work?
+        // toggle.triggerClick();
+    }
+    
+    bool getToggleState()
+    {
+        return toggle.getToggleState();
+    }
+    
 private:
     //==============================================================================
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
@@ -532,7 +566,7 @@ class Footer : public juce::Component
 {
 public:
     Footer(MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
-        linkInOut(Parameters::LinkInOut, vts),
+        linkInOut(Parameters::LinkInOut, vts, "Link In/Out"),
         bypass(Parameters::Bypass, vts),
         peaksEaten(p)
     {
@@ -555,7 +589,7 @@ public:
         Grid grid;
 
         grid.templateRows = { Track (Fr (1)) };
-        grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (3)) };
+        grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (5)) };
         grid.items = {
             Item(linkInOut), Item(bypass), Item(peaksEaten)
         };
@@ -567,6 +601,21 @@ public:
     void addLinkInOutListener(juce::Button::Listener* listener)
     {
         linkInOut.addListener(listener);
+    }
+    
+    void addBypassListener(juce::Button::Listener* listener)
+    {
+        bypass.addListener(listener);
+    }
+    
+    //==============================================================================
+    void setLinkEnabled(bool isEnabled)
+    {
+        if (!isEnabled & linkInOut.getToggleState()) // force unset checkbox
+        {
+            linkInOut.toggleClick();
+        }
+        linkInOut.setEnabled (isEnabled);
     }
     
 private:
@@ -654,16 +703,64 @@ public:
     {
         if (isEnabled)
         {
-            outputGainSlider.setEnabled(false);
-            outputGainLabel.setColour (juce::Label::textColourId, AppColors::Blue);
-            outputGainSlider.setColour (juce::Slider::thumbColourId, AppColors::Blue);
-            outputGainSlider.setColour (juce::Slider::trackColourId, AppColors::Blue);
-        } else
-        {
-            outputGainSlider.setEnabled(true);
+            outputGainSlider.setEnabled (true);
             outputGainLabel.setColour (juce::Label::textColourId, AppColors::Navy);
             outputGainSlider.setColour (juce::Slider::thumbColourId, AppColors::Red);
             outputGainSlider.setColour (juce::Slider::trackColourId, AppColors::Navy);
+        } else
+        {
+            outputGainSlider.setEnabled (false);
+            outputGainLabel.setColour (juce::Label::textColourId, AppColors::Blue);
+            outputGainSlider.setColour (juce::Slider::thumbColourId, AppColors::Blue);
+            outputGainSlider.setColour (juce::Slider::trackColourId, AppColors::Blue);
+        }
+    }
+    
+    void setEnabled(bool isEnabled)
+    {
+        setOutputGainEnabled(isEnabled);
+        if (isEnabled)
+        {
+            inputGainLabel.setColour (juce::Label::textColourId, AppColors::Navy);
+            inputGainSlider.setEnabled (true);
+            inputGainSlider.setColour (juce::Slider::thumbColourId, AppColors::Red);
+            inputGainSlider.setColour (juce::Slider::trackColourId, AppColors::Navy);
+            
+            ceilingLabel.setColour (juce::Label::textColourId, AppColors::Navy);
+            ceilingSlider.setEnabled (true);
+            ceilingSlider.setColour (juce::Slider::thumbColourId, AppColors::Red);
+            ceilingSlider.setColour (juce::Slider::trackColourId, AppColors::Navy);
+            
+            clippingTypeLabel.setColour (juce::Label::textColourId, AppColors::Navy);
+            clippingTypeSlider.setEnabled (true);
+            clippingTypeSlider.setColour (juce::Slider::thumbColourId, AppColors::Red);
+            clippingTypeSlider.setColour (juce::Slider::trackColourId, AppColors::Navy);
+            
+            oversampleRateLabel.setColour (juce::Label::textColourId, AppColors::Navy);
+            oversampleRateSlider.setEnabled (true);
+            oversampleRateSlider.setColour (juce::Slider::thumbColourId, AppColors::Red);
+            oversampleRateSlider.setColour (juce::Slider::trackColourId, AppColors::Navy);
+        } else
+        {
+            inputGainLabel.setColour (juce::Label::textColourId, AppColors::Blue);
+            inputGainSlider.setEnabled (false);
+            inputGainSlider.setColour (juce::Slider::thumbColourId, AppColors::Blue);
+            inputGainSlider.setColour (juce::Slider::trackColourId, AppColors::Blue);
+            
+            ceilingLabel.setColour (juce::Label::textColourId, AppColors::Blue);
+            ceilingSlider.setEnabled (false);
+            ceilingSlider.setColour (juce::Slider::thumbColourId, AppColors::Blue);
+            ceilingSlider.setColour (juce::Slider::trackColourId, AppColors::Blue);
+            
+            clippingTypeLabel.setColour (juce::Label::textColourId, AppColors::Blue);
+            clippingTypeSlider.setEnabled (false);
+            clippingTypeSlider.setColour (juce::Slider::thumbColourId, AppColors::Blue);
+            clippingTypeSlider.setColour (juce::Slider::trackColourId, AppColors::Blue);
+            
+            oversampleRateLabel.setColour (juce::Label::textColourId, AppColors::Blue);
+            oversampleRateSlider.setEnabled (false);
+            oversampleRateSlider.setColour (juce::Slider::thumbColourId, AppColors::Blue);
+            oversampleRateSlider.setColour (juce::Slider::trackColourId, AppColors::Blue);
         }
     }
     
@@ -710,6 +807,7 @@ public:
         addAndMakeVisible(footer);
         
         footer.addLinkInOutListener(this);
+        footer.addBypassListener(this);
     }
     
     //==============================================================================
@@ -741,13 +839,21 @@ public:
     }
     
     //==============================================================================
-    void buttonClicked (juce::Button *) override
-    {}
-    
-    void buttonStateChanged (juce::Button* button) override
+    void buttonClicked (juce::Button* button) override
     {
-        workingArea.setOutputGainEnabled(button->getToggleState());
+        if (button->getName() == "LinkInOut")
+        {
+            workingArea.setOutputGainEnabled (!button->getToggleState());
+        }
+        if (button->getName() == "Bypass")
+        {
+            workingArea.setEnabled (!button->getToggleState());
+            footer.setLinkEnabled (!button->getToggleState());
+        }
     }
+    
+    void buttonStateChanged (juce::Button*) override
+    {}
     
 private:
     Header      header;
