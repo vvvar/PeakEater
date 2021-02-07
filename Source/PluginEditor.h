@@ -136,6 +136,8 @@ public:
         }
     private:
         const float ROUNDING = 2.0f;
+        juce::ColourGradient horizontalGradient;
+        juce::ColourGradient verticalGradient;
     };
     
     MeterSlider(

@@ -35,7 +35,10 @@
       <FILE id="UzSp15" name="logo_full.png" compile="0" resource="1" file="Resources/logo_full.png"/>
     </GROUP>
   </MAINGROUP>
-  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"
+               FF_AUDIO_ALLOW_ALLOCATIONS_IN_MEASURE_BLOCK="0" JUCE_USE_OGGVORBIS="0"
+               JUCE_USE_FLAC="0" JUCE_USE_MP3AUDIOFORMAT="0" JUCE_USE_LAME_AUDIO_FORMAT="0"
+               JUCE_USE_WINDOWS_MEDIA_FORMAT="0" JUCE_USE_CURL="0" JUCE_LOAD_CURL_SYMBOLS_LAZILY="0"/>
   <EXPORTFORMATS>
     <VS2019 targetFolder="Builds/VisualStudio2019">
       <CONFIGURATIONS>
@@ -43,19 +46,19 @@
         <CONFIGURATION isDebug="0" name="Release" targetName="MultiShaper"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_plugin_client" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_dsp" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="Dependencies/JUCE/modules"/>
         <MODULEPATH id="ff_meters" path="Dependencies"/>
       </MODULEPATHS>
     </VS2019>
@@ -65,19 +68,19 @@
         <CONFIGURATION isDebug="0" name="Release" targetName="MultiShaper"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_plugin_client" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_dsp" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../libs/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="Dependencies/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="Dependencies/JUCE/modules"/>
         <MODULEPATH id="ff_meters" path="Dependencies"/>
       </MODULEPATHS>
     </XCODE_MAC>
