@@ -6,11 +6,11 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/vvvar/MultiShaper">
+  <a href="https://github.com/vvvar/PeakEater">
     <img src="Resources/logo_full.png" alt="Logo">
   </a>
 
-  <h3 align="center">MultiShaper</h3>
+  <h3 align="center">PeakEater</h3>
 
   <p align="center">
     Free open source VST3/AU wave shaping plugin.
@@ -60,7 +60,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://github.com/vvvar/MultiShaper)
+[![Product Name Screen Shot][product-screenshot]](https://github.com/vvvar/PeakEater)
 
 TBD
 
@@ -111,7 +111,7 @@ TBT
 <!-- LICENSE -->
 ## License
 
-Distributed under the GPL-3.0 License. See [`LICENSE.md`](https://github.com/vvvar/MultiShaper/blob/master/LICENSE.md) for more information.
+Distributed under the GPL-3.0 License. See [`LICENSE.md`](https://github.com/vvvar/PeakEater/blob/master/LICENSE.md) for more information.
 
 
 
@@ -120,7 +120,7 @@ Distributed under the GPL-3.0 License. See [`LICENSE.md`](https://github.com/vvv
 
 Vladyslav Voinov - [Linkedin](https://www.linkedin.com/in/vladyslav-voinov-5126a793/) - voinovvladv@gmail.com
 
-Project Link: [https://github.com/vvvar/MultiShaper](https://github.com/vvvar/MultiShaper)
+Project Link: [https://github.com/vvvar/PeakEater](https://github.com/vvvar/PeakEater)
 
 
 
@@ -134,10 +134,10 @@ TBD
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[issues-shield]: https://img.shields.io/github/issues/vvvar/MultiShaper?style=for-the-badge
-[issues-url]: https://github.com/vvvar/MultiShaper/issues
-[license-shield]: https://img.shields.io/github/license/vvvar/MultiShaper?style=for-the-badge
-[license-url]: https://github.com/vvvar/MultiShaper/blob/master/LICENSE.md
+[issues-shield]: https://img.shields.io/github/issues/vvvar/PeakEater?style=for-the-badge
+[issues-url]: https://github.com/vvvar/PeakEater/issues
+[license-shield]: https://img.shields.io/github/license/vvvar/PeakEater?style=for-the-badge
+[license-url]: https://github.com/vvvar/PeakEater/blob/master/LICENSE.md
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/vladyslav-voinov-5126a793/
 [product-screenshot]: Resources/screenshot.png
