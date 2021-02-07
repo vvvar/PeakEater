@@ -134,11 +134,11 @@ That's it, you may now build PeakEater for the available targets.
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Visual Studio 2019 support
-- [ ] Windows VST3 build
-- [ ] Skew factor for sliders
-- [ ] Additional softness adjustment for certain clipping types
-- [ ] More clipping algorythms
+- [ ] Windows package
+- [ ] Small UI/UX improvements
+- [ ] Extended clipping section
+
+Check out [Project Roadmap](https://github.com/vvvar/PeakEater/projects/1) page for more details.
 
 <!-- CONTRIBUTING -->
 ## Contributing
