@@ -77,13 +77,13 @@ static const ParameterInfo OversampleRate { "OversampleRate", "Oversample", {}, 
 //==============================================================================
 /**
 */
-class MultiShaperAudioProcessor  :  public juce::AudioProcessor,
+class PeakEaterAudioProcessor  :  public juce::AudioProcessor,
                                     public waveshaping::OversampledWaveShaperListener
 {
 public:
     //==============================================================================
-    MultiShaperAudioProcessor();
-    ~MultiShaperAudioProcessor() override;
+    PeakEaterAudioProcessor();
+    ~PeakEaterAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -194,5 +194,5 @@ private:
     foleys::LevelMeterSource outputMeterSource;
     
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MultiShaperAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeakEaterAudioProcessor)
 };

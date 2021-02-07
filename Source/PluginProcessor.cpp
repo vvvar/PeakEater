@@ -44,7 +44,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 }
 
 //==============================================================================
-MultiShaperAudioProcessor::MultiShaperAudioProcessor()
+PeakEaterAudioProcessor::PeakEaterAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -69,17 +69,17 @@ MultiShaperAudioProcessor::MultiShaperAudioProcessor()
     waveShaper->addListener(this);
 }
 
-MultiShaperAudioProcessor::~MultiShaperAudioProcessor()
+PeakEaterAudioProcessor::~PeakEaterAudioProcessor()
 {
 }
 
 //==============================================================================
-const juce::String MultiShaperAudioProcessor::getName() const
+const juce::String PeakEaterAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool MultiShaperAudioProcessor::acceptsMidi() const
+bool PeakEaterAudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -88,7 +88,7 @@ bool MultiShaperAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool MultiShaperAudioProcessor::producesMidi() const
+bool PeakEaterAudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -97,7 +97,7 @@ bool MultiShaperAudioProcessor::producesMidi() const
    #endif
 }
 
-bool MultiShaperAudioProcessor::isMidiEffect() const
+bool PeakEaterAudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -106,37 +106,37 @@ bool MultiShaperAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double MultiShaperAudioProcessor::getTailLengthSeconds() const
+double PeakEaterAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int MultiShaperAudioProcessor::getNumPrograms()
+int PeakEaterAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int MultiShaperAudioProcessor::getCurrentProgram()
+int PeakEaterAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void MultiShaperAudioProcessor::setCurrentProgram (int index)
+void PeakEaterAudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const juce::String MultiShaperAudioProcessor::getProgramName (int index)
+const juce::String PeakEaterAudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void MultiShaperAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void PeakEaterAudioProcessor::changeProgramName (int index, const juce::String& newName)
 {
 }
 
 //==============================================================================
-void MultiShaperAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void PeakEaterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     waveShaper->prepare({ sampleRate, static_cast<juce::uint32>(samplesPerBlock), 2 });
     waveShaperController.setup({
@@ -152,7 +152,7 @@ void MultiShaperAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     outputMeterSource.resize (getTotalNumOutputChannels(), sampleRate * 0.1f / samplesPerBlock);
 }
 
-void MultiShaperAudioProcessor::releaseResources()
+void PeakEaterAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
@@ -160,7 +160,7 @@ void MultiShaperAudioProcessor::releaseResources()
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool MultiShaperAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool PeakEaterAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     juce::ignoreUnused (layouts);
@@ -185,7 +185,7 @@ bool MultiShaperAudioProcessor::isBusesLayoutSupported (const BusesLayout& layou
 }
 #endif
 
-void MultiShaperAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void PeakEaterAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     
@@ -211,18 +211,18 @@ void MultiShaperAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
 }
 
 //==============================================================================
-bool MultiShaperAudioProcessor::hasEditor() const
+bool PeakEaterAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-juce::AudioProcessorEditor* MultiShaperAudioProcessor::createEditor()
+juce::AudioProcessorEditor* PeakEaterAudioProcessor::createEditor()
 {
-    return new MultiShaperAudioProcessorEditor (*this, parameters);
+    return new PeakEaterAudioProcessorEditor (*this, parameters);
 }
 
 //==============================================================================
-void MultiShaperAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+void PeakEaterAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
@@ -232,7 +232,7 @@ void MultiShaperAudioProcessor::getStateInformation (juce::MemoryBlock& destData
     copyXmlToBinary (*xml, destData);
 }
 
-void MultiShaperAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void PeakEaterAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
@@ -251,5 +251,5 @@ void MultiShaperAudioProcessor::setStateInformation (const void* data, int sizeI
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new MultiShaperAudioProcessor();
+    return new PeakEaterAudioProcessor();
 }

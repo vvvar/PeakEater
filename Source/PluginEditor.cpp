@@ -10,7 +10,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-MultiShaperAudioProcessorEditor::MultiShaperAudioProcessorEditor (MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
+PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
     :
     AudioProcessorEditor (&p),
     audioProcessor (p),
@@ -21,16 +21,16 @@ MultiShaperAudioProcessorEditor::MultiShaperAudioProcessorEditor (MultiShaperAud
     setSize (640, 400);
 }
 
-MultiShaperAudioProcessorEditor::~MultiShaperAudioProcessorEditor()
+PeakEaterAudioProcessorEditor::~PeakEaterAudioProcessorEditor()
 {}
 
 //==============================================================================
-void MultiShaperAudioProcessorEditor::paint (juce::Graphics& g)
+void PeakEaterAudioProcessorEditor::paint (juce::Graphics& g)
 {
     g.fillAll (AppColors::Paper);
 }
 
-void MultiShaperAudioProcessorEditor::resized()
+void PeakEaterAudioProcessorEditor::resized()
 {
     main.setBounds(getLocalBounds());
 }

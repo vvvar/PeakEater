@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="H20XIG" name="MultiShaper" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="0.0.1"
+<JUCERPROJECT id="H20XIG" name="PeakEater" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="0.1.0"
               companyName="T-Audio" companyEmail="voinovvladv@gmail.com" pluginManufacturerCode="TAD"
               pluginCode="TAMS" pluginVST3Category="Distortion,Dynamics,Fx"
               pluginRTASCategory="2,64,8192" pluginAAXCategory="2,64,8192"
-              pluginVSTCategory="kPlugCategEffect">
-  <MAINGROUP id="dzL0hV" name="MultiShaper">
+              pluginVSTCategory="kPlugCategEffect" companyCopyright="T-Audio"
+              pluginDesc="Free Open-Source Waveshaper Plugin" cppLanguageStandard="17">
+  <MAINGROUP id="dzL0hV" name="PeakEater">
     <GROUP id="{67065D82-5FC1-C5D6-73EC-1373AA640C7F}" name="Source">
       <GROUP id="{6A32C51B-90F1-9658-B27D-16178543ED34}" name="WaveShaping">
         <FILE id="J3sHJ6" name="Clipper.h" compile="0" resource="0" file="Source/WaveShaping/Clipper.h"/>

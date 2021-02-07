@@ -204,7 +204,7 @@ class PeakAnalyzer : public juce::Component, public juce::Timer
 {
 public:
     //==============================================================================
-    PeakAnalyzer(MultiShaperAudioProcessor& p):
+    PeakAnalyzer(PeakEaterAudioProcessor& p):
         processor(p)
     {
         addAndMakeVisible(inputMagnitudeLabel);
@@ -258,7 +258,7 @@ public:
     }
 private:
     //==============================================================================
-    MultiShaperAudioProcessor& processor;
+    PeakEaterAudioProcessor& processor;
     
     //==============================================================================
     juce::Label inputMagnitudeLabel { "InputMagnitudeLabel", "In:" };
@@ -450,7 +450,7 @@ class LeftPanel : public juce::Component
 {
 public:
     //==============================================================================
-    LeftPanel(MultiShaperAudioProcessor& p):
+    LeftPanel(PeakEaterAudioProcessor& p):
         inputMeter("Input", p.getInputMeterSource())
     {
         addAndMakeVisible(inputMeter);
@@ -489,7 +489,7 @@ class RightPanel : public juce::Component
 {
 public:
     //==============================================================================
-    RightPanel(MultiShaperAudioProcessor& p):
+    RightPanel(PeakEaterAudioProcessor& p):
         outputMeter("Output", p.getOutputMeterSource())
     {
         addAndMakeVisible(outputMeter);
@@ -568,7 +568,7 @@ private:
 class Footer : public juce::Component
 {
 public:
-    Footer(MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
+    Footer(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
         linkInOut(Parameters::LinkInOut, vts, "Link In/Out"),
         bypass(Parameters::Bypass, vts),
         peaksEaten(p)
@@ -635,7 +635,7 @@ private:
 class WorkingArea : public juce::Component
 {
 public:
-    WorkingArea(MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
+    WorkingArea(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
         ceilingSlider(p.getCeilingMeterSource(), vts, Parameters::Ceiling)
     {
         inputGainLabel.setText (Parameters::InputGain.Label, juce::dontSendNotification);
@@ -801,7 +801,7 @@ class CentralPanel : public juce::Component, public juce::Button::Listener
 {
 public:
     //==============================================================================
-    CentralPanel(MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
+    CentralPanel(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
         workingArea(p, vts),
         footer(p, vts)
     {
@@ -872,7 +872,7 @@ class MainWindow : public juce::Component
 {
 public:
     //==============================================================================
-    MainWindow(MultiShaperAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
+    MainWindow(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
         leftPanel(p),
         centralPanel(p, vts),
         rightPanel(p)
@@ -928,11 +928,11 @@ private:
 };
 
 //==============================================================================
-class MultiShaperAudioProcessorEditor  : public juce::AudioProcessorEditor
+class PeakEaterAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    MultiShaperAudioProcessorEditor (MultiShaperAudioProcessor&, juce::AudioProcessorValueTreeState&);
-    ~MultiShaperAudioProcessorEditor() override;
+    PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor&, juce::AudioProcessorValueTreeState&);
+    ~PeakEaterAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -940,12 +940,12 @@ public:
 
 private:
     //==============================================================================
-    MultiShaperAudioProcessor& audioProcessor;
+    PeakEaterAudioProcessor& audioProcessor;
     juce::AudioProcessorValueTreeState& valueTreeState;
     
     //==============================================================================
     MainWindow main;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MultiShaperAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeakEaterAudioProcessorEditor)
 };
