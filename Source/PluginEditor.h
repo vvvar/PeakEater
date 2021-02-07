@@ -395,6 +395,7 @@ public:
         meter.setLookAndFeel(&meterLookAndFeel);
         meter.setMeterSource (&meterSource);
         label.setText(labelText, juce::dontSendNotification);
+        label.setJustificationType(juce::Justification::centred);
         addAndMakeVisible(meter);
         addAndMakeVisible(label);
     }
@@ -421,6 +422,8 @@ public:
             Track (Fr (18))
         };
         grid.templateColumns = { Track (Fr (1)) };
+        
+        // .withMargin(juce::GridItem::Margin(0, 0, 0, 5))
 
         grid.items = {
             Item (label),
