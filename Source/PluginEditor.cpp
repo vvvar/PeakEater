@@ -18,7 +18,7 @@ PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (PeakEaterAudioProc
     main(p, vts)
 {
     addAndMakeVisible(main);
-    setSize (640, 400);
+    setSize (704, 440);
 }
 
 PeakEaterAudioProcessorEditor::~PeakEaterAudioProcessorEditor()

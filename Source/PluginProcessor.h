@@ -55,22 +55,22 @@ static const RangeInfo  InputGainRange   = { { -36.0f, 36.0f, 0.1f } };
 static const RangeInfo  OutputGainRange  = { { -36.0f, 36.0f, 0.1f } };
 static const RangeInfo  CeilingRange     = { { -36.0f, -0.1f, 0.1f }, -0.1f };
 static const ChoiceInfo ClippingTypeInfo = { {
-    "Hard",
-    "Quintic",
-    "Cubic",
-    "Tangent",
-    "Algebraic",
-    "Arctangent"
+    "HARD",
+    "QUINTIC",
+    "CUBIC",
+    "TANGENT",
+    "ALGEBRAIC",
+    "ARCTANGENT"
 }, 0 };
 static const ChoiceInfo OversampleRateInfo = { { "x2", "x4", "x8", "x16" }, 0 };
 
-static const ParameterInfo InputGain      { "InputGain", "Input Gain", InputGainRange };
-static const ParameterInfo OutputGain     { "OutputGain", "Output Gain", OutputGainRange };
-static const ParameterInfo LinkInOut      { "LinkInOut", "Link In & Out" };
-static const ParameterInfo Bypass         { "Bypass", "Bypass" };
-static const ParameterInfo Ceiling        { "Ceiling", "Ceiling", CeilingRange };
-static const ParameterInfo ClippingType   { "ClippingType", "Algorythm", {}, ClippingTypeInfo };
-static const ParameterInfo OversampleRate { "OversampleRate", "Oversample", {}, OversampleRateInfo };
+static const ParameterInfo InputGain      { "InputGain", "INPUT GAIN", InputGainRange };
+static const ParameterInfo OutputGain     { "OutputGain", "OUTPUT GAIN", OutputGainRange };
+static const ParameterInfo LinkInOut      { "LinkInOut", "IN<->OUT" };
+static const ParameterInfo Bypass         { "Bypass", "BYPASS" };
+static const ParameterInfo Ceiling        { "Ceiling", "CEILING", CeilingRange };
+static const ParameterInfo ClippingType   { "ClippingType", "ALGORYTHM", {}, ClippingTypeInfo };
+static const ParameterInfo OversampleRate { "OversampleRate", "OVERSAMPLE", {}, OversampleRateInfo };
 
 }
 

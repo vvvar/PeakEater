@@ -170,7 +170,7 @@ public:
     
     void resized() override
     {
-        meter.setBounds (-52, 26, getWidth() - 33, getHeight() - 46);
+        meter.setBounds (-52, 28, getWidth() - 34, getHeight() - 50);
         slider.setBounds (getLocalBounds());
     }
     
@@ -261,13 +261,13 @@ private:
     PeakEaterAudioProcessor& processor;
     
     //==============================================================================
-    juce::Label inputMagnitudeLabel { "InputMagnitudeLabel", "In:" };
+    juce::Label inputMagnitudeLabel { "InputMagnitudeLabel", "IN:" };
     juce::Label inputMagnitudeValue { "InputMagnitudeValue", "0 dB" };
     
-    juce::Label clippedMagnitudeLabel { "ClippedMagnitudeLabel", "Eaten:" };
+    juce::Label clippedMagnitudeLabel { "ClippedMagnitudeLabel", "EATEN:" };
     juce::Label clippedMagnitudeValue { "ClippedMagnitudeValue", "0 dB" };
     
-    juce::Label outputMagnitudeLabel { "OutputMagnitudeLabel", "Out:" };
+    juce::Label outputMagnitudeLabel { "OutputMagnitudeLabel", "OUT:" };
     juce::Label outputMagnitudeValue { "OutputMagnitudeValue", "0 dB" };
     
     //==============================================================================
@@ -292,7 +292,8 @@ public:
              ) noexcept :
         toggle(parameter.Id)
     {
-        label.setText (labelText.isNotEmpty() ? labelText : parameter.Label, juce::dontSendNotification);
+        juce::String text = labelText.isNotEmpty() ? labelText : parameter.Label;
+        label.setText (text.toUpperCase(), juce::dontSendNotification);
         label.setFont (juce::Font(11));
         toggle.setColour (juce::ToggleButton::tickDisabledColourId, AppColors::Blue);
         addAndMakeVisible (label);
@@ -451,7 +452,7 @@ class LeftPanel : public juce::Component
 public:
     //==============================================================================
     LeftPanel(PeakEaterAudioProcessor& p):
-        inputMeter("Input", p.getInputMeterSource())
+        inputMeter("IN", p.getInputMeterSource())
     {
         addAndMakeVisible(inputMeter);
     }
@@ -490,7 +491,7 @@ class RightPanel : public juce::Component
 public:
     //==============================================================================
     RightPanel(PeakEaterAudioProcessor& p):
-        outputMeter("Output", p.getOutputMeterSource())
+        outputMeter("OUT", p.getOutputMeterSource())
     {
         addAndMakeVisible(outputMeter);
     }
@@ -886,6 +887,9 @@ public:
         getLookAndFeel().setColour (juce::ToggleButton::tickColourId, AppColors::Navy);
         getLookAndFeel().setColour (juce::ToggleButton::tickDisabledColourId, AppColors::Navy);
         getLookAndFeel().setColour (juce::Label::textColourId, AppColors::Navy);
+        
+        auto typeface = juce::Typeface::createSystemTypefaceFor(BinaryData::WalkwayUpperBold_ttf, BinaryData::WalkwayUpperBold_ttfSize);
+        juce::LookAndFeel::getDefaultLookAndFeel().setDefaultSansSerifTypeface(typeface);
         
         addAndMakeVisible(leftPanel);
         addAndMakeVisible(centralPanel);

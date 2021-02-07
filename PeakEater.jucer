@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="H20XIG" name="PeakEater" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="0.1.0"
+              companyName="T-Audio" companyEmail="voinovvladv@gmail.com" pluginManufacturerCode="TAD"
+              pluginCode="TAMS" pluginVST3Category="Distortion,Dynamics,Fx"
+              pluginRTASCategory="2,64,8192" pluginAAXCategory="2,64,8192"
+              pluginVSTCategory="kPlugCategEffect" companyCopyright="T-Audio"
+              pluginDesc="Free Open-Source Waveshaper Plugin" cppLanguageStandard="17">
+  <MAINGROUP id="dzL0hV" name="PeakEater">
+    <GROUP id="{67065D82-5FC1-C5D6-73EC-1373AA640C7F}" name="Source">
+      <GROUP id="{6A32C51B-90F1-9658-B27D-16178543ED34}" name="WaveShaping">
+        <FILE id="J3sHJ6" name="Clipper.h" compile="0" resource="0" file="Source/WaveShaping/Clipper.h"/>
+        <FILE id="Lb2FEA" name="OversampledClipper.h" compile="0" resource="0"
+              file="Source/WaveShaping/OversampledClipper.h"/>
+        <FILE id="kL8sDK" name="OversampledWaveShaper.h" compile="0" resource="0"
+              file="Source/WaveShaping/OversampledWaveShaper.h"/>
+        <FILE id="y5cc3F" name="ClippingFunctions.h" compile="0" resource="0"
+              file="Source/WaveShaping/ClippingFunctions.h"/>
+        <FILE id="Uj5UG2" name="Helpers.h" compile="0" resource="0" file="Source/WaveShaping/Helpers.h"/>
+      </GROUP>
+      <FILE id="sLAY7T" name="WaveShaperController.h" compile="0" resource="0"
+            file="Source/WaveShaperController.h"/>
+      <FILE id="l4vr8o" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="B2tewP" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="QLWNU0" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="c58FfL" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+    <GROUP id="{4871CAE9-74EF-8C63-E174-4E80748CCAB8}" name="Resources">
+      <FILE id="s6Bt2J" name="WalkwayUpperBold.ttf" compile="0" resource="1"
+            file="Resources/WalkwayUpperBold.ttf"/>
+      <FILE id="UzSp15" name="logo_full.png" compile="0" resource="1" file="Resources/logo_full.png"/>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <EXPORTFORMATS>
+    <VS2019 targetFolder="Builds/VisualStudio2019">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="MultiShaper"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="MultiShaper"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="ff_meters" path="Dependencies"/>
+      </MODULEPATHS>
+    </VS2019>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="MultiShaper"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="MultiShaper"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../libs/JUCE/modules"/>
+        <MODULEPATH id="ff_meters" path="Dependencies"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="ff_meters" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <OSX/>
+  </LIVE_SETTINGS>
+</JUCERPROJECT>
