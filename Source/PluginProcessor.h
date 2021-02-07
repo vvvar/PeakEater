@@ -55,15 +55,12 @@ static const RangeInfo  InputGainRange   = { { -36.0f, 36.0f, 0.1f } };
 static const RangeInfo  OutputGainRange  = { { -36.0f, 36.0f, 0.1f } };
 static const RangeInfo  CeilingRange     = { { -36.0f, -0.1f, 0.1f }, -0.1f };
 static const ChoiceInfo ClippingTypeInfo = { {
-    "Logarythmic",
     "Hard",
     "Quintic",
-    "Cubic Basic",
-    "Hyperbolic Tan",
+    "Cubic",
+    "Tangent",
     "Algebraic",
-    "Arctangent",
-    "Sin",
-    "Limit"
+    "Arctangent"
 }, 0 };
 static const ChoiceInfo OversampleRateInfo = { { "x2", "x4", "x8", "x16" }, 0 };
 

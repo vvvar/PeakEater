@@ -124,31 +124,22 @@ private:
         switch (previousClippingType)
         {
             case 0:
-                waveShaperPtr->setClippingType(waveshaping::ClippingType::LOGARYTHMIC);
-                break;
-            case 1:
                 waveShaperPtr->setClippingType(waveshaping::ClippingType::HARD);
                 break;
-            case 2:
+            case 1:
                 waveShaperPtr->setClippingType(waveshaping::ClippingType::QUINTIC);
                 break;
-            case 3:
+            case 2:
                 waveShaperPtr->setClippingType(waveshaping::ClippingType::CUBIC);
                 break;
-            case 4:
+            case 3:
                 waveShaperPtr->setClippingType(waveshaping::ClippingType::HYPERBOLIC_TAN);
                 break;
-            case 5:
+            case 4:
                 waveShaperPtr->setClippingType(waveshaping::ClippingType::ALGEBRAIC);
                 break;
-            case 6:
+            case 5:
                 waveShaperPtr->setClippingType(waveshaping::ClippingType::ARCTANGENT);
-                break;
-            case 7:
-                waveShaperPtr->setClippingType(waveshaping::ClippingType::SIN);
-                break;
-            case 8:
-                waveShaperPtr->setClippingType(waveshaping::ClippingType::LIMIT);
                 break;
             default:
                 break;
