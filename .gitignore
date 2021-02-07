@@ -1,6 +1,5 @@
 # MacOS indexing files
-/.DS_Store
-/Source/.DS_Store
+.DS_Store
 
 # Build dir
 /Builds
