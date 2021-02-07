@@ -42,8 +42,8 @@
   <EXPORTFORMATS>
     <VS2019 targetFolder="Builds/VisualStudio2019">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="MultiShaper"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="MultiShaper"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="PeakEater"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="PeakEater"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="Dependencies/JUCE/modules"/>
@@ -64,8 +64,8 @@
     </VS2019>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="MultiShaper"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="MultiShaper"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="PeakEater"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="PeakEater"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="Dependencies/JUCE/modules"/>
