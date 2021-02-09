@@ -78,7 +78,7 @@ T arcClip (T x) noexcept
 template<typename T>
 T sinclip (T x) noexcept
 {
-    if (std::fabsf (x) < M_PI)
+    if (std::fabsf (x) < juce::MathConstants<T>::pi)
     {
         return JMath::sin (x);
     }
