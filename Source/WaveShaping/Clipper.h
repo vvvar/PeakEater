@@ -40,12 +40,12 @@ public:
     void prepare (const juce::dsp::ProcessSpec& spec) noexcept override
     {
         preGain.prepare(spec);
-        preGain.setRampDurationSeconds(RAMP_DURATION_SEC);
+        preGain.setRampDurationSeconds(DEFAULT_RAMP_DURATION);
         postGain.prepare(spec);
-        postGain.setRampDurationSeconds(RAMP_DURATION_SEC);
-        setThreshold(1.0f);
+        postGain.setRampDurationSeconds(DEFAULT_RAMP_DURATION);
+        setThreshold(DEFAULT_THRESHOLD);
         waveshaper.prepare(spec);
-        setClippingType(ClippingType::LOGARYTHMIC);
+        setClippingType(DEFAULT_CLIPPING_TYPE);
     }
     
     void reset() noexcept override
@@ -117,7 +117,9 @@ public:
 private:
     // ==============================================================================
     /** Consts */
-    const float RAMP_DURATION_SEC = 0.2f;
+    const float        DEFAULT_THRESHOLD     = 0.0f;
+    const float        DEFAULT_RAMP_DURATION = 0.2f;
+    const ClippingType DEFAULT_CLIPPING_TYPE = ClippingType::LOGARYTHMIC;
     
     // ==============================================================================
     /* DSP */

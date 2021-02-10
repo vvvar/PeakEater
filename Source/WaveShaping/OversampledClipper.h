@@ -115,9 +115,11 @@ private:
         return (sampleRate / 2) * 0.98;
     }
     
-    double calculateQ (float octave = 4.0f) const noexcept
+    double calculateQ (float octaves = 4.0f) const noexcept
     {
-        return 1.0f / std::sqrtf (octave);
+        jassert (octaves >= 0.0f & octaves <= 4); // maximum 4 octaves allowed, no negative octaves
+        
+        return 1.0f / std::sqrtf (octaves);
     }
     
     //==============================================================================
