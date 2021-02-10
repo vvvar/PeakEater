@@ -114,7 +114,7 @@ private:
     bool  previousLinkInOut      = false;
     float previousInputGain      = 0.0f;
     float previousOutputGain     = 0.0f;
-    float previousCeiling        = -0.1f;
+    float previousCeiling        = 0.0f;
     int   previousClippingType   = 0;
     int   previousOversampleRate = 0;
     

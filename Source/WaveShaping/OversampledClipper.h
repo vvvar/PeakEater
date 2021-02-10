@@ -98,7 +98,7 @@ private:
     //==============================================================================
     /** Default values */
     const float        DEFAULT_FILTER_Q_OCTAVES = 4.0f;
-    const float        DEFAULT_CEILING = -0.1f;
+    const float        DEFAULT_CEILING = 0.0f;
     const ClippingType DEFAULT_CLIPPING_TYPE = ClippingType::LOGARYTHMIC;
     
     //==============================================================================

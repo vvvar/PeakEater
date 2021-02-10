@@ -53,7 +53,7 @@ struct ParameterInfo
  
 static const RangeInfo  InputGainRange   = { { -36.0f, 36.0f, 0.1f, 0.6f, true } };
 static const RangeInfo  OutputGainRange  = { { -36.0f, 36.0f, 0.1f, 0.6f, true } };
-static const RangeInfo  CeilingRange     = { { -36.0f, -0.1f, 0.1f, 1.6f }, -0.1f };
+static const RangeInfo  CeilingRange     = { { -36.0f, 0.0f, 0.1f, 0.6f }, 0.0f };
 static const ChoiceInfo ClippingTypeInfo = { {
     "HARD",
     "QUINTIC",

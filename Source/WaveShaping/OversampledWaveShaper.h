@@ -65,7 +65,7 @@ public:
     {
         /** Setup input gain */
         inputGain.prepare (spec);
-        inputGain.setRampDurationSeconds(0.5f);
+        inputGain.setRampDurationSeconds(RAMP_DURATION_SEC);
         setInputGain (DEFAULT_INPUT_GAIN);
         
         /** Setup clipper */
@@ -76,7 +76,7 @@ public:
         
         /** Setup output gain */
         outputGain.prepare (spec);
-        outputGain.setRampDurationSeconds(0.5f);
+        outputGain.setRampDurationSeconds(RAMP_DURATION_SEC);
         setOutputGain (DEFAULT_OUTPUT_GAIN);
     }
     
@@ -176,6 +176,7 @@ private:
     /** Default values */
     const float DEFAULT_INPUT_GAIN  = 0.0f;
     const float DEFAULT_OUTPUT_GAIN = 0.0f;
+    const float RAMP_DURATION_SEC   = 0.2f;
     
     //==============================================================================
     /** DSP */

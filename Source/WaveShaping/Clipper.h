@@ -40,9 +40,9 @@ public:
     void prepare (const juce::dsp::ProcessSpec& spec) noexcept override
     {
         preGain.prepare(spec);
-        preGain.setRampDurationSeconds(0.5f);
+        preGain.setRampDurationSeconds(RAMP_DURATION_SEC);
         postGain.prepare(spec);
-        postGain.setRampDurationSeconds(0.5f);
+        postGain.setRampDurationSeconds(RAMP_DURATION_SEC);
         setThreshold(1.0f);
         waveshaper.prepare(spec);
         setClippingType(ClippingType::LOGARYTHMIC);
@@ -109,10 +109,16 @@ public:
      */
     void setThreshold (float threshold) noexcept
     {
-        preGain.setGainDecibels (std::fabs (threshold));
-        postGain.setGainDecibels (threshold);
+        jassert (threshold <= 0.0f); // threshold cannot be more than 0.0 dB
+        
+        preGain.setGainDecibels (std::fabs (threshold)); // gain signal up to make it clip
+        postGain.setGainDecibels (threshold); // gain down to make it's level tha same it was before clip
     }
 private:
+    // ==============================================================================
+    /** Consts */
+    const float RAMP_DURATION_SEC = 0.2f;
+    
     // ==============================================================================
     /* DSP */
     juce::dsp::Gain<T> preGain;
