@@ -18,7 +18,7 @@ PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (PeakEaterAudioProc
     main(p, vts)
 {
     addAndMakeVisible(main);
-    setSize (704, 440);
+    setSize (540, 350);
 }
 
 PeakEaterAudioProcessorEditor::~PeakEaterAudioProcessorEditor()
@@ -32,5 +32,6 @@ void PeakEaterAudioProcessorEditor::paint (juce::Graphics& g)
 
 void PeakEaterAudioProcessorEditor::resized()
 {
+
     main.setBounds(getLocalBounds());
 }

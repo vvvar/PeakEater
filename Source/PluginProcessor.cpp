@@ -9,6 +9,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#include "Parameters.h"
+
 juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
 {
     using NormalisableRange = juce::NormalisableRange<float>;
