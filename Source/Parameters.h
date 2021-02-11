@@ -54,8 +54,8 @@ static const ChoiceInfo ClippingTypeInfo = { {
 }, 0 };
 static const ChoiceInfo OversampleRateInfo = { { "x2", "x4", "x8", "x16" }, 0 };
 
-static const ParameterInfo InputGain      { "InputGain", "INPUT GAIN", InputGainRange };
-static const ParameterInfo OutputGain     { "OutputGain", "OUTPUT GAIN", OutputGainRange };
+static const ParameterInfo InputGain      { "InputGain", "INPUT", InputGainRange };
+static const ParameterInfo OutputGain     { "OutputGain", "OUTPUT", OutputGainRange };
 static const ParameterInfo LinkInOut      { "LinkInOut", "IN<->OUT" };
 static const ParameterInfo Bypass         { "Bypass", "BYPASS" };
 static const ParameterInfo Ceiling        { "Ceiling", "CEILING", CeilingRange };
