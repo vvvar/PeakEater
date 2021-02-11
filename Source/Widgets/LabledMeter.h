@@ -69,7 +69,7 @@ public:
         grid.templateColumns = { Track (Fr (1)) };
         
         grid.items = {
-            Item (label),
+            Item (label).withMargin(Item::Margin(0, 0, 0, -17)),
             Item (meter)
         };
          
