@@ -16,16 +16,16 @@ public:
     public:
         CheckBoxLookAndFeel()
         {
-            setColour (juce::Label::textColourId, AppColors::Navy);
+            setColour (juce::ToggleButton::textColourId, AppColors::Navy);
             setColour (juce::ToggleButton::tickColourId, AppColors::Navy);
             setColour (juce::ToggleButton::tickDisabledColourId, AppColors::Blue);
         }
         ~CheckBoxLookAndFeel() {}
-        juce::Font getLabelFont (juce::Label& label) override
-        {
-            label.setJustificationType (juce::Justification::centred);
-            return { 10.0f };
-        }
+        
+//        juce::Font getTextButtonFont (juce::TextButton&, int) override
+//        {
+//            return { 1.0f };
+//        }
     };
     
     //==============================================================================
@@ -37,18 +37,15 @@ public:
         toggle(parameter.Id)
     {
         juce::String text = labelText.isNotEmpty() ? labelText : parameter.Label;
-        label.setText (text.toUpperCase(), juce::dontSendNotification);
-        
-        setLookAndFeel(&lnf);
-        
-        addAndMakeVisible (label);
-        addAndMakeVisible (toggle);
-        
+        toggle.setButtonText(text.toUpperCase());
+        toggle.setLookAndFeel(&lnf);
         attachment.reset (new ButtonAttachment (vts, parameter.Id, toggle));
+        
+        addAndMakeVisible (toggle);
     }
     ~CheckBox()
     {
-        setLookAndFeel(nullptr);
+        toggle.setLookAndFeel(nullptr);
     }
     
     //==============================================================================
@@ -66,12 +63,12 @@ public:
         grid.templateRows = {
             Track (Fr (1))
         };
-        grid.templateColumns = { Track (Fr (1)), Track (Fr (1)) };
+        grid.templateColumns = { Track (Fr (1)) };
 
         grid.items = {
-            Item (label), Item (toggle)
+            Item (toggle)
         };
-         
+        
         grid.performLayout (getLocalBounds());
     }
     
@@ -84,7 +81,6 @@ public:
     //==============================================================================
     void setEnabled(bool isEnabled)
     {
-        label.setEnabled (isEnabled);
         toggle.setEnabled (isEnabled);
     }
     
@@ -93,7 +89,6 @@ private:
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
     
     //==============================================================================
-    juce::Label                       label;
     juce::ToggleButton                toggle;
     std::unique_ptr<ButtonAttachment> attachment;
     CheckBoxLookAndFeel               lnf;

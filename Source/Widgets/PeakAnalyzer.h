@@ -41,13 +41,11 @@ public:
         grid.justifyContent = juce::Grid::JustifyContent::end;
         
         grid.templateRows = {
-            Track (Fr (1)),
-            Track (Fr (1)),
             Track (Fr (1))
         };
         
         grid.templateColumns = {
-            Track (Fr (1)), Track (Fr (1))
+            Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1))
         };
         
         grid.items = {

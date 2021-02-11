@@ -35,10 +35,12 @@ public:
         
         Grid grid;
 
-        grid.templateRows = { Track (Fr (1)) };
-        grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (1)) };
+        grid.templateRows = {
+            Track (Fr (1))
+        };
+        grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (3)) };
         grid.items = {
-            Item(linkInOut), Item(bypass), Item(peakAnalyzer)
+            Item(bypass), Item(linkInOut), Item(peakAnalyzer),
         };
          
         grid.performLayout (getLocalBounds());
