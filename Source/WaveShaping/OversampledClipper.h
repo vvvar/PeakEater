@@ -28,7 +28,7 @@ public:
     
     //==============================================================================
     OversampledClipper (const unsigned int factor = 1) noexcept :
-        oversampler (2, factor, Oversampling::filterHalfBandFIREquiripple, false)
+        oversampler (2, factor, Oversampling::filterHalfBandPolyphaseIIR, false)
     {}
     
     ~OversampledClipper()
