@@ -97,9 +97,9 @@ public:
 private:
     //==============================================================================
     /** Default values */
-    const float        DEFAULT_FILTER_Q_OCTAVES = 4.0f;
+    const float        DEFAULT_FILTER_Q_OCTAVES = 2.0f;
     const float        DEFAULT_CEILING = 0.0f;
-    const ClippingType DEFAULT_CLIPPING_TYPE = ClippingType::LOGARYTHMIC;
+    const ClippingType DEFAULT_CLIPPING_TYPE = ClippingType::HARD;
     
     //==============================================================================
     /** DSP */
@@ -115,7 +115,7 @@ private:
         return (sampleRate / 2) * 0.98;
     }
     
-    double calculateQ (float octaves = 4.0f) const noexcept
+    double calculateQ (float octaves) const noexcept
     {
         jassert (octaves >= 0.0f & octaves <= 4); // maximum 4 octaves allowed, no negative octaves
         
