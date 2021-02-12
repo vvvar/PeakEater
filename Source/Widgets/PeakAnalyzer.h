@@ -23,7 +23,7 @@ public:
         addAndMakeVisible(clippedMagnitudeValue);
         addAndMakeVisible(outputMagnitudeLabel);
         addAndMakeVisible(outputMagnitudeValue);
-        startTimer(1000);
+        startTimer(100);
     }
     
     //==============================================================================
@@ -60,13 +60,32 @@ public:
     //==============================================================================
     void timerCallback() override
     {
+        auto dbClipped = processor.getDecibelsClipped();
+        
+        if (ticks >= 10 * 3)
+        {
+            prevDbClipped = dbClipped;
+            ticks = 0;
+        } else
+        {
+            if (dbClipped > prevDbClipped)
+            {
+                prevDbClipped = dbClipped;
+            }
+            ticks++;
+        }
+        
         inputMagnitudeValue.setText (dbToString (processor.getDecibelsIn()), juce::dontSendNotification);
         outputMagnitudeValue.setText (dbToString (processor.getDecibelsOut()), juce::dontSendNotification);
-        clippedMagnitudeValue.setText (dbToString (processor.getDecibelsClipped()), juce::dontSendNotification);
+        clippedMagnitudeValue.setText (dbToString (prevDbClipped), juce::dontSendNotification);
     }
 private:
     //==============================================================================
     PeakEaterAudioProcessor& processor;
+    
+    //==============================================================================
+    unsigned int ticks  = 0;
+    float prevDbClipped = 0;
     
     //==============================================================================
     widgets::Label inputMagnitudeLabel { "InputMagnitudeLabel", "IN:" };
