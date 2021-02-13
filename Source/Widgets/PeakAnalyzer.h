@@ -45,7 +45,7 @@ public:
         };
         
         grid.templateColumns = {
-            Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1))
+            Track (Fr (5)), Track (Fr (8)), Track (Fr (6)), Track (Fr (8)), Track (Fr (5)), Track (Fr (8))
         };
         
         grid.items = {
@@ -60,24 +60,34 @@ public:
     //==============================================================================
     void timerCallback() override
     {
+        auto dbIn      = processor.getDecibelsIn();
         auto dbClipped = processor.getDecibelsClipped();
+        auto dbOut     = processor.getDecibelsOut();
         
-        if (ticks >= 10 * 3)
+        if (ticks >= 10 * 3) // 3 seconds
         {
+            prevDbIn      = dbIn;
             prevDbClipped = dbClipped;
+            prevDbOut     = dbOut;
             ticks = 0;
         } else
         {
+            if (dbIn > prevDbIn)
+            {
+                prevDbIn = dbIn;
+            }
             if (dbClipped > prevDbClipped)
             {
                 prevDbClipped = dbClipped;
             }
+            if (dbOut > prevDbOut)
+            {
+                prevDbOut = dbOut;
+            }
             ticks++;
         }
         
-        inputMagnitudeValue.setText (dbToString (processor.getDecibelsIn()), juce::dontSendNotification);
-        outputMagnitudeValue.setText (dbToString (processor.getDecibelsOut()), juce::dontSendNotification);
-        clippedMagnitudeValue.setText (dbToString (prevDbClipped), juce::dontSendNotification);
+        setLabelValues(prevDbIn, prevDbClipped, prevDbOut);
     }
 private:
     //==============================================================================
@@ -85,7 +95,9 @@ private:
     
     //==============================================================================
     unsigned int ticks  = 0;
+    float prevDbIn      = 0;
     float prevDbClipped = 0;
+    float prevDbOut     = 0;
     
     //==============================================================================
     widgets::Label inputMagnitudeLabel { "InputMagnitudeLabel", "IN:" };
@@ -96,6 +108,14 @@ private:
     
     widgets::Label outputMagnitudeLabel { "OutputMagnitudeLabel", "OUT:" };
     widgets::Label outputMagnitudeValue { "OutputMagnitudeValue", "0 dB" };
+    
+    //==============================================================================
+    void setLabelValues(float input, float clipped, float output)
+    {
+        inputMagnitudeValue.setText   (dbToString (input), juce::dontSendNotification);
+        clippedMagnitudeValue.setText (dbToString (clipped), juce::dontSendNotification);
+        outputMagnitudeValue.setText  (dbToString (output), juce::dontSendNotification);
+    }
     
     //==============================================================================
     juce::String dbToString(const float db) const noexcept

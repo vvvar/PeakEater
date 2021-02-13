@@ -40,7 +40,7 @@ public:
         };
         grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (3)) };
         grid.items = {
-            Item(bypass).withMargin (Item::Margin (0, 0, 0, 20)), Item(linkInOut), Item(peakAnalyzer).withMargin (Item::Margin (0, 20, 0, 0)),
+            Item(bypass).withMargin (Item::Margin (0, 0, 0, 18)), Item(linkInOut), Item(peakAnalyzer).withMargin (Item::Margin (0, 18, 0, 0)),
         };
          
         grid.performLayout (getLocalBounds());
