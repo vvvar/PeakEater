@@ -120,7 +120,7 @@ private:
     //==============================================================================
     juce::String dbToString(const float db) const noexcept
     {
-        return juce::String (std::roundf (db * 100) / 100) + " dB";
+        return juce::String (std::roundf (db * 10) / 10) + " dB";
     }
     
     //==============================================================================
