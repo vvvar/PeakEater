@@ -19,14 +19,43 @@ public:
         LabledMeterLnf()
         {
             foleys::LevelMeterLookAndFeel();
-            setColour (LevelMeter::lmTextColour,             AppColors::Paper);
+            setColour (LevelMeter::lmTextColour,             AppColors::Navy);
+            setColour (LevelMeter::lmTextClipColour,         AppColors::Red);
             setColour (LevelMeter::lmTicksColour,            AppColors::Navy);
             setColour (LevelMeter::lmBackgroundColour,       AppColors::Paper);
-            setColour (LevelMeter::lmMeterOutlineColour,     AppColors::Paper);
-            setColour (LevelMeter::lmMeterBackgroundColour,  AppColors::Grey);
+            setColour (LevelMeter::lmMeterOutlineColour,     AppColors::Blue);
+            setColour (LevelMeter::lmMeterBackgroundColour,  AppColors::Blue);
             setColour (LevelMeter::lmMeterGradientLowColour, AppColors::Green);
             setColour (LevelMeter::lmMeterGradientMidColour, AppColors::Green2);
             setColour (LevelMeter::lmMeterGradientMaxColour, AppColors::Red);
+        }
+        
+        //==============================================================================
+        void drawMaxNumber (juce::Graphics& g,
+                            foleys::LevelMeter::MeterFlags meterType,
+                            juce::Rectangle<float> bounds,
+                            float maxGain) override
+        {
+            juce::ignoreUnused (meterType);
+
+            g.setColour (findColour (foleys::LevelMeter::lmMeterBackgroundColour));
+            g.fillRect (bounds);
+            const float maxDb = juce::Decibels::gainToDecibels (maxGain, -100.0f);
+            g.setColour (findColour (maxDb > 0.0 ? foleys::LevelMeter::lmTextClipColour : foleys::LevelMeter::lmTextColour));
+            g.setFont (bounds.getHeight() * 0.4f);
+            if (maxDb > -100.f) // if some input coming
+            {
+                g.drawFittedText (juce::String (maxDb, 1) + " dB",
+                                  bounds.reduced (2.0).toNearestInt(),
+                                  juce::Justification::centred, 1);
+            } else // draw placeholder
+            {
+                g.drawFittedText (juce::String ("-", 1) + " dB",
+                                  bounds.reduced (2.0).toNearestInt(),
+                                  juce::Justification::centred, 1);
+            }
+            g.setColour (findColour (foleys::LevelMeter::lmMeterOutlineColour));
+            g.drawRoundedRectangle (bounds, 1, 1.0);
         }
     private:
         //==============================================================================
