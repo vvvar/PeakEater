@@ -38,7 +38,7 @@ public:
         using Fr = juce::Grid::Fr;
         using Item = juce::GridItem;
         
-        grid.justifyContent = juce::Grid::JustifyContent::end;
+        grid.justifyContent = juce::Grid::JustifyContent::start;
         
         grid.templateRows = {
             Track (Fr (1))
