@@ -6,7 +6,8 @@
               pluginCode="TAMS" pluginVST3Category="Distortion,Dynamics,Fx"
               pluginRTASCategory="2,64,8192" pluginAAXCategory="2,64,8192"
               pluginVSTCategory="kPlugCategEffect" companyCopyright="T-Audio"
-              pluginDesc="Free Open-Source Waveshaper Plugin" cppLanguageStandard="17">
+              pluginDesc="Free Open-Source Waveshaper Plugin" cppLanguageStandard="17"
+              pluginFormats="buildAU,buildStandalone,buildVST3">
   <MAINGROUP id="dzL0hV" name="PeakEater">
     <GROUP id="{67065D82-5FC1-C5D6-73EC-1373AA640C7F}" name="Source">
       <GROUP id="{6A32C51B-90F1-9658-B27D-16178543ED34}" name="WaveShaping">

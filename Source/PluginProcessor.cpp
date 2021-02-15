@@ -151,6 +151,7 @@ void PeakEaterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     });
     inputMeterSource.resize (getTotalNumOutputChannels(), sampleRate * 0.1f / samplesPerBlock);
     ceilingMeterSource.resize (getTotalNumOutputChannels(), sampleRate * 0.1f / samplesPerBlock);
+    ceilingMeterSource.setMaxHoldMS(100);
     outputMeterSource.resize (getTotalNumOutputChannels(), sampleRate * 0.1f / samplesPerBlock);
 }
 
