@@ -176,7 +176,7 @@ private:
     /** Default values */
     const float DEFAULT_INPUT_GAIN  = 0.0f;
     const float DEFAULT_OUTPUT_GAIN = 0.0f;
-    const float RAMP_DURATION_SEC   = 0.2f;
+    const float RAMP_DURATION_SEC   = 0.1f;
     
     //==============================================================================
     /** DSP */
