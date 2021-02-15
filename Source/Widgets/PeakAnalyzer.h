@@ -10,19 +10,29 @@ namespace widgets
 {
 
 //==============================================================================
-class PeakAnalyzer : public juce::Component, public juce::Timer
+class PeakAnalyzer : public juce::Component,
+public widgets::LabelListener,
+public juce::Timer
 {
 public:
     //==============================================================================
     PeakAnalyzer(PeakEaterAudioProcessor& p):
         processor(p)
     {
-        addAndMakeVisible(inputMagnitudeLabel);
-        addAndMakeVisible(inputMagnitudeValue);
-        addAndMakeVisible(clippedMagnitudeLabel);
-        addAndMakeVisible(clippedMagnitudeValue);
-        addAndMakeVisible(outputMagnitudeLabel);
-        addAndMakeVisible(outputMagnitudeValue);
+        addAndMakeVisible (inputMagnitudeLabel);
+        addAndMakeVisible (inputMagnitudeValue);
+        addAndMakeVisible (clippedMagnitudeLabel);
+        addAndMakeVisible (clippedMagnitudeValue);
+        addAndMakeVisible (outputMagnitudeLabel);
+        addAndMakeVisible (outputMagnitudeValue);
+        
+        inputMagnitudeLabel.onClick (this);
+        inputMagnitudeValue.onClick (this);
+        clippedMagnitudeLabel.onClick (this);
+        clippedMagnitudeValue.onClick (this);
+        outputMagnitudeLabel.onClick (this);
+        outputMagnitudeValue.onClick (this);
+        
         startTimer(100);
     }
     
@@ -87,6 +97,14 @@ public:
             ticks++;
         }
         
+        setLabelValues(prevDbIn, prevDbClipped, prevDbOut);
+    }
+    
+    void onClick(const juce::MouseEvent&) override
+    {
+        prevDbIn      = 0;
+        prevDbClipped = 0;
+        prevDbOut     = 0;
         setLabelValues(prevDbIn, prevDbClipped, prevDbOut);
     }
 private:

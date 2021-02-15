@@ -6,6 +6,15 @@
 namespace widgets
 {
 
+// ==============================================================================
+class LabelListener
+{
+public:
+    virtual ~LabelListener() = default;
+    
+    virtual void onClick(const juce::MouseEvent&) = 0;
+};
+
 //==============================================================================
 class Label : public juce::Label
 {
@@ -38,9 +47,24 @@ public:
         setLookAndFeel(nullptr);
     }
     
+    void onClick(LabelListener* listener)
+    {
+        listeners.add (listener);
+    }
+    
+    void mouseDown (const juce::MouseEvent& event)
+    {
+        listeners.call ([&event] (LabelListener& listener)
+        {
+            listener.onClick (event);
+        });
+    }
 private:
     //==============================================================================
     LabelLookAndFeel lnf;
+    
+    //==============================================================================
+    juce::ListenerList<LabelListener> listeners;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Label)
