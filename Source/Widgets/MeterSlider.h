@@ -151,8 +151,13 @@ public:
     MeterSlider(
                 foleys::LevelMeterSource& meterSource,
                 juce::AudioProcessorValueTreeState& valueTreeState,
-                const Parameters::ParameterInfo& parameter)
-    : slider(juce::Slider::SliderStyle::LinearVertical, juce::Slider::TextEntryBoxPosition::TextBoxBelow, parameter, valueTreeState)
+                const Parameters::ParameterInfo& parameter,
+                juce::String sliderTooltip = "")
+    : slider(juce::Slider::SliderStyle::LinearVertical,
+             juce::Slider::TextEntryBoxPosition::TextBoxBelow,
+             parameter,
+             valueTreeState,
+             sliderTooltip)
     {
         meter.setLookAndFeel (&mLnF);
         slider.setLookAndFeel (&sLnF);

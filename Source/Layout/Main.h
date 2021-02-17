@@ -4,6 +4,7 @@
 #include "LeftPanel.h"
 #include "RightPanel.h"
 #include "CentralPanel.h"
+#include "../AppColours.h"
 
 namespace layout
 {
@@ -16,13 +17,18 @@ public:
     MainWindow(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
         leftPanel(p),
         centralPanel(p, vts),
-        rightPanel(p)
+        rightPanel(p),
+        tooltipWindow(this, 1500)
     {
         auto typeface = juce::Typeface::createSystemTypefaceFor(BinaryData::WalkwayUpperBold_ttf, BinaryData::WalkwayUpperBold_ttfSize);
         juce::LookAndFeel::getDefaultLookAndFeel().setDefaultSansSerifTypeface(typeface);
         juce::LookAndFeel::getDefaultLookAndFeel().setColour (juce::Label::textColourId, AppColors::Navy);
 
         juce::LookAndFeel::getDefaultLookAndFeel().setColour (juce::ToggleButton::tickColourId, AppColors::Navy);
+        
+        tooltipWindow.setColour(juce::TooltipWindow::backgroundColourId, AppColors::Navy);
+        tooltipWindow.setColour(juce::TooltipWindow::textColourId, AppColors::Paper);
+        tooltipWindow.setColour(juce::TooltipWindow::outlineColourId, AppColors::Blue);
         
         addAndMakeVisible(leftPanel);
         addAndMakeVisible(centralPanel);
@@ -59,6 +65,7 @@ private:
     layout::LeftPanel    leftPanel;
     layout::CentralPanel centralPanel;
     layout::RightPanel   rightPanel;
+    juce::TooltipWindow  tooltipWindow;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainWindow)

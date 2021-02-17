@@ -17,10 +17,11 @@ public:
     //==============================================================================
     LabledMeterSlider(foleys::LevelMeterSource& meterSource,
                       juce::AudioProcessorValueTreeState& valueTreeState,
-                      const Parameters::ParameterInfo& parameter)
+                      const Parameters::ParameterInfo& parameter,
+                      juce::String sliderTooltip = "")
     :
     label (parameter.Id + "Label", parameter.Label),
-    slider (meterSource, valueTreeState, parameter)
+    slider (meterSource, valueTreeState, parameter, sliderTooltip)
     {
         addAndMakeVisible (label);
         addAndMakeVisible (slider);

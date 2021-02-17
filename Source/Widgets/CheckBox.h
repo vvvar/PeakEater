@@ -74,13 +74,15 @@ public:
     CheckBox(
              const Parameters::ParameterInfo& parameter,
              juce::AudioProcessorValueTreeState& vts,
-             juce::String labelText = ""
+             juce::String labelText = "",
+             juce::String tooltipText = ""
              ) noexcept :
         toggle(parameter.Id)
     {
         juce::String text = labelText.isNotEmpty() ? labelText : parameter.Label;
         toggle.setButtonText(text.toUpperCase());
         toggle.setLookAndFeel(&lnf);
+        toggle.setTooltip(tooltipText);
         attachment.reset (new ButtonAttachment (vts, parameter.Id, toggle));
         
         addAndMakeVisible (toggle);

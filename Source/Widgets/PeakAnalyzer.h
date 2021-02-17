@@ -33,6 +33,14 @@ public:
         outputMagnitudeLabel.onClick (this);
         outputMagnitudeValue.onClick (this);
         
+        const juce::String inputTooltip("Highest peak value before clipping. Click to drop.");
+        const juce::String clippedTooltip("Highest peak value after clipping. Click to drop.");
+        const juce::String outputTooltip("Highest peak value after plugin. Click to drop.");
+        
+        inputMagnitudeLabel.setTooltip(inputTooltip);
+        clippedMagnitudeLabel.setTooltip(clippedTooltip);
+        outputMagnitudeLabel.setTooltip(outputTooltip);
+        
         startTimer(100);
     }
     
@@ -100,6 +108,7 @@ public:
         setLabelValues(prevDbIn, prevDbClipped, prevDbOut);
     }
     
+    //==============================================================================
     void onClick(const juce::MouseEvent&) override
     {
         prevDbIn      = 0;

@@ -17,8 +17,9 @@ public:
                  juce::Slider::SliderStyle style,
                  juce::Slider::TextEntryBoxPosition textBoxPosition,
                  const Parameters::ParameterInfo& parameter,
-                 juce::AudioProcessorValueTreeState& vts)
-    : label(parameter.Id + "Label", parameter.Label), slider(style, textBoxPosition, parameter, vts)
+                 juce::AudioProcessorValueTreeState& vts,
+                 juce::String sliderTooltip = "")
+    : label(parameter.Id + "Label", parameter.Label), slider(style, textBoxPosition, parameter, vts, sliderTooltip)
     {
         addAndMakeVisible(label);
         addAndMakeVisible(slider);

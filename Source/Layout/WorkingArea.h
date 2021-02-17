@@ -14,11 +14,30 @@ class WorkingArea : public juce::Component
 public:
     //==============================================================================
     WorkingArea(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
-        inputGain(juce::Slider::SliderStyle::LinearVertical, juce::Slider::TextEntryBoxPosition::TextBoxBelow, Parameters::InputGain, vts),
-        outputGain(juce::Slider::SliderStyle::LinearVertical, juce::Slider::TextEntryBoxPosition::TextBoxBelow, Parameters::OutputGain, vts),
-        ceiling(p.getCeilingMeterSource(), vts, Parameters::Ceiling),
-        clippingType(juce::Slider::SliderStyle::LinearVertical, juce::Slider::TextEntryBoxPosition::TextBoxBelow, Parameters::ClippingType, vts),
-        oversampleRate(juce::Slider::SliderStyle::LinearVertical, juce::Slider::TextEntryBoxPosition::TextBoxBelow, Parameters::OversampleRate, vts)
+        inputGain(juce::Slider::SliderStyle::LinearVertical,
+                  juce::Slider::TextEntryBoxPosition::TextBoxBelow,
+                  Parameters::InputGain,
+                  vts,
+                  "Adjust gain level applied to the signal before it's processed."),
+        outputGain(juce::Slider::SliderStyle::LinearVertical,
+                   juce::Slider::TextEntryBoxPosition::TextBoxBelow,
+                   Parameters::OutputGain,
+                   vts,
+                   "Adjust gain level applied to the signal after it was processed."),
+        ceiling(p.getCeilingMeterSource(),
+                vts,
+                Parameters::Ceiling,
+                "Clips everything which is above this threshold."),
+        clippingType(juce::Slider::SliderStyle::LinearVertical,
+                     juce::Slider::TextEntryBoxPosition::TextBoxBelow,
+                     Parameters::ClippingType,
+                     vts,
+                     "Type of clipping. The hard clip is harshest but less coloring, arctangent is smoothest but adds more color."),
+        oversampleRate(juce::Slider::SliderStyle::LinearVertical,
+                       juce::Slider::TextEntryBoxPosition::TextBoxBelow,
+                       Parameters::OversampleRate,
+                       vts,
+                       "High values will suppress aliasing better and increases CPU consumption.")
     {
         addAndMakeVisible (inputGain);
         addAndMakeVisible (outputGain);

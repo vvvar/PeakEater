@@ -13,8 +13,14 @@ class Footer : public juce::Component
 {
 public:
     Footer(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
-        linkInOut(Parameters::LinkInOut, vts, "Link In/Out"),
-        bypass(Parameters::Bypass, vts),
+        linkInOut(Parameters::LinkInOut,
+                  vts,
+                  "Link In/Out",
+                  "The more input gain you'll add the less output gain will be and vice versa."),
+        bypass(Parameters::Bypass,
+               vts,
+               Parameters::Bypass.Label,
+               "Bypass plugin processing."),
         peakAnalyzer(p)
     {
         addAndMakeVisible(linkInOut);

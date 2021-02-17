@@ -43,11 +43,13 @@ public:
            juce::Slider::SliderStyle style,
            juce::Slider::TextEntryBoxPosition textBoxPosition,
            const Parameters::ParameterInfo& parameter,
-           juce::AudioProcessorValueTreeState& vts)
+           juce::AudioProcessorValueTreeState& vts,
+           juce::String tooltipText = "")
     : juce::Slider(style, textBoxPosition)
     {
         setLookAndFeel(&lnf);
         attachment.reset (new SliderAttachment (vts, parameter.Id, *this));
+        setTooltip(tooltipText);
     }
     
     ~Slider()
