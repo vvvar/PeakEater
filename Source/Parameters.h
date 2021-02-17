@@ -59,7 +59,7 @@ static const ParameterInfo OutputGain     { "OutputGain", "OUTPUT", OutputGainRa
 static const ParameterInfo LinkInOut      { "LinkInOut", "IN<->OUT" };
 static const ParameterInfo Bypass         { "Bypass", "BYPASS" };
 static const ParameterInfo Ceiling        { "Ceiling", "CEILING", CeilingRange };
-static const ParameterInfo ClippingType   { "ClippingType", "ALGORYTHM", {}, ClippingTypeInfo };
+static const ParameterInfo ClippingType   { "ClippingType", "ALGORITHM", {}, ClippingTypeInfo };
 static const ParameterInfo OversampleRate { "OversampleRate", "OVERSAMPLE", {}, OversampleRateInfo };
 
 }
