@@ -45,10 +45,8 @@ public:
         const auto oversampledSpec = createOversampledSpec (spec);
         
         /** Setup pre-filter*/
+        *preFilter.state = *juce::dsp::IIR::Coefficients<T>::makeLowPass (oversampledSpec.sampleRate, calculateCutoff (oversampledSpec.sampleRate));
         preFilter.prepare (oversampledSpec);
-        preFilter.setType (juce::dsp::StateVariableTPTFilterType::lowpass);
-        preFilter.setCutoffFrequency (calculateCutoff (oversampledSpec.sampleRate));
-        preFilter.setResonance (calculateQ(DEFAULT_FILTER_Q_OCTAVES));
         
         /** Setup clipper*/
         clipper.prepare (oversampledSpec);
@@ -56,10 +54,8 @@ public:
         setClippingType (DEFAULT_CLIPPING_TYPE);
         
         /** Setup post-filter*/
+        *postFilter.state = *juce::dsp::IIR::Coefficients<T>::makeLowPass (oversampledSpec.sampleRate, calculateCutoff (oversampledSpec.sampleRate));
         postFilter.prepare (oversampledSpec);
-        postFilter.setType (juce::dsp::StateVariableTPTFilterType::lowpass);
-        postFilter.setCutoffFrequency (calculateCutoff (oversampledSpec.sampleRate));
-        postFilter.setResonance (calculateQ(DEFAULT_FILTER_Q_OCTAVES));
     }
     
     void reset() noexcept override
@@ -105,8 +101,8 @@ private:
     /** DSP */
     Oversampling oversampler;
     Clipper<T> clipper;
-    juce::dsp::StateVariableTPTFilter<T> preFilter;
-    juce::dsp::StateVariableTPTFilter<T> postFilter;
+    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<T>, juce::dsp::IIR::Coefficients<T>> preFilter;
+    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<T>, juce::dsp::IIR::Coefficients<T>> postFilter;
     
     //==============================================================================
     /** Filter calculations based on input params */

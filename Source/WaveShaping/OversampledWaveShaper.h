@@ -111,7 +111,7 @@ public:
         listenersList.call ([&buffer] (OversampledWaveShaperListener& listener) {
             listener.onPostCeiling (buffer);
         });
-        outputGain.process (context);
+         outputGain.process (context);
         listenersList.call ([&buffer] (OversampledWaveShaperListener& listener) {
             listener.onPostOutputGain (buffer);
         });
