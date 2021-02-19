@@ -6,15 +6,17 @@ namespace layout
 {
 
 //==============================================================================
-class Header : public juce::Component
+class Header : public juce::Component,
+public juce::Button::Listener
 {
 public:
     //==============================================================================
     Header()
     {
         juce::Image logoImage = juce::ImageCache::getFromMemory (BinaryData::logo_plugin_png, BinaryData::logo_plugin_pngSize);
-        logo.setImages(false, true, true, logoImage, 1.0f, {}, logoImage, 1.0f, {}, logoImage, 1.0f, {});
-        
+        logo.setImages (false, true, true, logoImage, 1.0f, {}, logoImage, 1.0f, {}, logoImage, 1.0f, {});
+        logo.setMouseCursor(juce::MouseCursor::PointingHandCursor);
+        logo.addListener (this);
         addAndMakeVisible (logo);
     }
     
@@ -38,9 +40,17 @@ public:
         grid.performLayout (getLocalBounds());
     }
     
+    void buttonClicked (juce::Button*) override
+    {
+        github.launchInDefaultBrowser();
+    }
+    
 private:
     //==============================================================================
     juce::ImageButton logo;
+    
+    //==============================================================================
+    juce::URL github { "https://github.com/vvvar/PeakEater" };
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Header)
