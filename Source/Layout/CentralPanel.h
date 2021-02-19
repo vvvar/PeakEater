@@ -40,13 +40,13 @@ public:
         Grid grid;
 
         grid.templateRows = {
-            Track (Fr (1)),
-            Track (Fr (5)),
-            Track (Fr (1))
+            Track (Fr (3)),
+            Track (Fr (18)),
+            Track (Fr (2))
         };
         grid.templateColumns = { Track (Fr (1)) };
         grid.items = {
-            Item(header).withMargin(Item::Margin(0, 0, 5, 0)),
+            Item(header),
             Item(workingArea),
             Item(footer)
         };

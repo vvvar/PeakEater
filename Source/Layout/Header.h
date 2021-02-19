@@ -35,7 +35,7 @@ public:
 
         grid.templateRows = { Track (Fr (1)) };
         grid.templateColumns = { Track (Fr (1)) };
-        grid.items = { Item(logo).withMargin (Item::Margin (10, 25, 0, 25)) };
+        grid.items = { Item (logo).withMargin (Item::Margin (5, 27, 0, 27)) };
          
         grid.performLayout (getLocalBounds());
     }
