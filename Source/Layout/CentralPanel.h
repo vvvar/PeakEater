@@ -40,15 +40,15 @@ public:
         Grid grid;
 
         grid.templateRows = {
-            Track (Fr (3)),
-            Track (Fr (18)),
-            Track (Fr (2))
+            Track (Fr (1)),
+            Track (Fr (5)),
+            Track (Fr (1))
         };
         grid.templateColumns = { Track (Fr (1)) };
         grid.items = {
-            Item(header),
-            Item(workingArea),
-            Item(footer)
+            Item (header).withMargin (Item::Margin (15, 0, 0, 0)),
+            Item (workingArea).withMargin (Item::Margin (20, 0, 0, 0)),
+            Item (footer).withMargin (Item::Margin (20, 0, 0, 0))
         };
          
         grid.performLayout (getLocalBounds());

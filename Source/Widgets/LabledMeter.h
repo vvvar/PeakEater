@@ -38,7 +38,7 @@ public:
         {
             juce::ignoreUnused (meterType);
 
-            g.setColour (findColour (foleys::LevelMeter::lmMeterBackgroundColour));
+            g.setColour (AppColors::Paper);
             g.fillRect (bounds);
             const float maxDb = juce::Decibels::gainToDecibels (maxGain, -100.0f);
             g.setColour (findColour (maxDb > 0.0 ? foleys::LevelMeter::lmTextClipColour : foleys::LevelMeter::lmTextColour));
@@ -54,7 +54,7 @@ public:
                                   bounds.reduced (2.0).toNearestInt(),
                                   juce::Justification::centred, 1);
             }
-            g.setColour (findColour (foleys::LevelMeter::lmMeterOutlineColour));
+            g.setColour (AppColors::Paper);
             g.drawRoundedRectangle (bounds, 1, 1.0);
         }
     private:
