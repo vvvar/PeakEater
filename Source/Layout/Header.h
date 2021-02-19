@@ -12,7 +12,7 @@ public:
     //==============================================================================
     Header()
     {
-        juce::Image logoImage = juce::ImageCache::getFromMemory (BinaryData::logo_full_png, BinaryData::logo_full_pngSize);
+        juce::Image logoImage = juce::ImageCache::getFromMemory (BinaryData::logo_plugin_png, BinaryData::logo_plugin_pngSize);
         logo.setImages(false, true, true, logoImage, 1.0f, {}, logoImage, 1.0f, {}, logoImage, 1.0f, {});
         
         addAndMakeVisible (logo);
@@ -33,7 +33,7 @@ public:
 
         grid.templateRows = { Track (Fr (1)) };
         grid.templateColumns = { Track (Fr (1)) };
-        grid.items = { Item(logo) };
+        grid.items = { Item(logo).withMargin (Item::Margin (10, 25, 0, 25)) };
          
         grid.performLayout (getLocalBounds());
     }

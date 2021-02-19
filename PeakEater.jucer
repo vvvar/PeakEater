@@ -55,7 +55,7 @@
     <GROUP id="{4871CAE9-74EF-8C63-E174-4E80748CCAB8}" name="Resources">
       <FILE id="s6Bt2J" name="WalkwayUpperBold.ttf" compile="0" resource="1"
             file="Resources/WalkwayUpperBold.ttf"/>
-      <FILE id="UzSp15" name="logo_full.png" compile="0" resource="1" file="Resources/logo_full.png"/>
+      <FILE id="e0ZRGJ" name="logo_plugin.png" compile="0" resource="1" file="Resources/logo_plugin.png"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"
