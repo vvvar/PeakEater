@@ -126,6 +126,10 @@ public:
     void setEnabled(bool isEnabled)
     {
         toggle.setEnabled (isEnabled);
+        if (!isEnabled && toggle.getToggleState()) // if we're disabling checkbox that is checked
+        {
+            toggle.setToggleState(false, juce::sendNotificationSync); // uncheck it
+        }
     }
     
 private:

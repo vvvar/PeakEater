@@ -63,8 +63,8 @@ public:
         }
         if (button->getName() == "Bypass")
         {
-            workingArea.setEnabled (!button->getToggleState());
             footer.setLinkEnabled (!button->getToggleState());
+            workingArea.setEnabled (!button->getToggleState());
         }
     }
     
