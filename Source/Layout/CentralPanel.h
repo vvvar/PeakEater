@@ -48,7 +48,7 @@ public:
         grid.items = {
             Item (header).withMargin (Item::Margin (15, 0, 0, 0)),
             Item (workingArea).withMargin (Item::Margin (20, 0, 0, 0)),
-            Item (footer).withMargin (Item::Margin (20, 0, 0, 0))
+            Item (footer).withMargin (Item::Margin (19, 0, 0, 0))
         };
          
         grid.performLayout (getLocalBounds());
