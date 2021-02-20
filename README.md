@@ -61,11 +61,14 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://github.com/vvvar/PeakEater)
 
-PeakEater is a free, easy to use, open-source waveshaping VST3/AU plugin that lets you choose between different waveshaping functions to boost the overall volume level of your track.
+PeakEater is a free, easy to use, open-source waveshaping VST3/AU plugin that lets you choose between different waveshaping [functions](https://en.wikipedia.org/wiki/Sigmoid_function) to boost the overall volume level of your track. It supports variours <a href="#features">features</a> such as multiple clipping types, oversampling and visualization of clipping process that aims to make clipping easy.
 
-Inspiration for this plugin comes mostly from [KAZROG KClip 3](https://kazrog.com/products/kclip-3) and [VennAudio Free Clip](https://www.vennaudio.com/free-clip/). So it's an attempt to combine the features of both plugins in one free plugin form.
+Inspiration for this plugin comes mostly from [KAZROG KClip 3](https://kazrog.com/products/kclip-3) and [VennAudio Free Clip](https://www.vennaudio.com/free-clip/). So it's an attempt to combine the features of both plugins but completley free and open-source.
 
 ### Features
+
+##### Input/Output RMS meters
+See the RMS of signal before and after plugin.
 
 ##### Input/Output Gain
 Adjusts volume before or after signal processing.
@@ -93,7 +96,7 @@ Simply bypass all plugin's processing.
 See levels of the signal before and after the plugin's processing.
 
 ##### VST3 and AU support
-Currently, the plugin only supports macOS as a target platform, however, Windows build is planned for the nearest future.
+You can use either VST3 or AU type of plugin on macOS and VST3 on Windows.
 
 ### Built With
 
@@ -103,7 +106,7 @@ This plugin was developed using [JUCE](https://github.com/juce-framework/JUCE) f
 <!-- GETTING STARTED -->
 ## Getting Started
 
-If you need a ready-to-use build, you may download it from the [Releases Page](https://github.com/vvvar/PeakEater/releases)(only macOS builds are currently supported).
+If you need a ready-to-use build, you may download prebuild packages from the [Releases Page](https://github.com/vvvar/PeakEater/releases).
 The guideline provided below is needed if you would like to build a plugin on your own.
 
 ### Prerequisites
@@ -131,20 +134,19 @@ Now, open [```PeakEater.jucer```](https://github.com/vvvar/PeakEater/blob/master
 
 That's it, you may now build PeakEater for the available targets.
 
+Please note that in order to disable JUCE Splash Screen you should switch your Projucer into GPL3 mode. If you're opening Projucer for the first time, popup regarding login should appear in the bottom left side of Projucer. Click "Singn In" and then choose "Use GPL3 Mode" instead of making sign in.
+
 <!-- ROADMAP -->
 ## Roadmap
-
-- [ ] Windows package
-- [ ] Small UI/UX improvements
-- [ ] Extended clipping section
 
 Check out [Project Roadmap](https://github.com/vvvar/PeakEater/projects/1) page for more details.
 
 <!-- CONTRIBUTING -->
 ## Contributing
 
-TBT
-
+This is a very young project on a very early stages, however, I will be happy to hear any sort of a feedback on it.
+If you have any feedback on a project, feel free to open a issue using [Issues Page](https://github.com/vvvar/PeakEater/issues).
+If you have a pull request, then just make it using common [Fork & PR flow](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork).
 
 <!-- LICENSE -->
 ## License
@@ -163,9 +165,10 @@ Project Link: [https://github.com/vvvar/PeakEater](https://github.com/vvvar/Peak
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
-* [JUCE](https://github.com/juce-framework/JUCE) 
+* [JUCE](https://github.com/juce-framework/JUCE)
 * [ff_meters](https://github.com/ffAudio/ff_meters) by [ffAudio](https://github.com/ffAudio)
 * [Free Clip](https://gitlab.com/JHVenn/Free-Clip) by [Venn Audio](https://www.vennaudio.com)
+* [The Audio Programmer](https://theaudioprogrammer.com) for providing extensive video-lessons on audio programming and DSP
 
 
 
