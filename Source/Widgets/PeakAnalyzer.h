@@ -82,7 +82,7 @@ public:
         auto dbClipped = processor.getDecibelsClipped();
         auto dbOut     = processor.getDecibelsOut();
         
-        if (ticks >= 10 * 3) // 3 seconds
+        if (ticks >= 10 * 5) // 3 seconds
         {
             prevDbIn      = dbIn;
             prevDbClipped = dbClipped;
