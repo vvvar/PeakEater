@@ -140,9 +140,8 @@ void PeakEaterAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void PeakEaterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    waveShaper->prepare({ sampleRate, static_cast<juce::uint32>(samplesPerBlock), 2 });
-    waveShaperController.setup({
-        *linkInOut,
+    waveShaper->prepare ({ sampleRate, static_cast<juce::uint32>(samplesPerBlock), 2 });
+    waveShaperController.prepare ({
         *inputGain,
         *outputGain,
         *ceiling,
@@ -151,7 +150,7 @@ void PeakEaterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     });
     inputMeterSource.resize (getTotalNumOutputChannels(), sampleRate * 0.1f / samplesPerBlock);
     ceilingMeterSource.resize (getTotalNumOutputChannels(), sampleRate * 0.1f / samplesPerBlock);
-    ceilingMeterSource.setMaxHoldMS(100);
+    ceilingMeterSource.setMaxHoldMS (100);
     outputMeterSource.resize (getTotalNumOutputChannels(), sampleRate * 0.1f / samplesPerBlock);
 }
 
@@ -198,9 +197,12 @@ void PeakEaterAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     {
         buffer.clear (i, 0, buffer.getNumSamples());
     }
-    
+    if (*linkInOut)
+    {
+        float inGainValue = *inputGain;
+        *outputGain = -inGainValue;
+    }
     waveShaperController.handleParametersChange ({
-        *linkInOut,
         *inputGain,
         *outputGain,
         *ceiling,

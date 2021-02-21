@@ -18,7 +18,6 @@ namespace controller
 /* Struct to hold all available WaveShaper parameters */
 struct WaveShaperPrameters
 {
-    bool  linkInOut;
     float inputGain;
     float outputGain;
     float ceiling;
@@ -42,68 +41,46 @@ public:
     //==============================================================================
     void handleParametersChange (WaveShaperPrameters parameters) noexcept
     {
-        if (parameters.linkInOut != previousLinkInOut)
+        if (parameters.inputGain != previousInputGain)
         {
-            previousLinkInOut = parameters.linkInOut;
-            
             previousInputGain = parameters.inputGain;
-            previousOutputGain = previousInputGain;
-            
             waveShaperPtr->setInputGain (previousInputGain);
-            setupOutputGain();
         }
-        if (previousLinkInOut)
+        if (parameters.clippingType != previousClippingType)
         {
-            if (parameters.inputGain != previousInputGain)
-            {
-                previousInputGain = parameters.inputGain;
-                waveShaperPtr->setInputGain (previousInputGain);
-                setupOutputGain();
-            }
-        } else
-        {
-            if (parameters.inputGain != previousInputGain)
-            {
-                previousInputGain = parameters.inputGain;
-                waveShaperPtr->setInputGain (previousInputGain);
-            }
-            if (parameters.outputGain != previousOutputGain)
-            {
-                previousOutputGain = parameters.outputGain;
-                setupOutputGain();
-            }
+            previousClippingType = parameters.clippingType;
+            waveShaperPtr->setClippingType (parameterChoiceToClippingType (previousClippingType));
         }
         if (parameters.ceiling != previousCeiling)
         {
             previousCeiling = parameters.ceiling;
             waveShaperPtr->setCeiling (previousCeiling);
         }
-        if (parameters.clippingType != previousClippingType)
-        {
-            previousClippingType = parameters.clippingType;
-            setupClippingType();
-        }
         if (parameters.oversampleRate != previousOversampleRate)
         {
             previousOversampleRate = parameters.oversampleRate;
-            setupOversampleRate();
+            waveShaperPtr->setOversamplingRate (parameterChoiceToOversampleRate (previousOversampleRate));
+        }
+        if (parameters.outputGain != previousOutputGain)
+        {
+            previousOutputGain = parameters.outputGain;
+            waveShaperPtr->setOutputGain (previousOutputGain);
         }
     }
     
-    void setup (WaveShaperPrameters parameters) noexcept
+    void prepare (WaveShaperPrameters parameters) noexcept
     {
-        previousLinkInOut = parameters.linkInOut;
         previousInputGain = parameters.inputGain;
-        previousOutputGain = parameters.outputGain;
-        previousCeiling = parameters.ceiling;
         previousClippingType = parameters.clippingType;
+        previousCeiling = parameters.ceiling;
+        previousOutputGain = parameters.outputGain;
         previousOversampleRate = parameters.oversampleRate;
-        
+
         waveShaperPtr->setInputGain (previousInputGain);
-        setupOutputGain();
+        waveShaperPtr->setClippingType (parameterChoiceToClippingType (previousClippingType));
         waveShaperPtr->setCeiling (previousCeiling);
-        setupClippingType();
-        setupOversampleRate();
+        waveShaperPtr->setOversamplingRate (parameterChoiceToOversampleRate (previousOversampleRate));
+        waveShaperPtr->setOutputGain (previousOutputGain);
     }
     
 private:
@@ -119,72 +96,41 @@ private:
     int   previousOversampleRate = 0;
     
     //==============================================================================
-    void setupClippingType()
+    waveshaping::ClippingType parameterChoiceToClippingType(const unsigned int parameterChoice) const noexcept
     {
-        switch (previousClippingType)
+        switch (parameterChoice)
         {
             case 0:
-                waveShaperPtr->setClippingType(waveshaping::ClippingType::HARD);
-                break;
+                return waveshaping::ClippingType::HARD;
             case 1:
-                waveShaperPtr->setClippingType(waveshaping::ClippingType::QUINTIC);
-                break;
+                return waveshaping::ClippingType::QUINTIC;
             case 2:
-                waveShaperPtr->setClippingType(waveshaping::ClippingType::CUBIC);
-                break;
+                return waveshaping::ClippingType::CUBIC;
             case 3:
-                waveShaperPtr->setClippingType(waveshaping::ClippingType::HYPERBOLIC_TAN);
-                break;
+                return waveshaping::ClippingType::HYPERBOLIC_TAN;
             case 4:
-                waveShaperPtr->setClippingType(waveshaping::ClippingType::ALGEBRAIC);
-                break;
+                return waveshaping::ClippingType::ALGEBRAIC;
             case 5:
-                waveShaperPtr->setClippingType(waveshaping::ClippingType::ARCTANGENT);
-                break;
+                return waveshaping::ClippingType::ARCTANGENT;
             default:
-                break;
+                return waveshaping::ClippingType::HARD;
         }
     }
         
-    void setupOversampleRate()
+    waveshaping::OversamplingRate parameterChoiceToOversampleRate(const unsigned int parameterChoice) const noexcept
     {
         switch (previousOversampleRate)
         {
             case 0:
-                waveShaperPtr->setOversamplingRate(waveshaping::OversamplingRate::X2);
-                break;
+                return waveshaping::OversamplingRate::X2;
             case 1:
-                waveShaperPtr->setOversamplingRate(waveshaping::OversamplingRate::X4);
-                break;
+                return waveshaping::OversamplingRate::X4;
             case 2:
-                waveShaperPtr->setOversamplingRate(waveshaping::OversamplingRate::X8);
-                break;
+                return waveshaping::OversamplingRate::X8;
             case 3:
-                waveShaperPtr->setOversamplingRate(waveshaping::OversamplingRate::X16);
-                break;
+                return waveshaping::OversamplingRate::X16;
             default:
-                waveShaperPtr->setOversamplingRate(waveshaping::OversamplingRate::X2);
-                break;
-        }
-    }
-    
-    void setupOutputGain()
-    {
-        if (previousLinkInOut)
-        {
-            if (previousInputGain > 0)
-            {
-                waveShaperPtr->setOutputGain (-previousInputGain);
-            } else if (previousInputGain < 0)
-            {
-                waveShaperPtr->setOutputGain (std::fabs (previousInputGain));
-            } else // input is 0
-            {
-                waveShaperPtr->setOutputGain (previousInputGain);
-            }
-        } else
-        {
-            waveShaperPtr->setOutputGain (previousOutputGain);
+                return waveshaping::OversamplingRate::X2;
         }
     }
 };
