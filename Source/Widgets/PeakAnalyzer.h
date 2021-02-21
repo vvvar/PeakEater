@@ -33,13 +33,13 @@ public:
         outputMagnitudeLabel.onClick (this);
         outputMagnitudeValue.onClick (this);
         
-        const juce::String inputTooltip("Highest peak value before clipping. Click to drop.");
-        const juce::String clippedTooltip("Highest peak value after clipping. Click to drop.");
-        const juce::String outputTooltip("Highest peak value after plugin. Click to drop.");
+        const juce::String inputTooltip ("Highest peak value before clipping. Click to drop.");
+        const juce::String clippedTooltip ("Highest peak value after clipping. Click to drop.");
+        const juce::String outputTooltip ("Highest peak value after plugin. Click to drop.");
         
-        inputMagnitudeLabel.setTooltip(inputTooltip);
-        clippedMagnitudeLabel.setTooltip(clippedTooltip);
-        outputMagnitudeLabel.setTooltip(outputTooltip);
+        inputMagnitudeLabel.setTooltip (inputTooltip);
+        clippedMagnitudeLabel.setTooltip (clippedTooltip);
+        outputMagnitudeLabel.setTooltip (outputTooltip);
         
         startTimer(100);
     }
@@ -82,7 +82,7 @@ public:
         auto dbClipped = processor.getDecibelsClipped();
         auto dbOut     = processor.getDecibelsOut();
         
-        if (ticks >= 10 * 5) // 3 seconds
+        if (ticks >= 10 * 3) // 3 seconds
         {
             prevDbIn      = dbIn;
             prevDbClipped = dbClipped;
@@ -105,7 +105,7 @@ public:
             ticks++;
         }
         
-        setLabelValues(prevDbIn, prevDbClipped, prevDbOut);
+        setLabelValues (prevDbIn, prevDbClipped, prevDbOut);
     }
     
     //==============================================================================
@@ -142,6 +142,30 @@ private:
         inputMagnitudeValue.setText   (dbToString (input), juce::dontSendNotification);
         clippedMagnitudeValue.setText (dbToString (clipped), juce::dontSendNotification);
         outputMagnitudeValue.setText  (dbToString (output), juce::dontSendNotification);
+        
+        if (input < 0.0f)
+        {
+            inputMagnitudeValue.setColour (juce::Label::textColourId, AppColors::Green2);
+        } else
+        {
+            inputMagnitudeValue.setColour (juce::Label::textColourId, AppColors::Red);
+        }
+        
+        if (clipped < 12.0f)
+        {
+            clippedMagnitudeValue.setColour (juce::Label::textColourId, AppColors::Green2);
+        } else
+        {
+            clippedMagnitudeValue.setColour (juce::Label::textColourId, AppColors::Red);
+        }
+        
+        if (output < 0.0f)
+        {
+            outputMagnitudeValue.setColour (juce::Label::textColourId, AppColors::Green2);
+        } else
+        {
+            outputMagnitudeValue.setColour (juce::Label::textColourId, AppColors::Red);
+        }
     }
     
     //==============================================================================

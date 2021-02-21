@@ -19,7 +19,7 @@ public:
         LabledMeterLnf()
         {
             foleys::LevelMeterLookAndFeel();
-            setColour (LevelMeter::lmTextColour,             AppColors::Navy);
+            setColour (LevelMeter::lmTextColour,             AppColors::Green2);
             setColour (LevelMeter::lmTextClipColour,         AppColors::Red);
             setColour (LevelMeter::lmTicksColour,            AppColors::Navy);
             setColour (LevelMeter::lmBackgroundColour,       AppColors::Paper);
