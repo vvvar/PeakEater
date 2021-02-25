@@ -87,7 +87,7 @@ public:
                 waveshaper.functionToUse = tanclip;
                 break;
             case ALGEBRAIC:
-                waveshaper.functionToUse = hardclip;
+                waveshaper.functionToUse = algClip;
                 break;
             case ARCTANGENT:
                 waveshaper.functionToUse = arcClip;
@@ -99,7 +99,7 @@ public:
                 waveshaper.functionToUse = limitclip;
                 break;
             default:
-                waveshaper.functionToUse = logiclip;
+                waveshaper.functionToUse = hardclip;
                 break;
         }
     }
@@ -119,7 +119,7 @@ private:
     /** Consts */
     const float        DEFAULT_THRESHOLD     = 0.0f;
     const float        DEFAULT_RAMP_DURATION = 0.1f;
-    const ClippingType DEFAULT_CLIPPING_TYPE = ClippingType::LOGARYTHMIC;
+    const ClippingType DEFAULT_CLIPPING_TYPE = ClippingType::HARD;
     
     // ==============================================================================
     /* DSP */

@@ -62,7 +62,7 @@ T cubicBasic (T x) noexcept
 }
 
 template<typename T>
-T algclip (T x) noexcept
+T algClip (T x) noexcept
 {
     float soft = 0.0f;
     return x / std::sqrtf ((1.0f + 2.0f * soft + std::powf (x, 2.0f)));
