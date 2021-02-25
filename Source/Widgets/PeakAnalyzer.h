@@ -143,7 +143,7 @@ private:
         clippedMagnitudeValue.setText (dbToString (clipped), juce::dontSendNotification);
         outputMagnitudeValue.setText  (dbToString (output), juce::dontSendNotification);
         
-        if (input < 0.0f)
+        if (input <= 0.0f)
         {
             inputMagnitudeValue.setColour (juce::Label::textColourId, AppColors::Green2);
         } else
@@ -159,7 +159,7 @@ private:
             clippedMagnitudeValue.setColour (juce::Label::textColourId, AppColors::Red);
         }
         
-        if (output < 0.0f)
+        if (output <= 0.0f)
         {
             outputMagnitudeValue.setColour (juce::Label::textColourId, AppColors::Green2);
         } else
