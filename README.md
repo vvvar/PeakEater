@@ -17,11 +17,11 @@
     <a href=""><strong>Explore the docs »</strong></a> -->
     <br />
     <br />
-    <a href="https://www.youtube.com/watch?v=vVZKNMDyudE">View Demo</a>
+    <a target="_blank" href="https://www.youtube.com/watch?v=vVZKNMDyudE">View Demo</a>
     ·
-    <a href="https://github.com/vvvar/PeakEater/releases/latest">Download</a>
+    <a target="_blank" href="https://github.com/vvvar/PeakEater/releases/latest">Download</a>
     ·
-    <a href="https://github.com/vvvar/PeakEater/issues/new/choose">Report Bug</a>
+    <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new/choose">Report Bug</a>
   </p>
 </p>
 
