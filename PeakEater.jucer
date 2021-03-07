@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="H20XIG" name="PeakEater" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="0.2.1"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="0.2.2"
               companyName="T-Audio" companyEmail="voinovvladv@gmail.com" pluginManufacturerCode="TAD"
               pluginCode="TAMS" pluginVST3Category="Distortion,Dynamics,Fx"
               pluginRTASCategory="2,64,8192" pluginAAXCategory="2,64,8192"
