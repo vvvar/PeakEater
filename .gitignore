@@ -6,3 +6,8 @@
 
 # Projucer auto-gen files
 /JuceLibraryCode
+
+# Releases dir
+/Release/PeakEater.dmg
+/Release/PeakEater.vst3
+/Release/PeakEater.component
