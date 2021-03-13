@@ -21,7 +21,6 @@
         <FILE id="Uj5UG2" name="Helpers.h" compile="0" resource="0" file="Source/WaveShaping/Helpers.h"/>
       </GROUP>
       <GROUP id="{10CF3624-3D93-4A58-4521-61F4C2CFD36B}" name="Widgets">
-        <FILE id="gtoLnu" name="RotarySlider.h" compile="0" resource="0" file="Source/Widgets/RotarySlider.h"/>
         <FILE id="HLPnJj" name="BlockPanel.h" compile="0" resource="0" file="Source/Widgets/BlockPanel.h"/>
         <FILE id="NPnYJS" name="CheckBox.h" compile="0" resource="0" file="Source/Widgets/CheckBox.h"/>
         <FILE id="JavhMz" name="Label.h" compile="0" resource="0" file="Source/Widgets/Label.h"/>
@@ -31,6 +30,9 @@
         <FILE id="Y2RO8k" name="LabledMeter.h" compile="0" resource="0" file="Source/Widgets/LabledMeter.h"/>
         <FILE id="WavEW1" name="LabledMeterSlider.h" compile="0" resource="0"
               file="Source/Widgets/LabledMeterSlider.h"/>
+        <FILE id="gtoLnu" name="RotarySlider.h" compile="0" resource="0" file="Source/Widgets/RotarySlider.h"/>
+        <FILE id="fQ91Yd" name="LabledRotarySlider.h" compile="0" resource="0"
+              file="Source/Widgets/LabledRotarySlider.h"/>
         <FILE id="tga71P" name="PeakAnalyzer.h" compile="0" resource="0" file="Source/Widgets/PeakAnalyzer.h"/>
       </GROUP>
       <GROUP id="{05F5E144-F066-6783-8204-FDA6E1477752}" name="Layout">

@@ -60,7 +60,7 @@ public:
             g.setColour (slider.findColour (Slider::textBoxTextColourId));
             g.setFont (radius * 0.4f);
             float value = floorf(slider.getValue() * 100) / 100;
-            g.drawSingleLineText (juce::String (value) + " dB", centreX, centreY * 1.03f, juce::Justification::horizontallyCentred);
+            g.drawSingleLineText (juce::String (value) + " dB", centreX, centreY * 1.04f, juce::Justification::horizontallyCentred);
         }
     };
     

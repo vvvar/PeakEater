@@ -3,7 +3,7 @@
 #include <JuceHeader.h>
 #include "../Parameters.h"
 #include "../Widgets/BlockPanel.h"
-#include "../Widgets/RotarySlider.h"
+#include "../Widgets/LabledRotarySlider.h"
 
 namespace layout
 {
@@ -45,8 +45,8 @@ public:
         grid.performLayout (getReducedBounds().toNearestInt());
     }
 private:
-    widgets::RotarySlider input;
-    widgets::RotarySlider output;
+    widgets::LabledRotarySlider input;
+    widgets::LabledRotarySlider output;
 };
 
 }
