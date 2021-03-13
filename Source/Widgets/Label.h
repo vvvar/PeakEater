@@ -23,21 +23,24 @@ public:
     class LabelLookAndFeel : public juce::LookAndFeel_V4
     {
     public:
-        LabelLookAndFeel()
+        LabelLookAndFeel(float _fontSize): fontSize(_fontSize)
         {
-            setColour (juce::Label::textColourId, AppColors::Navy);
+            // setColour (juce::Label::textColourId, AppColors::Navy);
         }
         ~LabelLookAndFeel() {}
         juce::Font getLabelFont (juce::Label& label) override
         {
             label.setJustificationType (juce::Justification::centred);
-            return { 10.0f };
+            return { fontSize };
         }
+    private:
+        float fontSize;
     };
     
     //==============================================================================
-    Label(const juce::String &componentName = {}, const juce::String &labelText = {})
-    : juce::Label(componentName, labelText)
+    Label(const juce::String &componentName = {}, const juce::String &labelText = {}, const float fontSize = 10.0f):
+    juce::Label(componentName, labelText),
+    lnf(fontSize)
     {
         setLookAndFeel(&lnf);
     }

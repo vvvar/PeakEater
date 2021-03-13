@@ -26,9 +26,7 @@ PeakEaterAudioProcessorEditor::~PeakEaterAudioProcessorEditor()
 
 //==============================================================================
 void PeakEaterAudioProcessorEditor::paint (juce::Graphics& g)
-{
-    g.fillAll (AppColors::Paper);
-}
+{}
 
 void PeakEaterAudioProcessorEditor::resized()
 {

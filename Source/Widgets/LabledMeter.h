@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../AppColours.h"
+#include "../AppTheme.h"
 
 #include "Label.h"
 
@@ -19,15 +20,15 @@ public:
         LabledMeterLnf()
         {
             foleys::LevelMeterLookAndFeel();
-            setColour (LevelMeter::lmTextColour,             AppColors::Green2);
-            setColour (LevelMeter::lmTextClipColour,         AppColors::Red);
-            setColour (LevelMeter::lmTicksColour,            AppColors::Navy);
-            setColour (LevelMeter::lmBackgroundColour,       AppColors::Paper);
-            setColour (LevelMeter::lmMeterOutlineColour,     AppColors::Blue);
-            setColour (LevelMeter::lmMeterBackgroundColour,  AppColors::Blue);
-            setColour (LevelMeter::lmMeterGradientLowColour, AppColors::Green);
-            setColour (LevelMeter::lmMeterGradientMidColour, AppColors::Green2);
-            setColour (LevelMeter::lmMeterGradientMaxColour, AppColors::Red);
+            setColour (LevelMeter::lmTextColour,             AppTheme::V1::MeterLevelNormalText);
+            setColour (LevelMeter::lmTextClipColour,         AppTheme::V1::MeterLevelClippedText);
+            setColour (LevelMeter::lmTicksColour,            AppTheme::V1::MeterTicksTextColor);
+            setColour (LevelMeter::lmBackgroundColour,       AppTheme::V1::MeterBackgroundColor);
+            setColour (LevelMeter::lmMeterOutlineColour,     AppTheme::V1::MeterBarBackgroundColor);
+            setColour (LevelMeter::lmMeterBackgroundColour,  AppTheme::V1::MeterBarBackgroundColor);
+            setColour (LevelMeter::lmMeterGradientLowColour, AppTheme::V1::MeterLevelLowColor);
+            setColour (LevelMeter::lmMeterGradientMidColour, AppTheme::V1::MeterLevelMidColor);
+            setColour (LevelMeter::lmMeterGradientMaxColour, AppTheme::V1::MeterLevelHighColor);
         }
         
         //==============================================================================
@@ -38,7 +39,7 @@ public:
         {
             juce::ignoreUnused (meterType);
 
-            g.setColour (AppColors::Paper);
+            g.setColour (AppTheme::V1::MeterBackgroundColor);
             g.fillRect (bounds);
             const float maxDb = juce::Decibels::gainToDecibels (maxGain, -100.0f);
             g.setColour (findColour (maxDb > 0.0 ? foleys::LevelMeter::lmTextClipColour : foleys::LevelMeter::lmTextColour));
@@ -54,7 +55,7 @@ public:
                                   bounds.reduced (2.0).toNearestInt(),
                                   juce::Justification::centred, 1);
             }
-            g.setColour (AppColors::Paper);
+            g.setColour (AppTheme::V1::MeterBackgroundColor);
             g.drawRoundedRectangle (bounds, 1, 1.0);
         }
     private:

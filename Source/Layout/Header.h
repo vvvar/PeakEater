@@ -13,7 +13,7 @@ public:
     //==============================================================================
     Header()
     {
-        juce::Image logoImage = juce::ImageCache::getFromMemory (BinaryData::logo_plugin_png, BinaryData::logo_plugin_pngSize);
+        juce::Image logoImage = juce::ImageCache::getFromMemory (BinaryData::logo_plugin_v2_png, BinaryData::logo_plugin_v2_pngSize);
         logo.setImages (false, true, true, logoImage, 1.0f, {}, logoImage, 1.0f, {}, logoImage, 1.0f, {});
         logo.setMouseCursor(juce::MouseCursor::PointingHandCursor);
         logo.addListener (this);
@@ -35,7 +35,8 @@ public:
 
         grid.templateRows = { Track (Fr (1)) };
         grid.templateColumns = { Track (Fr (1)) };
-        grid.items = { Item (logo).withMargin (Item::Margin (0, 27, 0, 27)) };
+        // grid.items = { Item (logo).withMargin (Item::Margin (0, 27, 0, 27)) };
+        grid.items = { Item (logo) };
          
         grid.performLayout (getLocalBounds());
     }

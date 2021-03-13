@@ -2,6 +2,8 @@
 
 #include <JuceHeader.h>
 
+#include "../Widgets/BlockPanel.h"
+
 #include "../Widgets/LabledSlider.h"
 #include "../Widgets/LabledMeterSlider.h"
 
@@ -13,37 +15,10 @@ class WorkingArea : public juce::Component
 {
 public:
     //==============================================================================
-    WorkingArea(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
-        inputGain(juce::Slider::SliderStyle::LinearVertical,
-                  juce::Slider::TextEntryBoxPosition::TextBoxBelow,
-                  Parameters::InputGain,
-                  vts,
-                  "Adjust gain level applied to the signal before it's processed."),
-        outputGain(juce::Slider::SliderStyle::LinearVertical,
-                   juce::Slider::TextEntryBoxPosition::TextBoxBelow,
-                   Parameters::OutputGain,
-                   vts,
-                   "Adjust gain level applied to the signal after it was processed."),
-        ceiling(p.getCeilingMeterSource(),
-                vts,
-                Parameters::Ceiling,
-                "Clips everything which is above this threshold."),
-        clippingType(juce::Slider::SliderStyle::LinearVertical,
-                     juce::Slider::TextEntryBoxPosition::TextBoxBelow,
-                     Parameters::ClippingType,
-                     vts,
-                     "Type of clipping. The hard clip is harshest but less coloring, arctangent is smoothest but adds more color."),
-        oversampleRate(juce::Slider::SliderStyle::LinearVertical,
-                       juce::Slider::TextEntryBoxPosition::TextBoxBelow,
-                       Parameters::OversampleRate,
-                       vts,
-                       "High values will suppress aliasing better and increases CPU consumption.")
+    WorkingArea(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
     {
-        addAndMakeVisible (inputGain);
-        addAndMakeVisible (outputGain);
-        addAndMakeVisible (ceiling);
-        addAndMakeVisible (clippingType);
-        addAndMakeVisible (oversampleRate);
+        addAndMakeVisible (clipper);
+        addAndMakeVisible (master);
     }
     
     //==============================================================================
@@ -62,36 +37,17 @@ public:
         grid.templateRows = {
             Track (Fr (1))
         };
-        grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)) };
+        grid.templateColumns = { Track (Fr (3)), Track (Fr (2)) };
         grid.items = {
-            Item(inputGain), Item(clippingType), Item(ceiling), Item(oversampleRate), Item(outputGain),
+            Item(clipper), Item(master)
         };
          
         grid.performLayout (getLocalBounds());
     }
-    
-    //==============================================================================
-    void setOutputGainEnabled(bool isEnabled)
-    {
-        outputGain.setEnabled (isEnabled);
-    }
-    
-    void setEnabled(bool isEnabled)
-    {
-        inputGain.setEnabled (isEnabled);
-        outputGain.setEnabled (isEnabled);
-        ceiling.setEnabled (isEnabled);
-        clippingType.setEnabled (isEnabled);
-        oversampleRate.setEnabled (isEnabled);
-    }
-    
 private:
     //==============================================================================
-    widgets::LabledSlider      inputGain;
-    widgets::LabledSlider      outputGain;
-    widgets::LabledMeterSlider ceiling;
-    widgets::LabledSlider      clippingType;
-    widgets::LabledSlider      oversampleRate;
+    widgets::BlockPanel clipper { "Clipper" };
+    widgets::BlockPanel master  { "Master" };
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WorkingArea)
