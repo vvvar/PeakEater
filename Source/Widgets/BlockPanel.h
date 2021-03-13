@@ -19,8 +19,7 @@ public:
     //==============================================================================
     void paint (juce::Graphics& g) override
     {
-        auto bounds = getLocalBounds().toFloat().reduced (AppTheme::V1::PanelBorderThickness / 2.0f + 10.0f,
-                                                          AppTheme::V1::PanelBorderThickness / 2.0f + 10.0f);
+        auto bounds = getReducedBounds();
         
         g.setColour (AppTheme::V1::PanelBackgroundColor);
         g.fillRoundedRectangle (bounds, AppTheme::V1::PanelBorderRadius);
@@ -34,6 +33,12 @@ public:
     void resized() override
     {
         label.setBounds (10, 0, 80, 20);
+    }
+    
+    juce::Rectangle<float> getReducedBounds() const noexcept
+    {
+        return getLocalBounds().toFloat().reduced (AppTheme::V1::PanelBorderThickness / 2.0f + 10.0f,
+                                                   AppTheme::V1::PanelBorderThickness / 2.0f + 10.0f);
     }
     
 private:

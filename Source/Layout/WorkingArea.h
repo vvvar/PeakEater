@@ -1,11 +1,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-
-#include "../Widgets/BlockPanel.h"
-
-#include "../Widgets/LabledSlider.h"
-#include "../Widgets/LabledMeterSlider.h"
+#include "Clipper.h"
+#include "Master.h"
 
 namespace layout
 {
@@ -15,16 +12,14 @@ class WorkingArea : public juce::Component
 {
 public:
     //==============================================================================
-    WorkingArea(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
+    WorkingArea(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
+    master (vts)
     {
         addAndMakeVisible (clipper);
         addAndMakeVisible (master);
     }
     
     //==============================================================================
-    void paint (juce::Graphics&) override
-    {}
-    
     void resized() override
     {
         using Grid  = juce::Grid;
@@ -46,8 +41,8 @@ public:
     }
 private:
     //==============================================================================
-    widgets::BlockPanel clipper { "Clipper" };
-    widgets::BlockPanel master  { "Master" };
+    layout::Clipper clipper;
+    layout::Master  master;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WorkingArea)

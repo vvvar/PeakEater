@@ -38,6 +38,13 @@ static const auto MeterLevelClippedText = MeterLevelHighColor;
 static const auto MeterTicksTextColor = TextColor;
 static const auto MeterBarBackgroundColor = AppColors::V2::DavysGrey;
 
+// Rotary Slider
+static const auto RSliderBackgroundColour = AppColors::V2::LightGrey;
+static const auto RSliderBorderColour = AppColors::V2::Jet;
+static const auto RSliderPointerColour = AppColors::V2::Jet;
+static const auto RSliderFontSize = 13.0f;
+static const auto RSliderFontColour = AppColors::V2::Jet;
+
 }
 
 

@@ -21,6 +21,7 @@
         <FILE id="Uj5UG2" name="Helpers.h" compile="0" resource="0" file="Source/WaveShaping/Helpers.h"/>
       </GROUP>
       <GROUP id="{10CF3624-3D93-4A58-4521-61F4C2CFD36B}" name="Widgets">
+        <FILE id="gtoLnu" name="RotarySlider.h" compile="0" resource="0" file="Source/Widgets/RotarySlider.h"/>
         <FILE id="HLPnJj" name="BlockPanel.h" compile="0" resource="0" file="Source/Widgets/BlockPanel.h"/>
         <FILE id="NPnYJS" name="CheckBox.h" compile="0" resource="0" file="Source/Widgets/CheckBox.h"/>
         <FILE id="JavhMz" name="Label.h" compile="0" resource="0" file="Source/Widgets/Label.h"/>
@@ -34,10 +35,12 @@
       </GROUP>
       <GROUP id="{05F5E144-F066-6783-8204-FDA6E1477752}" name="Layout">
         <FILE id="pyw5bg" name="CentralPanel.h" compile="0" resource="0" file="Source/Layout/CentralPanel.h"/>
+        <FILE id="yYpzMn" name="Clipper.h" compile="0" resource="0" file="Source/Layout/Clipper.h"/>
         <FILE id="qOZ3Sb" name="Footer.h" compile="0" resource="0" file="Source/Layout/Footer.h"/>
         <FILE id="E6ozzP" name="Header.h" compile="0" resource="0" file="Source/Layout/Header.h"/>
         <FILE id="SfYQlw" name="LeftPanel.h" compile="0" resource="0" file="Source/Layout/LeftPanel.h"/>
         <FILE id="fRY5A2" name="Main.h" compile="0" resource="0" file="Source/Layout/Main.h"/>
+        <FILE id="HS9cXc" name="Master.h" compile="0" resource="0" file="Source/Layout/Master.h"/>
         <FILE id="AMHwp0" name="RightPanel.h" compile="0" resource="0" file="Source/Layout/RightPanel.h"/>
         <FILE id="zN631H" name="WorkingArea.h" compile="0" resource="0" file="Source/Layout/WorkingArea.h"/>
       </GROUP>
