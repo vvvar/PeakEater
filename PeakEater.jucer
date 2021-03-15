@@ -64,6 +64,8 @@
       <FILE id="qMT7Dc" name="link_white.png" compile="0" resource="1" file="Resources/link_white.png"/>
       <FILE id="UY0iSc" name="link_dgrey.png" compile="0" resource="1" file="Resources/link_dgrey.png"/>
       <FILE id="ZJcxDU" name="link_green.png" compile="0" resource="1" file="Resources/link_green.png"/>
+      <FILE id="z6e37s" name="link_green_2.png" compile="0" resource="1"
+            file="Resources/link_green_2.png"/>
       <FILE id="yYfq18" name="logo_plugin_v2.png" compile="0" resource="1"
             file="Resources/logo_plugin_v2.png"/>
       <FILE id="ByLiut" name="MontserratRegular.ttf" compile="0" resource="1"

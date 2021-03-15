@@ -18,7 +18,7 @@ static const auto TextColor = AppColors::V2::Powder;
 
 // Panel Block
 static const auto PanelBackgroundColor = AppColors::V2::Jet;
-static const auto PanelNameTextSize = 18.0f;
+static const auto PanelNameTextSize = 16.0f;
 static const auto PanelBorderColor = AppColors::V2::DavysGrey;
 static const auto PanelBorderRadius = 13.0f;
 static const auto PanelBorderThickness = 1.0f;

@@ -13,66 +13,84 @@ class LinkInOutButton : public juce::ToggleButton
 {
 public:
     //==============================================================================
-    using Img = juce::Image;
-    using Cache = juce::ImageCache;
+    class LinkInOutLookAndFeel : public juce::LookAndFeel_V4
+    {
+    public:
+        //==============================================================================
+        using Img = juce::Image;
+        using Cache = juce::ImageCache;
+        
+        //==============================================================================
+        LinkInOutLookAndFeel():
+        off_normal (Cache::getFromMemory (BinaryData::link_grey_png, BinaryData::link_grey_pngSize)),
+        off_over   (Cache::getFromMemory (BinaryData::link_white_png, BinaryData::link_white_pngSize)),
+        on_normal  (Cache::getFromMemory (BinaryData::link_green_png, BinaryData::link_green_pngSize)),
+        on_over    (Cache::getFromMemory (BinaryData::link_green_2_png, BinaryData::link_green_2_pngSize))
+        {}
+        
+        //==============================================================================
+        void drawToggleButton (juce::Graphics &g,
+                               juce::ToggleButton &button,
+                               bool shouldDrawButtonAsHighlighted,
+                               bool shouldDrawButtonAsDown)
+        {
+            if (button.getToggleState())
+            {
+                if (shouldDrawButtonAsHighlighted)
+                {
+                    drawImageWithinButton (on_over, g, button);
+                } else
+                {
+                    drawImageWithinButton (on_normal, g, button);
+                }
+            } else
+            {
+                if (shouldDrawButtonAsHighlighted)
+                {
+                    drawImageWithinButton (off_over, g, button);
+                } else
+                {
+                    drawImageWithinButton (off_normal, g, button);
+                }
+            }
+        }
+    private:
+        //==============================================================================
+        Img off_normal;
+        Img off_over;
+        Img on_normal;
+        Img on_over;
+        
+        //==============================================================================
+        void drawImageWithinButton (Img &image, juce::Graphics &g, juce::ToggleButton &button)
+        {
+            g.drawImage (image, g.getClipBounds().toFloat(), juce::RectanglePlacement::centred);
+        }
+    };
     
     //==============================================================================
     LinkInOutButton()
     {
-        Img off_normal = Cache::getFromMemory (BinaryData::link_grey_png, BinaryData::link_grey_pngSize);
-        Img off_over = Cache::getFromMemory (BinaryData::link_white_png, BinaryData::link_white_pngSize);
-        Img off_down = Cache::getFromMemory (BinaryData::link_dgrey_png, BinaryData::link_dgrey_pngSize);
-        off.setImages (true, true, true, off_normal, 1.0f, {}, off_over, 1.0f, {}, off_down, 1.0f, {});
-        
-        Img on_normal = Cache::getFromMemory (BinaryData::link_green_png, BinaryData::link_green_pngSize);
-        Img on_over = Cache::getFromMemory (BinaryData::link_green_png, BinaryData::link_green_pngSize);
-        Img on_down = Cache::getFromMemory (BinaryData::link_green_png, BinaryData::link_green_pngSize);
-        on.setImages (true, true, true, on_normal, 1.0f, {}, on_over, 1.0f, {}, on_down, 1.0f, {});
-        
-        addAndMakeVisible (off);
-        addAndMakeVisible (on);
+        setLookAndFeel (&lnf);
     }
-    ~LinkInOutButton() {}
+    ~LinkInOutButton()
+    {
+        setLookAndFeel (nullptr);
+    }
     
     //==============================================================================
-    void paint (juce::Graphics&) override
-    {}
     
     void clicked () override
     {
-        setToggleState (!getToggleState());
+       // setToggleState (!getToggleState(), juce::NotificationType::sendNotification);
     }
     
-    void resized() override
+    void clicked (const juce::ModifierKeys &modifiers) override
     {
-        using Grid  = juce::Grid;
-        using Track = Grid::TrackInfo;
-        using Fr    = Grid::Fr;
-        using Item  = juce::GridItem;
-        
-        Grid grid;
-
-        grid.templateRows = {
-            Track (Fr (1)),
-        };
-        grid.templateColumns = { Track (Fr (1)) };
-        if (getToggleState())
-        {
-            grid.items = {
-                Item(on)
-            };
-        } else
-        {
-            grid.items = {
-                Item(off)
-            };
-        }
-        
-        grid.performLayout (getLocalBounds());
+        clicked();
     }
 private:
-    juce::ImageButton on;
-    juce::ImageButton off;
+    LinkInOutLookAndFeel lnf;
 };
 
 
@@ -81,7 +99,7 @@ class Master : public widgets::BlockPanel
 {
 public:
     Master (juce::AudioProcessorValueTreeState& vts):
-    widgets::BlockPanel ("Master"),
+    widgets::BlockPanel ("MASTER"),
     input (Parameters::InputGain, vts),
     output (Parameters::OutputGain, vts)
     {
@@ -107,9 +125,9 @@ public:
             Track (Fr (1)),
             Track (Fr (1))
         };
-        grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (1)) };
+        grid.templateColumns = { Track (Fr (2)), Track (Fr (1)), Track (Fr (2)) };
         grid.items = {
-            Item(input), Item(linkInOut), Item(output)
+            Item(input).withMargin (Item::Margin (0, 0, 0, 5)), Item(linkInOut).withMargin (Item::Margin (0, 5, 10, 5)), Item(output).withMargin (Item::Margin (0, 5, 0, 0))
         };
          
         grid.performLayout (getReducedBounds().toNearestInt());

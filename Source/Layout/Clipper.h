@@ -9,7 +9,7 @@ namespace layout
 class Clipper : public widgets::BlockPanel
 {
 public:
-    Clipper(): widgets::BlockPanel("Clipper")
+    Clipper(): widgets::BlockPanel("CLIPPER")
     {}
 };
 
