@@ -60,6 +60,10 @@
             file="Source/PluginProcessor.cpp"/>
     </GROUP>
     <GROUP id="{4871CAE9-74EF-8C63-E174-4E80748CCAB8}" name="Resources">
+      <FILE id="K27mC5" name="link_grey.png" compile="0" resource="1" file="Resources/link_grey.png"/>
+      <FILE id="qMT7Dc" name="link_white.png" compile="0" resource="1" file="Resources/link_white.png"/>
+      <FILE id="UY0iSc" name="link_dgrey.png" compile="0" resource="1" file="Resources/link_dgrey.png"/>
+      <FILE id="ZJcxDU" name="link_green.png" compile="0" resource="1" file="Resources/link_green.png"/>
       <FILE id="yYfq18" name="logo_plugin_v2.png" compile="0" resource="1"
             file="Resources/logo_plugin_v2.png"/>
       <FILE id="ByLiut" name="MontserratRegular.ttf" compile="0" resource="1"
