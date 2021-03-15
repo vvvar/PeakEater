@@ -38,6 +38,7 @@
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
+    <li><a href="#roadmap">Roadmap</a></li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
@@ -45,7 +46,6 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -64,6 +64,17 @@
 PeakEater is a free, easy to use, waveshaping VST3/AU plugin for macOS and Windows. PeakEater lets you choose between different [waveshaping](https://en.wikipedia.org/wiki/Waveshaper) [functions](https://en.wikipedia.org/wiki/Sigmoid_function) to clip everything above ceiling level. Therefore, you can boost overall volume of your track safely without worying that some nasty peak would go above maximum allowed volume level of your DAW. It supports variours <a href="#features">features</a> such as multiple clipping types, oversampling and visualizations of clipping process that aims to make clipping easy and fun.
 
 Inspiration for this plugin comes mostly from [KAZROG KClip 3](https://kazrog.com/products/kclip-3) and [VennAudio Free Clip](https://www.vennaudio.com/free-clip/). So it's an attempt to combine the features of both plugins but completley free and open-source.
+
+<!-- ROADMAP -->
+## Roadmap
+
+Main features planned:
+- [ ] New UI + Dark Theme
+- [ ] Waveform Preview
+- [ ] Dry/Wet support
+- [ ] "Custom" waveform parameter
+
+For more detailed roadmap, check out [Project Roadmap](https://github.com/vvvar/PeakEater/projects/1) page.
 
 ### Features
 
@@ -138,11 +149,6 @@ Now, open [```PeakEater.jucer```](https://github.com/vvvar/PeakEater/blob/master
 That's it, you may now build PeakEater for the available targets.
 
 Please note that in order to disable JUCE Splash Screen you should switch your Projucer into GPL3 mode. If you're opening Projucer for the first time, popup regarding login should appear in the bottom left side of Projucer. Click "Singn In" and then choose "Use GPL3 Mode" instead of making sign in.
-
-<!-- ROADMAP -->
-## Roadmap
-
-Check out [Project Roadmap](https://github.com/vvvar/PeakEater/projects/1) page for more details.
 
 <!-- CONTRIBUTING -->
 ## Contributing
