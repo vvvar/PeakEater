@@ -32,7 +32,7 @@ public:
         grid.templateRows = {
             Track (Fr (1))
         };
-        grid.templateColumns = { Track (Fr (3)), Track (Fr (2)) };
+        grid.templateColumns = { Track (Fr (5)), Track (Fr (3)) };
         grid.items = {
             Item(clipper), Item(master)
         };

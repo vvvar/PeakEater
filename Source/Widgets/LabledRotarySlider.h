@@ -26,24 +26,14 @@ public:
     
     void resized() override
     {
-        using Grid  = juce::Grid;
-        using Track = Grid::TrackInfo;
-        using Fr    = Grid::Fr;
-        using Item  = juce::GridItem;
-        
-        Grid grid;
+        juce::FlexBox fb;
+        fb.flexDirection = juce::FlexBox::Direction::column;
+        fb.alignItems = juce::FlexBox::AlignItems::flexStart;
 
-        grid.templateRows = {
-            Track (Fr (9)),
-            Track (Fr (1))
-        };
-        grid.templateColumns = { Track (Fr (1)) };
-        grid.items = {
-            Item(slider),
-            Item(label)
-        };
-         
-        grid.performLayout (getLocalBounds());
+        fb.items.add (juce::FlexItem (slider).withMinWidth (50.0f).withMinHeight (50.0f));
+        fb.items.add (juce::FlexItem (label).withMinWidth (50.0f).withMinHeight (20.0f));
+
+        fb.performLayout (getLocalBounds().toFloat());
     }
 private:
     //==============================================================================
