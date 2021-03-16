@@ -13,6 +13,12 @@ class LinkInOutButton : public juce::ToggleButton
 {
 public:
     //==============================================================================
+    using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
+    using String           = juce::String;
+    using ValueTreeState   = juce::AudioProcessorValueTreeState;
+    using ParameterInfo    = Parameters::ParameterInfo;
+    
+    //==============================================================================
     class LinkInOutLookAndFeel : public juce::LookAndFeel_V4
     {
     public:
@@ -69,9 +75,14 @@ public:
     };
     
     //==============================================================================
-    LinkInOutButton()
+    LinkInOutButton(String tooltipText = "") noexcept
     {
         setLookAndFeel (&lnf);
+    }
+    LinkInOutButton(const ParameterInfo& parameter, ValueTreeState& vts, String tooltipText = "") noexcept
+    {
+        setLookAndFeel (&lnf);
+        attachment.reset (new ButtonAttachment (vts, parameter.Id, *this));
     }
     ~LinkInOutButton()
     {
@@ -79,17 +90,17 @@ public:
     }
     
     //==============================================================================
-    
     void clicked () override
     {
        // setToggleState (!getToggleState(), juce::NotificationType::sendNotification);
     }
-    
     void clicked (const juce::ModifierKeys &modifiers) override
     {
         clicked();
     }
 private:
+    //==============================================================================
+    std::unique_ptr<ButtonAttachment> attachment;
     LinkInOutLookAndFeel lnf;
 };
 
@@ -101,6 +112,7 @@ public:
     Master (juce::AudioProcessorValueTreeState& vts):
     widgets::BlockPanel ("MASTER"),
     input (Parameters::InputGain, vts),
+    linkInOut (Parameters::LinkInOut, vts),
     output (Parameters::OutputGain, vts)
     {
         addAndMakeVisible (input);
