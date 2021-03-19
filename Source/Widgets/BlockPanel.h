@@ -20,10 +20,10 @@ public:
     void paint (juce::Graphics& g) override
     {
         auto bounds = getReducedBounds();
-        
+
         g.setColour (AppTheme::V1::PanelBackgroundColor);
         g.fillRoundedRectangle (bounds, AppTheme::V1::PanelBorderRadius);
-        
+
         g.setColour (AppTheme::V1::PanelBorderColor);
         g.drawRoundedRectangle (bounds,
                                 AppTheme::V1::PanelBorderRadius,

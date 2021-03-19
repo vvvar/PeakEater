@@ -37,25 +37,25 @@ public:
             auto ry = centreY - radius;
             auto rw = radius * 2.0f;
             auto angle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
-            
+
             // fill
             g.setColour (AppTheme::V1::RSliderBackgroundColour);
             g.fillEllipse (rx, ry, rw, rw);
-     
+
             // outline
             g.setColour (AppTheme::V1::RSliderBorderColour);
             g.drawEllipse (rx, ry, rw, rw, 1.0f);
-            
+
             juce::Path p;
             auto pointerLength = radius * 0.33f;
             auto pointerThickness = 2.0f;
             p.addRectangle (-pointerThickness * 0.5f, -radius, pointerThickness, pointerLength);
             p.applyTransform (juce::AffineTransform::rotation (angle).translated (centreX, centreY));
-            
+
             // pointer
             g.setColour (AppTheme::V1::RSliderPointerColour);
             g.fillPath (p);
-            
+
             // Value
             g.setColour (slider.findColour (Slider::textBoxTextColourId));
             g.setFont (radius * 0.4f);
