@@ -16,21 +16,26 @@ public:
     class SliderLookAndFeel : public juce::LookAndFeel_V4
     {
     public:
-        SliderLookAndFeel()
+        //==============================================================================
+        SliderLookAndFeel(const juce::String& postfix = ""):
+        valuePostfix (postfix)
         {
             setColour (juce::Slider::textBoxTextColourId, AppTheme::V1::RSliderFontColour);
             setColour (juce::Slider::textBoxOutlineColourId, AppTheme::V1::RSliderFontColour.withAlpha (0.0f));
         }
         ~SliderLookAndFeel() {}
+        
+        //==============================================================================
         juce::Font getLabelFont (juce::Label& label) override
         {
             label.setJustificationType (juce::Justification::centred);
             return { AppTheme::V1::RSliderFontSize };
         }
+        
         void drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
                                const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider) override
         {
-            auto radius = (float) juce::jmin (width / 2, height / 2) - 4.0f;
+            auto radius = (float) juce::jmin (width / 2, height / 2);
             auto centreX = (float) x + (float) width  * 0.5f;
             auto centreY = (float) y + (float) height * 0.5f;
             auto rx = centreX - radius;
@@ -59,17 +64,23 @@ public:
             // Value
             g.setColour (slider.findColour (Slider::textBoxTextColourId));
             g.setFont (radius * 0.4f);
-            float value = floorf(slider.getValue() * 100) / 100;
-            g.drawSingleLineText (juce::String (value) + " dB", centreX, centreY * 1.04f, juce::Justification::horizontallyCentred);
+            auto value = slider.getTextFromValue (slider.getValue());
+            g.drawSingleLineText (juce::String (value) + valuePostfix, centreX, centreY * 1.04f, juce::Justification::horizontallyCentred);
         }
+        
+    private:
+        //==============================================================================
+        juce::String valuePostfix;
     };
     
     //==============================================================================
     RotarySlider(
            const Parameters::ParameterInfo& parameter,
            juce::AudioProcessorValueTreeState& vts,
-           juce::String tooltipText = "")
-    : juce::Slider(parameter.Id)
+           juce::String postfix = "",
+           juce::String tooltipText = ""):
+    juce::Slider (parameter.Id),
+    lnf (postfix)
     {
         setSliderStyle (juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
         setTextBoxStyle (juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);

@@ -46,10 +46,11 @@ static const auto RSliderFontSize = 13.0f;
 static const auto RSliderFontColour = AppColors::V2::Jet;
 
 // Osciloscope
-static const auto OSCWaveColour = AppColors::V2::TiffanyBlue;
+static const auto OSCBackgroundColour = AppColors::V2::TiffanyBlue;
+static const auto OSCWaveColour = AppColors::V2::Powder;
+static const auto OSCBorderColour = AppColors::V2::Jet;
+
 
 }
-
-
 
 }

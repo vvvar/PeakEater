@@ -215,9 +215,9 @@ class MasterTop : public juce::Component
 public:
     //==============================================================================
     MasterTop (juce::AudioProcessorValueTreeState& vts):
-    input (Parameters::InputGain, vts),
-    linkInOut (Parameters::LinkInOut, vts),
-    output (Parameters::OutputGain, vts)
+    input (Parameters::InputGain, vts, " dB"),
+    linkInOut (Parameters::LinkInOut, vts, " dB"),
+    output (Parameters::OutputGain, vts, " dB")
     {
         addAndMakeVisible (input);
         addAndMakeVisible (linkInOut);
