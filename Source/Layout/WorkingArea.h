@@ -13,7 +13,7 @@ class WorkingArea : public juce::Component
 public:
     //==============================================================================
     WorkingArea(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
-    clipper (vts),
+    clipper (p.getCeilingMeterSource(), vts),
     master (vts)
     {
         addAndMakeVisible (clipper);

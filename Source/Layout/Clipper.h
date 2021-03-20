@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 #include "../Widgets/BlockPanel.h"
 #include "../Widgets/LabledRotarySlider.h"
+#include "../Widgets/LabledMeterSlider.h"
 #include "../Parameters.h"
 #include "../WaveShaping/ClippingFunctions.h"
 
@@ -98,9 +99,11 @@ private:
 class Clipper : public widgets::BlockPanel
 {
 public:
-    Clipper(juce::AudioProcessorValueTreeState& vts):
+    Clipper(foleys::LevelMeterSource& meterSource,
+            juce::AudioProcessorValueTreeState& vts):
     widgets::BlockPanel ("CLIPPER"),
-    algo (Parameters::ClippingType, vts)
+    algo (Parameters::ClippingType, vts),
+    ceiling (meterSource, vts, Parameters::Ceiling)
     {
         addAndMakeVisible (waveformDisplay);
         addAndMakeVisible (waveformDisplay2);
@@ -110,6 +113,7 @@ public:
         addAndMakeVisible (waveformDisplay6);
         addAndMakeVisible (waveformDisplay7);
         addAndMakeVisible (algo);
+        addAndMakeVisible (ceiling);
     }
     
     void resized() override
@@ -129,7 +133,7 @@ public:
         grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (1)) };
         
         grid.items = {
-            Item (waveformDisplay).withMargin (Item::Margin (10, 0, 10, 0)), Item (algo)
+            Item (waveformDisplay).withMargin (Item::Margin (10, 0, 10, 0)), Item (algo), Item (ceiling)
         };
          
         grid.performLayout (getReducedBounds().toNearestInt());
@@ -145,6 +149,8 @@ private:
     WaveformDisplay waveformDisplay7 { waveshaping::arcClip };
     
     widgets::LabledRotarySlider algo;
+    
+    widgets::LabledMeterSlider ceiling;
 };
 
 }
