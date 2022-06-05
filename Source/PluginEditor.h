@@ -8,10 +8,13 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "Layout/Main.h"
 
+#include "GUI/Main.h"
+
+namespace pe
+{
 //==============================================================================
-class PeakEaterAudioProcessorEditor  : public juce::AudioProcessorEditor
+class PeakEaterAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
     PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor&, juce::AudioProcessorValueTreeState&);
@@ -23,12 +26,9 @@ public:
 
 private:
     //==============================================================================
-    PeakEaterAudioProcessor& audioProcessor;
-    juce::AudioProcessorValueTreeState& valueTreeState;
-    
-    //==============================================================================
-    layout::MainWindow main;
+    pe::gui::layout::MainWindow main;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeakEaterAudioProcessorEditor)
 };
+} // namespace pe

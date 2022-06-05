@@ -1,0 +1,92 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "git-init-submodules",
+      "type": "shell",
+      "command": "rm -rf ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout cc9fdc3d6 && cd ${workspaceFolder}/Dependencies/ff_meters && git checkout 71e05b8 && sed -i '' '/#warning/d' ${workspaceFolder}/Dependencies/ff_meters/LevelMeter/LevelMeterSource.h"
+    },
+    {
+      "label": "build-cmake-MacOS",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "command": "rm -rf ${workspaceFolder}/build/ && cmake . -B build -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON"
+    },
+    {
+      "label": "build-cmake-Windows",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "command": "rm -rf ${workspaceFolder}/build/ && cmake . -B build -G 'Visual Studio 16 2019' -T 'v140' -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON"
+    },
+    {
+      "label": "build-standalone-Release",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "command": "cmake --build build --config Release --target PeakEater_Standalone -j4"
+    },
+    {
+      "label": "build-standalone-Debug",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "command": "cmake --build build --config Debug --target PeakEater_Standalone -j4"
+    },
+    {
+      "label": "build-vst3-Release",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "command": "cmake --build build --config Release --target PeakEater_VST3 -j4"
+    },
+    {
+      "label": "build-vst3-Debug",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "command": "cmake --build build --config Debug --target PeakEater_VST3 -j4"
+    },
+    {
+      "label": "run-standalone",
+      "type": "shell",
+      "command": "${workspaceFolder}/build/PeakEater_artefacts/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
+    },
+    {
+      "label": "util-clang-format",
+      "type": "shell",
+      "command": "find ${workspaceFolder}/Source/ -iname *.h -o -iname *.cpp | xargs clang-format --dry-run --Werror -i"
+    }
+  ]
+}

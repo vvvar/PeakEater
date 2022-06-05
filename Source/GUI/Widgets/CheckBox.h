@@ -3,6 +3,10 @@
 
 #include "../AppColours.h"
 
+namespace pe
+{
+namespace gui
+{
 namespace widgets
 {
 
@@ -20,20 +24,14 @@ public:
             setColour (juce::ToggleButton::tickColourId, AppColors::Navy);
             setColour (juce::ToggleButton::tickDisabledColourId, AppColors::Blue);
         }
-        ~CheckBoxLookAndFeel() {}
+        ~CheckBoxLookAndFeel() override {}
 
-        void drawToggleButton (juce::Graphics& g, juce::ToggleButton& button,
-                                               bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override
+        void drawToggleButton (juce::Graphics& g, juce::ToggleButton& button, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override
         {
             auto fontSize = juce::jmin (10.0f, (float) button.getHeight() * 0.75f);
             auto tickWidth = fontSize * 1.1f;
 
-            drawTickBox (g, button, 4.0f, ((float) button.getHeight() - tickWidth) * 0.5f,
-                         tickWidth, tickWidth,
-                         button.getToggleState(),
-                         button.isEnabled(),
-                         shouldDrawButtonAsHighlighted,
-                         shouldDrawButtonAsDown);
+            drawTickBox (g, button, 4.0f, ((float) button.getHeight() - tickWidth) * 0.5f, tickWidth, tickWidth, button.getToggleState(), button.isEnabled(), shouldDrawButtonAsHighlighted, shouldDrawButtonAsDown);
 
             g.setColour (button.findColour (juce::ToggleButton::textColourId));
             g.setFont (fontSize);
@@ -42,17 +40,12 @@ public:
                 g.setOpacity (0.5f);
 
             g.drawFittedText (button.getButtonText(),
-                              button.getLocalBounds().withTrimmedLeft (juce::roundToInt (tickWidth) + 10)
-                                                     .withTrimmedRight (2),
-                              juce::Justification::centredLeft, 10);
+                              button.getLocalBounds().withTrimmedLeft (juce::roundToInt (tickWidth) + 10).withTrimmedRight (2),
+                              juce::Justification::centredLeft,
+                              10);
         }
-        
-        void drawTickBox (juce::Graphics& g, juce::Component& component,
-                                          float x, float y, float w, float h,
-                                          const bool ticked,
-                                          const bool isEnabled,
-                                          const bool shouldDrawButtonAsHighlighted,
-                                          const bool shouldDrawButtonAsDown) override
+
+        void drawTickBox (juce::Graphics& g, juce::Component& component, float x, float y, float w, float h, const bool ticked, const bool isEnabled, const bool shouldDrawButtonAsHighlighted, const bool shouldDrawButtonAsDown) override
         {
             juce::ignoreUnused (isEnabled, shouldDrawButtonAsHighlighted, shouldDrawButtonAsDown);
 
@@ -69,41 +62,41 @@ public:
             }
         }
     };
-    
+
     //==============================================================================
-    CheckBox(
-             const Parameters::ParameterInfo& parameter,
-             juce::AudioProcessorValueTreeState& vts,
-             juce::String labelText = "",
-             juce::String tooltipText = ""
-             ) noexcept :
-        toggle(parameter.Id)
+    CheckBox (
+        params::Parameter const& parameter,
+        juce::AudioProcessorValueTreeState& vts,
+        juce::String labelText = "",
+        juce::String tooltipText = "") noexcept
+        : toggle (parameter.getId())
     {
-        juce::String text = labelText.isNotEmpty() ? labelText : parameter.Label;
-        toggle.setButtonText(text.toUpperCase());
-        toggle.setLookAndFeel(&lnf);
-        toggle.setTooltip(tooltipText);
-        attachment.reset (new ButtonAttachment (vts, parameter.Id, toggle));
-        
+        juce::String text = labelText.isNotEmpty() ? labelText : parameter.getLabel();
+        toggle.setButtonText (text.toUpperCase());
+        toggle.setLookAndFeel (&lnf);
+        toggle.setTooltip (tooltipText);
+        attachment.reset (new ButtonAttachment (vts, parameter.getId(), toggle));
+
         addAndMakeVisible (toggle);
     }
-    ~CheckBox()
+    ~CheckBox() override
     {
-        toggle.setLookAndFeel(nullptr);
+        toggle.setLookAndFeel (nullptr);
     }
-    
+
     //==============================================================================
     void paint (juce::Graphics&) override
-    {}
-    
+    {
+    }
+
     void resized() override
     {
         juce::Grid grid;
-         
+
         using Track = juce::Grid::TrackInfo;
         using Fr = juce::Grid::Fr;
         using Item = juce::GridItem;
-        
+
         grid.templateRows = {
             Track (Fr (1))
         };
@@ -112,37 +105,38 @@ public:
         grid.items = {
             Item (toggle)
         };
-        
+
         grid.performLayout (getLocalBounds());
     }
-    
+
     //==============================================================================
-    void addListener(juce::Button::Listener* listener)
+    void addListener (juce::Button::Listener* listener)
     {
-        toggle.addListener(listener);
+        toggle.addListener (listener);
     }
-    
+
     //==============================================================================
-    void setEnabled(bool isEnabled)
+    void setEnabled (bool isEnabled)
     {
         toggle.setEnabled (isEnabled);
-        if (!isEnabled && toggle.getToggleState()) // if we're disabling checkbox that is checked
+        if (! isEnabled && toggle.getToggleState()) // if we're disabling checkbox that is checked
         {
-            toggle.setToggleState(false, juce::sendNotificationSync); // uncheck it
+            toggle.setToggleState (false, juce::sendNotificationSync); // uncheck it
         }
     }
-    
+
 private:
     //==============================================================================
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
-    
+
     //==============================================================================
-    juce::ToggleButton                toggle;
+    juce::ToggleButton toggle;
     std::unique_ptr<ButtonAttachment> attachment;
-    CheckBoxLookAndFeel               lnf;
-    
+    CheckBoxLookAndFeel lnf;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CheckBox)
 };
-
-}
+} // namespace widgets
+} // namespace gui
+} // namespace pe
