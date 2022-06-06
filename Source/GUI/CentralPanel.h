@@ -2,41 +2,44 @@
 
 #include <JuceHeader.h>
 
+#include "Footer.h"
 #include "Header.h"
 #include "WorkingArea.h"
-#include "Footer.h"
 
+namespace pe
+{
+namespace gui
+{
 namespace layout
 {
-
 //==============================================================================
 class CentralPanel : public juce::Component, public juce::Button::Listener
 {
 public:
     //==============================================================================
-    CentralPanel(PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts):
-        workingArea(p, vts),
-        footer(p, vts)
+    CentralPanel (PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts) : workingArea (p, vts),
+                                                                                         footer (p, vts)
     {
-        addAndMakeVisible(header);
-        addAndMakeVisible(workingArea);
-        addAndMakeVisible(footer);
-        
-        footer.addLinkInOutListener(this);
-        footer.addBypassListener(this);
+        addAndMakeVisible (header);
+        addAndMakeVisible (workingArea);
+        addAndMakeVisible (footer);
+
+        footer.addLinkInOutListener (this);
+        footer.addBypassListener (this);
     }
-    
+
     //==============================================================================
     void paint (juce::Graphics&) override
-    {}
-    
+    {
+    }
+
     void resized() override
     {
-        using Grid  = juce::Grid;
+        using Grid = juce::Grid;
         using Track = Grid::TrackInfo;
-        using Fr    = Grid::Fr;
-        using Item  = juce::GridItem;
-        
+        using Fr = Grid::Fr;
+        using Item = juce::GridItem;
+
         Grid grid;
 
         grid.templateRows = {
@@ -50,35 +53,36 @@ public:
             Item (workingArea).withMargin (Item::Margin (24, 0, 0, 0)),
             Item (footer).withMargin (Item::Margin (21, 0, 0, 5))
         };
-         
+
         grid.performLayout (getLocalBounds());
     }
-    
+
     //==============================================================================
     void buttonClicked (juce::Button* button) override
     {
         if (button->getName() == "LinkInOut")
         {
-            workingArea.setOutputGainEnabled (!button->getToggleState());
+            workingArea.setOutputGainEnabled (! button->getToggleState());
         }
         if (button->getName() == "Bypass")
         {
-            footer.setLinkEnabled (!button->getToggleState());
-            workingArea.setEnabled (!button->getToggleState());
+            footer.setLinkEnabled (! button->getToggleState());
+            workingArea.setEnabled (! button->getToggleState());
         }
     }
-    
+
     void buttonStateChanged (juce::Button*) override
-    {}
-    
+    {
+    }
+
 private:
-    layout::Header      header;
+    layout::Header header;
     layout::WorkingArea workingArea;
-    layout::Footer      footer;
-    
+    layout::Footer footer;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentralPanel)
 };
-
-
-}
+} // namespace layout
+} // namespace gui
+} // namespace pe

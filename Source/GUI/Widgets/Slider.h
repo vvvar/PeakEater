@@ -2,12 +2,15 @@
 
 #include <JuceHeader.h>
 
+#include "../../Parameters.h"
 #include "../AppColours.h"
-#include "../Parameters.h"
 
+namespace pe
+{
+namespace gui
+{
 namespace widgets
 {
-
 class Slider : public juce::Slider
 {
 public:
@@ -23,65 +26,67 @@ public:
             setColour (juce::Slider::trackColourId, AppColors::Navy);
             setColour (juce::Slider::backgroundColourId, AppColors::Blue);
         }
-        ~SliderLookAndFeel() {}
+        ~SliderLookAndFeel() override {}
         juce::Font getLabelFont (juce::Label& label) override
         {
             label.setJustificationType (juce::Justification::centred);
             return { 10.0f };
         }
     };
-    
+
     //==============================================================================
-    Slider(const Parameters::ParameterInfo& parameter, juce::AudioProcessorValueTreeState& vts)
-    : juce::Slider()
+    Slider (params::Parameter const& parameter, juce::AudioProcessorValueTreeState& vts)
+        : juce::Slider()
     {
-        setLookAndFeel(&lnf);
-        attachment.reset (new SliderAttachment (vts, parameter.Id, *this));
+        setLookAndFeel (&lnf);
+        attachment.reset (new SliderAttachment (vts, parameter.getId(), *this));
     }
-    
-    Slider(
-           juce::Slider::SliderStyle style,
-           juce::Slider::TextEntryBoxPosition textBoxPosition,
-           const Parameters::ParameterInfo& parameter,
-           juce::AudioProcessorValueTreeState& vts,
-           juce::String tooltipText = "")
-    : juce::Slider(style, textBoxPosition)
+
+    Slider (
+        juce::Slider::SliderStyle style,
+        juce::Slider::TextEntryBoxPosition textBoxPosition,
+        params::Parameter const& parameter,
+        juce::AudioProcessorValueTreeState& vts,
+        juce::String tooltipText = "")
+        : juce::Slider (style, textBoxPosition)
     {
-        setLookAndFeel(&lnf);
-        attachment.reset (new SliderAttachment (vts, parameter.Id, *this));
-        setTooltip(tooltipText);
+        setLookAndFeel (&lnf);
+        attachment.reset (new SliderAttachment (vts, parameter.getId(), *this));
+        setTooltip (tooltipText);
     }
-    
+
     ~Slider()
     {
-        setLookAndFeel(nullptr);
+        setLookAndFeel (nullptr);
     }
-    
-    void setEnabled(bool isEnabled)
+
+    void setEnabled (bool isEnabled)
     {
-        juce::Slider::setEnabled(isEnabled);
+        juce::Slider::setEnabled (isEnabled);
         if (isEnabled)
         {
             setColour (juce::Slider::thumbColourId, AppColors::Red);
             setColour (juce::Slider::trackColourId, AppColors::Navy);
-        } else
+        }
+        else
         {
             setColour (juce::Slider::thumbColourId, AppColors::Blue);
             setColour (juce::Slider::trackColourId, AppColors::Blue);
         }
     }
-    
+
 private:
     //==============================================================================
     SliderLookAndFeel lnf;
-    
+
     //==============================================================================
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-    
+
     std::unique_ptr<SliderAttachment> attachment;
-    
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Slider)
 };
-
-}
+} // namespace widgets
+} // namespace gui
+} // namespace pe

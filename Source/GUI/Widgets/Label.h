@@ -3,16 +3,19 @@
 
 #include "../AppColours.h"
 
+namespace pe
+{
+namespace gui
+{
 namespace widgets
 {
-
 // ==============================================================================
 class LabelListener
 {
 public:
     virtual ~LabelListener() = default;
-    
-    virtual void onClick(const juce::MouseEvent&) = 0;
+
+    virtual void onClick (const juce::MouseEvent&) = 0;
 };
 
 //==============================================================================
@@ -27,47 +30,47 @@ public:
         {
             setColour (juce::Label::textColourId, AppColors::Navy);
         }
-        ~LabelLookAndFeel() {}
+        ~LabelLookAndFeel() override {}
         juce::Font getLabelFont (juce::Label& label) override
         {
             label.setJustificationType (juce::Justification::centred);
             return { 10.0f };
         }
     };
-    
+
     //==============================================================================
-    Label(const juce::String &componentName = {}, const juce::String &labelText = {})
-    : juce::Label(componentName, labelText)
+    Label (juce::String const& componentName = {}, juce::String const& labelText = {})
+        : juce::Label (componentName, labelText)
     {
-        setLookAndFeel(&lnf);
+        setLookAndFeel (&lnf);
     }
-    
+
     ~Label()
     {
-        setLookAndFeel(nullptr);
+        setLookAndFeel (nullptr);
     }
-    
-    void onClick(LabelListener* listener)
+
+    void onClick (LabelListener* listener)
     {
         listeners.add (listener);
     }
-    
+
     void mouseDown (const juce::MouseEvent& event)
     {
         listeners.call ([&event] (LabelListener& listener)
-        {
-            listener.onClick (event);
-        });
+                        { listener.onClick (event); });
     }
+
 private:
     //==============================================================================
     LabelLookAndFeel lnf;
-    
+
     //==============================================================================
     juce::ListenerList<LabelListener> listeners;
-    
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Label)
 };
-
-}
+} // namespace widgets
+} // namespace gui
+} // namespace pe
