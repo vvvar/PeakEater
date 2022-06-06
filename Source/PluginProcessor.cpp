@@ -40,21 +40,24 @@ PeakEaterAudioProcessor::PeakEaterAudioProcessor()
     , mCeiling (static_cast<juce::AudioParameterFloat*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())))
     , mClippingType (static_cast<juce::AudioParameterChoice*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getClippingType().getId())))
     , mOversampleRate (static_cast<juce::AudioParameterChoice*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getOversampleRate().getId())))
+    , mInputMeterSource (std::make_shared<foleys::LevelMeterSource>())
+    , mCeilingMeterSource (std::make_shared<foleys::LevelMeterSource>())
+    , mOutputMeterSource (std::make_shared<foleys::LevelMeterSource>())
     , mWaveShaperController()
     , mDecibelsIn (0.0f)
     , mDecibelsClipped (0.0f)
     , mDecibelsOut (0.0f)
 {
     mWaveShaperController.onPostInputGain ([this](auto& buffer) -> auto {
-        mInputMeterSource.measureBlock (buffer);
+        mInputMeterSource->measureBlock (buffer);
         setDecibelsIn (buffer.getMagnitude (0, buffer.getNumSamples()));
     });
     mWaveShaperController.onPostCeiling ([this](auto& buffer) -> auto {
-        mCeilingMeterSource.measureBlock (buffer);
+        mCeilingMeterSource->measureBlock (buffer);
         setDecibelsClipped (buffer.getMagnitude (0, buffer.getNumSamples()));
     });
     mWaveShaperController.onPostOutputGain ([this](auto& buffer) -> auto {
-        mOutputMeterSource.measureBlock (buffer);
+        mOutputMeterSource->measureBlock (buffer);
         setDecibelsOut (buffer.getMagnitude (0, buffer.getNumSamples()));
     });
 }
@@ -137,10 +140,10 @@ void PeakEaterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     auto const totalNumOutputChannels = getTotalNumOutputChannels();
     auto const rmsWindow = static_cast<int> (sampleRate * 0.1f / static_cast<double> (samplesPerBlock));
-    mInputMeterSource.resize (totalNumOutputChannels, rmsWindow);
-    mCeilingMeterSource.resize (totalNumOutputChannels, rmsWindow);
-    mCeilingMeterSource.setMaxHoldMS (100);
-    mOutputMeterSource.resize (totalNumOutputChannels, rmsWindow);
+    mInputMeterSource->resize (totalNumOutputChannels, rmsWindow);
+    mCeilingMeterSource->resize (totalNumOutputChannels, rmsWindow);
+    mCeilingMeterSource->setMaxHoldMS (100);
+    mOutputMeterSource->resize (totalNumOutputChannels, rmsWindow);
 }
 
 void PeakEaterAudioProcessor::releaseResources()
@@ -202,17 +205,17 @@ void PeakEaterAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     }
 }
 
-foleys::LevelMeterSource& PeakEaterAudioProcessor::getInputMeterSource()
+std::shared_ptr<foleys::LevelMeterSource> PeakEaterAudioProcessor::getInputMeterSource()
 {
     return mInputMeterSource;
 }
 
-foleys::LevelMeterSource& PeakEaterAudioProcessor::getOutputMeterSource()
+std::shared_ptr<foleys::LevelMeterSource> PeakEaterAudioProcessor::getOutputMeterSource()
 {
     return mOutputMeterSource;
 }
 
-foleys::LevelMeterSource& PeakEaterAudioProcessor::getCeilingMeterSource()
+std::shared_ptr<foleys::LevelMeterSource> PeakEaterAudioProcessor::getCeilingMeterSource()
 {
     return mCeilingMeterSource;
 }

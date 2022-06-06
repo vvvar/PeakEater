@@ -7,9 +7,10 @@
 */
 #pragma once
 
-#include <JuceHeader.h>
+#include <juce_audio_processors/juce_audio_processors.h>
 
-#include "GUI/Main.h"
+#include "GUIv2/MainComponent.h"
+#include "PluginProcessor.h"
 
 namespace pe
 {
@@ -17,7 +18,7 @@ namespace pe
 class PeakEaterAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-    PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor&, juce::AudioProcessorValueTreeState&);
+    PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& audioProcessor, juce::AudioProcessorValueTreeState& valueTreeState);
     ~PeakEaterAudioProcessorEditor() override;
 
     //==============================================================================
@@ -26,7 +27,7 @@ public:
 
 private:
     //==============================================================================
-    pe::gui::layout::MainWindow main;
+    pe::gui::MainComponent mMainComponent;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeakEaterAudioProcessorEditor)

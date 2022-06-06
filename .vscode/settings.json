@@ -66,6 +66,9 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "*.mm": "cpp"
+        "*.mm": "cpp",
+        "future": "cpp",
+        "shared_mutex": "cpp",
+        "typeindex": "cpp"
     }
 }

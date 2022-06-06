@@ -7,16 +7,15 @@
 */
 
 #include "PluginEditor.h"
-#include "PluginProcessor.h"
 
 namespace pe
 {
 //==============================================================================
-PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
-    : juce::AudioProcessorEditor (p)
-    , main (p, vts)
+PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& audioProcessor, juce::AudioProcessorValueTreeState& vts)
+    : juce::AudioProcessorEditor (audioProcessor)
+    , mMainComponent (audioProcessor.getInputMeterSource())
 {
-    addAndMakeVisible (main);
+    addAndMakeVisible (mMainComponent);
     setSize (540, 350);
 }
 
@@ -27,11 +26,11 @@ PeakEaterAudioProcessorEditor::~PeakEaterAudioProcessorEditor()
 //==============================================================================
 void PeakEaterAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.fillAll (pe::gui::AppColors::Paper);
+    g.fillAll();
 }
 
 void PeakEaterAudioProcessorEditor::resized()
 {
-    main.setBounds (getLocalBounds());
+    mMainComponent.setBounds (getLocalBounds());
 }
 } // namespace pe

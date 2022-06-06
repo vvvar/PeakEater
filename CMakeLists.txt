@@ -63,8 +63,6 @@ juce_add_plugin(PeakEater
 
 juce_add_module(Dependencies/ff_meters)
 
-juce_generate_juce_header(PeakEater)
-
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources which should normally be PRIVATE.
 # Finally, we supply a list of source files that will be built into the target. This is a standard
@@ -72,6 +70,7 @@ juce_generate_juce_header(PeakEater)
 
 target_sources(PeakEater
     PRIVATE
+        Source/GUIv2/MainComponent.cpp
         Source/PluginEditor.cpp
         Source/PluginProcessor.cpp)
 

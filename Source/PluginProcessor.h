@@ -8,7 +8,8 @@
 
 #pragma once
 
-#include <JuceHeader.h>
+#include <ff_meters/ff_meters.h>
+#include <juce_audio_processors/juce_audio_processors.h>
 
 #include "Controller/WaveShaperController.h"
 #include "DSP/OversampledWaveShaper.h"
@@ -57,9 +58,9 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     //==============================================================================
-    foleys::LevelMeterSource& getInputMeterSource();
-    foleys::LevelMeterSource& getOutputMeterSource();
-    foleys::LevelMeterSource& getCeilingMeterSource();
+    std::shared_ptr<foleys::LevelMeterSource> getInputMeterSource();
+    std::shared_ptr<foleys::LevelMeterSource> getOutputMeterSource();
+    std::shared_ptr<foleys::LevelMeterSource> getCeilingMeterSource();
 
     //==============================================================================
     float getDecibelsIn();
@@ -77,9 +78,9 @@ private:
     juce::AudioParameterChoice* mClippingType;
     juce::AudioParameterChoice* mOversampleRate;
 
-    foleys::LevelMeterSource mInputMeterSource;
-    foleys::LevelMeterSource mCeilingMeterSource;
-    foleys::LevelMeterSource mOutputMeterSource;
+    std::shared_ptr<foleys::LevelMeterSource> mInputMeterSource;
+    std::shared_ptr<foleys::LevelMeterSource> mCeilingMeterSource;
+    std::shared_ptr<foleys::LevelMeterSource> mOutputMeterSource;
 
     pe::controller::WaveShaperController<float> mWaveShaperController;
 

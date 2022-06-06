@@ -3,15 +3,15 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/Dependencies/**",
+                "${workspaceFolder}/Dependencies/JUCE/modules/**",
+                "${workspaceFolder}/Dependencies/ff_meters/**",
                 "${workspaceFolder}/Source/**"
             ],
             "defines": [],
             "macFrameworkPath": [],
             "compilerPath": "/usr/local/bin/gcc-11",
             "cStandard": "gnu17",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "macos-gcc-x64"
+            "cppStandard": "gnu++17"
         }
     ],
     "version": 4
