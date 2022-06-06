@@ -2,7 +2,7 @@
 .DS_Store
 
 # Build dir
-/Builds
+/build
 
 # Projucer auto-gen files
 /JuceLibraryCode

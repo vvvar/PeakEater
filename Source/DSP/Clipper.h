@@ -10,8 +10,13 @@
 #pragma once
 
 #include <JuceHeader.h>
+
 #include "ClippingFunctions.h"
 
+namespace pe
+{
+namespace dsp
+{
 namespace waveshaping
 {
 
@@ -31,7 +36,7 @@ enum ClippingType
 };
 
 // ==============================================================================
-template<typename T>
+template <typename T>
 class Clipper : public juce::dsp::ProcessorBase
 {
 public:
@@ -39,29 +44,29 @@ public:
     /* Iherited overriden methods */
     void prepare (const juce::dsp::ProcessSpec& spec) noexcept override
     {
-        preGain.prepare(spec);
-        preGain.setRampDurationSeconds(DEFAULT_RAMP_DURATION);
-        postGain.prepare(spec);
-        postGain.setRampDurationSeconds(DEFAULT_RAMP_DURATION);
-        setThreshold(DEFAULT_THRESHOLD);
-        waveshaper.prepare(spec);
-        setClippingType(DEFAULT_CLIPPING_TYPE);
+        preGain.prepare (spec);
+        preGain.setRampDurationSeconds (DEFAULT_RAMP_DURATION);
+        postGain.prepare (spec);
+        postGain.setRampDurationSeconds (DEFAULT_RAMP_DURATION);
+        setThreshold (DEFAULT_THRESHOLD);
+        waveshaper.prepare (spec);
+        setClippingType (DEFAULT_CLIPPING_TYPE);
     }
-    
+
     void reset() noexcept override
     {
         preGain.reset();
         waveshaper.reset();
         postGain.reset();
     }
-    
+
     void process (const juce::dsp::ProcessContextReplacing<T>& context) noexcept override
     {
         preGain.process (context);
         waveshaper.process (context);
         postGain.process (context);
     }
-    
+
     // ==============================================================================
     /*
      * Change clipping function
@@ -103,29 +108,31 @@ public:
                 break;
         }
     }
-    
+
     /*
      * Set threshold(in decibels) when clipping will occur
      */
     void setThreshold (float threshold) noexcept
     {
         jassert (threshold <= 0.0f); // threshold cannot be more than 0.0 dB
-        
+
         preGain.setGainDecibels (std::fabs (threshold)); // gain signal up to make it clip
         postGain.setGainDecibels (threshold); // gain down to make it's level tha same it was before clip
     }
+
 private:
     // ==============================================================================
     /** Consts */
-    const float        DEFAULT_THRESHOLD     = 0.0f;
-    const float        DEFAULT_RAMP_DURATION = 0.1f;
+    const float DEFAULT_THRESHOLD = 0.0f;
+    const float DEFAULT_RAMP_DURATION = 0.1f;
     const ClippingType DEFAULT_CLIPPING_TYPE = ClippingType::HARD;
-    
+
     // ==============================================================================
     /* DSP */
     juce::dsp::Gain<T> preGain;
     juce::dsp::Gain<T> postGain;
     juce::dsp::WaveShaper<T> waveshaper;
 };
-
-}
+} // namespace waveshaping
+} // namespace dsp
+} // namespace pe

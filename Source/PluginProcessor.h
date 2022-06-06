@@ -9,14 +9,14 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "WaveShaping/OversampledWaveShaper.h"
-#include "WaveShaperController.h"
+
+#include "Controller/WaveShaperController.h"
+#include "DSP/OversampledWaveShaper.h"
 
 //==============================================================================
 /**
 */
-class PeakEaterAudioProcessor  :  public juce::AudioProcessor,
-                                    public waveshaping::OversampledWaveShaperListener
+class PeakEaterAudioProcessor : public juce::AudioProcessor
 {
 public:
     //==============================================================================
@@ -27,9 +27,9 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-   #ifndef JucePlugin_PreferredChannelConfigurations
+#ifndef JucePlugin_PreferredChannelConfigurations
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
-   #endif
+#endif
 
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
@@ -55,82 +55,44 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    
+
     //==============================================================================
-    void onPostInputGain (juce::AudioBuffer<float>& buffer) override
-    {
-        inputMeterSource.measureBlock (buffer);
-        setDecibelsIn (buffer.getMagnitude (0, buffer.getNumSamples()));
-    }
-    void onPostCeiling (juce::AudioBuffer<float>& buffer) override
-    {
-        ceilingMeterSource.measureBlock (buffer);
-        setDecibelsClipped (buffer.getMagnitude (0, buffer.getNumSamples()));
-    }
-    void onPostOutputGain (juce::AudioBuffer<float>& buffer) override
-    {
-        outputMeterSource.measureBlock (buffer);
-        setDecibelsOut (buffer.getMagnitude (0, buffer.getNumSamples()));
-    }
-    
+    foleys::LevelMeterSource& getInputMeterSource();
+    foleys::LevelMeterSource& getOutputMeterSource();
+    foleys::LevelMeterSource& getCeilingMeterSource();
+
     //==============================================================================
-    foleys::LevelMeterSource& getInputMeterSource()   { return inputMeterSource; }
-    foleys::LevelMeterSource& getOutputMeterSource()  { return outputMeterSource; }
-    foleys::LevelMeterSource& getCeilingMeterSource() { return ceilingMeterSource; }
-    
-    //==============================================================================
-    float getDecibelsIn()      { return decibelsIn; }
-    float getDecibelsOut()     { return decibelsOut; }
-    float getDecibelsClipped() { return decibelsClipped; }
+    float getDecibelsIn();
+    float getDecibelsOut();
+    float getDecibelsClipped();
 
 private:
     //==============================================================================
-    juce::AudioProcessorValueTreeState parameters;
-    juce::AudioParameterFloat*  inputGain;
-    juce::AudioParameterFloat*  outputGain;
-    juce::AudioParameterBool*   linkInOut;
-    juce::AudioParameterBool*   bypass;
-    juce::AudioParameterFloat*  ceiling;
-    juce::AudioParameterChoice* clippingType;
-    juce::AudioParameterChoice* oversampleRate;
-    
+    juce::AudioProcessorValueTreeState mParameters;
+    juce::AudioParameterFloat* mInputGain;
+    juce::AudioParameterFloat* mOutputGain;
+    juce::AudioParameterBool* mLinkInOut;
+    juce::AudioParameterBool* mBypass;
+    juce::AudioParameterFloat* mCeiling;
+    juce::AudioParameterChoice* mClippingType;
+    juce::AudioParameterChoice* mOversampleRate;
+
+    foleys::LevelMeterSource mInputMeterSource;
+    foleys::LevelMeterSource mCeilingMeterSource;
+    foleys::LevelMeterSource mOutputMeterSource;
+
+    pe::controller::WaveShaperController<float> mWaveShaperController;
+
     //==============================================================================
-    std::atomic<float> decibelsIn      { 0.0f };
-    std::atomic<float> decibelsClipped { 0.0f };
-    std::atomic<float> decibelsOut     { 0.0f };
-    
-    void setDecibelsIn (const float magnitude)
-    {
-        const float dbIn = magnitudeToDecibels (magnitude);
-        decibelsIn = std::isinf(dbIn) ? 0.0f : dbIn;
-    }
-    
-    void setDecibelsClipped (const float magnitude)
-    {
-        const float dbClipped = magnitudeToDecibels (magnitude);
-        decibelsClipped = std::isinf(dbClipped) ? 0.0f : decibelsIn - dbClipped;
-    }
-    
-    void setDecibelsOut (const float magnitude)
-    {
-        const auto dbOut = magnitudeToDecibels (magnitude);
-        decibelsOut = std::isinf(dbOut) ? 0.0f : dbOut;
-    }
-    
-    float magnitudeToDecibels (const float magnitude) const noexcept
-    {
-        return 20.0f * std::log10 (magnitude);
-    }
-    
+    std::atomic<float> mDecibelsIn;
+    std::atomic<float> mDecibelsClipped;
+    std::atomic<float> mDecibelsOut;
+
     //==============================================================================
-    std::shared_ptr<waveshaping::OversampledWaveShaper<float>> waveShaper;
-    controller::WaveShaperController<float> waveShaperController;
-    
-    //==============================================================================
-    foleys::LevelMeterSource inputMeterSource;
-    foleys::LevelMeterSource ceilingMeterSource;
-    foleys::LevelMeterSource outputMeterSource;
-    
+    void setDecibelsIn (float const& magnitude);
+    void setDecibelsClipped (float const& magnitude);
+    void setDecibelsOut (float const& magnitude);
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeakEaterAudioProcessor)
 };
