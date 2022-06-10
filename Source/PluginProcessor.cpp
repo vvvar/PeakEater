@@ -11,14 +11,6 @@
 
 #include "Parameters.h"
 
-namespace
-{
-float gMagnitudeToDecibels (float const& magnitude) noexcept
-{
-    return 20.0f * std::log10 (magnitude);
-}
-} // namespace
-
 //==============================================================================
 PeakEaterAudioProcessor::PeakEaterAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -40,26 +32,11 @@ PeakEaterAudioProcessor::PeakEaterAudioProcessor()
     , mCeiling (static_cast<juce::AudioParameterFloat*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())))
     , mClippingType (static_cast<juce::AudioParameterChoice*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getClippingType().getId())))
     , mOversampleRate (static_cast<juce::AudioParameterChoice*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getOversampleRate().getId())))
-    , mInputMeterSource (std::make_shared<foleys::LevelMeterSource>())
-    , mCeilingMeterSource (std::make_shared<foleys::LevelMeterSource>())
-    , mOutputMeterSource (std::make_shared<foleys::LevelMeterSource>())
     , mWaveShaperController()
-    , mDecibelsIn (0.0f)
-    , mDecibelsClipped (0.0f)
-    , mDecibelsOut (0.0f)
+    , mLevelMeterPostIn (std::make_shared<pe::dsp::LevelMeter<float>>())
+    , mLevelMeterPostClipper (std::make_shared<pe::dsp::LevelMeter<float>>())
+    , mLevelMeterPostOut (std::make_shared<pe::dsp::LevelMeter<float>>())
 {
-    mWaveShaperController.onPostInputGain ([this](auto& buffer) -> auto {
-        mInputMeterSource->measureBlock (buffer);
-        setDecibelsIn (buffer.getMagnitude (0, buffer.getNumSamples()));
-    });
-    mWaveShaperController.onPostCeiling ([this](auto& buffer) -> auto {
-        mCeilingMeterSource->measureBlock (buffer);
-        setDecibelsClipped (buffer.getMagnitude (0, buffer.getNumSamples()));
-    });
-    mWaveShaperController.onPostOutputGain ([this](auto& buffer) -> auto {
-        mOutputMeterSource->measureBlock (buffer);
-        setDecibelsOut (buffer.getMagnitude (0, buffer.getNumSamples()));
-    });
 }
 
 PeakEaterAudioProcessor::~PeakEaterAudioProcessor()
@@ -131,25 +108,28 @@ void PeakEaterAudioProcessor::changeProgramName (int /* index */, const juce::St
 //==============================================================================
 void PeakEaterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    mWaveShaperController.onPostInputGain ([this](auto& buffer) -> auto {
+        mLevelMeterPostIn->updateLevels (buffer);
+    });
+    mWaveShaperController.onPostCeiling ([this](auto& buffer) -> auto {
+        mLevelMeterPostClipper->updateLevels (buffer);
+    });
+    mWaveShaperController.onPostOutputGain ([this](auto& buffer) -> auto {
+        mLevelMeterPostOut->updateLevels (buffer);
+    });
     mWaveShaperController.prepare ({ *mInputGain,
                                      *mOutputGain,
                                      *mCeiling,
                                      *mClippingType,
                                      *mOversampleRate },
                                    { sampleRate, static_cast<juce::uint32> (samplesPerBlock), 2 });
-
-    auto const totalNumOutputChannels = getTotalNumOutputChannels();
-    auto const rmsWindow = static_cast<int> (sampleRate * 0.1f / static_cast<double> (samplesPerBlock));
-    mInputMeterSource->resize (totalNumOutputChannels, rmsWindow);
-    mCeilingMeterSource->resize (totalNumOutputChannels, rmsWindow);
-    mCeilingMeterSource->setMaxHoldMS (100);
-    mOutputMeterSource->resize (totalNumOutputChannels, rmsWindow);
 }
 
 void PeakEaterAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    mWaveShaperController.unsubscribeFromAll();
     mWaveShaperController.reset();
 }
 
@@ -205,54 +185,6 @@ void PeakEaterAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     }
 }
 
-std::shared_ptr<foleys::LevelMeterSource> PeakEaterAudioProcessor::getInputMeterSource()
-{
-    return mInputMeterSource;
-}
-
-std::shared_ptr<foleys::LevelMeterSource> PeakEaterAudioProcessor::getOutputMeterSource()
-{
-    return mOutputMeterSource;
-}
-
-std::shared_ptr<foleys::LevelMeterSource> PeakEaterAudioProcessor::getCeilingMeterSource()
-{
-    return mCeilingMeterSource;
-}
-
-float PeakEaterAudioProcessor::getDecibelsIn()
-{
-    return mDecibelsIn;
-}
-
-float PeakEaterAudioProcessor::getDecibelsOut()
-{
-    return mDecibelsOut;
-}
-
-float PeakEaterAudioProcessor::getDecibelsClipped()
-{
-    return mDecibelsClipped;
-}
-
-void PeakEaterAudioProcessor::setDecibelsIn (float const& magnitude)
-{
-    const float dbIn = gMagnitudeToDecibels (magnitude);
-    mDecibelsIn = std::isinf (dbIn) ? 0.0f : dbIn;
-}
-
-void PeakEaterAudioProcessor::setDecibelsClipped (float const& magnitude)
-{
-    const float dbClipped = gMagnitudeToDecibels (magnitude);
-    mDecibelsClipped = std::isinf (dbClipped) ? 0.0f : mDecibelsIn - dbClipped;
-}
-
-void PeakEaterAudioProcessor::setDecibelsOut (float const& magnitude)
-{
-    const auto dbOut = gMagnitudeToDecibels (magnitude);
-    mDecibelsOut = std::isinf (dbOut) ? 0.0f : dbOut;
-}
-
 //==============================================================================
 bool PeakEaterAudioProcessor::hasEditor() const
 {
@@ -261,7 +193,7 @@ bool PeakEaterAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* PeakEaterAudioProcessor::createEditor()
 {
-    return new pe::PeakEaterAudioProcessorEditor (*this, mParameters);
+    return new pe::PeakEaterAudioProcessorEditor (*this, mLevelMeterPostIn);
 }
 
 //==============================================================================

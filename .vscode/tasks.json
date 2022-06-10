@@ -4,7 +4,7 @@
     {
       "label": "git-init-submodules",
       "type": "shell",
-      "command": "rm -rf ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout 2f98020 && cd ${workspaceFolder}/Dependencies/ff_meters && git checkout 968bb8e"
+      "command": "rm -rf ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout 2f98020 && cd ${workspaceFolder}/Dependencies/ff_meters && git checkout 968bb8e && cd ${workspaceFolder}/Dependencies/sound_meter && git checkout 2df993f"
     },
     {
       "label": "build-cmake-MacOS",

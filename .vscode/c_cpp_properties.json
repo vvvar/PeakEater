@@ -3,8 +3,10 @@
         {
             "name": "Mac",
             "includePath": [
+                "${workspaceFolder}/**",
                 "${workspaceFolder}/Dependencies/JUCE/modules/**",
                 "${workspaceFolder}/Dependencies/ff_meters/**",
+                "${workspaceFolder}/Dependencies/sound_meter/**",
                 "${workspaceFolder}/Source/**"
             ],
             "defines": [],

@@ -59,6 +59,11 @@ public:
         waveShaper.onPostOutputGain (handler);
     }
 
+    void unsubscribeFromAll()
+    {
+        waveShaper.unsubscribeFromAll();
+    }
+
     void handleParametersChange (WaveShaperPrameters parameters) noexcept
     {
         if (parameters.inputGain != previousInputGain)

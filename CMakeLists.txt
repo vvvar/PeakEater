@@ -62,6 +62,7 @@ juce_add_plugin(PeakEater
 # probably don't need to call this.
 
 juce_add_module(Dependencies/ff_meters)
+juce_add_module(Dependencies/sound_meter)
 
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources which should normally be PRIVATE.
@@ -71,6 +72,7 @@ juce_add_module(Dependencies/ff_meters)
 target_sources(PeakEater
     PRIVATE
         Source/GUIv2/MainComponent.cpp
+        Source/DSP/LevelMeter.cpp
         Source/PluginEditor.cpp
         Source/PluginProcessor.cpp)
 
@@ -115,6 +117,7 @@ target_link_libraries(PeakEater
         juce::juce_audio_utils
         juce::juce_audio_plugin_client
         ff_meters
+        sound_meter
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags

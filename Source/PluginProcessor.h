@@ -8,10 +8,11 @@
 
 #pragma once
 
-#include <ff_meters/ff_meters.h>
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <memory>
 
 #include "Controller/WaveShaperController.h"
+#include "DSP/LevelMeter.h"
 #include "DSP/OversampledWaveShaper.h"
 
 //==============================================================================
@@ -57,16 +58,6 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    //==============================================================================
-    std::shared_ptr<foleys::LevelMeterSource> getInputMeterSource();
-    std::shared_ptr<foleys::LevelMeterSource> getOutputMeterSource();
-    std::shared_ptr<foleys::LevelMeterSource> getCeilingMeterSource();
-
-    //==============================================================================
-    float getDecibelsIn();
-    float getDecibelsOut();
-    float getDecibelsClipped();
-
 private:
     //==============================================================================
     juce::AudioProcessorValueTreeState mParameters;
@@ -78,21 +69,10 @@ private:
     juce::AudioParameterChoice* mClippingType;
     juce::AudioParameterChoice* mOversampleRate;
 
-    std::shared_ptr<foleys::LevelMeterSource> mInputMeterSource;
-    std::shared_ptr<foleys::LevelMeterSource> mCeilingMeterSource;
-    std::shared_ptr<foleys::LevelMeterSource> mOutputMeterSource;
-
     pe::controller::WaveShaperController<float> mWaveShaperController;
-
-    //==============================================================================
-    std::atomic<float> mDecibelsIn;
-    std::atomic<float> mDecibelsClipped;
-    std::atomic<float> mDecibelsOut;
-
-    //==============================================================================
-    void setDecibelsIn (float const& magnitude);
-    void setDecibelsClipped (float const& magnitude);
-    void setDecibelsOut (float const& magnitude);
+    std::shared_ptr<pe::dsp::LevelMeter<float>> mLevelMeterPostIn;
+    std::shared_ptr<pe::dsp::LevelMeter<float>> mLevelMeterPostClipper;
+    std::shared_ptr<pe::dsp::LevelMeter<float>> mLevelMeterPostOut;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeakEaterAudioProcessor)

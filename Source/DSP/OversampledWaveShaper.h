@@ -129,6 +129,13 @@ public:
         mPostOutputGainHandler = handler;
     }
 
+    void unsubscribeFromAll()
+    {
+        mPostInputGainHandler = nullptr;
+        mPostCeilingHandler = nullptr;
+        mPostOutputGainHandler = nullptr;
+    }
+
     void setInputGain (float gainDbValue) noexcept
     {
         inputGain.setGainDecibels (gainDbValue);
