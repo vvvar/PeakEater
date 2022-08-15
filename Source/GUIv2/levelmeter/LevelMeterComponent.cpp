@@ -10,7 +10,6 @@ LevelMeterComponent::LevelMeterComponent (std::shared_ptr<pe::dsp::LevelMeter<fl
     : juce::Component()
     , mMeterTimer (std::bind (&LevelMeterComponent::onTimerTick, this))
     , mLevelMeter (levelMeter)
-    , mDial()
 {
     mMeters.setChannelFormat (juce::AudioChannelSet::stereo());
     sd::SoundMeter::Options meterOptions;
@@ -18,19 +17,9 @@ LevelMeterComponent::LevelMeterComponent (std::shared_ptr<pe::dsp::LevelMeter<fl
     meterOptions.headerEnabled = false;
     meterOptions.peakSegment_db = -3.0f;
     meterOptions.warningSegment_db = -12.0f;
+    meterOptions.tickMarks = { 0.0f, -3.0f, -6.0f, -9.0f, -12.0f, -18.0f, -36.0f };
     mMeters.setOptions (meterOptions);
     addAndMakeVisible (mMeters);
-
-    addAndMakeVisible (mDial);
-
-    // mSLider.setTextBoxIsEditable (false);
-    // mSLider.setSliderSnapsToMousePosition (false);
-    // mSLider.setScrollWheelEnabled (true);
-    // mSLider.setRange (-36.0f, 36.0f);
-    // mSLider.setTextValueSuffix (" dB");
-    // mSLider.setValue (0.0f);
-    // addAndMakeVisible (mSLider);
-
     mMeterTimer.startTimer (100);
 }
 
@@ -46,14 +35,9 @@ void LevelMeterComponent::resized()
     using Fr = juce::Grid::Fr;
     using Item = juce::GridItem;
     grid.templateRows = { Track (Fr (1)) };
-    grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)) };
-    grid.items = {
-        // Item (mSLider),
-        Item (mMeters),
-        Item (mDial),
-        // Item (mSLider),
-        Item (mMeters)
-    };
+    // grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)) };
+    grid.templateColumns = { Track (Fr (1)) };
+    grid.items = { Item (mMeters) };
     grid.performLayout (getLocalBounds());
 }
 

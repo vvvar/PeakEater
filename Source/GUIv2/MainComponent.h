@@ -7,6 +7,7 @@
 
 #include "../DSP/LevelMeter.h"
 #include "clipmeter/ClipMeter.h"
+#include "levelmeter/LevelMeterComponent.h"
 
 namespace pe
 {
@@ -24,6 +25,8 @@ public:
     void resized() override;
 
 private:
+    LevelMeterComponent mInputLevelMeter;
+    LevelMeterComponent mOutputLevelMeter;
     ClipMeter mClipMeter;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
