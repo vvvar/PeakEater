@@ -60,7 +60,7 @@ public:
 
 private:
     //==============================================================================
-    juce::AudioProcessorValueTreeState mParameters;
+    std::shared_ptr<juce::AudioProcessorValueTreeState> mParameters;
     juce::AudioParameterFloat* mInputGain;
     juce::AudioParameterFloat* mOutputGain;
     juce::AudioParameterBool* mLinkInOut;

@@ -11,12 +11,16 @@
 namespace pe
 {
 //==============================================================================
-PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& audioProcessor, std::shared_ptr<pe::dsp::LevelMeter<float>> levelMeter)
+PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& audioProcessor,
+                                                              std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+                                                              std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
+                                                              std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
+                                                              std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter)
     : juce::AudioProcessorEditor (audioProcessor)
-    , mMainComponent (levelMeter)
+    , mMainComponent (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
 {
     addAndMakeVisible (mMainComponent);
-    setSize (540, 350);
+    setSize (820, 480);
 }
 
 PeakEaterAudioProcessorEditor::~PeakEaterAudioProcessorEditor()

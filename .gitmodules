@@ -1,9 +1,6 @@
 [submodule "Dependencies/JUCE"]
 	path = Dependencies/JUCE
 	url = https://github.com/juce-framework/JUCE.git
-[submodule "Dependencies/ff_meters"]
-	path = Dependencies/ff_meters
-	url = https://github.com/ffAudio/ff_meters.git
 [submodule "Dependencies/sound_meter"]
 	path = Dependencies/sound_meter
 	url = https://github.com/SoundDevelopment/sound_meter.git

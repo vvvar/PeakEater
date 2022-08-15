@@ -15,17 +15,16 @@ T gMagnitudeToDecibels (T const& magnitude)
 }
 
 template <typename T>
-T gCalculateDecibels (juce::AudioBuffer<T> const& buffer)
+T gCalculateAmplification (int const& channelIndex, juce::AudioBuffer<T> const& buffer)
 {
-    auto const magnitude = buffer.getMagnitude (0, buffer.getNumSamples());
-    auto const decibels = gMagnitudeToDecibels (magnitude);
-    return std::isinf (decibels) ? gDefaultLevel : decibels;
+    return buffer.getRMSLevel (channelIndex, 0, buffer.getNumSamples());
 }
 
 template <typename T>
-T gCalculateAmplification (int const& channelIndex, juce::AudioBuffer<T> const& buffer)
+T gCalculateDecibels (juce::AudioBuffer<T> const& buffer)
 {
-    return buffer.getMagnitude (channelIndex, 0, buffer.getNumSamples());
+    auto const magnitude = gCalculateAmplification (0, buffer);
+    return gMagnitudeToDecibels (magnitude);
 }
 } // namespace
 

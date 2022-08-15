@@ -24,14 +24,14 @@ PeakEaterAudioProcessor::PeakEaterAudioProcessor()
                           )
     ,
 #endif
-    mParameters (*this, nullptr, juce::Identifier (JucePlugin_Name), pe::params::ParametersProvider::getInstance().createParameterLayout())
-    , mInputGain (static_cast<juce::AudioParameterFloat*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getInputGain().getId())))
-    , mOutputGain (static_cast<juce::AudioParameterFloat*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getOutputGain().getId())))
-    , mLinkInOut (static_cast<juce::AudioParameterBool*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getLinkInOut().getId())))
-    , mBypass (static_cast<juce::AudioParameterBool*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getBypass().getId())))
-    , mCeiling (static_cast<juce::AudioParameterFloat*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())))
-    , mClippingType (static_cast<juce::AudioParameterChoice*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getClippingType().getId())))
-    , mOversampleRate (static_cast<juce::AudioParameterChoice*> (mParameters.getParameter (pe::params::ParametersProvider::getInstance().getOversampleRate().getId())))
+    mParameters (std::make_shared<juce::AudioProcessorValueTreeState> (*this, nullptr, juce::Identifier (JucePlugin_Name), pe::params::ParametersProvider::getInstance().createParameterLayout()))
+    , mInputGain (static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getInputGain().getId())))
+    , mOutputGain (static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getOutputGain().getId())))
+    , mLinkInOut (static_cast<juce::AudioParameterBool*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getLinkInOut().getId())))
+    , mBypass (static_cast<juce::AudioParameterBool*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getBypass().getId())))
+    , mCeiling (static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())))
+    , mClippingType (static_cast<juce::AudioParameterChoice*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getClippingType().getId())))
+    , mOversampleRate (static_cast<juce::AudioParameterChoice*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getOversampleRate().getId())))
     , mWaveShaperController()
     , mLevelMeterPostIn (std::make_shared<pe::dsp::LevelMeter<float>>())
     , mLevelMeterPostClipper (std::make_shared<pe::dsp::LevelMeter<float>>())
@@ -193,7 +193,7 @@ bool PeakEaterAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* PeakEaterAudioProcessor::createEditor()
 {
-    return new pe::PeakEaterAudioProcessorEditor (*this, mLevelMeterPostIn);
+    return new pe::PeakEaterAudioProcessorEditor (*this, mParameters, mLevelMeterPostIn, mLevelMeterPostClipper, mLevelMeterPostOut);
 }
 
 //==============================================================================
@@ -202,7 +202,7 @@ void PeakEaterAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
-    auto state = mParameters.copyState();
+    auto state = mParameters->copyState();
     std::unique_ptr<juce::XmlElement> xml (state.createXml());
     copyXmlToBinary (*xml, destData);
 }
@@ -215,9 +215,9 @@ void PeakEaterAudioProcessor::setStateInformation (const void* data, int sizeInB
 
     if (xmlState.get() != nullptr)
     {
-        if (xmlState->hasTagName (mParameters.state.getType()))
+        if (xmlState->hasTagName (mParameters->state.getType()))
         {
-            mParameters.replaceState (juce::ValueTree::fromXml (*xmlState));
+            mParameters->replaceState (juce::ValueTree::fromXml (*xmlState));
         }
     }
 }

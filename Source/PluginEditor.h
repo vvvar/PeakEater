@@ -18,7 +18,11 @@ namespace pe
 class PeakEaterAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-    PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& audioProcessor, std::shared_ptr<pe::dsp::LevelMeter<float>> levelMeter);
+    PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& audioProcessor,
+                                   std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+                                   std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
+                                   std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
+                                   std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
     ~PeakEaterAudioProcessorEditor() override;
 
     //==============================================================================

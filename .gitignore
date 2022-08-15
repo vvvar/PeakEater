@@ -11,3 +11,6 @@
 /Release/PeakEater.dmg
 /Release/PeakEater.vst3
 /Release/PeakEater.component
+
+# Various vscode logs
+/.vscode/*.log
