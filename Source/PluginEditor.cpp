@@ -20,7 +20,10 @@ PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (PeakEaterAudioProc
     , mMainComponent (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
 {
     addAndMakeVisible (mMainComponent);
-    setSize (820, 480);
+    setResizable (true, true);
+    setResizeLimits (640, 400, 3840, 2400);
+    getConstrainer()->setFixedAspectRatio(16.0/10.0);
+    setSize (640, 400);
 }
 
 PeakEaterAudioProcessorEditor::~PeakEaterAudioProcessorEditor()

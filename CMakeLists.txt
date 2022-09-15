@@ -73,7 +73,20 @@ target_sources(PeakEater
         Source/GUIv2/clipmeter/ClipMeter.cpp
         Source/GUIv2/dial/DialLookAndFeel.cpp
         Source/GUIv2/dial/Dial.cpp
-        Source/GUIv2/levelmeter/LevelMeterComponent.cpp
+        Source/GUIv2/dial/gaindial/GainDialLookAndFeel.cpp
+        Source/GUIv2/dial/gaindial/GainDial.cpp
+        Source/GUIv2/dial/ceilingdial/CeilingDial.cpp
+        Source/GUIv2/dial/ceilingdial/CeilingDialLookAndFeel.cpp
+        Source/GUIv2/linkinout/LinkInOut.cpp
+        # Source/GUIv2/levelmeter/LevelMeterComponent.cpp
+        Source/GUIv2/levelmetercomponent/LevelMeterComponent.cpp
+        Source/GUIv2/ControlPanel.cpp
+        Source/GUIv2/LinkingPanel.cpp
+        Source/GUIv2/LeftPanel.cpp
+        Source/GUIv2/CentralPanel.cpp
+        Source/GUIv2/RightPanel.cpp
+        Source/GUIv2/Header.cpp
+        Source/GUIv2/WorkingPanel.cpp
         Source/GUIv2/MainComponent.cpp
         Source/DSP/LevelMeter.cpp
         Source/PluginEditor.cpp
@@ -102,6 +115,7 @@ target_compile_definitions(PeakEater
 # Conversion to binary-data will happen when your target is built.
 
 juce_add_binary_data(AudioPluginData SOURCES
+    Resources/link.png
     Resources/icon.png
     Resources/logo_full.png
     Resources/logo_plugin.png

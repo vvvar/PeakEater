@@ -7,17 +7,20 @@ namespace dsp
 namespace
 {
 float constexpr gDefaultLevel = 0.0f;
+float constexpr gMinusInfinity = -36.0f;
 
 template <typename T>
 T gMagnitudeToDecibels (T const& magnitude)
 {
-    return 20.0f * std::log10 (magnitude);
+    // return 20.0f * std::log10 (magnitude);
+    return juce::Decibels::gainToDecibels<T> (magnitude, gMinusInfinity);
 }
 
 template <typename T>
 T gCalculateAmplification (int const& channelIndex, juce::AudioBuffer<T> const& buffer)
 {
-    return buffer.getRMSLevel (channelIndex, 0, buffer.getNumSamples());
+    // return buffer.getRMSLevel (channelIndex, 0, buffer.getNumSamples());
+    return buffer.getMagnitude (0, buffer.getNumSamples());
 }
 
 template <typename T>

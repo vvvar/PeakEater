@@ -120,6 +120,16 @@ public:
         waveShaper.reset();
     }
 
+    float getPreviousInputGain() const
+    {
+        return previousInputGain;
+    }
+
+    float getPreviousOutputGain() const
+    {
+        return previousOutputGain;
+    }
+
 private:
     //==============================================================================
     dsp::waveshaping::OversampledWaveShaper<T> waveShaper;

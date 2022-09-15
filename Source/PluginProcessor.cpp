@@ -171,8 +171,22 @@ void PeakEaterAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     }
     if (*mLinkInOut)
     {
-        float inGainValue = *mInputGain;
-        *mOutputGain = -inGainValue;
+        float const inGainValue = *mInputGain;
+        float const outGainValue = *mOutputGain;
+        float const prevInGainValue = mWaveShaperController.getPreviousInputGain();
+        float const prevOutGainValue = mWaveShaperController.getPreviousOutputGain();
+        if (inGainValue != prevInGainValue) // Input gain changed, sync output
+        {
+            *mOutputGain = -inGainValue;
+        }
+        else if (outGainValue != prevOutGainValue) // Output gain changed, sync input
+        {
+            *mInputGain = -outGainValue;
+        }
+        else // nothing chnaged, sync out with in
+        {
+            *mOutputGain = -inGainValue;
+        }
     }
     mWaveShaperController.handleParametersChange ({ *mInputGain,
                                                     *mOutputGain,
@@ -183,6 +197,15 @@ void PeakEaterAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     {
         mWaveShaperController.process (buffer);
     }
+}
+
+void PeakEaterAudioProcessor::processBlockBypassed (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+{
+}
+
+juce::AudioProcessorParameter* PeakEaterAudioProcessor::getBypassParameter() const
+{
+    return mBypass;
 }
 
 //==============================================================================

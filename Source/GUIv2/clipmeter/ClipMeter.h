@@ -56,10 +56,16 @@ private:
 
     void onTimerTick();
 
+    void drawBuffer (std::deque<float>& buffer, juce::Colour& colour, juce::Graphics& g);
     void drawBuffer (std::deque<float>& buffer, juce::Colour&& colour, juce::Graphics& g);
-    void drawDbLine (float const& dB, juce::Colour&& colour, juce::Graphics& g);
-    void drawLevels (std::string const& name, std::shared_ptr<pe::dsp::LevelMeter<float>> levelMeter, juce::Graphics& g);
+    void drawDbLine (float const& dB, juce::Colour& colour, juce::Graphics& g);
+    void drawLevels (std::shared_ptr<pe::dsp::LevelMeter<float>> inputMeter,
+                     std::shared_ptr<pe::dsp::LevelMeter<float>> clippingMeter,
+                     std::shared_ptr<pe::dsp::LevelMeter<float>> outputMeter,
+                     juce::Graphics& g);
+    void drawTicks (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g);
     void drawTicks (std::vector<float> const& ticksLevels, juce::Colour&& colour, juce::Graphics& g);
+    void drawTicksTexts (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ClipMeter)
 };

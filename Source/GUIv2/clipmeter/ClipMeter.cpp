@@ -5,6 +5,7 @@
 #include <limits>
 
 #include "../../Parameters.h"
+#include "../Utils.h"
 
 namespace pe
 {
@@ -17,6 +18,18 @@ enum class ScalingType : u_int8_t
     kLinear,
     kLogarithmic
 };
+float gRoundDb (float const& dB)
+{
+    return ((float) ((int) (dB * 10))) / 10;
+}
+template <typename T>
+std::string gToStringWithPrecision (const T a_value, const int n = 6)
+{
+    std::ostringstream out;
+    out.precision (n);
+    out << std::fixed << a_value;
+    return out.str();
+}
 float gDbToYPos (float const& dB, float const& maxY, float const& maxDb = 36.0f, ScalingType const&& scalingType = ScalingType::kLinear)
 {
     if (std::isinf (dB))
@@ -49,10 +62,10 @@ ClipMeter::ClipMeter (std::shared_ptr<juce::AudioProcessorValueTreeState> parame
     , mInputLevelMeter (inputLevelMeter)
     , mClippingLevelMeter (clippingLevelMeter)
     , mOutputLevelMeter (outputLevelMeter)
-    , mBufferMaxSize (500)
-    //, mTicks({ 0.0f, -5.0f, -8.0f, -11.0f, -14.0f, -17.0f, -20.0f, -23.0f, -26.0f, -29.0f, -32.0f, -36.0f })
-    , mTicks ({ 0.0f, -3.0f, -6.0f, -9.0f, -12.0f, -15.0f, -18.0f, -21.0f, -24.0f, -27.0f, -30.0f, -33.0f, -36.0f })
-//  , mTicks ({ 0.0f, -3.0f, -6.0f, -9.0f, -12.0f, -18.0f, -36.0f })
+    , mBufferMaxSize (400)
+    , mTicks ({ 0.0f, -3.0f, -5.0f, -8.0f, -11.0f, -14.0f, -17.0f, -20.0f, -23.0f, -26.0f, -29.0f, -32.0f, -36.0f })
+// , mTicks ({ 0.0f, -3.0f, -6.0f, -9.0f, -12.0f, -15.0f, -18.0f, -21.0f, -24.0f, -27.0f, -30.0f, -33.0f, -36.0f })
+// , mTicks ({ 0.0f, -3.0f, -6.0f, -9.0f, -12.0f, -18.0f, -36.0f })
 {
     for (int x = 0; x < mBufferMaxSize; x++)
     {
@@ -60,7 +73,7 @@ ClipMeter::ClipMeter (std::shared_ptr<juce::AudioProcessorValueTreeState> parame
         mClippingBuffer.push_back (-std::numeric_limits<float>::infinity());
         mOutputBuffer.push_back (-std::numeric_limits<float>::infinity());
     }
-    mTimer.startTimer (20);
+    mTimer.startTimer (30);
 }
 
 ClipMeter::~ClipMeter()
@@ -76,14 +89,27 @@ void ClipMeter::paint (juce::Graphics& g)
     mClippingBuffer.pop_front();
     mClippingBuffer.push_back (mClippingLevelMeter->getDecibels());
 
-    drawBuffer (mInputBuffer, juce::Colour{ juce::Colours::red }, g);
-    drawBuffer (mClippingBuffer, juce::Colour{ juce::Colours::blue }, g);
-    drawDbLine (*static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())), juce::Colour{ juce::Colours::green }, g);
-    drawTicks (mTicks, juce::Colour{ juce::Colours::orange }.withAlpha (0.5f), g);
-    // drawLevels ("Input", mInputLevelMeter, g);
+    auto darkBlue = juce::Colour (22, 33, 62);
+    auto lightBlue = juce::Colour (15, 52, 96);
+    auto red = juce::Colour (233, 69, 96);
+    auto white = juce::Colours::white.withAlpha (0.9f);
+
+    g.fillAll (darkBlue);
+
+    drawTicks (mTicks, lightBlue, g);
+    drawBuffer (mInputBuffer, red.withAlpha (0.5f), g);
+    drawBuffer (mClippingBuffer, darkBlue.withAlpha (0.5f), g);
+    drawDbLine (*static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())), white, g);
+    drawTicksTexts (mTicks, red, g);
+    drawLevels (mInputLevelMeter, mClippingLevelMeter, mOutputLevelMeter, g);
 }
 
 void ClipMeter::drawBuffer (std::deque<float>& buffer, juce::Colour&& colour, juce::Graphics& g)
+{
+    drawBuffer (buffer, colour, g);
+}
+
+void ClipMeter::drawBuffer (std::deque<float>& buffer, juce::Colour& colour, juce::Graphics& g)
 {
     auto const bounds = getBounds();
     auto const width = static_cast<float> (bounds.getWidth());
@@ -91,7 +117,7 @@ void ClipMeter::drawBuffer (std::deque<float>& buffer, juce::Colour&& colour, ju
 
     juce::Path p;
 
-    g.setColour (colour.withAlpha (1.0f));
+    g.setColour (colour);
     float offset = 0.0f;
     float offsetCoef = width / static_cast<float> (mBufferMaxSize);
     juce::Point<float> currentPoint{ offset, height };
@@ -109,7 +135,7 @@ void ClipMeter::drawBuffer (std::deque<float>& buffer, juce::Colour&& colour, ju
     g.fillPath (p);
 }
 
-void ClipMeter::drawDbLine (float const& dB, juce::Colour&& colour, juce::Graphics& g)
+void ClipMeter::drawDbLine (float const& dB, juce::Colour& colour, juce::Graphics& g)
 {
     auto const bounds = getBounds();
     auto const width = static_cast<float> (bounds.getWidth());
@@ -119,40 +145,78 @@ void ClipMeter::drawDbLine (float const& dB, juce::Colour&& colour, juce::Graphi
     juce::Point<float> end (width, yPos);
     juce::Line<float> line (start, end);
     g.setColour (colour);
-    g.drawLine (line, 4.0f);
+    g.drawLine (line, 0.5f);
 }
 
-void ClipMeter::drawLevels (std::string const& name, std::shared_ptr<pe::dsp::LevelMeter<float>> levelMeter, juce::Graphics& g)
+void ClipMeter::drawLevels (std::shared_ptr<pe::dsp::LevelMeter<float>> inputMeter,
+                            std::shared_ptr<pe::dsp::LevelMeter<float>> clippingMeter,
+                            std::shared_ptr<pe::dsp::LevelMeter<float>> outputMeter,
+                            juce::Graphics& g)
 {
-    int const poxX = 20;
-    int const width = 200;
-    int const height = 40;
-    std::string const ampLeft = "Amp(L): " + std::to_string (std::get<0> (levelMeter->getAmplification()));
-    std::string const ampRight = "Amp(R): " + std::to_string (std::get<1> (levelMeter->getAmplification()));
-    std::string const db = "dB: " + std::to_string (levelMeter->getDecibels());
-    g.setColour (juce::Colour (juce::Colours::orange));
-    g.drawText (name + ":", poxX, 20, width, height, juce::Justification::left, true);
-    g.drawText (ampLeft, poxX, 40, width, height, juce::Justification::left, true);
-    g.drawText (ampRight, poxX, 60, width, height, juce::Justification::left, true);
-    g.drawText (db, poxX, 80, width, height, juce::Justification::left, true);
+    auto const bounds = getBounds();
+    auto const width = static_cast<float> (bounds.getWidth());
+    auto const height = static_cast<float> (bounds.getHeight());
+
+    int const poxX = width * 0.05f;
+    int const posY = height * 0.05f;
+    int const boxWidth = width * 0.15f;
+    int const boxHeight = height * 0.11f;
+    auto const fontSize = calculateTextSize (getTopLevelComponent()->getBounds().getWidth(), getTopLevelComponent()->getBounds().getHeight());
+    auto const newlinePadding = fontSize * 0.5f;
+
+    const juce::Rectangle<float> area (poxX, posY, boxWidth, boxHeight);
+    g.setColour (juce::Colour (juce::Colours::grey).withAlpha (0.4f));
+    g.fillRoundedRectangle (area, 3.0f);
+    g.setColour (juce::Colour (juce::Colours::grey));
+    g.drawRoundedRectangle (area, 3.0f, 0.5f);
+
+    std::string const inputLevelText = "Input: " + gToStringWithPrecision (gRoundDb (inputMeter->getDecibels()), 1) + " dB";
+    std::string const outLevelText = "Output: " + gToStringWithPrecision (gRoundDb (outputMeter->getDecibels()), 1) + " dB";
+    std::string const eatenLevelText = "Eaten: " + gToStringWithPrecision (gRoundDb (clippingMeter->getDecibels() - inputMeter->getDecibels()), 1) + " dB";
+    g.setFont (fontSize);
+    g.setColour (juce::Colour (juce::Colours::white));
+    g.drawText (inputLevelText, poxX + newlinePadding, posY + newlinePadding, boxWidth, fontSize, juce::Justification::left, true);
+    g.drawText (outLevelText, poxX + newlinePadding, posY + newlinePadding + fontSize + newlinePadding, boxWidth, fontSize, juce::Justification::left, true);
+    g.drawText (eatenLevelText, poxX + newlinePadding, posY + newlinePadding + (fontSize * 2) + (newlinePadding * 2), boxWidth, fontSize, juce::Justification::left, true);
 }
 
 void ClipMeter::drawTicks (std::vector<float> const& ticksLevels, juce::Colour&& colour, juce::Graphics& g)
 {
+    drawTicks (ticksLevels, colour, g);
+}
+
+void ClipMeter::drawTicks (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g)
+{
     auto const bounds = getBounds();
     auto const height = static_cast<float> (bounds.getHeight());
-    auto const tickWidth = 25;
-    g.setColour (colour);
+    auto const tickWidth = static_cast<float> (bounds.getWidth());
     for (auto const& tickLevel : ticksLevels)
     {
         auto const yPos = gDbToYPos (tickLevel, height);
         juce::Point<float> start (0.0f, yPos);
         juce::Point<float> end (tickWidth, yPos);
         juce::Line<float> line (start, end);
-        g.drawLine (line, 1.0f);
-        std::string const db = std::to_string (static_cast<int> (tickLevel)) + "dB";
-        g.setFont (9.0f);
-        g.drawText (db, 0, static_cast<int> (yPos) - 15, tickWidth, 20, juce::Justification::left, true);
+        g.setColour (colour);
+        g.drawLine (line, 0.5f);
+    }
+}
+
+void ClipMeter::drawTicksTexts (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g)
+{
+    auto const bounds = getBounds();
+    auto const height = static_cast<float> (bounds.getHeight());
+    auto const tickWidth = static_cast<float> (bounds.getWidth());
+    for (auto const& tickLevel : ticksLevels)
+    {
+        auto const yPos = static_cast<int> (gDbToYPos (tickLevel, height)) + 4;
+        auto const fontSize = calculateTextSize (getTopLevelComponent()->getBounds().getWidth(), getTopLevelComponent()->getBounds().getHeight());
+        auto const textWidth = fontSize * 3;
+        auto const textHeight = fontSize;
+        g.setFont (fontSize);
+        g.setColour (colour);
+        std::string const dbStr = std::to_string (static_cast<int> (tickLevel)) + "dB";
+        g.drawText (dbStr, 0, yPos, textWidth, textHeight, juce::Justification::left, true);
+        g.drawText (dbStr, tickWidth - textWidth, yPos, textWidth, textHeight, juce::Justification::right, true);
     }
 }
 
