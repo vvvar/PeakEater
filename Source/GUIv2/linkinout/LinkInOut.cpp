@@ -42,14 +42,27 @@ void LinkInOut::paint (juce::Graphics& g)
     auto const centreY = static_cast<float> (bounds.getCentreY()) + (height * paddingTopFactor);
 
     // Set color for lines and icon
+    juce::Colour mainColour;
+    juce::Colour labelTextColour (juce::Colours::white.withAlpha (0.8f));
     if (mIsOn)
     {
-        g.setColour (juce::Colours::cyan);
+        mainColour = juce::Colours::cyan.withAlpha (0.8f);
     }
     else
     {
-        g.setColour (juce::Colours::grey);
+        mainColour = juce::Colours::grey.withAlpha (0.8f);
     }
+    if (isMouseOver())
+    {
+        mainColour = mainColour.withAlpha (1.0f);
+        labelTextColour = labelTextColour.withAlpha (1.0f);
+    }
+    if (! isEnabled())
+    {
+        mainColour = mainColour.withAlpha (0.5f);
+        labelTextColour = labelTextColour.withAlpha (0.5f);
+    }
+    g.setColour (mainColour);
 
     // Draw icon
     auto const icon = juce::ImageCache::getFromMemory (BinaryData::link_png, BinaryData::link_pngSize);
@@ -83,7 +96,7 @@ void LinkInOut::paint (juce::Graphics& g)
     g.strokePath (path2, juce::PathStrokeType (1.0));
 
     // Draw label
-    g.setColour (juce::Colour (juce::Colours::white));
+    g.setColour (labelTextColour);
     auto const fontSize = calculatePrimaryTextSize (getTopLevelComponent()->getBounds().getWidth(), getTopLevelComponent()->getBounds().getHeight());
     g.setFont (fontSize);
     g.drawText (juce::String ("Link Input with Output").toUpperCase(), 0, topY, width, height, juce::Justification::centredTop, true);
@@ -91,9 +104,34 @@ void LinkInOut::paint (juce::Graphics& g)
 
 void LinkInOut::mouseDown (juce::MouseEvent const& event)
 {
-    std::cout << "Clicked at: " << event.getPosition().toString() << std::endl;
-    // mIsOn = ! mIsOn;
-    mParameters->getParameter (gParamName)->setValueNotifyingHost (! mIsOn);
+    if (isEnabled()) // handle click only when component is enabled
+    {
+        mParameters->getParameter (gParamName)->setValueNotifyingHost (! mIsOn);
+    }
+}
+
+void LinkInOut::mouseEnter (juce::MouseEvent const& event)
+{
+    if (isEnabled())
+    {
+        setMouseCursor (juce::MouseCursor::PointingHandCursor);
+    }
+    else
+    {
+        setMouseCursor (juce::MouseCursor::NormalCursor);
+    }
+}
+
+void LinkInOut::mouseExit (juce::MouseEvent const& event)
+{
+    if (isEnabled())
+    {
+        setMouseCursor (juce::MouseCursor::PointingHandCursor);
+    }
+    else
+    {
+        setMouseCursor (juce::MouseCursor::NormalCursor);
+    }
 }
 
 void LinkInOut::parameterValueChanged (int parameterIndex, float newValue)

@@ -107,15 +107,25 @@ void LevelMeterComponent::paint (juce::Graphics& g)
     g.setGradientFill (gradient);
     g.fillRect (poxX, poxY, width, height - poxY);
 
-    // Draw label
+    juce::Colour dbValueTextColour (juce::Colours::white.withAlpha (0.8f));
+    juce::Colour nameTextClour (juce::Colour (233, 69, 96));
+    if (! isEnabled())
+    {
+        dbValueTextColour = dbValueTextColour.withAlpha (0.5f);
+        nameTextClour = nameTextClour.withAlpha (0.5f);
+    }
+
+    // Draw dB value
     auto const padding = 15.0f;
     auto const valueTextSize = calculateTextSize (getTopLevelComponent()->getBounds().getWidth(), getTopLevelComponent()->getBounds().getHeight());
     g.setFont (valueTextSize);
-    g.setColour (juce::Colours::white.withAlpha (0.8f));
+    g.setColour (dbValueTextColour);
     g.drawText (std::to_string (static_cast<int> (dB)) + "dB", 0.0f, padding, width, height, juce::Justification::centredTop, true);
     auto const textSize = calculatePrimaryTextSize (getTopLevelComponent()->getBounds().getWidth(), getTopLevelComponent()->getBounds().getHeight());
+
+    // Draw name
     g.setFont (textSize);
-    g.setColour (juce::Colour (233, 69, 96));
+    g.setColour (nameTextClour);
     g.drawText (mName, 0.0f, 0.0f, width, height - padding, juce::Justification::centredBottom, true);
 }
 

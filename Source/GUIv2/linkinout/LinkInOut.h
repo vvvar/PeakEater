@@ -19,6 +19,8 @@ public:
     void resized() override;
     void paint (juce::Graphics& g) override;
     void mouseDown (juce::MouseEvent const& event) override;
+    void mouseEnter (juce::MouseEvent const& event) override;
+    void mouseExit (juce::MouseEvent const& event) override;
 
     void parameterValueChanged (int parameterIndex, float newValue) override;
     void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override;

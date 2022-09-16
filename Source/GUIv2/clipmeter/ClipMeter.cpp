@@ -165,17 +165,27 @@ void ClipMeter::drawLevels (std::shared_ptr<pe::dsp::LevelMeter<float>> inputMet
     auto const fontSize = calculateTextSize (getTopLevelComponent()->getBounds().getWidth(), getTopLevelComponent()->getBounds().getHeight());
     auto const newlinePadding = fontSize * 0.5f;
 
+    juce::Colour borderColor (juce::Colours::grey);
+    juce::Colour backgroundColor (juce::Colours::grey.withAlpha (0.4f));
+    juce::Colour textColor (juce::Colours::white);
+    if (! isEnabled())
+    {
+        borderColor = borderColor.withAlpha (0.5f);
+        backgroundColor = backgroundColor.withAlpha (0.5f);
+        textColor = textColor.withAlpha (0.5f);
+    }
+
     const juce::Rectangle<float> area (poxX, posY, boxWidth, boxHeight);
-    g.setColour (juce::Colour (juce::Colours::grey).withAlpha (0.4f));
+    g.setColour (backgroundColor);
     g.fillRoundedRectangle (area, 3.0f);
-    g.setColour (juce::Colour (juce::Colours::grey));
+    g.setColour (borderColor);
     g.drawRoundedRectangle (area, 3.0f, 0.5f);
 
     std::string const inputLevelText = "Input: " + gToStringWithPrecision (gRoundDb (inputMeter->getDecibels()), 1) + " dB";
     std::string const outLevelText = "Output: " + gToStringWithPrecision (gRoundDb (outputMeter->getDecibels()), 1) + " dB";
     std::string const eatenLevelText = "Eaten: " + gToStringWithPrecision (gRoundDb (clippingMeter->getDecibels() - inputMeter->getDecibels()), 1) + " dB";
     g.setFont (fontSize);
-    g.setColour (juce::Colour (juce::Colours::white));
+    g.setColour (textColor);
     g.drawText (inputLevelText, poxX + newlinePadding, posY + newlinePadding, boxWidth, fontSize, juce::Justification::left, true);
     g.drawText (outLevelText, poxX + newlinePadding, posY + newlinePadding + fontSize + newlinePadding, boxWidth, fontSize, juce::Justification::left, true);
     g.drawText (eatenLevelText, poxX + newlinePadding, posY + newlinePadding + (fontSize * 2) + (newlinePadding * 2), boxWidth, fontSize, juce::Justification::left, true);
@@ -207,6 +217,11 @@ void ClipMeter::drawTicksTexts (std::vector<float> const& ticksLevels, juce::Col
     auto const bounds = getBounds();
     auto const height = static_cast<float> (bounds.getHeight());
     auto const tickWidth = static_cast<float> (bounds.getWidth());
+    juce::Colour textColor (colour);
+    if (! isEnabled())
+    {
+        textColor = textColor.withAlpha (0.5f);
+    }
     for (auto const& tickLevel : ticksLevels)
     {
         auto const yPos = static_cast<int> (gDbToYPos (tickLevel, height)) + 4;
@@ -214,7 +229,7 @@ void ClipMeter::drawTicksTexts (std::vector<float> const& ticksLevels, juce::Col
         auto const textWidth = fontSize * 3;
         auto const textHeight = fontSize;
         g.setFont (fontSize);
-        g.setColour (colour);
+        g.setColour (textColor);
         std::string const dbStr = std::to_string (static_cast<int> (tickLevel)) + "dB";
         g.drawText (dbStr, 0, yPos, textWidth, textHeight, juce::Justification::left, true);
         g.drawText (dbStr, tickWidth - textWidth, yPos, textWidth, textHeight, juce::Justification::right, true);
