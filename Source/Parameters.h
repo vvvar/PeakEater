@@ -139,7 +139,7 @@ private:
         , mBypass ("Bypass", "BYPASS")
         , mLinkInOut ("LinkInOut", "IN<->OUT")
         , mClippingType ("ClippingType", "ALGORITHM", { "HARD", "QUINTIC", "CUBIC", "TANGENT", "ALGEBRAIC", "ARCTANGENT" })
-        , mOversampleRate ("OversampleRate", "OVERSAMPLE", { "x2", "x4", "x8", "x16" })
+        , mOversampleRate ("OversampleRate", "OVERSAMPLE", { "OFF", "x2", "x4", "x8", "x16" })
     {
     }
     ~ParametersProvider()
