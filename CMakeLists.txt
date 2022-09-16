@@ -78,6 +78,7 @@ target_sources(PeakEater
         Source/GUIv2/dial/ceilingdial/CeilingDial.cpp
         Source/GUIv2/dial/ceilingdial/CeilingDialLookAndFeel.cpp
         Source/GUIv2/linkinout/LinkInOut.cpp
+        Source/GUIv2/bypass/BypassButton.cpp
         # Source/GUIv2/levelmeter/LevelMeterComponent.cpp
         Source/GUIv2/levelmetercomponent/LevelMeterComponent.cpp
         Source/GUIv2/ControlPanel.cpp
@@ -116,6 +117,7 @@ target_compile_definitions(PeakEater
 
 juce_add_binary_data(AudioPluginData SOURCES
     Resources/link.png
+    Resources/bypass.png
     Resources/icon.png
     Resources/logo_full.png
     Resources/logo_plugin.png

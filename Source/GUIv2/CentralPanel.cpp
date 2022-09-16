@@ -20,15 +20,6 @@ CentralPanel::CentralPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> 
 
 void CentralPanel::resized()
 {
-    // juce::Grid grid;
-    // using Track = juce::Grid::TrackInfo;
-    // using Fr = juce::Grid::Fr;
-    // using Item = juce::GridItem;
-    // grid.templateRows = { Track (Fr (10)), Track (Fr (3)), Track (Fr (2)) };
-    // grid.templateColumns = { Track (Fr (1)) };
-    // grid.items = { Item (mClipMeter), Item (mControlPanel), Item (mLinkingPanel) };
-    // grid.performLayout (getLocalBounds());
-
     auto const localBounds = getLocalBounds();
 
     mClipMeter.setBounds (localBounds);

@@ -15,11 +15,12 @@ MainComponent::MainComponent (std::shared_ptr<juce::AudioProcessorValueTreeState
     : juce::Component()
     , mHeader (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
     , mWorkingPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
+    , mBypassButton (parameters)
     , mParameters (parameters)
 {
     mParameters->getParameter (gBypassParamName)->addListener (this);
-    //addAndMakeVisible (mHeader);
     addAndMakeVisible (mWorkingPanel);
+    addAndMakeVisible (mBypassButton);
 }
 
 MainComponent::~MainComponent()
@@ -30,6 +31,8 @@ MainComponent::~MainComponent()
 
 void MainComponent::resized()
 {
+    auto const localBounds = getLocalBounds();
+
     juce::Grid grid;
     using Track = juce::Grid::TrackInfo;
     using Fr = juce::Grid::Fr;
@@ -37,7 +40,15 @@ void MainComponent::resized()
     grid.templateRows = { Track (Fr (13)) };
     grid.templateColumns = { Track (Fr (1)) };
     grid.items = { Item (mWorkingPanel) };
-    grid.performLayout (getLocalBounds());
+    grid.performLayout (localBounds);
+
+    auto const bypassWidth = localBounds.getHeight() * 0.1f;
+    auto const bypassHeight = localBounds.getHeight() * 0.1f;
+    auto const paddingTop = localBounds.getHeight() * 0.055f;
+    auto const paddingRight = localBounds.getHeight() * 0.2f;
+    auto const bypassX = localBounds.getWidth() - bypassWidth - paddingRight;
+    auto const bypassY = 0 + paddingTop;
+    mBypassButton.setBounds (juce::Rectangle<int> (bypassWidth, bypassHeight).withX (bypassX).withY (bypassY));
 }
 
 void MainComponent::paint (juce::Graphics& g)

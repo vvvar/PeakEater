@@ -6,6 +6,7 @@
 #include "../DSP/LevelMeter.h"
 #include "Header.h"
 #include "WorkingPanel.h"
+#include "bypass/BypassButton.h"
 
 namespace pe
 {
@@ -31,6 +32,8 @@ public:
 private:
     Header mHeader;
     WorkingPanel mWorkingPanel;
+    BypassButton mBypassButton;
+    juce::TooltipWindow mTooltipWindow{ this, 500 };
 
     std::shared_ptr<juce::AudioProcessorValueTreeState> mParameters;
 

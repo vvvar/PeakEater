@@ -1,5 +1,6 @@
 #include "ClipMeter.h"
 
+#include <BinaryData.h>
 #include <cmath>
 #include <juce_graphics/juce_graphics.h>
 #include <limits>
