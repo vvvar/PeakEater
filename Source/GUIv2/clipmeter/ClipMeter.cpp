@@ -4,6 +4,7 @@
 #include <cmath>
 #include <juce_graphics/juce_graphics.h>
 #include <limits>
+#include <stdint.h>
 
 #include "../../Parameters.h"
 #include "../Utils.h"
