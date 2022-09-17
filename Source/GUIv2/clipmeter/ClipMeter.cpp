@@ -64,7 +64,7 @@ ClipMeter::ClipMeter (std::shared_ptr<juce::AudioProcessorValueTreeState> parame
     , mClippingLevelMeter (clippingLevelMeter)
     , mOutputLevelMeter (outputLevelMeter)
     , mBufferMaxSize (400)
-    , mTicks ({ 0.0f, -3.0f, -5.0f, -8.0f, -11.0f, -14.0f, -17.0f, -20.0f, -23.0f, -26.0f, -29.0f, -32.0f, -36.0f })
+//, mTicks ({ 0.0f, -3.0f, -5.0f, -8.0f, -11.0f, -14.0f, -17.0f, -20.0f, -23.0f, -26.0f, -29.0f, -32.0f, -36.0f })
 // , mTicks ({ 0.0f, -3.0f, -6.0f, -9.0f, -12.0f, -15.0f, -18.0f, -21.0f, -24.0f, -27.0f, -30.0f, -33.0f, -36.0f })
 // , mTicks ({ 0.0f, -3.0f, -6.0f, -9.0f, -12.0f, -18.0f, -36.0f })
 {
@@ -97,11 +97,11 @@ void ClipMeter::paint (juce::Graphics& g)
 
     g.fillAll (darkBlue);
 
-    drawTicks (mTicks, lightBlue, g);
+    drawTicks (mTicks.getTicksList(), lightBlue, g);
     drawBuffer (mInputBuffer, red.withAlpha (0.5f), g);
     drawBuffer (mClippingBuffer, darkBlue.withAlpha (0.5f), g);
     drawDbLine (*static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())), white, g);
-    drawTicksTexts (mTicks, red, g);
+    drawTicksTexts (mTicks.getTicksList(), red, g);
     drawLevels (mInputLevelMeter, mClippingLevelMeter, mOutputLevelMeter, g);
 }
 
@@ -243,6 +243,14 @@ void ClipMeter::resized()
 void ClipMeter::onTimerTick()
 {
     repaint();
+}
+
+void ClipMeter::mouseDown (juce::MouseEvent const& event)
+{
+    if (event.mods.isRightButtonDown())
+    {
+        mTicks.switchToNextTicksList();
+    }
 }
 } // namespace gui
 } // namespace pe
