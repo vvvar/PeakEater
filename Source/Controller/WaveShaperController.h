@@ -59,6 +59,11 @@ public:
         waveShaper.onPostOutputGain (handler);
     }
 
+    void unsubscribeFromAll()
+    {
+        waveShaper.unsubscribeFromAll();
+    }
+
     void handleParametersChange (WaveShaperPrameters parameters) noexcept
     {
         if (parameters.inputGain != previousInputGain)
@@ -115,6 +120,16 @@ public:
         waveShaper.reset();
     }
 
+    float getPreviousInputGain() const
+    {
+        return previousInputGain;
+    }
+
+    float getPreviousOutputGain() const
+    {
+        return previousOutputGain;
+    }
+
 private:
     //==============================================================================
     dsp::waveshaping::OversampledWaveShaper<T> waveShaper;
@@ -156,15 +171,17 @@ private:
         switch (parameterChoice)
         {
             case 0:
-                return OversamplingRate::X2;
+                return OversamplingRate::X1;
             case 1:
-                return OversamplingRate::X4;
+                return OversamplingRate::X2;
             case 2:
-                return OversamplingRate::X8;
+                return OversamplingRate::X4;
             case 3:
+                return OversamplingRate::X8;
+            case 4:
                 return OversamplingRate::X16;
             default:
-                return OversamplingRate::X2;
+                return OversamplingRate::X1;
         }
     }
 };

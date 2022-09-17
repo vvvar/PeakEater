@@ -61,9 +61,8 @@ juce_add_plugin(PeakEater
 # include all your JUCE module headers; if you're happy to include module headers directly, you
 # probably don't need to call this.
 
-juce_add_module(Dependencies/ff_meters)
-
-juce_generate_juce_header(PeakEater)
+# Add modules Example
+# juce_add_module(Dependencies/sound_meter)
 
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources which should normally be PRIVATE.
@@ -72,6 +71,25 @@ juce_generate_juce_header(PeakEater)
 
 target_sources(PeakEater
     PRIVATE
+        Source/GUIv2/clipmeter/ClipMeter.cpp
+        Source/GUIv2/dial/DialLookAndFeel.cpp
+        Source/GUIv2/dial/Dial.cpp
+        Source/GUIv2/dial/gaindial/GainDialLookAndFeel.cpp
+        Source/GUIv2/dial/gaindial/GainDial.cpp
+        Source/GUIv2/dial/ceilingdial/CeilingDial.cpp
+        Source/GUIv2/dial/ceilingdial/CeilingDialLookAndFeel.cpp
+        Source/GUIv2/linkinout/LinkInOut.cpp
+        Source/GUIv2/bypass/BypassButton.cpp
+        Source/GUIv2/levelmeter/LevelMeterComponent.cpp
+        Source/GUIv2/ControlPanel.cpp
+        Source/GUIv2/LinkingPanel.cpp
+        Source/GUIv2/LeftPanel.cpp
+        Source/GUIv2/CentralPanel.cpp
+        Source/GUIv2/RightPanel.cpp
+        Source/GUIv2/Header.cpp
+        Source/GUIv2/WorkingPanel.cpp
+        Source/GUIv2/MainComponent.cpp
+        Source/DSP/LevelMeter.cpp
         Source/PluginEditor.cpp
         Source/PluginProcessor.cpp)
 
@@ -98,6 +116,8 @@ target_compile_definitions(PeakEater
 # Conversion to binary-data will happen when your target is built.
 
 juce_add_binary_data(AudioPluginData SOURCES
+    Resources/link.png
+    Resources/bypass.png
     Resources/icon.png
     Resources/logo_full.png
     Resources/logo_plugin.png
@@ -115,7 +135,6 @@ target_link_libraries(PeakEater
         juce::juce_dsp
         juce::juce_audio_utils
         juce::juce_audio_plugin_client
-        ff_meters
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags

@@ -9,7 +9,7 @@
 */
 #pragma once
 
-#include <JuceHeader.h>
+#include <juce_dsp/juce_dsp.h>
 
 #include "OversampledClipper.h"
 
@@ -22,6 +22,7 @@ namespace waveshaping
 //==============================================================================
 enum OversamplingRate
 {
+    X1 = -1,
     X2 = 0,
     X4 = 1,
     X8 = 2,
@@ -62,6 +63,7 @@ public:
         setInputGain (DEFAULT_INPUT_GAIN);
 
         /** Setup clipper */
+        clipper1x.prepare (spec);
         clipper2x.prepare (spec);
         clipper4x.prepare (spec);
         clipper8x.prepare (spec);
@@ -76,6 +78,7 @@ public:
     void reset() override
     {
         inputGain.reset();
+        clipper1x.reset();
         clipper2x.reset();
         clipper4x.reset();
         clipper8x.reset();
@@ -86,7 +89,10 @@ public:
     void process (ProcessContextReplacing const& context) override
     {
         inputGain.process (context);
-        clipper->process (context);
+        if (clipper)
+        {
+            clipper->process (context);
+        }
         outputGain.process (context);
     }
 
@@ -129,6 +135,13 @@ public:
         mPostOutputGainHandler = handler;
     }
 
+    void unsubscribeFromAll()
+    {
+        mPostInputGainHandler = nullptr;
+        mPostCeilingHandler = nullptr;
+        mPostOutputGainHandler = nullptr;
+    }
+
     void setInputGain (float gainDbValue) noexcept
     {
         inputGain.setGainDecibels (gainDbValue);
@@ -141,6 +154,7 @@ public:
 
     void setCeiling (float ceilingDbValue) noexcept
     {
+        clipper1x.setThreshold (ceilingDbValue);
         clipper2x.setCeiling (ceilingDbValue);
         clipper4x.setCeiling (ceilingDbValue);
         clipper8x.setCeiling (ceilingDbValue);
@@ -149,6 +163,7 @@ public:
 
     void setClippingType (ClippingType clippingType) noexcept
     {
+        clipper1x.setClippingType (clippingType);
         clipper2x.setClippingType (clippingType);
         clipper4x.setClippingType (clippingType);
         clipper8x.setClippingType (clippingType);
@@ -159,6 +174,9 @@ public:
     {
         switch (oversamplingRate)
         {
+            case X1:
+                clipper = &clipper1x;
+                break;
             case X2:
                 clipper = &clipper2x;
                 break;
@@ -172,7 +190,7 @@ public:
                 clipper = &clipper16x;
                 break;
             default:
-                clipper = &clipper2x;
+                clipper = &clipper1x;
                 break;
         }
     }
@@ -188,11 +206,12 @@ private:
     /** DSP */
     juce::dsp::Gain<T> inputGain;
     juce::dsp::Gain<T> outputGain;
+    Clipper<T> clipper1x;
     OversampledClipper<T> clipper2x;
     OversampledClipper<T> clipper4x;
     OversampledClipper<T> clipper8x;
     OversampledClipper<T> clipper16x;
-    OversampledClipper<T>* clipper;
+    juce::dsp::ProcessorBase* clipper; // Current clipper
 
     //==============================================================================
     /* Handlers */

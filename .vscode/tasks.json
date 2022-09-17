@@ -2,89 +2,46 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "git-init-submodules",
+      "label": "Init Git Submodules",
       "type": "shell",
-      "command": "rm -rf ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout cc9fdc3d6 && cd ${workspaceFolder}/Dependencies/ff_meters && git checkout 71e05b8 && sed -i '' '/#warning/d' ${workspaceFolder}/Dependencies/ff_meters/LevelMeter/LevelMeterSource.h"
+      "command": "rm -rf ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout ${config:peakeater.juce_version}"
     },
     {
-      "label": "build-cmake-MacOS",
+      "label": "Clean Build Dir",
       "type": "shell",
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "command": "rm -rf ${workspaceFolder}/build/ && cmake . -B build -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON"
+      "command": "rm -rf ${workspaceFolder}/build/",
+      "windows": {
+        "command": "rmdir ${workspaceFolder}\build /s"
+      }
     },
     {
-      "label": "build-cmake-Windows",
+      "label": "Build",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "command": "rm -rf ${workspaceFolder}/build/ && cmake . -B build -G 'Visual Studio 16 2019' -T 'v140' -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON"
+      "command": "cmake . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON -DCMAKE_BUILD_TYPE=${config:peakeater.config} && cmake --build build --config ${config:peakeater.config} --target ${config:peakeater.target} -j${config:peakeater.cpucores}",
+      "windows": {
+        "command": "cmake . -B build -G 'Visual Studio 16 2019' -T 'v140' -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON && cmake --build build --config ${config:peakeater.config} --target ${config:peakeater.target} -j${config:peakeater.cpucores}"
+      }
     },
     {
-      "label": "build-standalone-Release",
+      "label": "Build(Clean)",
       "type": "shell",
-      "problemMatcher": [
-        "$gcc"
+      "dependsOn": [
+        "Init Git Submodules",
+        "Util: Clean Build Dir",
+        "Build"
       ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "command": "cmake --build build --config Release --target PeakEater_Standalone -j4"
+      "dependsOrder": "sequence"
     },
     {
-      "label": "build-standalone-Debug",
+      "label": "Run Standalone",
       "type": "shell",
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "command": "cmake --build build --config Debug --target PeakEater_Standalone -j4"
+      "command": "${workspaceFolder}/build/PeakEater_artefacts/${config:peakeater.config}/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
     },
     {
-      "label": "build-vst3-Release",
-      "type": "shell",
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "command": "cmake --build build --config Release --target PeakEater_VST3 -j4"
-    },
-    {
-      "label": "build-vst3-Debug",
-      "type": "shell",
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "command": "cmake --build build --config Debug --target PeakEater_VST3 -j4"
-    },
-    {
-      "label": "run-standalone",
-      "type": "shell",
-      "command": "${workspaceFolder}/build/PeakEater_artefacts/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
-    },
-    {
-      "label": "util-clang-format",
+      "label": "Clang Format",
       "type": "shell",
       "command": "find ${workspaceFolder}/Source/ -iname *.h -o -iname *.cpp | xargs clang-format --dry-run --Werror -i"
     }
