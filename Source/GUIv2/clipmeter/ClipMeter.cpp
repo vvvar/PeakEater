@@ -15,7 +15,7 @@ namespace gui
 {
 namespace
 {
-enum class ScalingType : u_int8_t
+enum class ScalingType : unsigned int
 {
     kLinear,
     kLogarithmic
