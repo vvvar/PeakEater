@@ -66,6 +66,61 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "*.mm": "cpp"
-    }
+        "*.mm": "cpp",
+        "future": "cpp",
+        "shared_mutex": "cpp",
+        "typeindex": "cpp",
+        "__bit_reference": "cpp",
+        "__bits": "cpp",
+        "__config": "cpp",
+        "__debug": "cpp",
+        "__errc": "cpp",
+        "__hash_table": "cpp",
+        "__locale": "cpp",
+        "__mutex_base": "cpp",
+        "__node_handle": "cpp",
+        "__nullptr": "cpp",
+        "__split_buffer": "cpp",
+        "__string": "cpp",
+        "__threading_support": "cpp",
+        "__tree": "cpp",
+        "__tuple": "cpp",
+        "ios": "cpp",
+        "locale": "cpp",
+        "optional": "cpp",
+        "queue": "cpp",
+        "variant": "cpp"
+    },
+    /**
+    * Commit of JUCE to checkout
+    */
+    "peakeater.juce_version": "2f98020",
+    /**
+    * Number of cores to use while build.
+    */
+    "peakeater.cpucores": 2,
+    /** 
+    * Specify target to build.
+    * Possible values are:
+    * - PeakEater
+    * - PeakEater_VST3
+    * - PeakEater_AU
+    * - PeakEater_Standalone
+    * - PeakEater_All(all PeakEater targets - VST, AU, etc.)
+    * - Projucer
+    * - ProjucerData
+    * - AudioPluginHost
+    * - AudioPluginHostData
+    * - UnitTestRunner
+    * - all(build all above targets)
+    */
+    "peakeater.target": "PeakEater_All",
+    /**
+    * CMake build configuration.
+    * Note: If changed, clear re-build is required.
+    * Possible values are:
+    * - Release
+    * - Debug
+    */
+    "peakeater.config": "Debug"
 }

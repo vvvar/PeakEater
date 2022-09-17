@@ -7,17 +7,23 @@
 */
 
 #include "PluginEditor.h"
-#include "PluginProcessor.h"
 
 namespace pe
 {
 //==============================================================================
-PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
-    : juce::AudioProcessorEditor (p)
-    , main (p, vts)
+PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& audioProcessor,
+                                                              std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+                                                              std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
+                                                              std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
+                                                              std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter)
+    : juce::AudioProcessorEditor (audioProcessor)
+    , mMainComponent (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
 {
-    addAndMakeVisible (main);
-    setSize (540, 350);
+    addAndMakeVisible (mMainComponent);
+    setResizable (true, true);
+    setResizeLimits (640, 400, 3840, 2400);
+    getConstrainer()->setFixedAspectRatio(16.0/10.0);
+    setSize (640, 400);
 }
 
 PeakEaterAudioProcessorEditor::~PeakEaterAudioProcessorEditor()
@@ -27,11 +33,11 @@ PeakEaterAudioProcessorEditor::~PeakEaterAudioProcessorEditor()
 //==============================================================================
 void PeakEaterAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.fillAll (pe::gui::AppColors::Paper);
+    g.fillAll();
 }
 
 void PeakEaterAudioProcessorEditor::resized()
 {
-    main.setBounds (getLocalBounds());
+    mMainComponent.setBounds (getLocalBounds());
 }
 } // namespace pe

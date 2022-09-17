@@ -3,8 +3,7 @@ on: [push, pull_request]
 env:
   BUILD_TYPE: Release
   VST_TARGET_NAME: PeakEater_VST3
-  JUCE_REVISION: cc9fdc3d6
-  FF_METERS_REVISION: 71e05b8
+  JUCE_REVISION: 2f98020
 jobs:
   build-macos:
     runs-on: macos-latest
@@ -14,8 +13,6 @@ jobs:
         run: git submodule update --init --recursive
       - name: Checkout JUCE
         run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
-      - name: Checkout ff_meters
-        run: cd ${{github.workspace}}/Dependencies/ff_meters && git checkout ${{env.FF_METERS_REVISION}}
       - name: Run CMake
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
@@ -34,10 +31,6 @@ jobs:
         run: git submodule update --init --recursive
       - name: Checkout JUCE
         run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
-      - name: Checkout ff_meters
-        run: cd ${{github.workspace}}/Dependencies/ff_meters && git checkout ${{env.FF_METERS_REVISION}}
-      - name: Patch ff_meters
-        run: sed -i '' '/#warning/d' ${{github.workspace}}/Dependencies/ff_meters/LevelMeter/LevelMeterSource.h
       - name: Run CMake
         run: cmake -B ${{github.workspace}}/build -G "Visual Studio 16 2019" -T "v140" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
