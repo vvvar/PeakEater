@@ -61,7 +61,8 @@ juce_add_plugin(PeakEater
 # include all your JUCE module headers; if you're happy to include module headers directly, you
 # probably don't need to call this.
 
-juce_add_module(Dependencies/sound_meter)
+# Add modules Example
+# juce_add_module(Dependencies/sound_meter)
 
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources which should normally be PRIVATE.
@@ -79,8 +80,7 @@ target_sources(PeakEater
         Source/GUIv2/dial/ceilingdial/CeilingDialLookAndFeel.cpp
         Source/GUIv2/linkinout/LinkInOut.cpp
         Source/GUIv2/bypass/BypassButton.cpp
-        # Source/GUIv2/levelmeter/LevelMeterComponent.cpp
-        Source/GUIv2/levelmetercomponent/LevelMeterComponent.cpp
+        Source/GUIv2/levelmeter/LevelMeterComponent.cpp
         Source/GUIv2/ControlPanel.cpp
         Source/GUIv2/LinkingPanel.cpp
         Source/GUIv2/LeftPanel.cpp
@@ -135,7 +135,6 @@ target_link_libraries(PeakEater
         juce::juce_dsp
         juce::juce_audio_utils
         juce::juce_audio_plugin_client
-        sound_meter
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags

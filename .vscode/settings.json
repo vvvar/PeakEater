@@ -92,6 +92,10 @@
         "variant": "cpp"
     },
     /**
+    * Commit of JUCE to checkout
+    */
+    "peakeater.juce_version": "2f98020",
+    /**
     * Number of cores to use while build.
     */
     "peakeater.cpucores": 2,

@@ -4,7 +4,7 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../DSP/LevelMeter.h"
-#include "levelmetercomponent/LevelMeterComponent.h"
+#include "levelmeter/LevelMeterComponent.h"
 
 namespace pe
 {

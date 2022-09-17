@@ -3,7 +3,6 @@
 #include "../../DSP/LevelMeter.h"
 #include <juce_events/juce_events.h>
 #include <juce_gui_basics/juce_gui_basics.h>
-#include <sound_meter/sound_meter.h>
 
 namespace pe
 {
@@ -16,6 +15,9 @@ public:
     ~LevelMeterComponent() override;
 
     void resized() override;
+    void paint (juce::Graphics& g) override;
+    void drawTicks (std::vector<float> const& ticksLevels, juce::Colour&& colour, juce::Graphics& g);
+    void drawTicks (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g);
 
 private:
     class LevelMeterTimer : public juce::Timer
@@ -38,9 +40,11 @@ private:
         std::function<void()> mCallback;
     };
 
+    std::string mName;
     LevelMeterTimer mMeterTimer;
-    sd::SoundMeter::MetersComponent mMeters;
     std::shared_ptr<pe::dsp::LevelMeter<float>> mLevelMeter;
+    juce::NormalisableRange<float> mRange;
+    juce::LinearSmoothedValue<float> mSmoothedGain;
     juce::Label mLabel;
 
     void onTimerTick();

@@ -4,7 +4,7 @@
     {
       "label": "Init Git Submodules",
       "type": "shell",
-      "command": "rm -rf ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout 2f98020 && cd ${workspaceFolder}/Dependencies/sound_meter && git checkout 2df993f"
+      "command": "rm -rf ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout ${config:peakeater.juce_version}"
     },
     {
       "label": "Clean Build Dir",
@@ -20,9 +20,9 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "cmake . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON -DCMAKE_BUILD_TYPE=${config:peakeater.config} && cmake --build build --config ${config:peakeater.config} --target ${config:peakeater.target} -j${config:peakeater.cpucores}",
+      "command": "cmake . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON -DCMAKE_BUILD_TYPE=${config:peakeater.config} && cmake --build build --config ${config:peakeater.config} --target ${config:peakeater.target} -j${config:peakeater.cpucores}",
       "windows": {
-        "command": "cmake . -B build -G 'Visual Studio 16 2019' -T 'v140' -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON && cmake --build build --config ${config:peakeater.config} --target ${config:peakeater.target} -j${config:peakeater.cpucores}"
+        "command": "cmake . -B build -G 'Visual Studio 16 2019' -T 'v140' -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON && cmake --build build --config ${config:peakeater.config} --target ${config:peakeater.target} -j${config:peakeater.cpucores}"
       }
     },
     {
