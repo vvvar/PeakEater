@@ -52,6 +52,19 @@ void CeilingDialLookAndFeel::drawProgress (juce::Graphics& g,
                                            const float rotaryStartAngle,
                                            const float rotaryEndAngle)
 {
+    drawProgress (g, value, colour, x, y, width, height, rotaryStartAngle, rotaryEndAngle);
+}
+
+void CeilingDialLookAndFeel::drawProgress (juce::Graphics& g,
+                                           float value,
+                                           juce::Colour const& colour,
+                                           int x,
+                                           int y,
+                                           int width,
+                                           int height,
+                                           const float rotaryStartAngle,
+                                           const float rotaryEndAngle)
+{
     auto const bounds = juce::Rectangle<float> (x, y, width, height).reduced (2.0f);
     auto const radius = juce::jmin (bounds.getWidth(), bounds.getHeight()) / 2.0f;
     auto const lineW = radius * 0.085f;

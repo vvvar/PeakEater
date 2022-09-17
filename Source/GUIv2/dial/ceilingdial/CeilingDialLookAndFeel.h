@@ -16,6 +16,15 @@ public:
     void drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider) override;
     void drawProgress (juce::Graphics& g,
                        float value,
+                       juce::Colour const& colour,
+                       int x,
+                       int y,
+                       int width,
+                       int height,
+                       const float rotaryStartAngle,
+                       const float rotaryEndAngle);
+    void drawProgress (juce::Graphics& g,
+                       float value,
                        juce::Colour const&& colour,
                        int x,
                        int y,
