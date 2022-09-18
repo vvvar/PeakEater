@@ -56,34 +56,37 @@ private:
     class PeakAnalyzer
     {
     public:
-        PeakAnalyzer (float const& minValue)
+        PeakAnalyzer (int const& sampleRate, float const& minValue)
             : mMinValue (minValue)
-            , mPeakValue (mMinValue)
+            , mBufferSize (sampleRate * 2) // 2 seconds of look behind
         {
             reset();
         }
 
-        void push (float const& nextValue, bool forceUpdate = false)
+        void push (float const& nextValue)
         {
-            if (nextValue > mPeakValue || forceUpdate)
-            {
-                mPeakValue = nextValue;
-            }
+            mBuffer.pop_front();
+            mBuffer.push_back (nextValue);
         }
 
-        float getNext()
+        float getMagnitude()
         {
-            return mPeakValue;
+            return *std::max_element (mBuffer.begin(), mBuffer.end());
         }
 
         void reset()
         {
-            mPeakValue = -36.0f;
+            mBuffer.clear();
+            for (int x = 0; x < mBufferSize; x++)
+            {
+                mBuffer.push_back (mMinValue);
+            }
         }
 
     private:
         float mMinValue;
-        float mPeakValue;
+        int const mBufferSize;
+        std::deque<float> mBuffer;
     };
 
     std::shared_ptr<pe::dsp::LevelMeter<float>> mInputLevelMeter;
@@ -94,10 +97,8 @@ private:
     PeakAnalyzer mOutputAnalyzer;
     PeakAnalyzer mEatenAnalyzer;
     AnalyserTimer mAnalyzerUpdateTimer;
-    AnalyserTimer mAnalyzerForceUpdateTimer;
 
     void onAnalyzerUpdateTick();
-    void onAnalyzerForceUpdateTick();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AnalyserComponent)
 };
