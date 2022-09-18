@@ -6,6 +6,7 @@
 #include "../DSP/LevelMeter.h"
 #include "ControlPanel.h"
 #include "LinkingPanel.h"
+#include "analyser/AnalyserComponent.h"
 #include "clipmeter/ClipMeter.h"
 
 namespace pe
@@ -27,6 +28,7 @@ private:
     ClipMeter mClipMeter;
     ControlPanel mControlPanel;
     LinkingPanel mLinkingPanel;
+    AnalyserComponent mAnalyserComponent;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentralPanel)
 };
