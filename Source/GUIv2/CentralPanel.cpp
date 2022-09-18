@@ -12,10 +12,12 @@ CentralPanel::CentralPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> 
     , mClipMeter (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
     , mControlPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
     , mLinkingPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
+    , mAnalyserComponent (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
 {
     addAndMakeVisible (mClipMeter);
     addAndMakeVisible (mControlPanel);
     addAndMakeVisible (mLinkingPanel);
+    addAndMakeVisible (mAnalyserComponent);
 }
 
 void CentralPanel::resized()
@@ -37,6 +39,14 @@ void CentralPanel::resized()
                             .withTrimmedTop (toRemoveFromTop)
                             .withTrimmedLeft (toRemoveFromSides)
                             .withTrimmedRight (toRemoveFromSides));
+
+    auto const bypassWidth = localBounds.getWidth() * 0.2f;
+    auto const bypassHeight = localBounds.getHeight() * 0.15f;
+    auto const paddingTop = localBounds.getHeight() * 0.055f;
+    auto const paddingRight = localBounds.getHeight() * 0.1f;
+    auto const bypassX = paddingRight;
+    auto const bypassY = paddingTop;
+    mAnalyserComponent.setBounds (juce::Rectangle<int> (bypassWidth, bypassHeight).withX (bypassX).withY (bypassY));
 }
 } // namespace gui
 } // namespace pe
