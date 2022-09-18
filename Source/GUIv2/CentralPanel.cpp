@@ -41,7 +41,7 @@ void CentralPanel::resized()
                             .withTrimmedRight (toRemoveFromSides));
 
     auto const bypassWidth = localBounds.getWidth() * 0.2f;
-    auto const bypassHeight = localBounds.getHeight() * 0.15f;
+    auto const bypassHeight = localBounds.getHeight() * 0.14f;
     auto const paddingTop = localBounds.getHeight() * 0.055f;
     auto const paddingRight = localBounds.getHeight() * 0.1f;
     auto const bypassX = paddingRight;

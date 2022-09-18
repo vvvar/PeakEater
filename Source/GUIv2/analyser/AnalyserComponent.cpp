@@ -8,13 +8,18 @@ namespace gui
 namespace
 {
 // DSP configuration
-int constexpr gAnalyzerUpdateTimeout = 30;
-int constexpr gAnalyzerForceUpdateTimeout = 4000;
+int constexpr gAnalyzerSampleRateHz = 30;
 float constexpr gMinDbValInOut = -36.0f;
 float constexpr gMinDbValEaten = 0.0f;
 // GUI configuration
 float constexpr gBorderWidth = 1.0f;
 float constexpr gBorderRadius = 3.0f;
+
+template <typename T>
+bool gIsInBounds (const T& value, const T& low, const T& high)
+{
+    return ! (value < low) && (value < high);
+}
 } // namespace
 AnalyserComponent::AnalyserComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
                                       std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
@@ -23,15 +28,13 @@ AnalyserComponent::AnalyserComponent (std::shared_ptr<juce::AudioProcessorValueT
     : mInputLevelMeter (inputLevelMeter)
     , mClippingLevelMeter (clippingLevelMeter)
     , mOutputLevelMeter (outputLevelMeter)
-    , mInputAnalyzer (gMinDbValInOut)
-    , mOutputAnalyzer (gMinDbValInOut)
-    , mEatenAnalyzer (gMinDbValEaten)
+    , mInputAnalyzer (gAnalyzerSampleRateHz, gMinDbValInOut)
+    , mOutputAnalyzer (gAnalyzerSampleRateHz, gMinDbValInOut)
+    , mEatenAnalyzer (gAnalyzerSampleRateHz, gMinDbValEaten)
     , mAnalyzerUpdateTimer (std::bind (&AnalyserComponent::onAnalyzerUpdateTick, this))
-    , mAnalyzerForceUpdateTimer (std::bind (&AnalyserComponent::onAnalyzerForceUpdateTick, this))
 {
     setMouseCursor (juce::MouseCursor::PointingHandCursor);
-    mAnalyzerUpdateTimer.startTimer (gAnalyzerUpdateTimeout);
-    mAnalyzerForceUpdateTimer.startTimer (gAnalyzerForceUpdateTimeout);
+    mAnalyzerUpdateTimer.startTimerHz (gAnalyzerSampleRateHz);
 }
 
 AnalyserComponent::~AnalyserComponent()
@@ -45,7 +48,7 @@ void AnalyserComponent::resized()
 
 void AnalyserComponent::paint (juce::Graphics& g)
 {
-    drawLevels (mInputAnalyzer.getNext(), mOutputAnalyzer.getNext(), mEatenAnalyzer.getNext(), g);
+    drawLevels (mInputAnalyzer.getMagnitude(), mOutputAnalyzer.getMagnitude(), mEatenAnalyzer.getMagnitude(), g);
 }
 
 void AnalyserComponent::drawLevels (float inputLevel,
@@ -87,6 +90,18 @@ void AnalyserComponent::drawLevels (float inputLevel,
     g.setColour (textColor);
     g.drawText (inputLevelText, poxX + newlinePadding, posY + newlinePadding, boxWidth, fontSize, juce::Justification::left, true);
     g.drawText (outLevelText, poxX + newlinePadding, posY + newlinePadding + fontSize + newlinePadding, boxWidth, fontSize, juce::Justification::left, true);
+    if (gIsInBounds (eatenAmount, 5.0f, 10.0f))
+    {
+        g.setColour (juce::Colours::yellow);
+    }
+    else if (gIsInBounds (eatenAmount, 10.0f, std::numeric_limits<float>::max()))
+    {
+        g.setColour (juce::Colour (233, 69, 96));
+    }
+    else
+    {
+        g.setColour (textColor);
+    }
     g.drawText (eatenLevelText, poxX + newlinePadding, posY + newlinePadding + (fontSize * 2) + (newlinePadding * 2), boxWidth, fontSize, juce::Justification::left, true);
 }
 
@@ -109,16 +124,6 @@ void AnalyserComponent::onAnalyzerUpdateTick()
     mInputAnalyzer.push (inputLevel);
     mOutputAnalyzer.push (outputLevel);
     mEatenAnalyzer.push (inputLevel - clippingLevel);
-}
-
-void AnalyserComponent::onAnalyzerForceUpdateTick()
-{
-    auto const inputLevel = static_cast<float> (mInputLevelMeter->getDecibels());
-    auto const outputLevel = static_cast<float> (mOutputLevelMeter->getDecibels());
-    auto const clippingLevel = static_cast<float> (mClippingLevelMeter->getDecibels());
-    mInputAnalyzer.push (inputLevel, true);
-    mOutputAnalyzer.push (outputLevel, true);
-    mEatenAnalyzer.push (inputLevel - clippingLevel, true);
 }
 } // namespace gui
 } // namespace pe
