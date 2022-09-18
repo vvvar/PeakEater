@@ -81,6 +81,7 @@ target_sources(PeakEater
         Source/GUIv2/linkinout/LinkInOut.cpp
         Source/GUIv2/bypass/BypassButton.cpp
         Source/GUIv2/levelmeter/LevelMeterComponent.cpp
+        Source/GUIv2/analyser/AnalyserComponent.cpp
         Source/GUIv2/ControlPanel.cpp
         Source/GUIv2/LinkingPanel.cpp
         Source/GUIv2/LeftPanel.cpp
