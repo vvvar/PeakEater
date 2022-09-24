@@ -18,8 +18,8 @@ Dial::Dial (std::string const& labelText,
     mSlider.setColour (juce::Slider::textBoxOutlineColourId, juce::Colours::grey);
     mSlider.setColour (juce::Slider::rotarySliderFillColourId, juce::Colours::blue);
     mSlider.setLookAndFeel (&mLookAndFeel);
-
-    mSlider.setTextBoxIsEditable (true);
+    mSlider.setVelocityModeParameters (1.0, 1, 0.02, true, juce::ModifierKeys::shiftModifier);
+    mSlider.setTextBoxIsEditable (false);
     // mSlider.setTextValueSuffix (" dB");
 
     // mSlider.setVelocityBasedMode (true);
