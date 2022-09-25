@@ -89,7 +89,9 @@
         "locale": "cpp",
         "optional": "cpp",
         "queue": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "stack": "cpp",
+        "__functional_base": "cpp"
     },
     /**
     * Commit of JUCE to checkout

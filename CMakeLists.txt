@@ -72,6 +72,9 @@ juce_add_plugin(PeakEater
 target_sources(PeakEater
     PRIVATE
         Source/GUIv2/clipmeter/ClipMeter.cpp
+        Source/GUIv2/editableparameter/EditableParameterComponentLookAndFeel.cpp
+        Source/GUIv2/editableparameter/EditableLabelAttachment.cpp
+        Source/GUIv2/editableparameter/EditableParameterComponent.cpp
         Source/GUIv2/dial/DialLookAndFeel.cpp
         Source/GUIv2/dial/Dial.cpp
         Source/GUIv2/dial/gaindial/GainDialLookAndFeel.cpp
