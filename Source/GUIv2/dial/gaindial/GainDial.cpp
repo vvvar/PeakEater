@@ -11,7 +11,7 @@ GainDial::GainDial (std::string const& labelText,
     , mParameters (parameters)
 {
     mSlider.setLookAndFeel (&mGainDialLookAndFeel);
-    mSlider.setTextValueSuffix (" dB");
+    mDialValue.setSuffix (" dB");
 }
 
 GainDial::~GainDial()

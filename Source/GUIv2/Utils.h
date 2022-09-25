@@ -8,8 +8,8 @@ namespace gui
 {
 namespace
 {
-auto constexpr fontScalingCoefMed = 110.0f;
-auto constexpr fontScalingCoefLarge = 90.0f;
+auto constexpr fontScalingCoefMed = 110;
+auto constexpr fontScalingCoefLarge = 90;
 } // namespace
 inline int calculateTextSize (int const& windowWidth, int const& windowHeight)
 {

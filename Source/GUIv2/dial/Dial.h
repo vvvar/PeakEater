@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../editableparameter/EditableParameterComponent.h"
 #include "DialLookAndFeel.h"
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_basics/juce_gui_basics.h>
@@ -22,9 +23,13 @@ protected:
     DialLookAndFeel mLookAndFeel;
     juce::Slider mSlider;
     juce::Label mLabel;
-    juce::AudioProcessorValueTreeState::SliderAttachment mAttachment;
+    EditableParameterComponent mDialValue;
+    juce::AudioProcessorValueTreeState::SliderAttachment mSliderAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Dial)
+
+private:
+    void updateFontSize();
 };
 } // namespace gui
 } // namespace pe
