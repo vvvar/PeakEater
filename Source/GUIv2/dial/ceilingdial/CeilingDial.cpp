@@ -14,7 +14,7 @@ CeilingDial::CeilingDial (std::string const& labelText,
     , mTimer (std::bind (&CeilingDial::onTimerTick, this))
 {
     mSlider.setLookAndFeel (&mCeilingDialLookAndFeel);
-    mSlider.setTextValueSuffix (" dB");
+    mDialValue.setSuffix (" dB");
     mTimer.startTimer (20);
 }
 
