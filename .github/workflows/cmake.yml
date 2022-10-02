@@ -3,12 +3,23 @@ on: [push, pull_request]
 env:
   BUILD_TYPE: Release
   VST_TARGET_NAME: PeakEater_VST3
+  AU_TARGET_NAME: PeakEater_AU
   JUCE_REVISION: 2f98020
 jobs:
   build-macos:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: |
+          echo $PATH
+          python --version
+          which python
       - name: Init Git Submodules
         run: git submodule update --init --recursive
       - name: Checkout JUCE
@@ -17,11 +28,25 @@ jobs:
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
-      - name: Upload build artifacts
+      - name: Upload VST3
         uses: actions/upload-artifact@v3
         with:
           name: MacOS-PeakEater.vst3
-          path: ${{github.workspace}}/build/PeakEater_artefacts/Release/VST3/PeakEater.vst3
+          path: ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/VST3/PeakEater.vst3
+      - name: Build AU
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.AU_TARGET_NAME}}
+      - name: Upload AU
+        uses: actions/upload-artifact@v3
+        with:
+          name: MacOS-PeakEater.component
+          path: ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/AU/PeakEater.component
+      - name: Build release dmg package
+        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}}
+      - name: Upload release dmg package
+        uses: actions/upload-artifact@v3
+        with:
+          name: PeakEater.dmg
+          path: ${{github.workspace}}/build/release/PeakEater.dmg
 
   build-windows:
     runs-on: windows-2019
