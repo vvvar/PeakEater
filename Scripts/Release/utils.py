@@ -1,4 +1,4 @@
-from os import system, mkdir
+from os import system, mkdir, name
 from pathlib import Path
 from enum import Enum
 from shutil import rmtree, copytree
@@ -13,6 +13,10 @@ def logInfo(*args, **kwargs):
 def logVerbose(*args, **kwargs):
     if VERBOSE_LOGGING:
         print(*args, **kwargs)
+
+
+def isWindows() -> bool:
+    return name == 'nt'
 
 # Represents relese type later used for arguments parsing
 
@@ -80,6 +84,8 @@ def getBuildAUDirPath(releaseType: ReleaseType) -> Path:
 def getBuildVST3DirPath(releaseType: ReleaseType) -> Path:
     path = getBuildDirPath().joinpath("PeakEater_artefacts/" +
                                       releaseType + "/VST3").resolve()
+    if isWindows():
+        path = path.joinpath("PeakEater.vst3/Contents/x86_64-win/").resolve()
     logVerbose("VST3 build dir: " + str(path))
     return path
 

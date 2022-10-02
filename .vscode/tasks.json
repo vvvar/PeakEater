@@ -36,9 +36,12 @@
       "dependsOrder": "sequence"
     },
     {
-      "label": "Create release package(MacOS)",
+      "label": "Create release package",
       "type": "shell",
-      "command": "python3 ${workspaceFolder}/Scripts/Release/MacOS.py --release_type=${config:peakeater.config}"
+      "command": "python3 ${workspaceFolder}/Scripts/Release/MacOS.py --release_type=${config:peakeater.config}",
+      "windows": {
+        "command": "python3 ${workspaceFolder}/Scripts/Release/Windows.py --release_type=${config:peakeater.config}"
+      }
     },
     {
       "label": "Run Standalone",
