@@ -7,10 +7,8 @@
 # Projucer auto-gen files
 /JuceLibraryCode
 
-# Releases dir
-/Release/PeakEater.dmg
-/Release/PeakEater.vst3
-/Release/PeakEater.component
+# Python cache
+Scripts/Release/__pycache__
 
 # Various vscode logs
 /.vscode/*.log

@@ -36,6 +36,11 @@
       "dependsOrder": "sequence"
     },
     {
+      "label": "Create release package(MacOS)",
+      "type": "shell",
+      "command": "python3 ${workspaceFolder}/Scripts/Release/MacOS.py --release_type=${config:peakeater.config}"
+    },
+    {
       "label": "Run Standalone",
       "type": "shell",
       "command": "${workspaceFolder}/build/PeakEater_artefacts/${config:peakeater.config}/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
