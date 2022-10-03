@@ -72,6 +72,21 @@ jobs:
         with:
           name: Windows-PeakEater.vst3
           path: ${{github.workspace}}\build\PeakEater_artefacts\${{env.BUILD_TYPE}}\VST3\PeakEater.vst3\Contents\x86_64-win\PeakEater.vst3
+      - name: Install Wix
+        uses: actions/checkout@v2
+        with:
+          repository: fbarresi/wix
+          path: wix
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
       - name: Build installer
         run: python.exe ${{github.workspace}}\Scripts\Release\Windows.py --iscc_path="%programfiles(x86)%\Inno Setup 6\iscc.exe" --release_type=${{env.BUILD_TYPE}} --preserve_tmp=True
         shell: cmd
@@ -81,5 +96,5 @@ jobs:
       - name: Upload the installer
         uses: actions/upload-artifact@v2
         with:
-          name: PeakEater.exe
-          path: ${{github.workspace}}\build\__tmp__\VST3\PeakEater.exe
+          name: PeakEater.msi
+          path: ${{github.workspace}}\build\__tmp__\VST3\PeakEater.msi

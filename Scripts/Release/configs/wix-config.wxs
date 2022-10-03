@@ -1,0 +1,6 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Product Id="*" UpgradeCode="12345678-1111-2222-3333-666666666666"
+Name="My First Installer" Version="1.0.0.0" Manufacturer="My Company" Language="1033">
+<Package InstallerVersion="200" Compressed="yes" Comments="Hello, this is my first installer"/>
+</Product>
+</Wix>
