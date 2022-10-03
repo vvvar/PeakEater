@@ -38,7 +38,7 @@ isscConfigFullPath = TMP_DIR_PATH.joinpath("inno-config.iss").resolve()
 # # Show help to verify that ISSC works
 # utils.execCommand(f'{str(isscFullPath)} /?')
 # Run actual build
-utils.execCommand(f'{str(isscFullPath)} "{str(isscConfigFullPath)}"')
+utils.execCommand(f'{str(isscFullPath)} /O+ "{str(isscConfigFullPath)}"')
 # Conditionally, cleanup tmp
 if not args.preserve_tmp:
     utils.logInfo("Cleaning up tmo dir...")
