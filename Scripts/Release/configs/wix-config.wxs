@@ -1,6 +1,26 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-<Product Id="*" UpgradeCode="12345678-1111-2222-3333-666666666666"
-Name="My First Installer" Version="1.0.0.0" Manufacturer="My Company" Language="1033">
-<Package InstallerVersion="200" Compressed="yes" Comments="Hello, this is my first installer"/>
+<Product Id="*" UpgradeCode="12345678-1111-2222-3333-666666666666" Name="My First Installer" Version="1.0.0.0" Manufacturer="My Company" Language="1033">
+    <Package InstallerVersion="200" Compressed="yes" Comments="Hello, this is my first installer"/>
+
+    <!-- Step 1: Define the directory structure -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+        <Directory Id="ProgramFilesFolder">
+            <Directory Id="CommonFilesFolder">
+                <Directory Id="APPLICATIONROOTDIRECTORY" Name="VST3"/>
+            </Directory>
+        </Directory>
+    </Directory>
+
+    <!-- Step 2: Add files to your installer package -->
+    <DirectoryRef Id="APPLICATIONROOTDIRECTORY">
+        <Component Id="PeakEater.vst3" Guid="ce9f70be-bc5c-41a6-97d8-8b3e1914adb5">
+            <File Id="PeakEater.vst3" Source="PeakEater.vst3" KeyPath="yes" Checksum="yes"/>
+        </Component>
+    </DirectoryRef>
+
+    <!-- Step 3: Tell WiX to install the files -->
+    <Feature Id="MainApplication" Title="Main Application" Level="1">
+        <ComponentRef Id="PeakEater.vst3" />
+    </Feature>
 </Product>
 </Wix>
