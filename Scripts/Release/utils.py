@@ -1,4 +1,5 @@
 from os import system, mkdir, name
+from subprocess import check_output
 from pathlib import Path
 from enum import Enum
 from shutil import rmtree, copytree
@@ -39,9 +40,8 @@ class ReleaseType(Enum):
 
 def execCommand(command: str) -> None:
     logVerbose("Executing command: " + command)
-    outout = system(command)
-    if (outout):
-        logInfo(outout)
+    outout = check_output(command, shell=True).decode()
+    logInfo(outout)
 
 
 def getProjectRootDirPath() -> Path:
