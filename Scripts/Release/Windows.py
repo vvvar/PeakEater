@@ -33,13 +33,13 @@ utils.copyDirContentRecursive(
     utils.getProjectReleaseConfigsDirPath(), TMP_DIR_PATH)
 # Create installer
 utils.logInfo("Creating installer...")
-isscFullPath = Path(args.iscc_path).resolve()
 wixConfigFullPath = TMP_DIR_PATH.joinpath("wix-config.wxs").resolve()
 wixObjectFullPath = RELEASE_DIR_PATH.joinpath("wix-config.wixobj").resolve()
+msiBuildFullPath = RELEASE_DIR_PATH.joinpath("PeakEater.msi").resolve()
 utils.execCommand(
     f'wix\\tools\candle.exe {str(wixConfigFullPath)} -o {str(wixObjectFullPath)}')
 utils.execCommand(
-    f'wix\\tools\light.exe {str(wixObjectFullPath)} -o {str(RELEASE_DIR_PATH)}\PeakEater.msi')
+    f'wix\\tools\light.exe {str(wixObjectFullPath)} -o {str(msiBuildFullPath)}')
 # Conditionally, cleanup tmp
 if not args.preserve_tmp:
     utils.logInfo("Cleaning up tmp dir...")
