@@ -73,7 +73,7 @@ jobs:
           name: Windows-PeakEater.vst3
           path: ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/VST3/PeakEater.vst3/Contents/x86_64-win/PeakEater.vst3
       - name: Building the installer
-        run: python ${{github.workspace}}/Scripts/Release/Windows.py --iscc_path="%programfiles(x86)%\Inno Setup 6\iscc.exe" --release_type=${{env.BUILD_TYPE}}
+        run: python ${{github.workspace}}/Scripts/Release/Windows.py --iscc_path="%programfiles(x86)%\Inno Setup 6\iscc.exe" --release_type=${{env.BUILD_TYPE}} --preserve_tmp=True
         shell: cmd
       - name: Upload the installer
         uses: actions/upload-artifact@v2

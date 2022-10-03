@@ -5,6 +5,7 @@ Create executable(for Windows) that installs VST3.
 from ctypes import util
 import utils
 import argparse
+from pathlib import Path
 # Parse input arguments
 argument_parser = argparse.ArgumentParser()
 argument_parser.add_argument(
@@ -32,7 +33,7 @@ utils.copyDirContentRecursive(
     utils.getProjectReleaseConfigsDirPath(), TMP_DIR_PATH)
 # Create installer
 utils.logInfo("Creating installer...")
-utils.execCommand(f'{args.iscc_path} inno-config.iss')
+utils.execCommand(f'{str(Path(args.iscc_path).resolve())} inno-config.iss')
 # Conditionally, cleanup tmp
 if not args.preserve_tmp:
     utils.logInfo("Cleaning up tmo dir...")

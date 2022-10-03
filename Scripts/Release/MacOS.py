@@ -49,7 +49,7 @@ outputDmgFilePath = str(RELEASE_DIR_PATH) + "/PeakEater.dmg"
 utils.execCommand("appdmg " + appDmgConfigFilePath + " " + outputDmgFilePath)
 # Conditionally, cleanup tmp
 if not args.preserve_tmp:
-    utils.logInfo("Cleaning up tmo dir...")
+    utils.logInfo("Cleaning up tmp dir...")
     utils.rmDir(TMP_DIR_PATH)
 # Done, print where DMG is located
 utils.logInfo("Done! Dmg file may be found at: " + outputDmgFilePath)
