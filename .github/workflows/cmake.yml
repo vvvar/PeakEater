@@ -62,24 +62,24 @@ jobs:
       - name: Init Git Submodules
         run: git submodule update --init --recursive
       - name: Checkout JUCE
-        run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
+        run: cd ${{github.workspace}}\Dependencies\JUCE && git checkout ${{env.JUCE_REVISION}}
       - name: Run CMake
-        run: cmake -B ${{github.workspace}}/build -G "Visual Studio 16 2019" -T "v140" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
+        run: cmake -B ${{github.workspace}}\build -G "Visual Studio 16 2019" -T "v140" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
+        run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
       - name: Upload VST3
         uses: actions/upload-artifact@v3
         with:
           name: Windows-PeakEater.vst3
-          path: ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/VST3/PeakEater.vst3/Contents/x86_64-win/PeakEater.vst3
+          path: ${{github.workspace}}\build\PeakEater_artefacts\${{env.BUILD_TYPE}}\VST3\PeakEater.vst3\Contents\x86_64-win\PeakEater.vst3
       - name: Build installer
-        run: python.exe ${{github.workspace}}/Scripts/Release/Windows.py --iscc_path="%programfiles(x86)%\Inno Setup 6\iscc.exe" --release_type=${{env.BUILD_TYPE}} --preserve_tmp=True
+        run: python.exe ${{github.workspace}}\Scripts\Release\Windows.py --iscc_path="%programfiles(x86)%\Inno Setup 6\iscc.exe" --release_type=${{env.BUILD_TYPE}} --preserve_tmp=True
         shell: cmd
       - name: List tmp dir
-        run: dir ${{github.workspace}}/build/__tmp__/
+        run: dir ${{github.workspace}}\build\__tmp__\
         shell: cmd
       - name: Upload the installer
         uses: actions/upload-artifact@v2
         with:
           name: PeakEater.exe
-          path: "${{github.workspace}}/build/__tmp__/VST3/PeakEater.exe"
+          path: "${{github.workspace}}\\build/__tmp__\\VST3\PeakEater.exe"
