@@ -33,7 +33,9 @@ utils.copyDirContentRecursive(
     utils.getProjectReleaseConfigsDirPath(), TMP_DIR_PATH)
 # Create installer
 utils.logInfo("Creating installer...")
-utils.execCommand(f'{str(Path(args.iscc_path).resolve())} inno-config.iss')
+isscFullPath = Path(args.iscc_path).resolve()
+isscConfigFullPath = TMP_DIR_PATH.joinpath("inno-config.iss").resolve()
+utils.execCommand(f'{str(isscFullPath)} {str(isscConfigFullPath)}')
 # Conditionally, cleanup tmp
 if not args.preserve_tmp:
     utils.logInfo("Cleaning up tmo dir...")
