@@ -40,8 +40,8 @@ class ReleaseType(Enum):
 
 def execCommand(command: str) -> None:
     logVerbose("Executing command: " + command)
-    outout = check_output(command, shell=True).decode()
-    logInfo(outout)
+    logInfo(system(command))
+    # logInfo(check_output(command, shell=True).decode())
 
 
 def getProjectRootDirPath() -> Path:

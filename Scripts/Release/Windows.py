@@ -42,9 +42,9 @@ wixObjectFullPath = TMP_DIR_PATH.joinpath("wix-config.wixobj").resolve()
 # Run actual build
 # utils.execCommand(f'{str(isscFullPath)} /O+ "{str(isscConfigFullPath)}"')
 utils.execCommand(
-    f'wix\\tools\candle.exe {str(wixConfigFullPath)} -o obj\ -ext WixUtilExtension -ext WixUIExtension')
+    f'wix\\tools\candle.exe {str(wixConfigFullPath)}')
 utils.execCommand(
-    f'wix\\tools\light.exe {str(wixObjectFullPath)} -o {str(TMP_DIR_PATH)}\PeakEater.msi -ext WixUtilExtension -ext WixUIExtension -dWixUILicenseRtf="License.rtf"')
+    f'wix\\tools\light.exe {str(wixObjectFullPath)} -o {str(TMP_DIR_PATH)}\PeakEater.msi')
 # Conditionally, cleanup tmp
 if not args.preserve_tmp:
     utils.logInfo("Cleaning up tmo dir...")
