@@ -34,18 +34,13 @@ utils.copyDirContentRecursive(
 # Create installer
 utils.logInfo("Creating installer...")
 isscFullPath = Path(args.iscc_path).resolve()
-isscConfigFullPath = TMP_DIR_PATH.joinpath("inno-config.iss").resolve()
 wixConfigFullPath = TMP_DIR_PATH.joinpath("wix-config.wxs").resolve()
-wixObjectFullPath = TMP_DIR_PATH.joinpath("wix-config.wixobj").resolve()
-# # Show help to verify that ISSC works
-# utils.execCommand(f'{str(isscFullPath)} /?')
-# Run actual build
-# utils.execCommand(f'{str(isscFullPath)} /O+ "{str(isscConfigFullPath)}"')
+wixObjectFullPath = RELEASE_DIR_PATH.joinpath("wix-config.wixobj").resolve()
 utils.execCommand(
     f'wix\\tools\candle.exe {str(wixConfigFullPath)} -o {str(wixObjectFullPath)}')
 utils.execCommand(
-    f'wix\\tools\light.exe {str(wixObjectFullPath)} -o {str(TMP_DIR_PATH)}\PeakEater.msi')
+    f'wix\\tools\light.exe {str(wixObjectFullPath)} -o {str(RELEASE_DIR_PATH)}\PeakEater.msi')
 # Conditionally, cleanup tmp
 if not args.preserve_tmp:
-    utils.logInfo("Cleaning up tmo dir...")
+    utils.logInfo("Cleaning up tmp dir...")
     utils.rmDir(TMP_DIR_PATH)
