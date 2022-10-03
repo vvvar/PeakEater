@@ -35,8 +35,8 @@ utils.copyDirContentRecursive(
 utils.logInfo("Creating installer...")
 isscFullPath = Path(args.iscc_path).resolve()
 isscConfigFullPath = TMP_DIR_PATH.joinpath("inno-config.iss").resolve()
-# Show help to verify that ISSC works
-utils.execCommand(f'{str(isscFullPath)} /?')
+# # Show help to verify that ISSC works
+# utils.execCommand(f'{str(isscFullPath)} /?')
 # Run actual build
 utils.execCommand(f'{str(isscFullPath)} "{str(isscConfigFullPath)}"')
 # Conditionally, cleanup tmp
