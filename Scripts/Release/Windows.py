@@ -34,7 +34,7 @@ utils.copyDirContentRecursive(
 # Create installer
 utils.logInfo("Creating installer...")
 wixConfigFullPath = TMP_DIR_PATH.joinpath("wix-config.wxs").resolve()
-wixObjectFullPath = RELEASE_DIR_PATH.joinpath("wix-config.wixobj").resolve()
+wixObjectFullPath = TMP_DIR_PATH.joinpath("wix-config.wixobj").resolve()
 msiBuildFullPath = RELEASE_DIR_PATH.joinpath("PeakEater.msi").resolve()
 utils.execCommand(
     f'wix\\tools\candle.exe {str(wixConfigFullPath)} -o {str(wixObjectFullPath)}')
