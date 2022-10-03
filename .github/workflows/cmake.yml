@@ -77,16 +77,6 @@ jobs:
         with:
           repository: fbarresi/wix
           path: wix
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 3.1.101
-      - name: Install dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-      - name: Test
-        run: dotnet test --no-restore --verbosity normal
       - name: Build installer
         run: python.exe ${{github.workspace}}\Scripts\Release\Windows.py --iscc_path="%programfiles(x86)%\Inno Setup 6\iscc.exe" --release_type=${{env.BUILD_TYPE}} --preserve_tmp=True
         shell: cmd
