@@ -1,13 +1,13 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 <Product Id="*" UpgradeCode="12345678-1111-2222-3333-666666666666" Name="PeakEater" Version="0.3.0.0" Manufacturer="T-Audio" Language="1033">
-    <Package InstallerVersion="200" InstallScope="perMachine" Compressed="yes" Comments="PeakEater is a free open-source VST3/AU waveshaper plugin"/>
+    <Package InstallerVersion="200" InstallScope="perUser" Compressed="yes" Comments="PeakEater is a free open-source VST3/AU waveshaper plugin"/>
     <MediaTemplate EmbedCab="yes" />
 
     <!-- Step 1: Define the directory structure -->
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="ProgramFilesFolder">
             <Directory Id="CommonFilesFolder">
-                <Directory Id="INSTALLFOLDER" Name="VST3"/>
+                <Directory Id="INSTALLFOLDER" Name="VST3">
                     <Component Id="ProductComponent">
                         <File KeyPath="yes" Source="PeakEater.vst3"></File>
                     </Component>
