@@ -20,8 +20,5 @@
       <ComponentRef Id="ProductComponent" />
     </Feature>
 
-    <UI>
-        <UIRef Id="WixUI_HK" />
-    </UI>
 </Product>
 </Wix>
