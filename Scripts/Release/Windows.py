@@ -7,8 +7,8 @@ import utils
 import argparse
 from pathlib import Path
 # WiX Default Configuration
-WIX_COMPILER_DEFAULT_PATH = "C:\Program Files (x86)\WiX Toolset v3.11\\bin\candle.exe"
-WIX_LINKER_DEFAULT_PATH = "C:\Program Files (x86)\WiX Toolset v3.11\\bin\light.exe"
+WIX_COMPILER_DEFAULT_PATH = "C:\Program Files (x86)\\WiX Toolset v3.11\\bin\\candle.exe"
+WIX_LINKER_DEFAULT_PATH = "C:\Program Files (x86)\\WiX Toolset v3.11\\bin\\light.exe"
 # Parse input arguments
 argument_parser = argparse.ArgumentParser()
 argument_parser.add_argument(
@@ -44,9 +44,9 @@ wixConfigFullPath = TMP_DIR_PATH.joinpath("wix-config.wxs").resolve()
 wixObjectFullPath = TMP_DIR_PATH.joinpath("wix-config.wixobj").resolve()
 msiBuildFullPath = RELEASE_DIR_PATH.joinpath("PeakEater.msi").resolve()
 utils.execCommand(
-    f'"{str(wixCompilerFullPath)}" "{str(wixConfigFullPath)}" -o "{str(wixObjectFullPath)}"')
+    f'""{str(wixCompilerFullPath)}" "{str(wixConfigFullPath)}" -o "{str(wixObjectFullPath)}" -arch "x64""')
 utils.execCommand(
-    f'"{str(wixLinkerFullPath)}" "{str(wixObjectFullPath)}" -o "{str(msiBuildFullPath)}"')
+    f'""{str(wixLinkerFullPath)}" "{str(wixObjectFullPath)}" -o "{str(msiBuildFullPath)}" -ext "WixUIExtension""')
 # Conditionally, cleanup tmp
 if not args.preserve_tmp:
     utils.logInfo("Cleaning up tmp dir...")

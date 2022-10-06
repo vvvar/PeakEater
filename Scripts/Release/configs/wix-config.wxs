@@ -3,12 +3,12 @@
     <Package InstallerVersion="200" InstallScope="perMachine" Compressed="yes" Comments="PeakEater is a free open-source VST3/AU waveshaper plugin"/>
     <MediaTemplate EmbedCab="yes" />
 
-    <!-- Step 1: Define the directory structure -->
+    <!-- Target directory structure -->
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="ProgramFiles64Folder">
-            <Directory Id="CommonFilesFolder">
-                <Directory Id="INSTALLFOLDER" Name="VST3">
-                    <Component Id="ProductComponent">
+            <Directory Id="CommonFiles64Folder">
+                <Directory Id="TESTFILEPRODUCTDIR" Name="VST3">
+                    <Component Id="ProductComponent" Win64="yes">
                         <File KeyPath="yes" Source="PeakEater.vst3"></File>
                     </Component>
                 </Directory>
@@ -16,9 +16,25 @@
         </Directory>
     </Directory>
 
+    <!-- Installation steps -->
     <Feature Id="HelloWorldFeature">
       <ComponentRef Id="ProductComponent" />
     </Feature>
+
+    <!-- Licensing file -->
+    <WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+
+    <!-- Custom icons -->
+    <Icon Id="icon.ico" SourceFile="icon.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+    <WixVariable Id="WixUIDialogBmp" Value="banner_vertical.bmp" />
+    <WixVariable Id="WixUIBannerBmp" Value="banner_horizontal.bmp" />
+    <WixVariable Id="WixUIExclamationIco" Value="icon.ico" />
+    <WixVariable Id="WixUIInfoIco" Value="icon.ico" />
+
+    <!-- Use pre-compiled UI template(part of WixUIExtension) -->
+    <Property Id="WIXUI_INSTALLDIR" Value="TESTFILEPRODUCTDIR" />
+    <UIRef Id="WixUI_InstallDir" />
 
 </Product>
 </Wix>
