@@ -4,14 +4,17 @@
     {
       "label": "Init Git Submodules",
       "type": "shell",
-      "command": "rm -rf ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout ${config:peakeater.juce_version}"
+      "command": "rm -rf ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout ${config:peakeater.juce_version}",
+      "windows": {
+        "command": "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout ${config:peakeater.juce_version}"
+      }
     },
     {
       "label": "Clean Build Dir",
       "type": "shell",
       "command": "rm -rf ${workspaceFolder}/build/",
       "windows": {
-        "command": "rmdir ${workspaceFolder}\build /s"
+        "command": "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ${workspaceFolder}/build/"
       }
     },
     {
@@ -22,7 +25,7 @@
       ],
       "command": "cmake . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON -DCMAKE_BUILD_TYPE=${config:peakeater.config} && cmake --build build --config ${config:peakeater.config} --target ${config:peakeater.target} -j${config:peakeater.cpucores}",
       "windows": {
-        "command": "cmake . -B build -G 'Visual Studio 16 2019' -T 'v140' -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON && cmake --build build --config ${config:peakeater.config} --target ${config:peakeater.target} -j${config:peakeater.cpucores}"
+        "command": "cmake . -B build -G 'Visual Studio 17 2022' -A x64 -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON && cmake --build build --config ${config:peakeater.config} --target ${config:peakeater.target} -j${config:peakeater.cpucores}"
       }
     },
     {
@@ -40,7 +43,7 @@
       "type": "shell",
       "command": "python3 ${workspaceFolder}/Scripts/Release/MacOS.py --release_type=${config:peakeater.config}",
       "windows": {
-        "command": "python3 ${workspaceFolder}/Scripts/Release/Windows.py --release_type=${config:peakeater.config}"
+        "command": "python ${workspaceFolder}/Scripts/Release/Windows.py --release_type=${config:peakeater.config}"
       }
     },
     {

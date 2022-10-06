@@ -6,10 +6,15 @@ from ctypes import util
 import utils
 import argparse
 from pathlib import Path
+# WiX Default Configuration
+WIX_COMPILER_DEFAULT_PATH = "C:\Program Files (x86)\WiX Toolset v3.11\\bin\candle.exe"
+WIX_LINKER_DEFAULT_PATH = "C:\Program Files (x86)\WiX Toolset v3.11\\bin\light.exe"
 # Parse input arguments
 argument_parser = argparse.ArgumentParser()
 argument_parser.add_argument(
-    '--iscc_path', type=str, help='Path to InnoSetup executable')
+    '--wix_compiler_path', type=str, default=WIX_COMPILER_DEFAULT_PATH, help='Path to WiX Compiler(usually called candle.exe)')
+argument_parser.add_argument(
+    '--wix_linker_path', type=str, default=WIX_LINKER_DEFAULT_PATH, help='Path to WiX Linker(usually called light.exe)')
 argument_parser.add_argument('--release_type', type=utils.ReleaseType, default=utils.ReleaseType.release,
                              choices=list(utils.ReleaseType), help='Type of release package, e.g. Release or Debug')
 argument_parser.add_argument('--preserve_tmp', type=bool, default=False,
@@ -33,13 +38,15 @@ utils.copyDirContentRecursive(
     utils.getProjectReleaseConfigsDirPath(), TMP_DIR_PATH)
 # Create installer
 utils.logInfo("Creating installer...")
+wixCompilerFullPath = utils.createPath(args.wix_compiler_path)
+wixLinkerFullPath = utils.createPath(args.wix_linker_path)
 wixConfigFullPath = TMP_DIR_PATH.joinpath("wix-config.wxs").resolve()
 wixObjectFullPath = TMP_DIR_PATH.joinpath("wix-config.wixobj").resolve()
 msiBuildFullPath = RELEASE_DIR_PATH.joinpath("PeakEater.msi").resolve()
 utils.execCommand(
-    f'wix\\tools\candle.exe {str(wixConfigFullPath)} -o {str(wixObjectFullPath)}')
+    f'"{str(wixCompilerFullPath)}" "{str(wixConfigFullPath)}" -o "{str(wixObjectFullPath)}"')
 utils.execCommand(
-    f'wix\\tools\light.exe {str(wixObjectFullPath)} -o {str(msiBuildFullPath)}')
+    f'"{str(wixLinkerFullPath)}" "{str(wixObjectFullPath)}" -o "{str(msiBuildFullPath)}"')
 # Conditionally, cleanup tmp
 if not args.preserve_tmp:
     utils.logInfo("Cleaning up tmp dir...")

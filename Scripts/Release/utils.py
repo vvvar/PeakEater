@@ -121,3 +121,12 @@ def rmDir(path: Path) -> None:
 
 def copyDirContentRecursive(src: Path, dst: Path) -> None:
     copytree(src=src, dst=dst, dirs_exist_ok=True)
+
+def createPath(src: str, sanitize: bool = True) -> Path:
+    return Path(src).resolve()
+    # if sanitize:
+    #     path = sanitizePath(path)
+    # return path
+
+def sanitizePath(path: Path) -> Path:
+    return Path(str(path).replace(" ", "\\")).resolve() 
