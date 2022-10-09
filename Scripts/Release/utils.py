@@ -1,9 +1,10 @@
-from os import system, mkdir
+from os import system, mkdir, name
+from subprocess import check_output
 from pathlib import Path
 from enum import Enum
 from shutil import rmtree, copytree
 
-VERBOSE_LOGGING = False
+VERBOSE_LOGGING = True
 
 
 def logInfo(*args, **kwargs):
@@ -13,6 +14,10 @@ def logInfo(*args, **kwargs):
 def logVerbose(*args, **kwargs):
     if VERBOSE_LOGGING:
         print(*args, **kwargs)
+
+
+def isWindows() -> bool:
+    return name == 'nt'
 
 # Represents relese type later used for arguments parsing
 
@@ -35,9 +40,8 @@ class ReleaseType(Enum):
 
 def execCommand(command: str) -> None:
     logVerbose("Executing command: " + command)
-    outout = system(command)
-    if (outout):
-        logInfo(outout)
+    logInfo(system(command))
+    # logInfo(check_output(command, shell=True).decode())
 
 
 def getProjectRootDirPath() -> Path:
@@ -80,6 +84,8 @@ def getBuildAUDirPath(releaseType: ReleaseType) -> Path:
 def getBuildVST3DirPath(releaseType: ReleaseType) -> Path:
     path = getBuildDirPath().joinpath("PeakEater_artefacts/" +
                                       releaseType + "/VST3").resolve()
+    if isWindows():
+        path = path.joinpath("PeakEater.vst3/Contents/x86_64-win/").resolve()
     logVerbose("VST3 build dir: " + str(path))
     return path
 
@@ -115,3 +121,12 @@ def rmDir(path: Path) -> None:
 
 def copyDirContentRecursive(src: Path, dst: Path) -> None:
     copytree(src=src, dst=dst, dirs_exist_ok=True)
+
+def createPath(src: str, sanitize: bool = True) -> Path:
+    return Path(src).resolve()
+    # if sanitize:
+    #     path = sanitizePath(path)
+    # return path
+
+def sanitizePath(path: Path) -> Path:
+    return Path(str(path).replace(" ", "\\")).resolve() 

@@ -94,6 +94,19 @@
         "__functional_base": "cpp"
     },
     /**
+    * Force use only PowerShell 7 to make tasks more predictable
+    */
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": null,
+        "Git Bash": null,
+        "JavaScript Debug Terminal": null,
+        "Windows PowerShell": null,
+        "PowerShell7": {
+            "path": "C:\\Program Files\\PowerShell\\7\\pwsh.exe"
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell7",
+    /**
     * Commit of JUCE to checkout
     */
     "peakeater.juce_version": "2f98020",
