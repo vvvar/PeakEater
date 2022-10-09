@@ -20,6 +20,10 @@ jobs:
           echo $PATH
           python --version
           which python
+          node --version
+          which node
+          npm --version
+          which npm
       - name: Init Git Submodules
         run: git submodule update --init --recursive
       - name: Checkout JUCE
@@ -49,19 +53,35 @@ jobs:
           path: ${{github.workspace}}/build/release/PeakEater.dmg
 
   build-windows:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
       - name: Init Git Submodules
         run: git submodule update --init --recursive
       - name: Checkout JUCE
-        run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
+        run: cd ${{github.workspace}}\Dependencies\JUCE && git checkout ${{env.JUCE_REVISION}}
       - name: Run CMake
-        run: cmake -B ${{github.workspace}}/build -G "Visual Studio 16 2019" -T "v140" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
+        run: cmake . -B ${{github.workspace}}\build -G 'Visual Studio 17 2022' -A x64 -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
-      - name: Upload build artifacts
+        run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
+      - name: Upload VST3
         uses: actions/upload-artifact@v3
         with:
           name: Windows-PeakEater.vst3
-          path: ${{github.workspace}}/build/PeakEater_artefacts/Release/VST3/PeakEater.vst3/Contents/x86_64-win/PeakEater.vst3
+          path: ${{github.workspace}}\build\PeakEater_artefacts\${{env.BUILD_TYPE}}\VST3\PeakEater.vst3\Contents\x86_64-win\PeakEater.vst3
+      - name: Install Wix
+        uses: actions/checkout@v2
+        with:
+          repository: fbarresi/wix
+          path: wix
+      - name: Build installer
+        run: python.exe ${{github.workspace}}\Scripts\Release\Windows.py --release_type=${{env.BUILD_TYPE}} --wix_compiler_path="wix\\tools\\candle.exe" --wix_linker_path="wix\\tools\\light.exe"
+        shell: cmd
+      - name: Upload the installer
+        uses: actions/upload-artifact@v2
+        with:
+          name: PeakEater.msi
+          path: ${{github.workspace}}\build\release\PeakEater.msi
