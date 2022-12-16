@@ -13,23 +13,23 @@ auto constexpr fontScalingCoefLarge = 90;
 } // namespace
 inline int calculateTextSize (int const& windowWidth, int const& windowHeight)
 {
-    return (windowWidth + windowHeight) / fontScalingCoefMed;
+	return (windowWidth + windowHeight) / fontScalingCoefMed;
 }
 inline int calculatePrimaryTextSize (int const& windowWidth, int const& windowHeight)
 {
-    return (windowWidth + windowHeight) / fontScalingCoefLarge;
+	return (windowWidth + windowHeight) / fontScalingCoefLarge;
 }
 inline float gRoundDb (float const& dB)
 {
-    return ((float) ((int) (dB * 10))) / 10;
+	return ((float) ((int) (dB * 10))) / 10;
 }
 template <typename T>
 inline std::string gToStringWithPrecision (const T a_value, const int n = 6)
 {
-    std::ostringstream out;
-    out.precision (n);
-    out << std::fixed << a_value;
-    return out.str();
+	std::ostringstream out;
+	out.precision (n);
+	out << std::fixed << a_value;
+	return out.str();
 }
 } // namespace gui
 } // namespace pe

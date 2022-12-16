@@ -17,20 +17,20 @@ namespace gui
 class CentralPanel : public juce::Component
 {
 public:
-    CentralPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                  std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                  std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                  std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+CentralPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+              std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
+              std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
+              std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
 
-    void resized() override;
+void resized() override;
 
 private:
-    ClipMeter mClipMeter;
-    ControlPanel mControlPanel;
-    LinkingPanel mLinkingPanel;
-    AnalyserComponent mAnalyserComponent;
+ClipMeter mClipMeter;
+ControlPanel mControlPanel;
+LinkingPanel mLinkingPanel;
+AnalyserComponent mAnalyserComponent;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentralPanel)
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentralPanel)
 };
 } // namespace gui
 } // namespace pe

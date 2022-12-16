@@ -137,5 +137,15 @@
     * - Release
     * - Debug
     */
-    "peakeater.config": "Debug"
+    "peakeater.config": "Debug",
+    "[cpp]": {
+        "editor.defaultFormatter": "zachflower.uncrustify"
+    },
+    "python.linting.pep8Enabled": true,
+    "python.linting.pylintEnabled": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8",
+        "editor.formatOnSave": true
+    },
+    "python.linting.enabled": true
 }

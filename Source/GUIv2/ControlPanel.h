@@ -17,21 +17,21 @@ namespace gui
 class ControlPanel : public juce::Component
 {
 public:
-    ControlPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                  std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                  std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                  std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+ControlPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+              std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
+              std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
+              std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
 
-    void resized() override;
+void resized() override;
 
 private:
-    GainDial mDial_1;
-    Dial mDial_2;
-    CeilingDial mDial_3;
-    Dial mDial_4;
-    GainDial mDial_5;
+GainDial mDial_1;
+Dial mDial_2;
+CeilingDial mDial_3;
+Dial mDial_4;
+GainDial mDial_5;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlPanel)
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlPanel)
 };
 } // namespace gui
 } // namespace pe
