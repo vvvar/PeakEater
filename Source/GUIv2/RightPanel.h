@@ -14,17 +14,17 @@ namespace gui
 class RightPanel : public juce::Component
 {
 public:
-    RightPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+RightPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+            std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
+            std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
+            std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
 
-    void resized() override;
+void resized() override;
 
 private:
-    LevelMeterComponent mLevelMeter;
+LevelMeterComponent mLevelMeter;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RightPanel)
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (RightPanel)
 };
 } // namespace gui
 } // namespace pe
