@@ -16,19 +16,19 @@ namespace gui
 class WorkingPanel : public juce::Component
 {
 public:
-    WorkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                  std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                  std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                  std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+WorkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+              std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
+              std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
+              std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
 
-    void resized() override;
+void resized() override;
 
 private:
-    LeftPanel mLeftPanel;
-    CentralPanel mCentralPanel;
-    RightPanel mRightPanel;
+LeftPanel mLeftPanel;
+CentralPanel mCentralPanel;
+RightPanel mRightPanel;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WorkingPanel)
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WorkingPanel)
 };
 } // namespace gui
 } // namespace pe

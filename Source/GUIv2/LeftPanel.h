@@ -14,18 +14,18 @@ namespace gui
 class LeftPanel : public juce::Component
 {
 public:
-    LeftPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-               std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-               std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-               std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+LeftPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+           std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
+           std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
+           std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
 
-    void resized() override;
-    void paint (juce::Graphics& g) override;
+void resized() override;
+void paint (juce::Graphics& g) override;
 
 private:
-    LevelMeterComponent mLevelMeter;
+LevelMeterComponent mLevelMeter;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LeftPanel)
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LeftPanel)
 };
 } // namespace gui
 } // namespace pe

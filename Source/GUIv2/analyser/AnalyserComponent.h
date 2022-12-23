@@ -14,93 +14,93 @@ namespace pe
 namespace gui
 {
 class AnalyserComponent
-    : public juce::Component
+	: public juce::Component
 {
 public:
-    AnalyserComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                       std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                       std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                       std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
-    ~AnalyserComponent() override;
+AnalyserComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+                   std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
+                   std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
+                   std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
+~AnalyserComponent() override;
 
-    void resized() override;
-    void paint (juce::Graphics& g) override;
-    void drawLevels (float inputLevel,
-                     float outputLevel,
-                     float eatenAmount,
-                     juce::Graphics& g);
+void resized() override;
+void paint (juce::Graphics& g) override;
+void drawLevels (float inputLevel,
+                 float outputLevel,
+                 float eatenAmount,
+                 juce::Graphics& g);
 
-    void mouseDown (juce::MouseEvent const& event) override;
+void mouseDown (juce::MouseEvent const& event) override;
 
 private:
-    class AnalyserTimer : public juce::Timer
-    {
-    public:
-        AnalyserTimer (std::function<void()> callback)
-            : mCallback (callback)
-        {
-        }
+class AnalyserTimer : public juce::Timer
+{
+public:
+AnalyserTimer (std::function<void()> callback)
+	: mCallback (callback)
+{
+}
 
-        void timerCallback() override
-        {
-            if (mCallback)
-            {
-                mCallback();
-            }
-        }
+void timerCallback() override
+{
+	if (mCallback)
+	{
+		mCallback();
+	}
+}
 
-    private:
-        std::function<void()> mCallback;
-    };
+private:
+std::function<void()> mCallback;
+};
 
-    class PeakAnalyzer
-    {
-    public:
-        PeakAnalyzer (int const& sampleRate, float const& minValue)
-            : mMinValue (minValue)
-            , mBufferSize (sampleRate * 2) // 2 seconds of look behind
-        {
-            reset();
-        }
+class PeakAnalyzer
+{
+public:
+PeakAnalyzer (int const& sampleRate, float const& minValue)
+	: mMinValue (minValue)
+	, mBufferSize (sampleRate * 2)     // 2 seconds of look behind
+{
+	reset();
+}
 
-        void push (float const& nextValue)
-        {
-            mBuffer.pop_front();
-            mBuffer.push_back (nextValue);
-        }
+void push (float const& nextValue)
+{
+	mBuffer.pop_front();
+	mBuffer.push_back (nextValue);
+}
 
-        float getMagnitude()
-        {
-            return *std::max_element (mBuffer.begin(), mBuffer.end());
-        }
+float getMagnitude()
+{
+	return *std::max_element (mBuffer.begin(), mBuffer.end());
+}
 
-        void reset()
-        {
-            mBuffer.clear();
-            for (int x = 0; x < mBufferSize; x++)
-            {
-                mBuffer.push_back (mMinValue);
-            }
-        }
+void reset()
+{
+	mBuffer.clear();
+	for (int x = 0; x < mBufferSize; x++)
+	{
+		mBuffer.push_back (mMinValue);
+	}
+}
 
-    private:
-        float mMinValue;
-        int const mBufferSize;
-        std::deque<float> mBuffer;
-    };
+private:
+float mMinValue;
+int const mBufferSize;
+std::deque<float> mBuffer;
+};
 
-    std::shared_ptr<pe::dsp::LevelMeter<float>> mInputLevelMeter;
-    std::shared_ptr<pe::dsp::LevelMeter<float>> mClippingLevelMeter;
-    std::shared_ptr<pe::dsp::LevelMeter<float>> mOutputLevelMeter;
+std::shared_ptr<pe::dsp::LevelMeter<float> > mInputLevelMeter;
+std::shared_ptr<pe::dsp::LevelMeter<float> > mClippingLevelMeter;
+std::shared_ptr<pe::dsp::LevelMeter<float> > mOutputLevelMeter;
 
-    PeakAnalyzer mInputAnalyzer;
-    PeakAnalyzer mOutputAnalyzer;
-    PeakAnalyzer mEatenAnalyzer;
-    AnalyserTimer mAnalyzerUpdateTimer;
+PeakAnalyzer mInputAnalyzer;
+PeakAnalyzer mOutputAnalyzer;
+PeakAnalyzer mEatenAnalyzer;
+AnalyserTimer mAnalyzerUpdateTimer;
 
-    void onAnalyzerUpdateTick();
+void onAnalyzerUpdateTick();
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AnalyserComponent)
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AnalyserComponent)
 };
 } // namespace gui
 } // namespace pe

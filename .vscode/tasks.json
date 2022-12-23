@@ -52,9 +52,9 @@
       "command": "${workspaceFolder}/build/PeakEater_artefacts/${config:peakeater.config}/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
     },
     {
-      "label": "Clang Format",
+      "label": "Pip: Install",
       "type": "shell",
-      "command": "find ${workspaceFolder}/Source/ -iname *.h -o -iname *.cpp | xargs clang-format --dry-run --Werror -i"
+      "command": "python3 -m pip install -r ${workspaceFolder}/requirements.txt"
     }
   ]
 }

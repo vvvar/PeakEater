@@ -11,45 +11,45 @@ namespace gui
 class LevelMeterComponent : public juce::Component
 {
 public:
-    LevelMeterComponent (std::shared_ptr<pe::dsp::LevelMeter<float>> levelMeter, std::string const& name);
-    ~LevelMeterComponent() override;
+LevelMeterComponent (std::shared_ptr<pe::dsp::LevelMeter<float> > levelMeter, std::string const& name);
+~LevelMeterComponent() override;
 
-    void resized() override;
-    void paint (juce::Graphics& g) override;
-    void drawTicks (std::vector<float> const& ticksLevels, juce::Colour&& colour, juce::Graphics& g);
-    void drawTicks (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g);
+void resized() override;
+void paint (juce::Graphics& g) override;
+void drawTicks (std::vector<float> const& ticksLevels, juce::Colour&& colour, juce::Graphics& g);
+void drawTicks (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g);
 
 private:
-    class LevelMeterTimer : public juce::Timer
-    {
-    public:
-        LevelMeterTimer (std::function<void()> callback)
-            : mCallback (callback)
-        {
-        }
+class LevelMeterTimer : public juce::Timer
+{
+public:
+LevelMeterTimer (std::function<void()> callback)
+	: mCallback (callback)
+{
+}
 
-        void timerCallback() override
-        {
-            if (mCallback)
-            {
-                mCallback();
-            }
-        }
+void timerCallback() override
+{
+	if (mCallback)
+	{
+		mCallback();
+	}
+}
 
-    private:
-        std::function<void()> mCallback;
-    };
+private:
+std::function<void()> mCallback;
+};
 
-    std::string mName;
-    LevelMeterTimer mMeterTimer;
-    std::shared_ptr<pe::dsp::LevelMeter<float>> mLevelMeter;
-    juce::NormalisableRange<float> mRange;
-    juce::LinearSmoothedValue<float> mSmoothedGain;
-    juce::Label mLabel;
+std::string mName;
+LevelMeterTimer mMeterTimer;
+std::shared_ptr<pe::dsp::LevelMeter<float> > mLevelMeter;
+juce::NormalisableRange<float> mRange;
+juce::LinearSmoothedValue<float> mSmoothedGain;
+juce::Label mLabel;
 
-    void onTimerTick();
+void onTimerTick();
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LevelMeterComponent)
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LevelMeterComponent)
 };
 } // namespace gui
 } // namespace pe

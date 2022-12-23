@@ -1,5 +1,4 @@
 from os import system, mkdir, name
-from subprocess import check_output
 from pathlib import Path
 from enum import Enum
 from shutil import rmtree, copytree
@@ -7,22 +6,24 @@ from shutil import rmtree, copytree
 VERBOSE_LOGGING = True
 
 
-def logInfo(*args, **kwargs):
+def log_info(*args, **kwargs):
+    """Log to info channel"""
     print(*args, **kwargs)
 
 
-def logVerbose(*args, **kwargs):
+def log_verbose(*args, **kwargs):
+    """Log to verbose channel"""
     if VERBOSE_LOGGING:
         print(*args, **kwargs)
 
 
-def isWindows() -> bool:
+def is_windows() -> bool:
+    """Check is OS Windows"""
     return name == 'nt'
-
-# Represents relese type later used for arguments parsing
 
 
 class ReleaseType(Enum):
+    """Represents relese type later used for arguments parsing"""
     debug = 'Debug'
     release = 'Release'
 
@@ -35,98 +36,96 @@ class ReleaseType(Enum):
     def __radd__(self, other):
         return other + self.value
 
-# Executes provided shell command
+
+def exec_command(command: str) -> None:
+    """Executes provided shell command"""
+    log_verbose("Executing command: " + command)
+    log_info(system(command))
 
 
-def execCommand(command: str) -> None:
-    logVerbose("Executing command: " + command)
-    logInfo(system(command))
-    # logInfo(check_output(command, shell=True).decode())
-
-
-def getProjectRootDirPath() -> Path:
+def get_project_root_dir_path() -> Path:
+    """Get path to project root"""
     path = Path(__file__).parent.parent.parent.resolve()
-    logVerbose("Project root dir: " + str(path))
+    log_verbose("Project root dir: " + str(path))
     return path
 
 
-def getProjectReleaseAssetsDirPath() -> Path:
-    path = getProjectRootDirPath().joinpath("Scripts/Release/assets").resolve()
-    logVerbose("Project release assets dir path: " + str(path))
+def get_project_release_assets_dir_path() -> Path:
+    """Get path to project assets dir"""
+    path = get_project_root_dir_path().joinpath("Scripts/Release/assets").resolve()
+    log_verbose("Project release assets dir path: " + str(path))
     return path
 
 
-def getProjectReleaseConfigsDirPath() -> Path:
-    path = getProjectRootDirPath().joinpath("Scripts/Release/configs").resolve()
-    logVerbose("Project release configs dir path: " + str(path))
+def get_project_release_configs_dir_path() -> Path:
+    """Get path to project config dir"""
+    path = get_project_root_dir_path().joinpath("Scripts/Release/configs").resolve()
+    log_verbose("Project release configs dir path: " + str(path))
     return path
 
-# Returns path to project's build dir
 
-
-def getBuildDirPath() -> Path:
-    path = getProjectRootDirPath().joinpath("build").resolve()
-    logVerbose("Project build dir: " + str(path))
+def get_build_dir_path() -> Path:
+    """Returns path to project's build dir"""
+    path = get_project_root_dir_path().joinpath("build").resolve()
+    log_verbose("Project build dir: " + str(path))
     return path
 
-# Returns path AU bin that was build
 
-
-def getBuildAUDirPath(releaseType: ReleaseType) -> Path:
-    path = getBuildDirPath().joinpath(
-        "PeakEater_artefacts/" + releaseType + "/AU").resolve()
-    logVerbose("AU build dir: " + str(path))
+def get_build_au_dir_path(release_type: ReleaseType) -> Path:
+    """Returns path AU bin that was build"""
+    path = get_build_dir_path().joinpath(
+        "PeakEater_artefacts/" + release_type + "/AU").resolve()
+    log_verbose("AU build dir: " + str(path))
     return path
 
-# Returns path VST3 bin that was build
 
-
-def getBuildVST3DirPath(releaseType: ReleaseType) -> Path:
-    path = getBuildDirPath().joinpath("PeakEater_artefacts/" +
-                                      releaseType + "/VST3").resolve()
-    if isWindows():
+def get_build_vst3_dir_path(release_type: ReleaseType) -> Path:
+    """Returns path VST3 bin that was build"""
+    path = get_build_dir_path().joinpath("PeakEater_artefacts/" +
+                                         release_type + "/VST3").resolve()
+    if is_windows():
         path = path.joinpath("PeakEater.vst3/Contents/x86_64-win/").resolve()
-    logVerbose("VST3 build dir: " + str(path))
+    log_verbose("VST3 build dir: " + str(path))
     return path
 
-# Get path to temp dir
 
-
-def getTmpDirPath() -> Path:
-    path = getBuildDirPath().joinpath("__tmp__").resolve()
-    logVerbose("tmp build dir: " + str(path))
+def get_tmp_dir_path() -> Path:
+    """Get path to temp dir"""
+    path = get_build_dir_path().joinpath("__tmp__").resolve()
+    log_verbose("tmp build dir: " + str(path))
     return path
 
-# Get path to release artifacts dir
 
-
-def getReleaseDirPath() -> Path:
-    path = getBuildDirPath().joinpath("release").resolve()
-    logVerbose("Release articats dir: " + str(path))
+def get_release_dir_path() -> Path:
+    """Get path to release artifacts dir"""
+    path = get_build_dir_path().joinpath("release").resolve()
+    log_verbose("Release articats dir: " + str(path))
     return path
 
-# Ensures that dor exists and empty
 
-
-def ensureDirEmpty(path: Path) -> None:
-    if (path.exists()):
+def ensure_dir_empty(path: Path) -> None:
+    """Ensures that dor exists and empty"""
+    if path.exists():
         rmtree(path)
     mkdir(path)
 
 
-def rmDir(path: Path) -> None:
-    if (path.exists()):
+def rm_dir(path: Path) -> None:
+    """Remove dir by specified path"""
+    if path.exists():
         rmtree(path)
 
 
-def copyDirContentRecursive(src: Path, dst: Path) -> None:
+def copy_dir_content_recursive(src: Path, dst: Path) -> None:
+    """Copies content of dir with all subcontent"""
     copytree(src=src, dst=dst, dirs_exist_ok=True)
 
-def createPath(src: str, sanitize: bool = True) -> Path:
-    return Path(src).resolve()
-    # if sanitize:
-    #     path = sanitizePath(path)
-    # return path
 
-def sanitizePath(path: Path) -> Path:
-    return Path(str(path).replace(" ", "\\")).resolve() 
+def create_path(src: str) -> Path:
+    """Construct Path from str"""
+    return Path(src).resolve()
+
+
+def sanitize_path(path: Path) -> Path:
+    """Removes all special characters from path"""
+    return Path(str(path).replace(" ", "\\")).resolve()
