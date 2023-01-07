@@ -41,7 +41,7 @@
     {
       "label": "Create release package",
       "type": "shell",
-      "command": "python3 ${workspaceFolder}/Scripts/Release/MacOS.py --release_type=${config:peakeater.config}",
+      "command": "python3 ${workspaceFolder}/Scripts/Release/MacOS.py --release_type=${config:peakeater.config} --sign_and_notarize=True",
       "windows": {
         "command": "python ${workspaceFolder}/Scripts/Release/Windows.py --release_type=${config:peakeater.config}"
       }

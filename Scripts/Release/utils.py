@@ -3,7 +3,7 @@ from pathlib import Path
 from enum import Enum
 from shutil import rmtree, copytree
 
-VERBOSE_LOGGING = True
+VERBOSE_LOGGING = False
 
 
 def log_info(*args, **kwargs):
