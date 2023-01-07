@@ -27,6 +27,8 @@ jobs:
           which node
           npm --version
           which npm
+      - name: Install Python Dependencies
+        run: python -m pip install -r ${{github.workspace}}/requirements.txt 
       - name: Init Git Submodules
         run: git submodule update --init --recursive
       - name: Checkout JUCE

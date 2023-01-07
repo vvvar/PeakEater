@@ -54,6 +54,8 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+      - name: Install Python Dependencies
+        run: python -m pip install -r ${{github.workspace}}/requirements.txt 
       - name: Init Git Submodules
         run: git submodule update --init --recursive
       - name: Checkout JUCE
