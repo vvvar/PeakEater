@@ -5,6 +5,7 @@ env:
   BUILD_TYPE: Release
   VST_TARGET_NAME: PeakEater_VST3
   AU_TARGET_NAME: PeakEater_AU
+  CLAP_TARGET_NAME: PeakEater_CLAP
   JUCE_REVISION: 2f98020
   BUILD_ID: '${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}'
 jobs:
@@ -59,6 +60,8 @@ jobs:
         run: cmake . -B ${{github.workspace}}\build -G 'Visual Studio 17 2022' -A x64 -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
         run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
+      - name: Build CLAP
+        run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
