@@ -4,19 +4,27 @@ Create DMG Image(for MacOS) that contains release artifacts.
 """
 import argparse
 import utils
+from os import environ
+from dotenv import load_dotenv
 
-# Parse input arguments
+# Read env variables
+load_dotenv()
+
+# Read input arguments
 argument_parser = argparse.ArgumentParser()
 argument_parser.add_argument('--release_type',
                              type=utils.ReleaseType, default=utils.ReleaseType.release,
                              choices=list(utils.ReleaseType),
                              help='Type of release package, e.g. Release or Debug')
+argument_parser.add_argument('--sign_and_notarize',
+                             type=bool,
+                             default=False,
+                             help='Sign all binaries and notarize disk image')
 argument_parser.add_argument('--preserve_tmp',
                              type=bool,
                              default=False,
                              help='Preserve temp dir after script executed')
 args = argument_parser.parse_args()
-
 # Print arguments
 utils.log_verbose("Arguments: ", args)
 
@@ -42,12 +50,30 @@ utils.copy_dir_content_recursive(
 utils.copy_dir_content_recursive(
     utils.get_project_release_configs_dir_path(), TMP_DIR_PATH)
 
-# Create DMG
+if args.sign_and_notarize:
+    # Code-sign binaries
+    utils.exec_command(
+        f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {str(TMP_DIR_PATH) + '/PeakEater.vst3'} --deep --strict --options=runtime --timestamp")
+    utils.exec_command(
+        f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {str(TMP_DIR_PATH) + '/PeakEater.component'} --deep --strict --options=runtime --timestamp")
+
+# Create .dmg
 utils.log_info("Creating release image...")
 APP_DMG_CONFIG_FILE_PATH = str(TMP_DIR_PATH) + "/appdmg-config.json"
 OUTPUT_DMG_FILE_PATH = str(RELEASE_DIR_PATH) + "/PeakEater.dmg"
 utils.exec_command("appdmg " + APP_DMG_CONFIG_FILE_PATH +
                    " " + OUTPUT_DMG_FILE_PATH)
+
+if args.sign_and_notarize:
+    # Code-sign .dmg
+    utils.exec_command(
+        f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {OUTPUT_DMG_FILE_PATH} --deep --strict --timestamp")
+    # Notarize .dmg
+    utils.exec_command(
+        f"xcrun notarytool submit {OUTPUT_DMG_FILE_PATH} --apple-id {environ.get('MACOS_APPLE_ID')} --password {environ.get('MACOS_APPLE_PASSWORD')} --team-id {environ.get('MACOS_APPLE_TEAM_ID')} --wait")
+
+# Staple .dmg
+utils.exec_command(f"xcrun stapler staple {OUTPUT_DMG_FILE_PATH}")
 
 # Conditionally, cleanup tmp
 if not args.preserve_tmp:
