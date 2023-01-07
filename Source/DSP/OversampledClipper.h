@@ -9,6 +9,8 @@
  */
 #pragma once
 
+#include <cmath>
+
 #include <juce_dsp/juce_dsp.h>
 
 #include "Clipper.h"

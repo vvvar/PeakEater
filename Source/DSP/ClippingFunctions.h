@@ -11,6 +11,7 @@
 
 #include <juce_dsp/juce_dsp.h>
 #include <math.h>
+#include <cmath>
 
 #include "Helpers.h"
 
