@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 project(PeakEater VERSION 0.3.2)
 
 add_subdirectory(Dependencies/JUCE)
+add_subdirectory(Dependencies/clap-juce-extensions EXCLUDE_FROM_ALL) 
 
 juce_add_plugin(PeakEater
     PLUGIN_MANUFACTURER_CODE Tado
@@ -55,6 +56,10 @@ juce_add_binary_data(AudioPluginData SOURCES
     Resources/WalkwayUpperBold.ttf)
 
 juce_generate_juce_header(PeakEater)
+
+clap_juce_extensions_plugin(TARGET PeakEater
+    CLAP_ID "com.T-Audio.peakeater"
+    CLAP_FEATURES audio-effect)
 
 target_link_libraries(PeakEater
     PRIVATE
