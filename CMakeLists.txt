@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(PeakEater VERSION 0.3.0)
+project(PeakEater VERSION 0.3.1)
 
 add_subdirectory(Dependencies/JUCE)
 
@@ -7,6 +7,7 @@ juce_add_plugin(PeakEater
     PLUGIN_MANUFACTURER_CODE Tado
     PLUGIN_CODE Tape
     FORMATS AU VST3 Standalone
+    HARDENED_RUNTIME_ENABLED True
     COMPANY_NAME "T-Audio"
     PRODUCT_NAME "PeakEater")
 
