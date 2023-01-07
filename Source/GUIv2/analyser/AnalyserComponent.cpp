@@ -1,4 +1,7 @@
 #include "AnalyserComponent.h"
+
+#include <JuceHeader.h>
+
 #include "../Utils.h"
 
 namespace pe
@@ -113,6 +116,11 @@ void AnalyserComponent::mouseDown (juce::MouseEvent const& event)
 		mOutputAnalyzer.reset();
 		mEatenAnalyzer.reset();
 		repaint();
+	} else if (event.getNumberOfClicks() == 4) // Only for debug, to show current version
+	{
+		std::string const lModalBoxTitle = std::string(ProjectInfo::projectName) + " by " + std::string(ProjectInfo::companyName);
+		std::string const lModalBoxText = "Version: " + std::string(ProjectInfo::versionString);
+		juce::NativeMessageBox::showMessageBoxAsync(juce::AlertWindow::InfoIcon, lModalBoxTitle, lModalBoxText, nullptr, nullptr);
 	}
 }
 
