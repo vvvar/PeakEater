@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
-project(PeakEater VERSION 0.3.3)
+project(PeakEater VERSION 0.3.4)
+set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(Dependencies/JUCE)
 add_subdirectory(Dependencies/clap-juce-extensions EXCLUDE_FROM_ALL) 
@@ -7,7 +8,10 @@ add_subdirectory(Dependencies/clap-juce-extensions EXCLUDE_FROM_ALL)
 juce_add_plugin(PeakEater
     PLUGIN_MANUFACTURER_CODE Tado
     PLUGIN_CODE Tape
-    FORMATS AU VST3 Standalone
+    LV2URI "https://github.com/vvvar/PeakEater"
+    FORMATS AU VST3 LV2 Standalone
+    VST3_CATEGORIES Fx Distortion Dynamics
+    AU_MAIN_TYPE kAudioUnitType_Effect
     HARDENED_RUNTIME_ENABLED True
     COMPANY_NAME "T-Audio"
     PRODUCT_NAME "PeakEater")

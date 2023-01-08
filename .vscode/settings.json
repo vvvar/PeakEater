@@ -109,7 +109,7 @@
     /**
     * Commit of JUCE to checkout
     */
-    "peakeater.juce_version": "2f98020",
+    "peakeater.juce_version": "4e68af7",
     /**
     * Number of cores to use while build.
     */
