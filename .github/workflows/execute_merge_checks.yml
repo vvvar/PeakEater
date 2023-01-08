@@ -42,7 +42,7 @@ jobs:
       - name: Build AU
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.AU_TARGET_NAME}}
       - name: Build CLAP
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.PeakEater_CLAP}}
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
       - name: Build LV2
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
       - name: Package
