@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(PeakEater VERSION 0.3.2)
+project(PeakEater VERSION 0.3.3)
 
 add_subdirectory(Dependencies/JUCE)
 add_subdirectory(Dependencies/clap-juce-extensions EXCLUDE_FROM_ALL) 
