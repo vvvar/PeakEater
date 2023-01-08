@@ -55,6 +55,9 @@ juce_add_binary_data(AudioPluginData SOURCES
     Resources/logo_plugin.png
     Resources/WalkwayUpperBold.ttf)
 
+set_target_properties(AudioPluginData PROPERTIES
+    POSITION_INDEPENDENT_CODE ON)
+
 juce_generate_juce_header(PeakEater)
 
 clap_juce_extensions_plugin(TARGET PeakEater
