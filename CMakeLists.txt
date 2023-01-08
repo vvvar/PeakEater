@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(PeakEater VERSION 0.3.2)
+project(PeakEater VERSION 0.3.3)
 
 add_subdirectory(Dependencies/JUCE)
 add_subdirectory(Dependencies/clap-juce-extensions EXCLUDE_FROM_ALL) 
@@ -54,6 +54,9 @@ juce_add_binary_data(AudioPluginData SOURCES
     Resources/logo_full.png
     Resources/logo_plugin.png
     Resources/WalkwayUpperBold.ttf)
+
+set_target_properties(AudioPluginData PROPERTIES
+    POSITION_INDEPENDENT_CODE ON)
 
 juce_generate_juce_header(PeakEater)
 
