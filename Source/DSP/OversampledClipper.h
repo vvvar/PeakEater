@@ -9,6 +9,8 @@
  */
 #pragma once
 
+#include <cmath>
+
 #include <juce_dsp/juce_dsp.h>
 
 #include "Clipper.h"
@@ -121,14 +123,14 @@ double calculateQ (float octaves) const noexcept
 {
 	jassert (octaves >= 0.0f & octaves <= 4); // maximum 4 octaves allowed, no negative octaves
 
-	return 1.0f / std::sqrtf (octaves);
+	return 1.0f / sqrtf (octaves);
 }
 
 //==============================================================================
 /** Helper builders */
 const ProcessorSpec createOversampledSpec (ProcessorSpec const& src) const noexcept
 {
-	const unsigned int xOversample = static_cast<unsigned int> (std::sqrt (oversampler.getOversamplingFactor()));
+	const unsigned int xOversample = static_cast<unsigned int> (sqrt (oversampler.getOversamplingFactor()));
 	return { src.sampleRate * xOversample, src.maximumBlockSize * xOversample, src.numChannels };
 }
 
