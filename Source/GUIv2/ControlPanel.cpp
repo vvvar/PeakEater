@@ -1,5 +1,7 @@
 #include "ControlPanel.h"
 
+#include "ColourScheme.h"
+
 namespace pe
 {
 namespace gui
@@ -22,6 +24,13 @@ ControlPanel::ControlPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> 
 	addAndMakeVisible (mDial_5);
 }
 
+void ControlPanel::paint (juce::Graphics& g)
+{
+	g.setColour(colourscheme::BackgroundSecondary);
+	auto bounds = getLocalBounds().toFloat();
+	g.fillRoundedRectangle(bounds, 5);
+}
+
 void ControlPanel::resized()
 {
 	juce::Grid grid;
@@ -31,7 +40,12 @@ void ControlPanel::resized()
 	grid.templateRows = { Track (Fr (1)) };
 	grid.templateColumns = { Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)), Track (Fr (1)) };
 	grid.items = { Item (mDial_1), Item (mDial_2), Item (mDial_3), Item (mDial_4), Item (mDial_5) };
-	grid.performLayout (getLocalBounds());
+	auto bounds = getLocalBounds();
+	bounds.removeFromTop(5);
+	bounds.removeFromLeft(10);
+	bounds.removeFromRight(10);
+	bounds.removeFromBottom(10);
+	grid.performLayout (bounds);
 }
 } // namespace gui
 } // namespace pe

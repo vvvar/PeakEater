@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 
 #include "../Utils.h"
+#include "../ColourScheme.h"
 
 namespace pe
 {
@@ -70,21 +71,21 @@ void AnalyserComponent::drawLevels (float inputLevel,
 	auto const fontSize = calculatePrimaryTextSize (getTopLevelComponent()->getBounds().getWidth(), getTopLevelComponent()->getBounds().getHeight());
 	auto const newlinePadding = fontSize * 0.5f;
 
-	juce::Colour borderColor (juce::Colours::grey);
-	juce::Colour backgroundColor (juce::Colours::grey.withAlpha (0.4f));
-	juce::Colour textColor (juce::Colours::white);
+	juce::Colour borderColor = colourscheme::BackgroundSecondary;
+	juce::Colour backgroundColor = colourscheme::BackgroundSecondary;
+	juce::Colour textColor = colourscheme::TextFocusLevel0;
 	if (!isEnabled())
 	{
-		borderColor = borderColor.withAlpha (0.5f);
-		backgroundColor = backgroundColor.withAlpha (0.5f);
-		textColor = textColor.withAlpha (0.5f);
+		// borderColor = borderColor.withAlpha (0.5f);
+		// backgroundColor = backgroundColor.withAlpha (0.5f);
+		textColor = colourscheme::TextFocusLevel3;
 	}
 
 	const juce::Rectangle<float> area (poxX, posY, boxWidth, boxHeight);
 	g.setColour (backgroundColor);
 	g.fillRoundedRectangle (area, gBorderRadius);
-	g.setColour (borderColor);
-	g.drawRoundedRectangle (area, gBorderRadius, gBorderWidth);
+	// g.setColour (borderColor);
+	// g.drawRoundedRectangle (area, gBorderRadius, gBorderWidth);
 
 	std::string const inputLevelText = "Input: " + gToStringWithPrecision (gRoundDb (inputLevel), 1) + " dB";
 	std::string const outLevelText = "Output: " + gToStringWithPrecision (gRoundDb (outputLevel), 1) + " dB";
@@ -95,11 +96,11 @@ void AnalyserComponent::drawLevels (float inputLevel,
 	g.drawText (outLevelText, poxX + newlinePadding, posY + newlinePadding + fontSize + newlinePadding, boxWidth, fontSize, juce::Justification::left, true);
 	if (gIsInBounds (eatenAmount, 5.0f, 10.0f))
 	{
-		g.setColour (juce::Colours::yellow);
+		g.setColour (colourscheme::Warning);
 	}
 	else if (gIsInBounds (eatenAmount, 10.0f, std::numeric_limits<float>::max()))
 	{
-		g.setColour (juce::Colour (233, 69, 96));
+		g.setColour (colourscheme::ForegroundSecondary);
 	}
 	else
 	{

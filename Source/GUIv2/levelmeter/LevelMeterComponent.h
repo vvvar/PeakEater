@@ -16,8 +16,8 @@ LevelMeterComponent (std::shared_ptr<pe::dsp::LevelMeter<float> > levelMeter, st
 
 void resized() override;
 void paint (juce::Graphics& g) override;
-void drawTicks (std::vector<float> const& ticksLevels, juce::Colour&& colour, juce::Graphics& g);
-void drawTicks (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g);
+void drawTicks (std::vector<float> const& ticksLevels, juce::Colour const&& colour, juce::Graphics& g);
+void drawTicks (std::vector<float> const& ticksLevels, juce::Colour const& colour, juce::Graphics& g);
 
 private:
 class LevelMeterTimer : public juce::Timer

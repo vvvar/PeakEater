@@ -1,6 +1,8 @@
 #include "LevelMeterComponent.h"
 
 #include "../Utils.h"
+#include "../ColourScheme.h"
+
 #include <juce_graphics/juce_graphics.h>
 #include <stdint.h>
 
@@ -87,34 +89,33 @@ void LevelMeterComponent::resized()
 
 void LevelMeterComponent::paint (juce::Graphics& g)
 {
-	g.fillAll (juce::Colour (22, 33, 62));
-
-	drawTicks ({ 0.0f, -3.0f, -5.0f, -8.0f, -11.0f, -14.0f, -17.0f, -20.0f, -23.0f, -26.0f, -29.0f, -32.0f, -36.0f }, juce::Colour (15, 52, 96), g);
+	g.fillAll (colourscheme::BackgroundPrimary);
 
 	auto const bounds = getLocalBounds();
 	auto const width = static_cast<float> (bounds.getWidth());
 	auto const height = static_cast<float> (bounds.getHeight());
 
-	//mSmoothedGain.skip (1);
-	// mSmoothedGain.setTargetValue (mLevelMeter->getDecibels());
 	auto const dB = smoothDbValue (mLevelMeter->getDecibels(), mSmoothedGain);
 	auto const poxY = gDbToYPos (dB, height);
 	auto const poxX = 0.0f;
 
-	// g.setColour (juce::Colour (233, 69, 96));
 	const juce::Point<float> gradientPoint1 = { 0.0f, static_cast<float> (bounds.getBottom()) };
 	const juce::Point<float> gradientPoint2 = { 0.0f, static_cast<float> (bounds.getY()) };
-	const juce::ColourGradient gradient (juce::Colour (22, 33, 62).withAlpha (0.8f), gradientPoint1, juce::Colour (233, 69, 96).withAlpha (0.8f), gradientPoint2, false);
+	juce::ColourGradient gradient (colourscheme::ForegroundPrimary, gradientPoint1, colourscheme::ForegroundSecondary, gradientPoint2, false);
+	gradient.addColour(0.8, colourscheme::ForegroundSecondary);
 	g.setGradientFill (gradient);
 	g.fillRect (poxX, poxY, width, height - poxY);
 
-	juce::Colour dbValueTextColour (juce::Colours::white.withAlpha (0.8f));
-	juce::Colour nameTextClour (juce::Colour (233, 69, 96));
+	juce::Colour dbValueTextColour = colourscheme::TextFocusLevel2;
+	juce::Colour nameTextClour = colourscheme::TextFocusLevel2;
 	if (!isEnabled())
 	{
 		dbValueTextColour = dbValueTextColour.withAlpha (0.5f);
 		nameTextClour = nameTextClour.withAlpha (0.5f);
 	}
+
+	// Draw level ticks
+	drawTicks ({ 0.0f, -3.0f, -5.0f, -8.0f, -11.0f, -14.0f, -17.0f, -20.0f, -23.0f, -26.0f, -29.0f, -32.0f, -36.0f }, colourscheme::TextFocusLevel3, g);
 
 	// Draw dB value
 	auto const padding = 15.0f;
@@ -130,12 +131,12 @@ void LevelMeterComponent::paint (juce::Graphics& g)
 	g.drawText (mName, 0.0f, 0.0f, width, height - padding, juce::Justification::centredBottom, true);
 }
 
-void LevelMeterComponent::drawTicks (std::vector<float> const& ticksLevels, juce::Colour&& colour, juce::Graphics& g)
+void LevelMeterComponent::drawTicks (std::vector<float> const& ticksLevels, juce::Colour const&& colour, juce::Graphics& g)
 {
 	drawTicks (ticksLevels, colour, g);
 }
 
-void LevelMeterComponent::drawTicks (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g)
+void LevelMeterComponent::drawTicks (std::vector<float> const& ticksLevels, juce::Colour const& colour, juce::Graphics& g)
 {
 	auto const bounds = getBounds();
 	auto const height = static_cast<float> (bounds.getHeight());

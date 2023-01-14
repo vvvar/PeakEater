@@ -86,13 +86,13 @@ Ticks mTicks;
 
 void onTimerTick();
 
-void drawBuffer (std::deque<float>& buffer, juce::Colour& colour, juce::Graphics& g);
-void drawBuffer (std::deque<float>& buffer, juce::Colour&& colour, juce::Graphics& g);
-void drawDbLine (float const& dB, juce::Colour& colour, juce::Graphics& g);
+void drawBuffer (std::deque<float>& buffer, juce::Colour const& colour, juce::Graphics& g);
+void drawBuffer (std::deque<float>& buffer, juce::Colour const&& colour, juce::Graphics& g);
+void drawDbLine (float const& dB, juce::Colour const& colour, juce::Graphics& g);
 
-void drawTicks (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g);
-void drawTicks (std::vector<float> const& ticksLevels, juce::Colour&& colour, juce::Graphics& g);
-void drawTicksTexts (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g);
+void drawTicks (std::vector<float> const& ticksLevels, juce::Colour const& colour, juce::Graphics& g);
+void drawTicks (std::vector<float> const& ticksLevels, juce::Colour const&& colour, juce::Graphics& g);
+void drawTicksTexts (std::vector<float> const& ticksLevels, juce::Colour const& colour, juce::Graphics& g);
 
 void mouseDown (juce::MouseEvent const& event) override;
 
