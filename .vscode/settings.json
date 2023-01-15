@@ -129,7 +129,7 @@
     * - UnitTestRunner
     * - all(build all above targets)
     */
-    "peakeater.target": "PeakEater_CLAP",
+    "peakeater.target": "PeakEater_All",
     /**
     * CMake build configuration.
     * Note: If changed, clear re-build is required.
