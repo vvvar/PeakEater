@@ -31,7 +31,7 @@ ControlPanel::ControlPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> 
 
 void ControlPanel::paint (juce::Graphics& g)
 {
-	g.setColour(colourscheme::BackgroundSecondary);
+	g.setColour(colourscheme::BackgroundSecondary.withAlpha(0.9f));
 	auto bounds = getLocalBounds().toFloat().reduced(gBorderWith);
 	g.fillRoundedRectangle(bounds, gBorderRadius);
 	g.setColour (colourscheme::BackgroundTertiary.withAlpha(0.5f));

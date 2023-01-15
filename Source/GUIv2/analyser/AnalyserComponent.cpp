@@ -72,7 +72,7 @@ void AnalyserComponent::drawLevels (float inputLevel,
 	auto const newlinePadding = fontSize * 0.7f;
 
 	juce::Colour borderColor = colourscheme::BackgroundSecondary;
-	juce::Colour backgroundColor = colourscheme::BackgroundSecondary;
+	juce::Colour backgroundColor = colourscheme::BackgroundSecondary.withAlpha(0.9f);
 	juce::Colour textColor = colourscheme::TextFocusLevel0;
 	if (!isEnabled())
 	{
