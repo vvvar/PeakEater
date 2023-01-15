@@ -1,60 +1,59 @@
 {
   "title": "PeakEater v0.3.4",
-  "icon": "icon.icns",
-  "background": "background.png",
+  "icon": "icon-mac.icns",
   "format": "ULFO",
   "window": {
     "size": {
-      "width": 600,
-      "height": 400
+      "width": 575,
+      "height": 365
     }
   },
   "contents": [
     {
-      "x": 125,
-      "y": 160,
+      "x": 100,
+      "y": 75,
       "type": "file",
       "path": "PeakEater.vst3"
     },
     {
-      "x": 250,
-      "y": 160,
+      "x": 225,
+      "y": 75,
       "type": "file",
       "path": "PeakEater.component"
     },
     {
-      "x": 375,
-      "y": 160,
+      "x": 350,
+      "y": 75,
       "type": "file",
       "path": "PeakEater.lv2"
     },
     {
-      "x": 500,
-      "y": 160,
+      "x": 475,
+      "y": 75,
       "type": "file",
       "path": "PeakEater.clap"
     },
     {
-      "x": 125,
-      "y": 320,
+      "x": 100,
+      "y": 245,
       "type": "link",
       "path": "/Library/Audio/Plug-Ins/VST3"
     },
     {
-      "x": 250,
-      "y": 320,
+      "x": 225,
+      "y": 245,
       "type": "link",
       "path": "/Library/Audio/Plug-Ins/Components"
     },
     {
-      "x": 375,
-      "y": 320,
+      "x": 350,
+      "y": 245,
       "type": "link",
       "path": "/Library/Audio/Plug-Ins/LV2"
     },
     {
-      "x": 500,
-      "y": 320,
+      "x": 475,
+      "y": 245,
       "type": "link",
       "path": "/Library/Audio/Plug-Ins/CLAP"
     }
