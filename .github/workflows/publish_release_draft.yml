@@ -81,12 +81,6 @@ jobs:
         with:
           name: PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}}
           path: ${{github.workspace}}/build/release/PeakEater.dmg
-      - uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          draft: true
-          tag: v${{env.VERSION}}
-          artifacts: "PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}}.zip"
 
   windows:
     name: Windows
@@ -150,9 +144,30 @@ jobs:
             build/PeakEater_artefacts/VST3/PeakEater.vst3/Contents/x86_64-linux/PeakEater.so
             build/PeakEater_artefacts/LV2/PeakEater.lv2
             build/PeakEater_artefacts/CLAP/PeakEater.clap
+
+  release:
+    name: Publish Release v${{env.VERSION}} Draft 
+    runs-on: ubuntu-latest
+    needs: [macos, windows, linux]
+    steps:
+      - name: Download macOS Artefact
+        uses: bettermarks/action-artifact-download
+        with:
+          artifact_name: "PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Download Windows Artefact
+        uses: bettermarks/action-artifact-download
+        with:
+          artifact_name: "PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Download Linux Artefact
+        uses: bettermarks/action-artifact-download
+        with:
+          artifact_name: "PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
           draft: true
           tag: v${{env.VERSION}}
-          artifacts: "PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}.zip"
+          artifacts: "PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}},PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}},PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}.zip"
