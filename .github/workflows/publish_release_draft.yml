@@ -75,6 +75,11 @@ jobs:
       - name: Build LV2
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
       - name: Package
+        env:
+          MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
+          MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
+          MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
+          MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
         run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --sign_and_notarize=True
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
