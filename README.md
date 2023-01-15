@@ -16,7 +16,23 @@
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#about">About</a></li>
-    <li><a href="#features">Features</a></li>
+    <li>
+      <a href="#features">Features</a>
+      <ul>
+        <li><a href="#input-&-output-rms-meters">Input/Output RMS Meters</a></li>
+        <li><a href="#input-&-output-gain">Input & Output Gain</a></li>
+        <li><a href="#link-input-with-output">Link Input with Output</a></li>
+        <li><a href="#ceiling-control">Ceiling control</a></li>
+        <li><a href="#visualizer">Visualizer</a></li>
+        <li><a href="#analyzer">Analyzer</a></li>
+        <li><a href="#6-clipping-types">6 Clipping Types</a></li>
+        <li><a href="#oversampling">Oversampling</a></li>
+        <li><a href="#bypass-mode">Bypass mode</a></li>
+        <li><a href="#resizing">Resizing</a></li>
+        <li><a href="#vst3-au-lv2-and-clap-support">VST3, AU, LV2 and CLAP Support</a></li>
+        <li><a href="#available-on-all-major-platforms">macOS, Windows and Linux Support</a></li>
+      </ul>
+    </li>
     <li><a href="#installation">Installation</a></li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -41,7 +57,7 @@ PeakEater is a free, easy to use waveshaping plugin. PeakEater lets you choose b
 
 ## Features
 
-### Input/Output RMS Meters
+### Input & Output RMS Meters
 
 <img src="Resources/screenshots/screenshot-in.png" alt="input-rms-screen" height="250"/><---><img src="Resources/screenshots/screenshot-out.png" alt="output-rms-screen" height="250"/>
 
@@ -53,7 +69,7 @@ See the RMS of signal before and after plugin.
 
 Adjusts gain level before and after processing. Input Gain is useful when you're either working with too quiet or too loud signal and Output Gain can be helpful to compensate loss of gain.
 
-### Link Input Gain with Output Gain
+### Link Input with Output
 
 <img src="Resources/screenshots/screenshot-link.png" alt="link-in-out" height="100"/>
 
@@ -65,13 +81,13 @@ Use linking to automatically set the Output Gain level to the opposite of the In
 
 Control your ceiling. Everything above this level would be "eaten". Build-in RMS meter would show you signal level that comes into clipper and help you set threshold.
 
-### Clipping visualizer
+### Visualizer
 
 <img src="Resources/screenshots/screenshot-clip-visualizer.png" alt="clip-visualizer" height="100"/>
 
 See how your peaks were eaten with visualizer.
 
-### Clipping Analyzer
+### Analyzer
 
 <img src="Resources/screenshots/screenshot-analyzer.png" alt="clip-analyzer" height="100"/>
 
@@ -117,19 +133,23 @@ Drag the corner to change the size of the window.
 
 ### VST3, AU, LV2 and CLAP support
 
-You can use either VST3, AU(macOS only), LV2 or CLAP type of plugin on macOS, Windows and Linux.
+<img src="Resources/vendorIcons/vst3.png" alt="vst3" height="50"/> <img src="Resources/vendorIcons/audio-units.png" alt="au" height="50"/> <img src="Resources/vendorIcons/lv2.png" alt="lv2" height="50"/> <img src="Resources/vendorIcons/clap.png" alt="clap" height="50"/>
 
-> **Note** LV2 and CLAP support is experimental and may be unstable.
+You can use either VST3, AU(macOS only), LV2 or CLAP type of plugin.
 
-> **Note** CLAP support is provided by [clap-juce-extensions](https://github.com/free-audio/clap-juce-extensions).
+> **Warning** LV2 and CLAP support is experimental and may be unstable.
 
-> **Note** Linux support is experimental and may be unstable.
+### Available on all major platforms
+
+<img src="Resources/vendorIcons/macOS.png" alt="macOS" height="30"/> <img src="Resources/vendorIcons/windows.png" alt="windows" height="30"/> <img src="Resources/vendorIcons/linux.png" alt="linux" height="30"/>
+
+You can use it on macOS, Windows or Linux.
+
+> **Warning** Linux support is experimental and may be unstable.
 
 <!-- INSTALLATION -->
 
 ## Installation
-
-> **Note** LV2 and CLAP formats are experimental features and may be unstable.
 
 1. Go to <a href="https://github.com/vvvar/PeakEater/releases/latest"><b>latest release</b></a> page.
 2. In the Assets section choose installer for your platform.
@@ -141,11 +161,11 @@ Tested on: macOS 12.6.2
 
 Install plugin via **.dmg** file.
 
-> **Note**
-> VST3 directory is `/Library/Audio/Plug-ins/VST3`
-> AU directory is `/Library/Audio/Plug-ins/Components`
-> LV2 directory is `/Library/Audio/Plug-Ins/LV2`
-> CLAP directory is `/Library/Audio/Plug-Ins/CLAP`
+> **Note**<br />
+> VST3 directory is `/Library/Audio/Plug-ins/VST3`<br />
+> AU directory is `/Library/Audio/Plug-ins/Components`<br />
+> LV2 directory is `/Library/Audio/Plug-Ins/LV2`<br />
+> CLAP directory is `/Library/Audio/Plug-Ins/CLAP`<br />
 
 ### Windows
 
@@ -154,10 +174,10 @@ Tested on: Windows 10 21H2
 
 Extract zip and copy plugin in format of choice into folder with your plugins.
 
-> **Note**
-> Standard VST3 folder is `C:\Program Files\Common Files\VST3`
-> Standard LV2 folder is `C:\Program Files\Common Files\LV2`
-> Standard CLAP folder is `C:\Program Files\Common Files\CLAP`
+> **Note**<br />
+> Standard VST3 folder is `C:\Program Files\Common Files\VST3`<br />
+> Standard LV2 folder is `C:\Program Files\Common Files\LV2`<br />
+> Standard CLAP folder is `C:\Program Files\Common Files\CLAP`<br />
 
 ### Linux
 
@@ -166,10 +186,10 @@ Tested on: Ubuntu 18.04
 
 Extract zip and copy plugin in format of choice into folder with your plugins.
 
-> **Note**
-> Standard VST3 directory is `~/.vst3`
-> Standard LV2 directory is `~/.lv2`
-> Standard CLAP directory is `~/.clap`
+> **Note**<br />
+> Standard VST3 directory is `~/.vst3`<br />
+> Standard LV2 directory is `~/.lv2`<br />
+> Standard CLAP directory is `~/.clap`<br />
 
 <!-- GETTING STARTED -->
 
@@ -178,8 +198,8 @@ Extract zip and copy plugin in format of choice into folder with your plugins.
 ### Prerequisites
 
 - [Git](https://git-scm.com) 2.39.0+
-- [CMake](https://juce.com/discover/projucer) 3.15+
-- [Python] 3.8.1+
+- [CMake](https://cmake.org) 3.15+
+- [Python](https://www.python.org) 3.8.1+
 
 Clone this repo:
 
@@ -225,7 +245,8 @@ Distributed under the GPL-3.0 License. See [`LICENSE.md`](https://github.com/vvv
 - [clap-juce-extensions](https://github.com/free-audio/clap-juce-extensions) - CLAP support for JUCE
 - [Free Clip](https://gitlab.com/JHVenn/Free-Clip) by [Venn Audio](https://www.vennaudio.com)
 - [The Audio Programmer](https://theaudioprogrammer.com) for providing extensive video-lessons on audio programming and DSP
-- Testing volounteeres and active supporters - [George Budilov](), [Blue Four](https://soundcloud.com/bluefour)
+- Testers-volunteers and active supporters - [George Budilov](), [Blue Four](https://soundcloud.com/bluefour)
+- Everyone who provided active feedback all this time
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
