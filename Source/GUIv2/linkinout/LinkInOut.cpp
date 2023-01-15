@@ -1,5 +1,8 @@
 #include "LinkInOut.h"
+
+#include "../ColourScheme.h"
 #include "../Utils.h"
+
 #include <BinaryData.h>
 
 namespace pe
@@ -26,7 +29,6 @@ LinkInOut::~LinkInOut()
 
 void LinkInOut::resized()
 {
-	// mToggle.setBounds (getLocalBounds());
 }
 
 void LinkInOut::paint (juce::Graphics& g)
@@ -43,14 +45,16 @@ void LinkInOut::paint (juce::Graphics& g)
 
 	// Set color for lines and icon
 	juce::Colour mainColour;
-	juce::Colour labelTextColour (juce::Colours::white.withAlpha (0.8f));
+	juce::Colour labelTextColour;
 	if (mIsOn)
 	{
-		mainColour = juce::Colours::cyan.withAlpha (0.8f);
+		mainColour = colourscheme::ForegroundTertiary.withAlpha (0.9f);
+		labelTextColour = colourscheme::ForegroundTertiary.withAlpha (0.9f);
 	}
 	else
 	{
-		mainColour = juce::Colours::grey.withAlpha (0.8f);
+		mainColour = colourscheme::BackgroundTertiary.withAlpha (0.9f);
+		labelTextColour = colourscheme::TextFocusLevel1.withAlpha (0.9f);
 	}
 	if (isMouseOver())
 	{

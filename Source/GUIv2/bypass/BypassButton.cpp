@@ -1,5 +1,8 @@
 #include "BypassButton.h"
+
+#include "../ColourScheme.h"
 #include "../Utils.h"
+
 #include <BinaryData.h>
 
 namespace pe
@@ -40,11 +43,11 @@ void BypassButton::drawBypassButton (juce::Graphics& g)
 	juce::Colour iconColor;
 	if (mIsOn)
 	{
-		iconColor = juce::Colours::aquamarine.withAlpha (0.8f);
+		iconColor = colourscheme::ForegroundTertiary.withAlpha (0.8f);
 	}
 	else
 	{
-		iconColor = juce::Colours::grey.withAlpha (0.8f);
+		iconColor = colourscheme::BackgroundTertiary.withAlpha (0.8f);
 	}
 	if (isMouseOver())
 	{

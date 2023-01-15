@@ -1,5 +1,7 @@
 #include "LinkingPanel.h"
 
+#include "ColourScheme.h"
+
 namespace pe
 {
 namespace gui
@@ -12,6 +14,11 @@ LinkingPanel::LinkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> 
 	, mLinkInOut (parameters)
 {
 	addAndMakeVisible (mLinkInOut);
+}
+
+void LinkingPanel::paint (juce::Graphics& g)
+{
+	// g.fillAll(colourscheme::BackgroundSecondary);
 }
 
 void LinkingPanel::resized()

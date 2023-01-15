@@ -19,6 +19,7 @@ LinkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
               std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
               std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
 
+void paint (juce::Graphics& g) override;
 void resized() override;
 
 private:

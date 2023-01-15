@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 
 #include "../Utils.h"
+#include "../ColourScheme.h"
 
 namespace pe
 {
@@ -15,8 +16,8 @@ int constexpr gAnalyzerSampleRateHz = 30;
 float constexpr gMinDbValInOut = -36.0f;
 float constexpr gMinDbValEaten = 0.0f;
 // GUI configuration
-float constexpr gBorderWidth = 1.0f;
-float constexpr gBorderRadius = 3.0f;
+int constexpr gBorderWidth = 1;
+int constexpr gBorderRadius = 10;
 
 template <typename T>
 bool gIsInBounds (const T& value, const T& low, const T& high)
@@ -59,7 +60,7 @@ void AnalyserComponent::drawLevels (float inputLevel,
                                     float eatenAmount,
                                     juce::Graphics& g)
 {
-	auto const bounds = getBounds().reduced (gBorderWidth).toFloat();
+	auto const bounds = getBounds().toFloat().reduced (gBorderWidth / 2);
 	auto const width = bounds.getWidth();
 	auto const height = bounds.getHeight();
 
@@ -68,22 +69,21 @@ void AnalyserComponent::drawLevels (float inputLevel,
 	int const boxWidth = width;
 	int const boxHeight = height;
 	auto const fontSize = calculatePrimaryTextSize (getTopLevelComponent()->getBounds().getWidth(), getTopLevelComponent()->getBounds().getHeight());
-	auto const newlinePadding = fontSize * 0.5f;
+	auto const newlinePadding = fontSize * 0.7f;
 
-	juce::Colour borderColor (juce::Colours::grey);
-	juce::Colour backgroundColor (juce::Colours::grey.withAlpha (0.4f));
-	juce::Colour textColor (juce::Colours::white);
+	juce::Colour borderColor = colourscheme::BackgroundSecondary;
+	juce::Colour backgroundColor = colourscheme::BackgroundSecondary.withAlpha(0.9f);
+	juce::Colour textColor = colourscheme::TextFocusLevel0;
 	if (!isEnabled())
 	{
-		borderColor = borderColor.withAlpha (0.5f);
-		backgroundColor = backgroundColor.withAlpha (0.5f);
-		textColor = textColor.withAlpha (0.5f);
+		textColor = colourscheme::TextFocusLevel3;
 	}
 
-	const juce::Rectangle<float> area (poxX, posY, boxWidth, boxHeight);
+	juce::Rectangle<float> area (poxX, posY, boxWidth, boxHeight);
+	area = area.reduced (gBorderWidth);
 	g.setColour (backgroundColor);
 	g.fillRoundedRectangle (area, gBorderRadius);
-	g.setColour (borderColor);
+	g.setColour (colourscheme::BackgroundTertiary.withAlpha(0.5f));
 	g.drawRoundedRectangle (area, gBorderRadius, gBorderWidth);
 
 	std::string const inputLevelText = "Input: " + gToStringWithPrecision (gRoundDb (inputLevel), 1) + " dB";
@@ -95,11 +95,11 @@ void AnalyserComponent::drawLevels (float inputLevel,
 	g.drawText (outLevelText, poxX + newlinePadding, posY + newlinePadding + fontSize + newlinePadding, boxWidth, fontSize, juce::Justification::left, true);
 	if (gIsInBounds (eatenAmount, 5.0f, 10.0f))
 	{
-		g.setColour (juce::Colours::yellow);
+		g.setColour (colourscheme::Warning);
 	}
 	else if (gIsInBounds (eatenAmount, 10.0f, std::numeric_limits<float>::max()))
 	{
-		g.setColour (juce::Colour (233, 69, 96));
+		g.setColour (colourscheme::ForegroundSecondary);
 	}
 	else
 	{
