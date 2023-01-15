@@ -107,12 +107,6 @@ jobs:
             build\PeakEater_artefacts\${{env.BUILD_TYPE}}\VST3\PeakEater.vst3\Contents\x86_64-win\PeakEater.vst3
             build\PeakEater_artefacts\${{env.BUILD_TYPE}}\LV2\PeakEater.lv2
             build\PeakEater_artefacts\${{env.BUILD_TYPE}}\CLAP\PeakEater.clap
-      - uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: true
-          draft: true
-          tag: v${{env.VERSION}}
-          artifacts: "PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}}.zip"
 
   linux:
     name: Linux
@@ -153,21 +147,21 @@ jobs:
       - name: Download macOS Artefact
         uses: bettermarks/action-artifact-download@0.4.0
         with:
-          artifact_name: "PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}}"
+          artifact_name: "PeakEater_v${{ matrix.env.VERSION }}_macOS_${{ matrix.env.BUILD_ID }}"
           token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Download Windows Artefact
         uses: bettermarks/action-artifact-download@0.4.0
         with:
-          artifact_name: "PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}}"
+          artifact_name: "PeakEater_v${{ matrix.env.VERSION }}_Windows_${{ matrix.env.BUILD_ID }}"
           token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Download Linux Artefact
         uses: bettermarks/action-artifact-download@0.4.0
         with:
-          artifact_name: "PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}"
+          artifact_name: "PeakEater_v${{ matrix.env.VERSION }}_Linux_${{ matrix.env.BUILD_ID }}"
           token: "${{ secrets.GITHUB_TOKEN }}"
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
           draft: true
-          tag: v${{env.VERSION}}
-          artifacts: "PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}},PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}},PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}.zip"
+          tag: "v${{ matrix.env.VERSION }}"
+          artifacts: "PeakEater_v${{ matrix.env.VERSION }}_macOS_${{ matrix.env.BUILD_ID }},PeakEater_v${{ matrix.env.VERSION }}_Windows_${{ matrix.env.BUILD_ID }},PeakEater_v${{ matrix.env.VERSION }}_Linux_${{ matrix.env.BUILD_ID }}.zip"
