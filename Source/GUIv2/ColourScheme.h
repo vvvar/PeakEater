@@ -12,7 +12,7 @@ static auto BackgroundSecondary = juce::Colour (50, 50, 50);
 static auto BackgroundTertiary = juce::Colour (179, 179, 179);
 
 static auto ForegroundPrimary = juce::Colour (0, 76, 152);
-static auto ForegroundSecondary = juce::Colour (196, 0, 0);
+static auto ForegroundSecondary = juce::Colour (196, 0, 0).withAlpha(0.6f);
 static auto ForegroundTertiary = juce::Colour (28, 212, 184);
 
 static auto Warning = juce::Colour (255, 214, 0);

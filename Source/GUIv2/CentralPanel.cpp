@@ -34,15 +34,15 @@ void CentralPanel::resized()
 	grid.templateColumns = { Track (Fr (1)) };
 	grid.items = { Item (mControlPanel), Item (mLinkingPanel) };
 	auto const toRemoveFromTop = localBounds.proportionOfHeight (0.65f);
-	auto const toRemoveFromSides = localBounds.proportionOfWidth (0.15f);
+	auto const toRemoveFromSides = localBounds.proportionOfWidth (0.18f);
 	grid.performLayout (localBounds
 	                    .withTrimmedTop (toRemoveFromTop)
 	                    .withTrimmedLeft (toRemoveFromSides)
 	                    .withTrimmedRight (toRemoveFromSides));
 
 	mAnalyserComponent.setBounds(localBounds
-	                             .withWidth(localBounds.proportionOfWidth (0.165f))
-	                             .withHeight(localBounds.proportionOfHeight (0.14f))
+	                             .withWidth(localBounds.proportionOfWidth (0.17f))
+	                             .withHeight(localBounds.proportionOfHeight (0.155f))
 	                             .withX(localBounds.proportionOfWidth (0.1f))
 	                             .withY(localBounds.proportionOfHeight (0.05f)));
 }

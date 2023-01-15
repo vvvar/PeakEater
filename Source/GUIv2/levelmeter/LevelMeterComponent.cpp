@@ -102,7 +102,7 @@ void LevelMeterComponent::paint (juce::Graphics& g)
 	const juce::Point<float> gradientPoint1 = { 0.0f, static_cast<float> (bounds.getBottom()) };
 	const juce::Point<float> gradientPoint2 = { 0.0f, static_cast<float> (bounds.getY()) };
 	juce::ColourGradient gradient (colourscheme::ForegroundPrimary, gradientPoint1, colourscheme::ForegroundSecondary, gradientPoint2, false);
-	gradient.addColour(0.8, colourscheme::ForegroundSecondary);
+	gradient.addColour(0.8f, colourscheme::ForegroundSecondary);
 	g.setGradientFill (gradient);
 	g.fillRect (poxX, poxY, width, height - poxY);
 
