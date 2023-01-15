@@ -5,7 +5,7 @@
   "format": "ULFO",
   "window": {
     "size": {
-      "width": 640,
+      "width": 600,
       "height": 400
     }
   },
@@ -17,22 +17,46 @@
       "path": "PeakEater.vst3"
     },
     {
-      "x": 125,
-      "y": 320,
-      "type": "link",
-      "path": "/Library/Audio/Plug-ins/VST3"
-    },
-    {
-      "x": 525,
+      "x": 250,
       "y": 160,
       "type": "file",
       "path": "PeakEater.component"
     },
     {
-      "x": 525,
+      "x": 375,
+      "y": 160,
+      "type": "file",
+      "path": "PeakEater.lv2"
+    },
+    {
+      "x": 500,
+      "y": 160,
+      "type": "file",
+      "path": "PeakEater.clap"
+    },
+    {
+      "x": 125,
       "y": 320,
       "type": "link",
-      "path": "/Library/Audio/Plug-ins/Components"
+      "path": "/Library/Audio/Plug-Ins/VST3"
+    },
+    {
+      "x": 250,
+      "y": 320,
+      "type": "link",
+      "path": "/Library/Audio/Plug-Ins/Components"
+    },
+    {
+      "x": 375,
+      "y": 320,
+      "type": "link",
+      "path": "/Library/Audio/Plug-Ins/LV2"
+    },
+    {
+      "x": 500,
+      "y": 320,
+      "type": "link",
+      "path": "/Library/Audio/Plug-Ins/CLAP"
     }
   ]
 }
