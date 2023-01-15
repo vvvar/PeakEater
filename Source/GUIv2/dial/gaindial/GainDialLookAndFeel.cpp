@@ -1,5 +1,7 @@
 #include "GainDialLookAndFeel.h"
 
+#include "../../ColourScheme.h"
+
 namespace pe
 {
 namespace gui
@@ -30,21 +32,8 @@ void GainDialLookAndFeel::drawProgress (juce::Graphics& g, int x, int y, int wid
 	                        canterAngle,
 	                        toAngle,
 	                        true);
-	g.setColour (juce::Colours::aquamarine);
+	g.setColour (colourscheme::ForegroundTertiary);
 	g.strokePath (valueArc, juce::PathStrokeType (lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
-
-	// Draw uniderectional progress
-	// juce::Path valueArc;
-	// valueArc.addCentredArc (bounds.getCentreX(),
-	//                         bounds.getCentreY(),
-	//                         arcRadius,
-	//                         arcRadius,
-	//                         0.0f,
-	//                         rotaryStartAngle,
-	//                         toAngle,
-	//                         true);
-	// g.setColour (juce::Colours::aquamarine);
-	// g.strokePath (valueArc, juce::PathStrokeType (lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
 }
 } // namespace gui
 } // namespace pe

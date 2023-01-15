@@ -1,5 +1,7 @@
 #include "Dial.h"
+
 #include "../Utils.h"
+
 #include <juce_graphics/juce_graphics.h>
 
 namespace pe
@@ -14,26 +16,15 @@ Dial::Dial (std::string const& labelText,
 {
 	mSlider.setSliderStyle (juce::Slider::SliderStyle::RotaryVerticalDrag);
 	mSlider.setTextBoxStyle (juce::Slider::NoTextBox, false, 80, 20);
-	mSlider.setColour (juce::Slider::textBoxTextColourId, juce::Colours::black);
-	mSlider.setColour (juce::Slider::textBoxTextColourId, juce::Colours::antiquewhite);
-	mSlider.setColour (juce::Slider::textBoxOutlineColourId, juce::Colours::grey);
-	mSlider.setColour (juce::Slider::rotarySliderFillColourId, juce::Colours::blue);
 	mSlider.setLookAndFeel (&mLookAndFeel);
 	mSlider.setVelocityModeParameters (1.0, 1, 0.02, true, juce::ModifierKeys::shiftModifier);
 	mSlider.setTextBoxIsEditable (false);
 	addAndMakeVisible (mSlider);
-
 	addAndMakeVisible (mDialValue);
-
-	// mLabel.setFont (juce::Font (12.0f, juce::Font::plain));
-	mLabel.setColour (juce::Label::textColourId, juce::Colours::white);
 	mLabel.setFont (11.0f);
 	mLabel.setText (juce::String (labelText).toUpperCase(), juce::dontSendNotification);
 	mLabel.setJustificationType (juce::Justification::centred);
-
-	// mLabel.attachToComponent (&mSlider, true);
 	addAndMakeVisible (mLabel);
-
 	updateFontSize();
 }
 

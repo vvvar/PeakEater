@@ -1,4 +1,7 @@
 #include "CeilingDialLookAndFeel.h"
+
+#include "../../ColourScheme.h"
+
 #include <juce_core/juce_core.h>
 
 namespace pe
@@ -37,8 +40,8 @@ CeilingDialLookAndFeel::CeilingDialLookAndFeel (std::shared_ptr<pe::dsp::LevelMe
 void CeilingDialLookAndFeel::drawRotarySlider (juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider)
 {
 	DialLookAndFeel::drawRotarySlider (g, x, y, width, height, sliderPos, rotaryStartAngle, rotaryEndAngle, slider);
-	drawProgress (g, smoothDbValue (mInputMeter->getDecibels(), mSmoothedInput), juce::Colour{ juce::Colours::aquamarine }, x, y, width, height, rotaryStartAngle, rotaryEndAngle);
-	//  drawProgress (g, smoothDbValue (mClippingMeter->getDecibels(), mSmoothedClipping), juce::Colour{ juce::Colours::darkred }, x, y, width, height, rotaryStartAngle, rotaryEndAngle);
+	drawProgress (g, smoothDbValue (mInputMeter->getDecibels(), mSmoothedInput), colourscheme::ForegroundTertiary, x, y, width, height, rotaryStartAngle, rotaryEndAngle);
+	//  drawProgress (g, smoothDbValue (mClippingMeter->getDecibels(), mSmoothedClipping), colourscheme::ForegroundTertiary, x, y, width, height, rotaryStartAngle, rotaryEndAngle);
 	drawStick (g, x, y, width, height, sliderPos, rotaryStartAngle, rotaryEndAngle, slider);
 }
 

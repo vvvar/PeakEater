@@ -1,4 +1,6 @@
 #include "DialLookAndFeel.h"
+
+#include "../ColourScheme.h"
 #include "../Utils.h"
 
 namespace pe
@@ -44,7 +46,7 @@ void DialLookAndFeel::drawBorder (juce::Graphics& g, int x, int y, int width, in
 	                             rotaryStartAngle,
 	                             rotaryEndAngle,
 	                             true);
-	g.setColour (juce::Colours::grey);
+	g.setColour (colourscheme::BackgroundTertiary);
 	g.strokePath (backgroundArc, juce::PathStrokeType (lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
 }
 
@@ -53,7 +55,7 @@ void DialLookAndFeel::drawCircle (juce::Graphics& g, int x, int y, int width, in
 	auto const bounds = juce::Rectangle<float> (x, y, width, height).reduced (2.0f);
 	// Draw circle
 	auto const circleRadius = juce::jmin (bounds.getWidth(), bounds.getHeight()) * 0.6f;
-	g.setColour (juce::Colours::grey);
+	g.setColour (colourscheme::BackgroundTertiary);
 	g.fillEllipse (juce::Rectangle<float> (
 			       bounds.getCentreX() - circleRadius / 2,
 			       bounds.getCentreY() - circleRadius / 2,
@@ -69,8 +71,8 @@ void DialLookAndFeel::drawStick (juce::Graphics& g, int x, int y, int width, int
 	auto const lineWidth = radius * 0.085f;
 	// Draw stick
 	juce::Path stick;
-	stick.addRectangle (-lineWidth / 2, (-lineWidth / 2), lineWidth, radius - lineWidth + 1.0f);
-	g.setColour (juce::Colours::grey);
+	stick.addRectangle (-lineWidth / 2, (-lineWidth / 2), lineWidth, (radius - lineWidth) * 1.025f);
+	g.setColour (colourscheme::BackgroundTertiary);
 	g.fillPath (stick, juce::AffineTransform::rotation (toAngle + juce::MathConstants<float>::pi).translated (bounds.getCentre()));
 }
 } // namespace gui

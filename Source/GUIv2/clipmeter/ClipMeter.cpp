@@ -6,6 +6,7 @@
 #include <limits>
 #include <stdint.h>
 
+#include "../ColourScheme.h"
 #include "../../Parameters.h"
 #include "../Utils.h"
 
@@ -76,26 +77,20 @@ void ClipMeter::paint (juce::Graphics& g)
 	mClippingBuffer.pop_front();
 	mClippingBuffer.push_back (mClippingLevelMeter->getDecibels());
 
-	auto darkBlue = juce::Colour (22, 33, 62);
-	auto lightBlue = juce::Colour (15, 52, 96);
-	auto red = juce::Colour (233, 69, 96);
-	auto white = juce::Colours::white.withAlpha (0.9f);
-
-	g.fillAll (darkBlue);
-
-	drawTicks (mTicks.getTicksList(), lightBlue, g);
-	drawBuffer (mInputBuffer, red.withAlpha (0.5f), g);
-	drawBuffer (mClippingBuffer, darkBlue.withAlpha (0.5f), g);
-	drawDbLine (*static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())), white, g);
-	drawTicksTexts (mTicks.getTicksList(), red, g);
+	g.fillAll (colourscheme::BackgroundPrimary);
+	drawBuffer (mInputBuffer, colourscheme::ForegroundSecondary, g);
+	drawBuffer (mClippingBuffer, colourscheme::ForegroundPrimary, g);
+	drawTicks (mTicks.getTicksList(), colourscheme::TextFocusLevel3, g);
+	drawDbLine (*static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())), colourscheme::TextFocusLevel0, g);
+	drawTicksTexts (mTicks.getTicksList(), colourscheme::TextFocusLevel3, g);
 }
 
-void ClipMeter::drawBuffer (std::deque<float>& buffer, juce::Colour&& colour, juce::Graphics& g)
+void ClipMeter::drawBuffer (std::deque<float>& buffer, juce::Colour const&& colour, juce::Graphics& g)
 {
 	drawBuffer (buffer, colour, g);
 }
 
-void ClipMeter::drawBuffer (std::deque<float>& buffer, juce::Colour& colour, juce::Graphics& g)
+void ClipMeter::drawBuffer (std::deque<float>& buffer, juce::Colour const& colour, juce::Graphics& g)
 {
 	auto const bounds = getBounds();
 	auto const width = static_cast<float> (bounds.getWidth());
@@ -121,7 +116,7 @@ void ClipMeter::drawBuffer (std::deque<float>& buffer, juce::Colour& colour, juc
 	g.fillPath (p);
 }
 
-void ClipMeter::drawDbLine (float const& dB, juce::Colour& colour, juce::Graphics& g)
+void ClipMeter::drawDbLine (float const& dB, juce::Colour const& colour, juce::Graphics& g)
 {
 	auto const bounds = getBounds();
 	auto const width = static_cast<float> (bounds.getWidth());
@@ -131,15 +126,15 @@ void ClipMeter::drawDbLine (float const& dB, juce::Colour& colour, juce::Graphic
 	juce::Point<float> end (width, yPos);
 	juce::Line<float> line (start, end);
 	g.setColour (colour);
-	g.drawLine (line, 0.5f);
+	g.drawLine (line, 1.0f);
 }
 
-void ClipMeter::drawTicks (std::vector<float> const& ticksLevels, juce::Colour&& colour, juce::Graphics& g)
+void ClipMeter::drawTicks (std::vector<float> const& ticksLevels, juce::Colour const&& colour, juce::Graphics& g)
 {
 	drawTicks (ticksLevels, colour, g);
 }
 
-void ClipMeter::drawTicks (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g)
+void ClipMeter::drawTicks (std::vector<float> const& ticksLevels, juce::Colour const& colour, juce::Graphics& g)
 {
 	auto const bounds = getBounds();
 	auto const height = static_cast<float> (bounds.getHeight());
@@ -155,7 +150,7 @@ void ClipMeter::drawTicks (std::vector<float> const& ticksLevels, juce::Colour& 
 	}
 }
 
-void ClipMeter::drawTicksTexts (std::vector<float> const& ticksLevels, juce::Colour& colour, juce::Graphics& g)
+void ClipMeter::drawTicksTexts (std::vector<float> const& ticksLevels, juce::Colour const& colour, juce::Graphics& g)
 {
 	auto const bounds = getBounds();
 	auto const height = static_cast<float> (bounds.getHeight());
@@ -163,7 +158,7 @@ void ClipMeter::drawTicksTexts (std::vector<float> const& ticksLevels, juce::Col
 	juce::Colour textColor (colour);
 	if (!isEnabled())
 	{
-		textColor = textColor.withAlpha (0.5f);
+		textColor = textColor.withAlpha (0.2f);
 	}
 	for (auto const& tickLevel : ticksLevels)
 	{
