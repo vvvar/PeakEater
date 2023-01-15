@@ -1,44 +1,39 @@
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+<!-- HEADER -->
 
-<!-- PROJECT LOGO -->
-<br />
+<h1 align="center"><a href="https://github.com/vvvar/PeakEater"><img width="100" src="Scripts/Release/assets/icon-mac.png" /></a></h1>
+<h1 align="center">PeakEater</h1>
+<p align="center">Free open-source VST3/AU/LV2/CLAP wave shaping plugin for macOS, Windows and Linux.</p>
 <p align="center">
-  <a href="https://github.com/vvvar/PeakEater">
-    <img src="Resources/logo_full.png" alt="Logo">
-  </a>
-
-  <h3 align="center">PeakEater</h3>
-
-  <p align="center">
-    Free open source VST3/AU wave shaping plugin for macOS and Windows.
-    <!-- <br />
-    <a href=""><strong>Explore the docs »</strong></a> -->
-    <br />
-    <br />
-    <a target="_blank" href="https://www.youtube.com/watch?v=vVZKNMDyudE">View Demo</a>
-    ·
-    <a target="_blank" href="https://github.com/vvvar/PeakEater/releases/latest">Download</a>
-    ·
-    <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new/choose">Report Bug</a>
-  </p>
+    <a href="https://github.com/vvvar/PeakEater/releases/latest"><b>Download</b></a>
+    · <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new/choose"><b>Report Bug</b></a>
 </p>
 
-
+![screenshot](Resources/screenshots/screenshot-mac.png)
 
 <!-- TABLE OF CONTENTS -->
+
 <details open="open">
   <summary>Table of Contents</summary>
   <ol>
+    <li><a href="#about">About</a></li>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#features">Features</a>
       <ul>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#input--output-rms-meters">Input/Output RMS Meters</a></li>
+        <li><a href="#input--output-gain">Input & Output Gain</a></li>
+        <li><a href="#link-input-with-output">Link Input with Output</a></li>
+        <li><a href="#ceiling-control">Ceiling control</a></li>
+        <li><a href="#visualizer">Visualizer</a></li>
+        <li><a href="#analyzer">Analyzer</a></li>
+        <li><a href="#6-clipping-types">6 Clipping Types</a></li>
+        <li><a href="#oversampling">Oversampling</a></li>
+        <li><a href="#bypass-mode">Bypass mode</a></li>
+        <li><a href="#resizing">Resizing</a></li>
+        <li><a href="#vst3-au-lv2-and-clap-support">VST3, AU, LV2 and CLAP Support</a></li>
+        <li><a href="#available-on-all-major-platforms">macOS, Windows and Linux Support</a></li>
       </ul>
     </li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#installation">Installation</a></li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
@@ -54,46 +49,57 @@
   </ol>
 </details>
 
+<!-- ABOUT -->
 
+## About
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+PeakEater is a free, easy to use waveshaping plugin. PeakEater lets you choose between different [waveshaping](https://en.wikipedia.org/wiki/Waveshaper) [functions](https://en.wikipedia.org/wiki/Sigmoid_function) to clip everything above ceiling level. Therefore, you can boost overall volume of your track safely without worying that some nasty peak would go above maximum allowed volume level of your DAW. It supports variours <a href="#features">features</a> such as multiple clipping types, oversampling and visualizations of clipping process that aims to make clipping easy and fun.
 
-[![PeakEater Screen Shot][product-screenshot]](https://github.com/vvvar/PeakEater)
+## Features
 
-PeakEater is a free, easy to use, waveshaping VST3/AU plugin for macOS and Windows. PeakEater lets you choose between different [waveshaping](https://en.wikipedia.org/wiki/Waveshaper) [functions](https://en.wikipedia.org/wiki/Sigmoid_function) to clip everything above ceiling level. Therefore, you can boost overall volume of your track safely without worying that some nasty peak would go above maximum allowed volume level of your DAW. It supports variours <a href="#features">features</a> such as multiple clipping types, oversampling and visualizations of clipping process that aims to make clipping easy and fun.
+### Input & Output RMS Meters
 
-Inspiration for this plugin comes mostly from [KAZROG KClip 3](https://kazrog.com/products/kclip-3) and [VennAudio Free Clip](https://www.vennaudio.com/free-clip/). So it's an attempt to combine the features of both plugins but completley free and open-source.
+<img src="Resources/screenshots/screenshot-in.png" alt="input-rms-screen" height="250"/><---><img src="Resources/screenshots/screenshot-out.png" alt="output-rms-screen" height="250"/>
 
-<!-- ROADMAP -->
-## Roadmap
-
-Main features planned:
-- [ ] New UI + Dark Theme
-- [ ] Waveform Preview
-- [ ] Dry/Wet support
-- [ ] "Custom" waveform parameter
-
-For more detailed roadmap, check out [Project Roadmap](https://github.com/vvvar/PeakEater/projects/1) page.
-
-### Features
-
-##### Input/Output RMS meters
 See the RMS of signal before and after plugin.
 
-##### Input/Output Gain
-Adjusts gain level before or after signal processing.
+### Input & Output Gain
 
-##### Link Input Gain with Output Gain
-Use linking to automatically set the Output Gain level to the opposite of the Input Gain. 
-As an example, if the Input Gain value is +5dB then the Output Gain value will be automatically set to -5dB. It also works in the opposite direction.
+<img src="Resources/screenshots/screenshot-in-gain.png" alt="input-gain-screen" height="100"/><---><img src="Resources/screenshots/screenshot-out-gain.png" alt="output-gain-screen" height="100"/>
 
-##### Ceiling control with dB-meter
-See how exactly you're limiting your signal using meter that is mounted into the Ceiling slider.
+Adjusts gain level before and after processing. Input Gain is useful when you're either working with too quiet or too loud signal and Output Gain can be helpful to compensate loss of gain.
 
-##### 6 Clipping types to choose
-Choose between 6 clipping functions, from harshest "Hard" to softest "Arctangent".
+### Link Input with Output
+
+<img src="Resources/screenshots/screenshot-link.png" alt="link-in-out" height="100"/>
+
+Use linking to automatically set the Output Gain level to the opposite of the Input Gain. For example, if the Input Gain value is set to +5dB then the Output Gain value will be automatically set to -5dB and vice versa.
+
+### Ceiling control
+
+<img src="Resources/screenshots/screenshot-ceiling-knob.png" alt="link-in-out" height="100"/>
+
+Control your ceiling. Everything above this level would be "eaten". Build-in RMS meter would show you signal level that comes into clipper and help you set threshold.
+
+### Visualizer
+
+<img src="Resources/screenshots/screenshot-clip-visualizer.png" alt="clip-visualizer" height="100"/>
+
+See how your peaks were eaten with visualizer.
+
+### Analyzer
+
+<img src="Resources/screenshots/screenshot-analyzer.png" alt="clip-analyzer" height="100"/>
+
+Shows approximated RMS that was cut("Eaten") in last 2 seconds. Double-click to drop it to zero and force to re-calculate.
+
+### 6 Clipping Types
+
+<img src="Resources/screenshots/screenshot-clip-type.png" alt="clip-type" height="100"/>
+
+Choose between 6 clipping functions, from Hard clipping to different types Soft Clip(Up to Arctangent).
 Available clipping functions are:
+
 - Hard
 - Quintic
 - Cubic
@@ -101,93 +107,150 @@ Available clipping functions are:
 - Algebraic
 - Arctangent
 
-##### Up to 16x Oversampling
-Choose between 2x, 4x, 8x, and 16x oversampling to avoid signal aliasing. Be aware that high values of oversampling may hurt CPU performance.
+You can read more about difference between Hard and Soft clipping [here](https://www.hackaudio.com/digital-signal-processing/distortion-effects/hard-clipping/) and [here](https://www.hackaudio.com/digital-signal-processing/distortion-effects/soft-clipping/).
 
-##### See how much dBs were clipped
-Analyser provides information about how much dB's were cut by waveshaper so you can see how much volume you're won. 
+### Oversampling
 
-##### Bypass mode
-Simply bypass all plugin's processing.
+<img src="Resources/screenshots/screenshot-oversample.png" alt="oversample" height="100"/>
 
-##### VST3 and AU support
-You can use either VST3 or AU type of plugin on macOS and VST3 on Windows.
+Choose between 2x, 4x, 8x, and 16x oversampling to avoid signal aliasing. You can also turn off oversampling.
 
-### Built With
+> **Note** High values of oversampling may hurt CPU performance.
 
-This plugin was developed using [JUCE](https://github.com/juce-framework/JUCE) framework and [ff_meters](https://github.com/ffAudio/ff_meters) library that provided convinient dB-meters.
+You can read more about oversampling [here](https://www.nickwritesablog.com/introduction-to-oversampling-for-alias-reduction/).
 
+### Bypass mode
+
+<img src="Resources/screenshots/screenshot-bypass.png" alt="bypass" height="100"/>
+
+Bypasses all plugin's processing. Useful when you need to make side-by-side comparsion before and after processing.
+
+### Resizing
+
+<img src="Resources/screenshots/screenshot-resize.png" alt="bypass" height="100"/>
+
+Drag the corner to change the size of the window.
+
+### VST3, AU, LV2 and CLAP support
+
+<img src="Resources/vendorIcons/vst3.png" alt="vst3" height="50"/> <img src="Resources/vendorIcons/audio-units.png" alt="au" height="50"/> <img src="Resources/vendorIcons/lv2.png" alt="lv2" height="50"/> <img src="Resources/vendorIcons/clap.png" alt="clap" height="50"/>
+
+You can use either VST3, AU(macOS only), LV2 or CLAP type of plugin.
+
+> **Warning** LV2 and CLAP support is experimental and may be unstable.
+
+### Available on all major platforms
+
+<img src="Resources/vendorIcons/macOS.png" alt="macOS" height="30"/> <img src="Resources/vendorIcons/windows.png" alt="windows" height="30"/> <img src="Resources/vendorIcons/linux.png" alt="linux" height="30"/>
+
+You can use it on macOS, Windows or Linux.
+
+> **Warning** Linux support is experimental and may be unstable.
+
+<!-- INSTALLATION -->
+
+## Installation
+
+1. Go to <a href="https://github.com/vvvar/PeakEater/releases/latest"><b>latest release</b></a> page.
+2. In the Assets section choose installer for your platform.
+
+### macOS
+
+Supported formats are: VST3, AU, LV2, CLAP.
+Tested on: macOS 12.6.2
+
+Install plugin via **.dmg** file.
+
+> **Note**<br />
+> VST3 directory is `/Library/Audio/Plug-ins/VST3`<br />
+> AU directory is `/Library/Audio/Plug-ins/Components`<br />
+> LV2 directory is `/Library/Audio/Plug-Ins/LV2`<br />
+> CLAP directory is `/Library/Audio/Plug-Ins/CLAP`<br />
+
+### Windows
+
+Supported formats are: VST3, AU, LV2, CLAP.
+Tested on: Windows 10 21H2
+
+Extract zip and copy plugin in format of choice into folder with your plugins.
+
+> **Note**<br />
+> Standard VST3 folder is `C:\Program Files\Common Files\VST3`<br />
+> Standard LV2 folder is `C:\Program Files\Common Files\LV2`<br />
+> Standard CLAP folder is `C:\Program Files\Common Files\CLAP`<br />
+
+### Linux
+
+Supported formats are: VST3, AU, LV2, CLAP.
+Tested on: Ubuntu 18.04
+
+Extract zip and copy plugin in format of choice into folder with your plugins.
+
+> **Note**<br />
+> Standard VST3 directory is `~/.vst3`<br />
+> Standard LV2 directory is `~/.lv2`<br />
+> Standard CLAP directory is `~/.clap`<br />
 
 <!-- GETTING STARTED -->
-## Getting Started
 
-If you need a ready-to-use build, you may download latest packages from the [Releases Page](https://github.com/vvvar/PeakEater/releases/latest). The guideline provided below is needed only if you would like to build a plugin on your own.
+## Building the project from sources
 
 ### Prerequisites
 
-- [Git](https://git-scm.com) v2.24.3+
-- [Projucer](https://juce.com/discover/projucer) v6.0.7+
-- XCode v10.2+
+- [Git](https://git-scm.com) 2.39.0+
+- [CMake](https://cmake.org) 3.15+
+- [Python](https://www.python.org) 3.8.1+
 
-### Installation
+Clone this repo:
 
-Once you have the dependencies installed, we need to clone the PeakEater repository. PeakEater's git repository contains necessary submodules, so we'll need to collect those as well, which we can do one of two ways:
 ```
 git clone --recurse-submodules https://github.com/vvvar/PeakEater.git
 ```
-or:
+
+If you're using VS Code, then use Build tasks provided in [settings.json](.vscode/settings.json).
+For manual build, checkout proper versions of dependencies:
+
 ```
-git clone https://github.com/vvvar/PeakEater.git
-cd PeakEater
-git submodule update --init --recursive
+cd Dependencies/JUCE && git checkout 4e68af7 && cd ../clap-juce-extensions/JUCE && git checkout cf93cac
 ```
 
-At this point, you should have a cloned project with all necessary dependencies installed into the [```Dependencies```](https://github.com/vvvar/PeakEater/tree/master/Dependencies) directory.
+Run cmake build:
 
-Now, open [```PeakEater.jucer```](https://github.com/vvvar/PeakEater/blob/master/PeakEater.jucer) file using <a href="#prerequisites">Projucer</a> and press *Save and Open in IDE*.
-
-That's it, you may now build PeakEater for the available targets.
-
-Please note that in order to disable JUCE Splash Screen you should switch your Projucer into GPL3 mode. If you're opening Projucer for the first time, popup regarding login should appear in the bottom left side of Projucer. Click "Singn In" and then choose "Use GPL3 Mode" instead of making sign in.
+```
+mkdir build && cd build
+cmake .. -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
+cmake --build .
+```
 
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
-This is a very young project on a very early stages, however, I will be happy to hear any sort of a feedback on it.
-If you have any feedback on a project, feel free to open a issue using [Issues Page](https://github.com/vvvar/PeakEater/issues).
+If you found a bug, please report it using [Bug Template](https://github.com/vvvar/PeakEater/issues/new/choose).
+If you have any feedback, feel free to open a feedback ticket using [Feedback Template](https://github.com/vvvar/PeakEater/issues/new/choose).
+If you have a specific feature request, please create it using [Feature Request Template](https://github.com/vvvar/PeakEater/issues/new/choose).
 If you have a pull request, then just make it using common [Fork & PR flow](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork).
 
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the GPL-3.0 License. See [`LICENSE.md`](https://github.com/vvvar/PeakEater/blob/master/LICENSE.md) for more information.
 
-
-<!-- CONTACT -->
-## Contact
-
-Vladyslav Voinov - [Linkedin](https://www.linkedin.com/in/vladyslav-voinov-5126a793/) - voinovvladv@gmail.com
-
-Project Link: [https://github.com/vvvar/PeakEater](https://github.com/vvvar/PeakEater)
-
-<!-- DONATIONS -->
-## Donations
-
-To support this project, you can make a donation to its current maintainer:
-
-[![paypal](https://www.paypalobjects.com/en_US/DK/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=FSY4DFNYXUYYN)
-
 <!-- ACKNOWLEDGEMENTS -->
+
 ## Acknowledgements
-* [JUCE](https://github.com/juce-framework/JUCE)
-* [ff_meters](https://github.com/ffAudio/ff_meters) by [ffAudio](https://github.com/ffAudio)
-* [Free Clip](https://gitlab.com/JHVenn/Free-Clip) by [Venn Audio](https://www.vennaudio.com)
-* [The Audio Programmer](https://theaudioprogrammer.com) for providing extensive video-lessons on audio programming and DSP
 
-
+- [JUCE](https://github.com/juce-framework/JUCE) - Framework for multi-platform audio applications
+- [clap-juce-extensions](https://github.com/free-audio/clap-juce-extensions) - CLAP support for JUCE
+- [Free Clip](https://gitlab.com/JHVenn/Free-Clip) by [Venn Audio](https://www.vennaudio.com)
+- [The Audio Programmer](https://theaudioprogrammer.com) for providing extensive video-lessons on audio programming and DSP
+- Testers-volunteers and active supporters - [George Budilov](), [Blue Four](https://soundcloud.com/bluefour)
+- Everyone who provided active feedback all this time
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [issues-shield]: https://img.shields.io/github/issues/vvvar/PeakEater?style=for-the-badge
 [issues-url]: https://github.com/vvvar/PeakEater/issues
 [license-shield]: https://img.shields.io/github/license/vvvar/PeakEater?style=for-the-badge
