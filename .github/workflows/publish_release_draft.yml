@@ -151,17 +151,17 @@ jobs:
     needs: [macos, windows, linux]
     steps:
       - name: Download macOS Artefact
-        uses: bettermarks/action-artifact-download
+        uses: bettermarks/action-artifact-download@0.4.0
         with:
           artifact_name: "PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}}"
           token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Download Windows Artefact
-        uses: bettermarks/action-artifact-download
+        uses: bettermarks/action-artifact-download@0.4.0
         with:
           artifact_name: "PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}}"
           token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Download Linux Artefact
-        uses: bettermarks/action-artifact-download
+        uses: bettermarks/action-artifact-download@0.4.0
         with:
           artifact_name: "PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}"
           token: "${{ secrets.GITHUB_TOKEN }}"
