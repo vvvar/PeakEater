@@ -75,7 +75,7 @@ jobs:
       - name: Build LV2
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
       - name: Package
-        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}}
+        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --sign_and_notarize=True
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -147,15 +147,15 @@ jobs:
       - name: Download macOS Artefact
         uses: actions/download-artifact@v3
         with:
-          name: "PeakEater_v${{ env.VERSION }}_macOS_${{ matrix.env.BUILD_ID }}"
+          name: "PeakEater_v${{ env.VERSION }}_macOS_${{ env.BUILD_ID }}"
       - name: Download Windows Artefact
         uses: actions/download-artifact@v3
         with:
-          name: "PeakEater_v${{ env.VERSION }}_Windows_${{ matrix.env.BUILD_ID }}"
+          name: "PeakEater_v${{ env.VERSION }}_Windows_${{ env.BUILD_ID }}"
       - name: Download Linux Artefact
         uses: actions/download-artifact@v3
         with:
-          name: "PeakEater_v${{ env.VERSION }}_Linux_${{ matrix.env.BUILD_ID }}"
+          name: "PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}"
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
