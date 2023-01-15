@@ -8,6 +8,7 @@ env:
   LV2_TARGET_NAME: PeakEater_LV2
   CLAP_TARGET_NAME: PeakEater_CLAP
   JUCE_REVISION: 4e68af7
+  VERSION: 0.3.4
   BUILD_ID: '${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}'
 jobs:
   macos:
@@ -50,6 +51,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
+          name: PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}}
           path: ${{github.workspace}}/build/release/PeakEater.dmg
 
   windows:
@@ -72,7 +74,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: PeakEater_Windows_${{env.BUILD_ID}}
+          name: PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}}
           path: |
             build\PeakEater_artefacts\${{env.BUILD_TYPE}}\VST3\PeakEater.vst3\Contents\x86_64-win\PeakEater.vst3
             build\PeakEater_artefacts\${{env.BUILD_TYPE}}\LV2\PeakEater.lv2
@@ -103,7 +105,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: PeakEater_Linux_${{env.BUILD_ID}}
+          name: PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}
           path: |
             build/PeakEater_artefacts/VST3/PeakEater.vst3/Contents/x86_64-linux/PeakEater.so
             build/PeakEater_artefacts/LV2/PeakEater.lv2
