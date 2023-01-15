@@ -19,8 +19,8 @@
     <li>
       <a href="#features">Features</a>
       <ul>
-        <li><a href="#input-&-output-rms-meters">Input/Output RMS Meters</a></li>
-        <li><a href="#input-&-output-gain">Input & Output Gain</a></li>
+        <li><a href="#input--output-rms-meters">Input/Output RMS Meters</a></li>
+        <li><a href="#input--output-gain">Input & Output Gain</a></li>
         <li><a href="#link-input-with-output">Link Input with Output</a></li>
         <li><a href="#ceiling-control">Ceiling control</a></li>
         <li><a href="#visualizer">Visualizer</a></li>
