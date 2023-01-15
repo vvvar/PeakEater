@@ -145,20 +145,17 @@ jobs:
     needs: [macos, windows, linux]
     steps:
       - name: Download macOS Artefact
-        uses: bettermarks/action-artifact-download@0.4.0
+        uses: actions/download-artifact@v3
         with:
-          artifact_name: "PeakEater_v${{ matrix.env.VERSION }}_macOS_${{ matrix.env.BUILD_ID }}"
-          token: "${{ secrets.GITHUB_TOKEN }}"
+          name: "PeakEater_v${{ matrix.env.VERSION }}_macOS_${{ matrix.env.BUILD_ID }}"
       - name: Download Windows Artefact
-        uses: bettermarks/action-artifact-download@0.4.0
+        uses: actions/download-artifact@v3
         with:
-          artifact_name: "PeakEater_v${{ matrix.env.VERSION }}_Windows_${{ matrix.env.BUILD_ID }}"
-          token: "${{ secrets.GITHUB_TOKEN }}"
+          name: "PeakEater_v${{ matrix.env.VERSION }}_Windows_${{ matrix.env.BUILD_ID }}"
       - name: Download Linux Artefact
-        uses: bettermarks/action-artifact-download@0.4.0
+        uses: actions/download-artifact@v3
         with:
-          artifact_name: "PeakEater_v${{ matrix.env.VERSION }}_Linux_${{ matrix.env.BUILD_ID }}"
-          token: "${{ secrets.GITHUB_TOKEN }}"
+          name: "PeakEater_v${{ matrix.env.VERSION }}_Linux_${{ matrix.env.BUILD_ID }}"
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
