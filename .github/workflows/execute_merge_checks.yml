@@ -50,8 +50,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: PeakEater_macOS_${{env.BUILD_ID}}
-          path: ${{github.workspace}}/build/
+          path: ${{github.workspace}}/build/release/PeakEater.dmg
 
   windows:
     name: Windows
@@ -70,14 +69,14 @@ jobs:
         run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
       - name: Build LV2
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
-      - uses: montudor/action-zip@v1
-        name: Package
-        with:
-          args: zip -qq -r PeakEater_Windows_${{env.BUILD_ID}}.zip build\PeakEater_artefacts\${{env.BUILD_TYPE}}\VST3\PeakEater.vst3\Contents\x86_64-win\PeakEater.vst3 build\PeakEater_artefacts\${{env.BUILD_TYPE}}\LV2\PeakEater.lv2 build\PeakEater_artefacts\${{env.BUILD_TYPE}}\CLAP\PeakEater.clap
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: PeakEater_Windows_${{env.BUILD_ID}}.zip
+          name: PeakEater_Windows_${{env.BUILD_ID}}
+          path: |
+            build\PeakEater_artefacts\${{env.BUILD_TYPE}}\VST3\PeakEater.vst3\Contents\x86_64-win\PeakEater.vst3
+            build\PeakEater_artefacts\${{env.BUILD_TYPE}}\LV2\PeakEater.lv2
+            build\PeakEater_artefacts\${{env.BUILD_TYPE}}\CLAP\PeakEater.clap
 
   linux:
     name: Linux
@@ -101,12 +100,12 @@ jobs:
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
       - name: Build LV2
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
-      - uses: montudor/action-zip@v1
-        name: Package
-        with:
-          args: zip -qq -r PeakEater_Linux_${{env.BUILD_ID}}.zip build/PeakEater_artefacts/VST3/PeakEater.vst3/Contents/x86_64-linux/PeakEater.so build/PeakEater_artefacts/LV2/PeakEater.lv2 build/PeakEater_artefacts/CLAP/PeakEater.clap
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          path: PeakEater_Linux_${{env.BUILD_ID}}.zip
+          name: PeakEater_Linux_${{env.BUILD_ID}}
+          path: |
+            build/PeakEater_artefacts/VST3/PeakEater.vst3/Contents/x86_64-linux/PeakEater.so
+            build/PeakEater_artefacts/LV2/PeakEater.lv2
+            build/PeakEater_artefacts/CLAP/PeakEater.clap
           
