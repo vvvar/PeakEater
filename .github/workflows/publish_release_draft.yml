@@ -162,6 +162,9 @@ jobs:
         with:
           name: PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}
           path: PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}
+      - name: Archive
+        run: |
+          zip -9 -r PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}.zip PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}/
       - name: Display structure of downloaded files
         run: ls -R
       - uses: ncipollo/release-action@v1
@@ -169,4 +172,4 @@ jobs:
           allowUpdates: true
           draft: true
           tag: "v${{ env.VERSION }}"
-          artifacts: "PeakEater_v${{ env.VERSION }}_macOS_${{ env.BUILD_ID }},PeakEater_v${{ env.VERSION }}_Windows_${{ env.BUILD_ID }},PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}"
+          artifacts: "PeakEater_v${{ env.VERSION }}_macOS_${{ env.BUILD_ID }},PeakEater_v${{ env.VERSION }}_Windows_${{ env.BUILD_ID }},PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}.zip"
