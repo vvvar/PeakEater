@@ -161,10 +161,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}
-          path: PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}
+          path: linux
       - name: Archive
         run: |
-          zip -9 -r PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}.zip PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}/
+          zip -r PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}{.zip,}
       - name: Display structure of downloaded files
         run: ls -R
       - uses: ncipollo/release-action@v1
