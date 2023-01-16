@@ -177,5 +177,5 @@ jobs:
           allowUpdates: true
           draft: true
           removeArtifacts: true
-          tag: "v${{ env.VERSION }}"
+          tag: "v0.3.4"
           artifacts: "${{ env.MACOS_RELEASE_NAME }}.zip,${{ env.WINDOWS_RELEASE_NAME }}.zip,${{ env.LINUX_RELEASE_NAME }}.zip"
