@@ -37,25 +37,25 @@
       "x": 100,
       "y": 245,
       "type": "link",
-      "path": "/Library/Audio/Plug-Ins/VST3"
+      "path": "/Library/Audio/Plug-ins/VST3"
     },
     {
       "x": 225,
       "y": 245,
       "type": "link",
-      "path": "/Library/Audio/Plug-Ins/Components"
+      "path": "/Library/Audio/Plug-ins/Components"
     },
     {
       "x": 350,
       "y": 245,
       "type": "link",
-      "path": "/Library/Audio/Plug-Ins/LV2"
+      "path": "/Library/Audio/Plug-ins/LV2"
     },
     {
       "x": 475,
       "y": 245,
       "type": "link",
-      "path": "/Library/Audio/Plug-Ins/CLAP"
+      "path": "/Library/Audio/Plug-ins/CLAP"
     }
   ]
 }

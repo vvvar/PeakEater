@@ -1,9 +1,9 @@
 name: Publish Release Draft
-run-name: Release draft for commit ${{ github.sha }}
+run-name: Create release draft for v0.3.4
 on:
   push:
     branches:
-      - release_package
+      - master
 
 env:
   BUILD_TYPE: Release
@@ -177,5 +177,6 @@ jobs:
           allowUpdates: true
           draft: true
           removeArtifacts: true
+          makeLatest: true
           tag: "v0.3.4"
           artifacts: "${{ env.MACOS_RELEASE_NAME }}.zip,${{ env.WINDOWS_RELEASE_NAME }}.zip,${{ env.LINUX_RELEASE_NAME }}.zip"
