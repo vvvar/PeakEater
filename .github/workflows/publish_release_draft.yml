@@ -161,6 +161,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: "PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}"
+          path: linux
       - name: Display structure of downloaded files
         run: ls -R
       - uses: ncipollo/release-action@v1
