@@ -12,11 +12,9 @@ env:
   LV2_TARGET_NAME: PeakEater_LV2
   CLAP_TARGET_NAME: PeakEater_CLAP
   JUCE_REVISION: 4e68af7
-  VERSION: 0.3.4
-  BUILD_ID: '${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}'
-  MACOS_RELEASE_NAME: PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}}
-  WINDOWS_RELEASE_NAME: PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}}
-  LINUX_RELEASE_NAME: PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}
+  MACOS_RELEASE_NAME: PeakEater_v0.3.4_macOS_${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
+  WINDOWS_RELEASE_NAME: PeakEater_v0.3.4_Windows_${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
+  LINUX_RELEASE_NAME: PeakEater_v0.3.4_Linux_${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
 jobs:
   macos:
     name: macOS
