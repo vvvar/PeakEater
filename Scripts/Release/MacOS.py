@@ -46,6 +46,10 @@ utils.copy_dir_content_recursive(
 utils.copy_dir_content_recursive(
     utils.get_build_au_dir_path(args.release_type), TMP_DIR_PATH)
 utils.copy_dir_content_recursive(
+    utils.get_build_lv2_dir_path(args.release_type), TMP_DIR_PATH)
+utils.copy_dir_content_recursive(
+    utils.get_build_clap_dir_path(args.release_type), TMP_DIR_PATH)
+utils.copy_dir_content_recursive(
     utils.get_project_release_assets_dir_path(), TMP_DIR_PATH)
 utils.copy_dir_content_recursive(
     utils.get_project_release_configs_dir_path(), TMP_DIR_PATH)
@@ -56,6 +60,10 @@ if args.sign_and_notarize:
         f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {str(TMP_DIR_PATH) + '/PeakEater.vst3'} --deep --strict --options=runtime --timestamp")
     utils.exec_command(
         f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {str(TMP_DIR_PATH) + '/PeakEater.component'} --deep --strict --options=runtime --timestamp")
+    utils.exec_command(
+        f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {str(TMP_DIR_PATH) + '/PeakEater.lv2/libPeakEater.so'} --deep --strict --options=runtime --timestamp")
+    utils.exec_command(
+        f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {str(TMP_DIR_PATH) + '/PeakEater.clap'} --deep --strict --options=runtime --timestamp")
 
 # Create .dmg
 utils.log_info("Creating release image...")

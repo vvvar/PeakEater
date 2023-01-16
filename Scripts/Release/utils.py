@@ -83,9 +83,23 @@ def get_build_vst3_dir_path(release_type: ReleaseType) -> Path:
     """Returns path VST3 bin that was build"""
     path = get_build_dir_path().joinpath("PeakEater_artefacts/" +
                                          release_type + "/VST3").resolve()
-    if is_windows():
-        path = path.joinpath("PeakEater.vst3/Contents/x86_64-win/").resolve()
     log_verbose("VST3 build dir: " + str(path))
+    return path
+
+
+def get_build_lv2_dir_path(release_type: ReleaseType) -> Path:
+    """Returns path LV2 bin that was build"""
+    path = get_build_dir_path().joinpath("PeakEater_artefacts/" +
+                                         release_type + "/LV2").resolve()
+    log_verbose("LV2 build dir: " + str(path))
+    return path
+
+
+def get_build_clap_dir_path(release_type: ReleaseType) -> Path:
+    """Returns path CLAP bin that was build"""
+    path = get_build_dir_path().joinpath("PeakEater_artefacts/" +
+                                         release_type + "/CLAP").resolve()
+    log_verbose("CLAP build dir: " + str(path))
     return path
 
 
