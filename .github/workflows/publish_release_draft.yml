@@ -1,5 +1,5 @@
 name: Publish Release Draft
-run-name: Create release draft for v0.3.4
+run-name: Create release draft for v0.3.5
 on:
   push:
     branches:
@@ -12,9 +12,9 @@ env:
   LV2_TARGET_NAME: PeakEater_LV2
   CLAP_TARGET_NAME: PeakEater_CLAP
   JUCE_REVISION: 4e68af7
-  MACOS_RELEASE_NAME: PeakEater_v0.3.4_macOS_${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
-  WINDOWS_RELEASE_NAME: PeakEater_v0.3.4_Windows_${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
-  LINUX_RELEASE_NAME: PeakEater_v0.3.4_Linux_${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
+  MACOS_RELEASE_NAME: PeakEater_v0.3.5_macOS_${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
+  WINDOWS_RELEASE_NAME: PeakEater_v0.3.5_Windows_${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
+  LINUX_RELEASE_NAME: PeakEater_v0.3.5_Linux_${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}
 jobs:
   macos:
     name: macOS
@@ -26,7 +26,7 @@ jobs:
           python-version: 3.8
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18.11
       - run: |
           echo $PATH
           python --version
@@ -106,7 +106,7 @@ jobs:
       - name: Build LV2
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.WINDOWS_RELEASE_NAME }}
           path: |
@@ -137,7 +137,7 @@ jobs:
       - name: Build LV2
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.LINUX_RELEASE_NAME }}
           path: |
@@ -178,5 +178,5 @@ jobs:
           draft: true
           removeArtifacts: true
           makeLatest: true
-          tag: "v0.3.4"
+          tag: "v0.3.5"
           artifacts: "${{ env.MACOS_RELEASE_NAME }}.zip,${{ env.WINDOWS_RELEASE_NAME }}.zip,${{ env.LINUX_RELEASE_NAME }}.zip"

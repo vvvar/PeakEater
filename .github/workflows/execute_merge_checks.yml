@@ -8,7 +8,7 @@ env:
   LV2_TARGET_NAME: PeakEater_LV2
   CLAP_TARGET_NAME: PeakEater_CLAP
   JUCE_REVISION: 4e68af7
-  VERSION: 0.3.4
+  VERSION: 0.3.5
   BUILD_ID: '${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}'
 jobs:
   macos:
@@ -21,7 +21,7 @@ jobs:
           python-version: 3.8
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18.11
       - run: |
           echo $PATH
           python --version
@@ -72,7 +72,7 @@ jobs:
       - name: Build LV2
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}}
           path: |
@@ -103,7 +103,7 @@ jobs:
       - name: Build LV2
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}
           path: |
