@@ -14,104 +14,107 @@ env:
   JUCE_REVISION: 4e68af7
   VERSION: 0.3.4
   BUILD_ID: '${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}'
+  MACOS_RELEASE_NAME: PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}}
+  WINDOWS_RELEASE_NAME: PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}}
+  LINUX_RELEASE_NAME: PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}
 jobs:
-  # macos:
-  #   name: macOS
-  #   runs-on: macos-12
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-python@v2
-  #       with:
-  #         python-version: 3.8
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: 16
-  #     - run: |
-  #         echo $PATH
-  #         python --version
-  #         which python
-  #         node --version
-  #         which node
-  #         npm --version
-  #         which npm
-  #     - name: Install the Apple certificate and provisioning profile
-  #       env:
-  #         BUILD_CERTIFICATE_BASE64: ${{ secrets.MACOS_BUILD_CERTIFICATE_BASE64 }}
-  #         P12_PASSWORD: ${{ secrets.MACOS_P12_PASSWORD }}
-  #         BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.MACOS_BUILD_PROVISION_PROFILE_BASE64 }}
-  #         KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
-  #       run: |
-  #         # create variables
-  #         CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-  #         PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-  #         KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-  #         # import certificate and provisioning profile from secrets
-  #         echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
-  #         echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
-  #         # create temporary keychain
-  #         security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-  #         security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-  #         security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
-  #         # import certificate to keychain
-  #         security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-  #         security list-keychain -d user -s $KEYCHAIN_PATH
-  #         # apply provisioning profile
-  #         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-  #         cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-  #     - name: Install Python Dependencies
-  #       run: python -m pip install -r ${{github.workspace}}/requirements.txt
-  #     - name: Init Git Submodules
-  #       run: git submodule update --init --recursive
-  #     - name: Checkout JUCE
-  #       run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
-  #     - name: Configure CMake
-  #       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
-  #     - name: Build VST3
-  #       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
-  #     - name: Build AU
-  #       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.AU_TARGET_NAME}}
-  #     - name: Build CLAP
-  #       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
-  #     - name: Build LV2
-  #       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
-  #     - name: Package
-  #       env:
-  #         MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
-  #         MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
-  #         MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
-  #         MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
-  #       run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --sign_and_notarize=True
-  #     - name: Upload Artifacts
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}}
-  #         path: ${{github.workspace}}/build/release/PeakEater.dmg
+  macos:
+    name: macOS
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: |
+          echo $PATH
+          python --version
+          which python
+          node --version
+          which node
+          npm --version
+          which npm
+      - name: Install the Apple certificate and provisioning profile
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.MACOS_BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.MACOS_P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.MACOS_BUILD_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          # import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+      - name: Install Python Dependencies
+        run: python -m pip install -r ${{github.workspace}}/requirements.txt
+      - name: Init Git Submodules
+        run: git submodule update --init --recursive
+      - name: Checkout JUCE
+        run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
+      - name: Build VST3
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
+      - name: Build AU
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.AU_TARGET_NAME}}
+      - name: Build CLAP
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
+      - name: Build LV2
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
+      - name: Package
+        env:
+          MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
+          MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
+          MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
+          MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
+        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --sign_and_notarize=True
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.MACOS_RELEASE_NAME }}
+          path: ${{github.workspace}}/build/release/PeakEater.dmg
 
-  # windows:
-  #   name: Windows
-  #   runs-on: windows-2022
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Init Git Submodules
-  #       run: git submodule update --init --recursive
-  #     - name: Checkout JUCE
-  #       run: cd ${{github.workspace}}\Dependencies\JUCE && git checkout ${{env.JUCE_REVISION}}
-  #     - name: Configure CMake 
-  #       run: cmake . -B ${{github.workspace}}\build -G 'Visual Studio 17 2022' -A x64 -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
-  #     - name: Build VST3
-  #       run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
-  #     - name: Build CLAP
-  #       run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
-  #     - name: Build LV2
-  #       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
-  #     - name: Upload Artifacts
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}}
-  #         path: |
-  #           build\PeakEater_artefacts\${{env.BUILD_TYPE}}\VST3\PeakEater.vst3\Contents\x86_64-win\PeakEater.vst3
-  #           build\PeakEater_artefacts\${{env.BUILD_TYPE}}\LV2\PeakEater.lv2
-  #           build\PeakEater_artefacts\${{env.BUILD_TYPE}}\CLAP\PeakEater.clap
+  windows:
+    name: Windows
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v3
+      - name: Init Git Submodules
+        run: git submodule update --init --recursive
+      - name: Checkout JUCE
+        run: cd ${{github.workspace}}\Dependencies\JUCE && git checkout ${{env.JUCE_REVISION}}
+      - name: Configure CMake 
+        run: cmake . -B ${{github.workspace}}\build -G 'Visual Studio 17 2022' -A x64 -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
+      - name: Build VST3
+        run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
+      - name: Build CLAP
+        run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
+      - name: Build LV2
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.WINDOWS_RELEASE_NAME }}
+          path: |
+            build\PeakEater_artefacts\${{env.BUILD_TYPE}}\VST3\PeakEater.vst3\Contents\x86_64-win\PeakEater.vst3
+            build\PeakEater_artefacts\${{env.BUILD_TYPE}}\LV2\PeakEater.lv2
+            build\PeakEater_artefacts\${{env.BUILD_TYPE}}\CLAP\PeakEater.clap
 
   linux:
     name: Linux
@@ -138,7 +141,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}
+          name: ${{ env.LINUX_RELEASE_NAME }}
           path: |
             build/PeakEater_artefacts/VST3/PeakEater.vst3/Contents/x86_64-linux/PeakEater.so
             build/PeakEater_artefacts/LV2/PeakEater.lv2
@@ -149,27 +152,32 @@ jobs:
     runs-on: ubuntu-latest
     needs: [linux]
     steps:
-      # - name: Download macOS Artefact
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: "PeakEater_v${{ env.VERSION }}_macOS_${{ env.BUILD_ID }}"
-      # - name: Download Windows Artefact
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: "PeakEater_v${{ env.VERSION }}_Windows_${{ env.BUILD_ID }}"
-      - name: Download Linux Artefact
+      - name: Download macOS Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}
-          path: linux
-      - name: Archive
+          name: ${{ env.MACOS_RELEASE_NAME }}
+          path: ${{ env.MACOS_RELEASE_NAME }}
+      - name: Download Windows Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.WINDOWS_RELEASE_NAME }}
+          path: ${{ env.WINDOWS_RELEASE_NAME }}
+      - name: Download Linux Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.LINUX_RELEASE_NAME }}
+          path: ${{ env.LINUX_RELEASE_NAME }}
+      - name: Archive Artifacts
         run: |
-          zip -r PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}{.zip,}
+          zip -r ${{ env.MACOS_RELEASE_NAME }}{.zip,}
+          zip -r ${{ env.WINDOWS_RELEASE_NAME }}{.zip,}
+          zip -r ${{ env.LINUX_RELEASE_NAME }}{.zip,}
       - name: Display structure of downloaded files
         run: ls -R
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
           draft: true
+          removeArtifacts: true
           tag: "v${{ env.VERSION }}"
-          artifacts: "PeakEater_v${{ env.VERSION }}_macOS_${{ env.BUILD_ID }},PeakEater_v${{ env.VERSION }}_Windows_${{ env.BUILD_ID }},PeakEater_v${{ env.VERSION }}_Linux_${{ env.BUILD_ID }}.zip"
+          artifacts: "${{ env.MACOS_RELEASE_NAME }}.zip,${{ env.WINDOWS_RELEASE_NAME }}.zip,${{ env.LINUX_RELEASE_NAME }}.zip"
