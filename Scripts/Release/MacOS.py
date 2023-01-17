@@ -4,7 +4,8 @@ Create DMG Image(for MacOS) that contains release artifacts.
 """
 import argparse
 import utils
-from os import environ
+import os
+import pathlib
 from dotenv import load_dotenv
 
 # Read env variables
@@ -20,73 +21,71 @@ argument_parser.add_argument('--sign_and_notarize',
                              type=bool,
                              default=False,
                              help='Sign all binaries and notarize disk image')
-argument_parser.add_argument('--preserve_tmp',
-                             type=bool,
+argument_parser.add_argument('--release_version',
+                             type=str,
                              default=False,
-                             help='Preserve temp dir after script executed')
+                             help='Release version to put into installer')
 args = argument_parser.parse_args()
 # Print arguments
 utils.log_verbose("Arguments: ", args)
 
-# Ensure appdmg installed
-utils.log_info("Installing appdmg...")
-utils.exec_command("npm install -g appdmg")
-
 # Create tmp dir
 utils.log_info("Ensuring tmp and release dirs are clean and esists...")
-TMP_DIR_PATH = utils.get_tmp_dir_path()
-utils.ensure_dir_empty(TMP_DIR_PATH)
 RELEASE_DIR_PATH = utils.get_release_dir_path()
 utils.ensure_dir_empty(RELEASE_DIR_PATH)
 
 # Copy VST3, AU, configs and assets into it
-utils.log_info("Copying VST3, AU, release assets and configs to tmo dir...")
+utils.log_info("Copying plugins to the release dir...")
 utils.copy_dir_content_recursive(
-    utils.get_build_vst3_dir_path(args.release_type), TMP_DIR_PATH)
+    utils.get_build_vst3_dir_path(args.release_type), RELEASE_DIR_PATH)
 utils.copy_dir_content_recursive(
-    utils.get_build_au_dir_path(args.release_type), TMP_DIR_PATH)
+    utils.get_build_au_dir_path(args.release_type), RELEASE_DIR_PATH)
 utils.copy_dir_content_recursive(
-    utils.get_build_lv2_dir_path(args.release_type), TMP_DIR_PATH)
+    utils.get_build_lv2_dir_path(args.release_type), RELEASE_DIR_PATH)
 utils.copy_dir_content_recursive(
-    utils.get_build_clap_dir_path(args.release_type), TMP_DIR_PATH)
-utils.copy_dir_content_recursive(
-    utils.get_project_release_assets_dir_path(), TMP_DIR_PATH)
-utils.copy_dir_content_recursive(
-    utils.get_project_release_configs_dir_path(), TMP_DIR_PATH)
+    utils.get_build_clap_dir_path(args.release_type), RELEASE_DIR_PATH)
+
+
+def codesign(bin_path: str, resursive: bool = False) -> None:
+    """Codesigns bin"""
+    utils.log_info(f"Codesigning {bin_path}...")
+    identity = os.environ.get('MACOS_APPLE_IDENTITY')
+    if resursive:
+        for filename in os.listdir(bin_path):
+            utils.exec_command(
+                f"codesign --force -s '{identity}' -v {os.path.join(bin_path, filename)} --deep --strict --options=runtime --timestamp")
+    else:
+        utils.exec_command(
+            f"codesign --force -s '{identity}' -v {bin_path} --deep --strict --options=runtime --timestamp")
+
+
+def notarize(bin_path: str) -> None:
+    """Notarize and stable bin"""
+    apple_id = os.environ.get('MACOS_APPLE_ID')
+    password = os.environ.get('MACOS_APPLE_PASSWORD')
+    team_id = os.environ.get('MACOS_APPLE_TEAM_ID')
+    utils.exec_command(
+        f"xcrun notarytool submit {bin_path} --apple-id {apple_id} --password {password} --team-id {team_id} --wait")
+    utils.exec_command(f"xcrun stapler staple {bin_path}")
+
 
 if args.sign_and_notarize:
-    # Code-sign binaries
-    utils.exec_command(
-        f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {str(TMP_DIR_PATH) + '/PeakEater.vst3'} --deep --strict --options=runtime --timestamp")
-    utils.exec_command(
-        f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {str(TMP_DIR_PATH) + '/PeakEater.component'} --deep --strict --options=runtime --timestamp")
-    utils.exec_command(
-        f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {str(TMP_DIR_PATH) + '/PeakEater.lv2/libPeakEater.so'} --deep --strict --options=runtime --timestamp")
-    utils.exec_command(
-        f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {str(TMP_DIR_PATH) + '/PeakEater.clap'} --deep --strict --options=runtime --timestamp")
+    codesign(f"{str(RELEASE_DIR_PATH)}/PeakEater.vst3")
+    codesign(f"{str(RELEASE_DIR_PATH)}/PeakEater.component")
+    codesign(f"{str(RELEASE_DIR_PATH)}/PeakEater.lv2", resursive=True)
+    codesign(f"{str(RELEASE_DIR_PATH)}/PeakEater.clap")
 
-# Create .dmg
-utils.log_info("Creating release image...")
-APP_DMG_CONFIG_FILE_PATH = str(TMP_DIR_PATH) + "/appdmg-config.json"
-OUTPUT_DMG_FILE_PATH = str(RELEASE_DIR_PATH) + "/PeakEater.dmg"
-utils.exec_command("appdmg " + APP_DMG_CONFIG_FILE_PATH +
-                   " " + OUTPUT_DMG_FILE_PATH)
-
+utils.log_info("Creating DMG image...")
+release_dmg_path = f"{str(RELEASE_DIR_PATH)}/PeakEater-{args.release_version}.dmg"
+utils.exec_command(
+    f"hdiutil create -volname PeakEater-{args.release_version} -srcfolder {str(RELEASE_DIR_PATH)} -ov -format ULFO {release_dmg_path}")
 if args.sign_and_notarize:
-    # Code-sign .dmg
-    utils.exec_command(
-        f"codesign --force -s '{environ.get('MACOS_APPLE_IDENTITY')}' -v {OUTPUT_DMG_FILE_PATH} --deep --strict --timestamp")
-    # Notarize .dmg
-    utils.exec_command(
-        f"xcrun notarytool submit {OUTPUT_DMG_FILE_PATH} --apple-id {environ.get('MACOS_APPLE_ID')} --password {environ.get('MACOS_APPLE_PASSWORD')} --team-id {environ.get('MACOS_APPLE_TEAM_ID')} --wait")
+    codesign(release_dmg_path)
+    notarize(release_dmg_path)
 
-# Staple .dmg
-utils.exec_command(f"xcrun stapler staple {OUTPUT_DMG_FILE_PATH}")
+utils.rm_dir(pathlib.Path(f"{str(RELEASE_DIR_PATH)}/PeakEater.vst3"))
+utils.rm_dir(pathlib.Path(f"{str(RELEASE_DIR_PATH)}/PeakEater.component"))
+utils.rm_dir(pathlib.Path(f"{str(RELEASE_DIR_PATH)}/PeakEater.lv2"))
+utils.rm_dir(pathlib.Path(f"{str(RELEASE_DIR_PATH)}/PeakEater.clap"))
 
-# Conditionally, cleanup tmp
-if not args.preserve_tmp:
-    utils.log_info("Cleaning up tmp dir...")
-    utils.rm_dir(TMP_DIR_PATH)
-
-# Done, print where DMG is located
-utils.log_info("Done! Dmg file may be found at: " + OUTPUT_DMG_FILE_PATH)
+utils.log_info("Done! Dmg file may be found at: " + release_dmg_path)

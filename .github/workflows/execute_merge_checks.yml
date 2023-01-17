@@ -47,7 +47,7 @@ jobs:
       - name: Build LV2
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
       - name: Package
-        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}}
+        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --release_version=${{env.VERSION}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -76,9 +76,9 @@ jobs:
         with:
           name: PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}}
           path: |
-            build\PeakEater_artefacts\${{env.BUILD_TYPE}}\VST3\PeakEater.vst3\Contents\x86_64-win\PeakEater.vst3
-            build\PeakEater_artefacts\${{env.BUILD_TYPE}}\LV2\PeakEater.lv2
-            build\PeakEater_artefacts\${{env.BUILD_TYPE}}\CLAP\PeakEater.clap
+            ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/VST3/PeakEater.vst3/Contents/x86_64-win/PeakEater.vst3
+            ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/LV2/PeakEater.lv2
+            ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/CLAP/PeakEater.clap
 
   linux:
     name: Linux
@@ -107,6 +107,6 @@ jobs:
         with:
           name: PeakEater_v${{env.VERSION}}_Linux_${{env.BUILD_ID}}
           path: |
-            build/PeakEater_artefacts/VST3/PeakEater.vst3/Contents/x86_64-linux/PeakEater.so
-            build/PeakEater_artefacts/LV2/PeakEater.lv2
-            build/PeakEater_artefacts/CLAP/PeakEater.clap
+            ${{github.workspace}}/build/PeakEater_artefacts/VST3/PeakEater.vst3/Contents/x86_64-linux/PeakEater.so
+            ${{github.workspace}}/build/PeakEater_artefacts/LV2/PeakEater.lv2
+            ${{github.workspace}}/build/PeakEater_artefacts/CLAP/PeakEater.clap
