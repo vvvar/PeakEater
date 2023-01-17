@@ -52,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: PeakEater_v${{env.VERSION}}_macOS_${{env.BUILD_ID}}
-          path: ${{github.workspace}}/build/release/PeakEater.dmg
+          path: ${{github.workspace}}/build/release/PeakEater-${{env.VERSION}}.dmg
 
   windows:
     name: Windows
