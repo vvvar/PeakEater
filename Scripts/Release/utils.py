@@ -124,10 +124,10 @@ def ensure_dir_empty(path: Path) -> None:
     mkdir(path)
 
 
-def rm_dir(path: Path) -> None:
+def rm_dir(dir_path: Path) -> None:
     """Remove dir by specified path"""
-    if path.exists():
-        rmtree(path)
+    if dir_path.exists():
+        rmtree(dir_path)
 
 
 def copy_dir_content_recursive(src: Path, dst: Path) -> None:

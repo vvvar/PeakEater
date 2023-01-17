@@ -159,7 +159,7 @@ You can use it on macOS, Windows or Linux.
 Supported formats are: VST3, AU, LV2, CLAP.
 Tested on: macOS 12.6.2
 
-Install plugin via **.dmg** file.
+Install plugin via **.dmg** file. copy plugin in format of choice into folder with your plugins.
 
 > **Note**<br />
 > VST3 directory is `/Library/Audio/Plug-ins/VST3`<br />
@@ -245,7 +245,7 @@ Distributed under the GPL-3.0 License. See [`LICENSE.md`](https://github.com/vvv
 - [clap-juce-extensions](https://github.com/free-audio/clap-juce-extensions) - CLAP support for JUCE
 - [Free Clip](https://gitlab.com/JHVenn/Free-Clip) by [Venn Audio](https://www.vennaudio.com)
 - [The Audio Programmer](https://theaudioprogrammer.com) for providing extensive video-lessons on audio programming and DSP
-- Testers-volunteers and active supporters - [George Budilov](), [Blue Four](https://soundcloud.com/bluefour)
+- Testers-volunteers and active supporters - [George Budilov](), [Blue Four](https://soundcloud.com/bluefour), Garmata Music
 - Everyone who provided active feedback all this time
 
 <!-- MARKDOWN LINKS & IMAGES -->
