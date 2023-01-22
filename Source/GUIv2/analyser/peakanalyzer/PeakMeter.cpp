@@ -1,5 +1,7 @@
 #include "PeakMeter.h"
 
+#include <algorithm>
+
 namespace pe
 {
 namespace gui
