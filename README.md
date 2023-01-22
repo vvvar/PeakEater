@@ -5,7 +5,7 @@
 <p align="center">Free open-source VST3/AU/LV2/CLAP wave shaping plugin for macOS, Windows and Linux.</p>
 <p align="center">
     <a href="https://github.com/vvvar/PeakEater/releases/latest"><b>Download</b></a>
-    · <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new/choose"><b>Report Bug</b></a>
+    · <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new?assignees=&labels=Feature+Request&template=feature_request.md&title="><b>Request Feature</b></a> · <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new?assignees=&labels=Bug&template=bug_report.md&title=%5BBug%5D"><b>Report Bug</b></a>
 </p>
 
 ![screenshot](Resources/screenshots/screenshot-mac.png)
@@ -33,18 +33,23 @@
         <li><a href="#available-on-all-major-platforms">macOS, Windows and Linux Support</a></li>
       </ul>
     </li>
-    <li><a href="#installation">Installation</a></li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#installation">Installation</a>
+      <ul>
+        <li><a href="#macos">macOS</a></li>
+        <li><a href="#windows">Windows</a></li>
+        <li><a href="#linux">Linux</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#building-from-sources">Building from sources</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#build">Build</a></li>
       </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#donations">Donations</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
@@ -91,7 +96,7 @@ See how your peaks were eaten with visualizer.
 
 <img src="Resources/screenshots/screenshot-analyzer.png" alt="clip-analyzer" height="100"/>
 
-Shows approximated RMS that was cut("Eaten") in last 2 seconds. Double-click to drop it to zero and force to re-calculate.
+Shows approximated RMS that was cut("Eaten") in last 2 seconds and current clipping algorithm. Double-click on numbers to drop it to zero and force to re-calculate.
 
 ### 6 Clipping Types
 
@@ -193,13 +198,15 @@ Extract zip and copy plugin in format of choice into folder with your plugins.
 
 <!-- GETTING STARTED -->
 
-## Building the project from sources
+## Building from sources
 
 ### Prerequisites
 
 - [Git](https://git-scm.com) 2.39.0+
 - [CMake](https://cmake.org) 3.15+
 - [Python](https://www.python.org) 3.8.1+
+
+### Build
 
 Clone this repo:
 

@@ -1,5 +1,5 @@
 name: Publish Release Draft
-run-name: Create release draft for v0.3.5
+run-name: Create release draft for v0.4.0
 on:
   push:
     branches:
@@ -12,9 +12,9 @@ env:
   LV2_TARGET_NAME: PeakEater_LV2
   CLAP_TARGET_NAME: PeakEater_CLAP
   JUCE_REVISION: 4e68af7
-  MACOS_RELEASE_NAME: PeakEater_v0.3.5_macOS
-  WINDOWS_RELEASE_NAME: PeakEater_v0.3.5_Windows
-  LINUX_RELEASE_NAME: PeakEater_v0.3.5_Linux
+  MACOS_RELEASE_NAME: PeakEater_v0.4.0_macOS
+  WINDOWS_RELEASE_NAME: PeakEater_v0.4.0_Windows
+  LINUX_RELEASE_NAME: PeakEater_v0.4.0_Linux
 jobs:
   macos:
     name: macOS
@@ -81,12 +81,12 @@ jobs:
           MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
           MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
           MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
-        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --sign_and_notarize=True --release_version=0.3.5
+        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --sign_and_notarize=True --release_version=0.4.0
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.MACOS_RELEASE_NAME }}
-          path: ${{github.workspace}}/build/release/PeakEater-0.3.5.dmg
+          path: ${{github.workspace}}/build/release/PeakEater-0.4.0.dmg
 
   windows:
     name: Windows
@@ -97,7 +97,7 @@ jobs:
         run: git submodule update --init --recursive
       - name: Checkout JUCE
         run: cd ${{github.workspace}}\Dependencies\JUCE && git checkout ${{env.JUCE_REVISION}}
-      - name: Configure CMake 
+      - name: Configure CMake
         run: cmake . -B ${{github.workspace}}\build -G 'Visual Studio 17 2022' -A x64 -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
         run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
@@ -128,7 +128,7 @@ jobs:
           sudo apt-get install libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev
       - name: Checkout JUCE
         run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
-      - name: Configure CMake 
+      - name: Configure CMake
         run: cmake . -B ${{github.workspace}}/build -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
@@ -146,7 +146,7 @@ jobs:
             ${{github.workspace}}/build/PeakEater_artefacts/CLAP/PeakEater.clap
 
   release:
-    name: Publish Release Draft 
+    name: Publish Release Draft
     runs-on: ubuntu-latest
     needs: [macos, windows, linux]
     steps:
@@ -178,5 +178,5 @@ jobs:
           draft: true
           removeArtifacts: true
           makeLatest: true
-          tag: "v0.3.5"
+          tag: "v0.4.0"
           artifacts: "${{ env.MACOS_RELEASE_NAME }}.zip,${{ env.WINDOWS_RELEASE_NAME }}.zip,${{ env.LINUX_RELEASE_NAME }}.zip"

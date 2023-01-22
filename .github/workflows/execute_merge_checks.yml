@@ -1,5 +1,5 @@
 name: Execute nmerger checks
-run-name: 'Merge checks for PR #${{ github.event.number }}'
+run-name: "Merge checks for PR #${{ github.event.number }}"
 on: pull_request
 env:
   BUILD_TYPE: Release
@@ -8,8 +8,8 @@ env:
   LV2_TARGET_NAME: PeakEater_LV2
   CLAP_TARGET_NAME: PeakEater_CLAP
   JUCE_REVISION: 4e68af7
-  VERSION: 0.3.5
-  BUILD_ID: '${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}'
+  VERSION: 0.4.0
+  BUILD_ID: "${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}"
 jobs:
   macos:
     name: macOS
@@ -31,7 +31,7 @@ jobs:
           npm --version
           which npm
       - name: Install Python Dependencies
-        run: python -m pip install -r ${{github.workspace}}/requirements.txt 
+        run: python -m pip install -r ${{github.workspace}}/requirements.txt
       - name: Init Git Submodules
         run: git submodule update --init --recursive
       - name: Checkout JUCE
@@ -63,7 +63,7 @@ jobs:
         run: git submodule update --init --recursive
       - name: Checkout JUCE
         run: cd ${{github.workspace}}\Dependencies\JUCE && git checkout ${{env.JUCE_REVISION}}
-      - name: Configure CMake 
+      - name: Configure CMake
         run: cmake . -B ${{github.workspace}}\build -G 'Visual Studio 17 2022' -A x64 -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
         run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
@@ -94,7 +94,7 @@ jobs:
           sudo apt-get install libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev
       - name: Checkout JUCE
         run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
-      - name: Configure CMake 
+      - name: Configure CMake
         run: cmake . -B ${{github.workspace}}/build -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}

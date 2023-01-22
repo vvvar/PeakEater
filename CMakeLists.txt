@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(PeakEater VERSION 0.3.5)
+project(PeakEater VERSION 0.4.0)
 set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(Dependencies/JUCE)
@@ -31,6 +31,9 @@ target_sources(PeakEater
         Source/GUIv2/linkinout/LinkInOut.cpp
         Source/GUIv2/bypass/BypassButton.cpp
         Source/GUIv2/levelmeter/LevelMeterComponent.cpp
+        Source/GUIv2/analyser/peakanalyzer/PeakMeter.cpp
+        Source/GUIv2/analyser/peakanalyzer/PeakAnalyzerComponent.cpp
+        Source/GUIv2/analyser/cliptype/ClipTypeComponent.cpp
         Source/GUIv2/analyser/AnalyserComponent.cpp
         Source/GUIv2/ControlPanel.cpp
         Source/GUIv2/LinkingPanel.cpp
