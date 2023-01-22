@@ -8,7 +8,7 @@ env:
   LV2_TARGET_NAME: PeakEater_LV2
   CLAP_TARGET_NAME: PeakEater_CLAP
   JUCE_REVISION: 4e68af7
-  VERSION: 0.4.0
+  VERSION: 0.4.1
   BUILD_ID: "${{ github.run_id }}.${{ github.run_number }}.${{ github.run_attempt }}"
 jobs:
   macos:
@@ -64,7 +64,7 @@ jobs:
       - name: Checkout JUCE
         run: cd ${{github.workspace}}\Dependencies\JUCE && git checkout ${{env.JUCE_REVISION}}
       - name: Configure CMake
-        run: cmake . -B ${{github.workspace}}\build -G 'Visual Studio 17 2022' -A x64 -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
+        run: cmake . -B ${{github.workspace}}\build -G 'Visual Studio 17 2022' -A x64 -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
         run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
       - name: Build CLAP
@@ -75,6 +75,32 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: PeakEater_v${{env.VERSION}}_Windows_${{env.BUILD_ID}}
+          path: |
+            ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/VST3/PeakEater.vst3/Contents/x86_64-win/PeakEater.vst3
+            ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/LV2/PeakEater.lv2
+            ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/CLAP/PeakEater.clap
+
+  windows_legacy:
+    name: Windows(Legacy)
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v3
+      - name: Init Git Submodules
+        run: git submodule update --init --recursive
+      - name: Checkout JUCE
+        run: cd ${{github.workspace}}\Dependencies\JUCE && git checkout ${{env.JUCE_REVISION}}
+      - name: Configure CMake
+        run: cmake . -B ${{github.workspace}}\build -G 'Visual Studio 17 2022' -A x64 -DSTATIC_MSVC_RUNTIME_LINKING=ON -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
+      - name: Build VST3
+        run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
+      - name: Build CLAP
+        run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
+      - name: Build LV2
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: PeakEater_v${{env.VERSION}}_Windows_Legacy_${{env.BUILD_ID}}
           path: |
             ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/VST3/PeakEater.vst3/Contents/x86_64-win/PeakEater.vst3
             ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/LV2/PeakEater.lv2
@@ -95,7 +121,7 @@ jobs:
       - name: Checkout JUCE
         run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
       - name: Configure CMake
-        run: cmake . -B ${{github.workspace}}/build -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
+        run: cmake . -B ${{github.workspace}}/build -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
       - name: Build CLAP

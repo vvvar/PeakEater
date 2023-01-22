@@ -1,6 +1,22 @@
 cmake_minimum_required(VERSION 3.15)
-project(PeakEater VERSION 0.4.0)
+project(PeakEater VERSION 0.4.1)
 set(CMAKE_CXX_STANDARD 20)
+
+# Used for backwards compatibility with older Windows versions(less then Win 10).
+# Should be used only for legacy versions. Do not use it for new Windows version.
+# See discussions:
+# - https://forum.juce.com/t/vst-vst3-cant-be-loaded-in-other-machine/34452
+# - https://forum.juce.com/t/cmake-windows-static-runtime-libs-issue/41219
+option(STATIC_MSVC_RUNTIME_LINKING "Statically link MSVC runtime" OFF)
+if ($CACHE{STATIC_MSVC_RUNTIME_LINKING} MATCHES ON)
+    message(STATUS "Will statically link MSVC runtime")
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    add_compile_options(
+        $<$<CONFIG:Release>:/MT> # Runtime library: Multi-threaded
+        $<$<CONFIG:RelWithDebInfo>:/MT> # Runtime library: Multi-threaded                           
+        $<$<CONFIG:Debug>:/MTd> # Runtime library: Multi-threaded Debug
+    )
+endif()
 
 add_subdirectory(Dependencies/JUCE)
 add_subdirectory(Dependencies/clap-juce-extensions EXCLUDE_FROM_ALL) 
