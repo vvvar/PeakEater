@@ -3,7 +3,7 @@ run-name: Create release draft for v0.4.0
 on:
   push:
     branches:
-      - master
+      - visualise_clipping_algo
 
 env:
   BUILD_TYPE: Release
@@ -168,6 +168,11 @@ jobs:
       - name: Archive Artifacts
         run: |
           zip -r ${{ env.MACOS_RELEASE_NAME }}{.zip,}
+          mkdir ${{ env.WINDOWS_RELEASE_NAME }}/tmp
+          mv ${{ env.WINDOWS_RELEASE_NAME }}/VST3/PeakEater.vst3/Contents/x86_64-win/PeakEater.vst3 ${{ env.WINDOWS_RELEASE_NAME }}/tmp
+          rm -rf ${{ env.WINDOWS_RELEASE_NAME }}/VST3/PeakEater.vst3
+          mv ${{ env.WINDOWS_RELEASE_NAME }}/tmp/PeakEater.vst3 ${{ env.WINDOWS_RELEASE_NAME }}/VST3
+          rm -rf ${{ env.WINDOWS_RELEASE_NAME }}/tmp
           zip -r ${{ env.WINDOWS_RELEASE_NAME }}{.zip,}
           zip -r ${{ env.LINUX_RELEASE_NAME }}{.zip,}
       - name: Display structure of downloaded files
