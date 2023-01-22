@@ -41,7 +41,7 @@ void CentralPanel::resized()
 	                    .withTrimmedRight (toRemoveFromSides));
 
 	mAnalyserComponent.setBounds(localBounds
-	                             .withWidth(localBounds.proportionOfWidth (0.17f))
+	                             .withWidth(localBounds.proportionOfWidth (0.28f))
 	                             .withHeight(localBounds.proportionOfHeight (0.155f))
 	                             .withX(localBounds.proportionOfWidth (0.1f))
 	                             .withY(localBounds.proportionOfHeight (0.05f)));
