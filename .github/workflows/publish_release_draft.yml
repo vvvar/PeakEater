@@ -3,7 +3,7 @@ run-name: Create release draft for v0.4.0
 on:
   push:
     branches:
-      - visualise_clipping_algo
+      - master
 
 env:
   BUILD_TYPE: Release
