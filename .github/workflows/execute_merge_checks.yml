@@ -88,7 +88,7 @@ jobs:
       - name: Init Git Submodules
         run: git submodule update --init --recursive
       - name: Checkout JUCE
-        run: cd ${{github.workspace}}\Dependencies\JUCE && git checkout bbd6ccb
+        run: cd ${{github.workspace}}\Dependencies\JUCE && git checkout 164c9121ceafb4fad686470ed963a7bb14f15c63
       - name: Configure CMake
         run: cmake . -B ${{github.workspace}}\build -G 'Visual Studio 17 2022' -A x64 -DSTATIC_MSVC_RUNTIME_LINKING=ON -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3

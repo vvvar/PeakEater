@@ -11,11 +11,6 @@ option(STATIC_MSVC_RUNTIME_LINKING "Statically link MSVC runtime" OFF)
 if ($CACHE{STATIC_MSVC_RUNTIME_LINKING} MATCHES ON)
     message(STATUS "Will statically link MSVC runtime")
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-    # add_compile_options(
-    #     $<$<CONFIG:Release>:/MT> # Runtime library: Multi-threaded
-    #     $<$<CONFIG:RelWithDebInfo>:/MT> # Runtime library: Multi-threaded                           
-    #     $<$<CONFIG:Debug>:/MTd> # Runtime library: Multi-threaded Debug
-    # )
 endif()
 
 add_subdirectory(Dependencies/JUCE)
