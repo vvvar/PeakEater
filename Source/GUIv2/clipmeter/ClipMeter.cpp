@@ -46,7 +46,8 @@ float gDbToYPos (float const& dB, float const& maxY, float const& maxDb = 36.0f,
 ClipMeter::ClipMeter (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
                       std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
                       std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-                      std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter)
+                      std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter,
+                      std::shared_ptr<Ticks> ticks)
 	: juce::Component()
 	, mTimer (std::bind (&ClipMeter::onTimerTick, this))
 	, mParameters (parameters)
@@ -54,6 +55,7 @@ ClipMeter::ClipMeter (std::shared_ptr<juce::AudioProcessorValueTreeState> parame
 	, mClippingLevelMeter (clippingLevelMeter)
 	, mOutputLevelMeter (outputLevelMeter)
 	, mBufferMaxSize (400)
+	, mTicks(ticks)
 {
 	for (int x = 0; x < mBufferMaxSize; x++)
 	{
@@ -80,9 +82,9 @@ void ClipMeter::paint (juce::Graphics& g)
 	g.fillAll (colourscheme::BackgroundPrimary);
 	drawBuffer (mInputBuffer, colourscheme::ForegroundSecondary, g);
 	drawBuffer (mClippingBuffer, colourscheme::ForegroundPrimary, g);
-	drawTicks (mTicks.getTicksList(), colourscheme::TextFocusLevel3, g);
+	drawTicks (mTicks->getTicksList(), colourscheme::TextFocusLevel3, g);
 	drawDbLine (*static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())), colourscheme::TextFocusLevel0, g);
-	drawTicksTexts (mTicks.getTicksList(), colourscheme::TextFocusLevel3, g);
+	drawTicksTexts (mTicks->getTicksList(), colourscheme::TextFocusLevel3, g);
 }
 
 void ClipMeter::drawBuffer (std::deque<float>& buffer, juce::Colour const&& colour, juce::Graphics& g)
@@ -187,7 +189,7 @@ void ClipMeter::mouseDown (juce::MouseEvent const& event)
 {
 	if (event.mods.isRightButtonDown())
 	{
-		mTicks.switchToNextTicksList();
+		mTicks->switchToNextTicksList();
 	}
 }
 } // namespace gui

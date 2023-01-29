@@ -9,9 +9,10 @@ WorkingPanel::WorkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> 
                             std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
                             std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter)
 	: juce::Component()
-	, mLeftPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
-	, mCentralPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
-	, mRightPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
+	, mTicks (std::make_shared<Ticks>())
+	, mLeftPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter, mTicks)
+	, mCentralPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter, mTicks)
+	, mRightPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter, mTicks)
 {
 	addAndMakeVisible (mLeftPanel);
 	addAndMakeVisible (mCentralPanel);

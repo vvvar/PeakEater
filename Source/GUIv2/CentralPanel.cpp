@@ -7,9 +7,10 @@ namespace gui
 CentralPanel::CentralPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
                             std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
                             std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-                            std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter)
+                            std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter,
+                            std::shared_ptr<Ticks> ticks)
 	: juce::Component()
-	, mClipMeter (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
+	, mClipMeter (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter, ticks)
 	, mControlPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
 	, mLinkingPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
 	, mAnalyserComponent (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)

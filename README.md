@@ -25,6 +25,7 @@
         <li><a href="#ceiling-control">Ceiling control</a></li>
         <li><a href="#visualizer">Visualizer</a></li>
         <li><a href="#analyzer">Analyzer</a></li>
+        <li><a href="#switchable-scales">Switchable scales</a></li>
         <li><a href="#6-clipping-types">6 Clipping Types</a></li>
         <li><a href="#oversampling">Oversampling</a></li>
         <li><a href="#bypass-mode">Bypass mode</a></li>
@@ -66,7 +67,7 @@ PeakEater is a free, easy to use waveshaping plugin. PeakEater lets you choose b
 
 <img src="Resources/screenshots/screenshot-in.png" alt="input-rms-screen" height="250"/><---><img src="Resources/screenshots/screenshot-out.png" alt="output-rms-screen" height="250"/>
 
-See the RMS of signal before and after plugin.
+See how loud signal was before and after plugin.
 
 ### Input & Output Gain
 
@@ -90,13 +91,19 @@ Control your ceiling. Everything above this level would be "eaten". Build-in RMS
 
 <img src="Resources/screenshots/screenshot-clip-visualizer.png" alt="clip-visualizer" height="100"/>
 
-See how your peaks were eaten with visualizer.
+Displays magnitude(in dB's) so you can see how peaks were eaten over time.
 
 ### Analyzer
 
 <img src="Resources/screenshots/screenshot-analyzer.png" alt="clip-analyzer" height="100"/>
 
 Shows approximated RMS that was cut("Eaten") in last 2 seconds and current clipping algorithm. Double-click on numbers to drop it to zero and force to re-calculate.
+
+### Switchable scales
+
+<img src="Resources/screenshots/screenshot-switch-ticks.gif" alt="switch-db-level-scales" height="250"/>
+
+Right click on Visualizer to switch between different scales.
 
 ### 6 Clipping Types
 

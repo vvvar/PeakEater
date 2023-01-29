@@ -4,6 +4,7 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../DSP/LevelMeter.h"
+#include "Ticks.h"
 #include "levelmeter/LevelMeterComponent.h"
 
 namespace pe
@@ -17,7 +18,8 @@ public:
 RightPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
             std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
             std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-            std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
+            std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter,
+            std::shared_ptr<Ticks> ticks);
 
 void resized() override;
 
