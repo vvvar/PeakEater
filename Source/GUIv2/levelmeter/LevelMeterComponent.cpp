@@ -64,9 +64,13 @@ float gDbToYPos (float const& dB, float const& maxY, float const& maxDb = 36.0f,
 	}
 }
 } // namespace
-LevelMeterComponent::LevelMeterComponent (std::shared_ptr<pe::dsp::LevelMeter<float> > levelMeter, std::string const& name)
+LevelMeterComponent::LevelMeterComponent (
+	std::shared_ptr<pe::dsp::LevelMeter<float> > levelMeter
+	, std::shared_ptr<Ticks> ticks
+	, std::string const& name)
 	: juce::Component()
 	, mName (name)
+	, mTicks(ticks)
 	, mMeterTimer (std::bind (&LevelMeterComponent::onTimerTick, this))
 	, mLevelMeter (levelMeter)
 	, mRange (-36.0f, 0.0f, 0.1f, 1.0f)
@@ -115,7 +119,7 @@ void LevelMeterComponent::paint (juce::Graphics& g)
 	}
 
 	// Draw level ticks
-	drawTicks ({ 0.0f, -3.0f, -5.0f, -8.0f, -11.0f, -14.0f, -17.0f, -20.0f, -23.0f, -26.0f, -29.0f, -32.0f, -36.0f }, colourscheme::TextFocusLevel3, g);
+	drawTicks (mTicks->getTicksList(), colourscheme::TextFocusLevel3, g);
 
 	// Draw dB value
 	auto const padding = 15.0f;

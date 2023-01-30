@@ -7,9 +7,10 @@ namespace gui
 LeftPanel::LeftPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
                       std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
                       std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-                      std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter)
+                      std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter,
+                      std::shared_ptr<Ticks> ticks)
 	: juce::Component()
-	, mLevelMeter (inputLevelMeter, "IN")
+	, mLevelMeter (inputLevelMeter, ticks, "IN")
 {
 	addAndMakeVisible (mLevelMeter);
 }

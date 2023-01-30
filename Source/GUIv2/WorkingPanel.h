@@ -4,6 +4,7 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../DSP/LevelMeter.h"
+#include "Ticks.h"
 #include "CentralPanel.h"
 #include "LeftPanel.h"
 #include "RightPanel.h"
@@ -24,6 +25,7 @@ WorkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
 void resized() override;
 
 private:
+std::shared_ptr<Ticks> mTicks;
 LeftPanel mLeftPanel;
 CentralPanel mCentralPanel;
 RightPanel mRightPanel;
