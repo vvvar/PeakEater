@@ -6,6 +6,7 @@ import argparse
 import utils
 import os
 import pathlib
+import shutil
 from dotenv import load_dotenv
 
 # Read env variables
@@ -77,8 +78,11 @@ if args.sign_and_notarize:
 
 utils.log_info("Creating DMG image...")
 release_dmg_path = f"{str(RELEASE_DIR_PATH)}/PeakEater-{args.release_version}.dmg"
+utils.exec_command("npm install -g appdmg")
+shutil.copyfile(
+    f"{os.path.dirname(__file__)}/configs/appdmg-config.json", f"{RELEASE_DIR_PATH}/appdmg-config.json")
 utils.exec_command(
-    f"hdiutil create -volname PeakEater-{args.release_version} -srcfolder {str(RELEASE_DIR_PATH)} -ov -format ULFO {release_dmg_path}")
+    f"appdmg {RELEASE_DIR_PATH}/appdmg-config.json {str(RELEASE_DIR_PATH)}/PeakEater-{args.release_version}.dmg")
 if args.sign_and_notarize:
     codesign(release_dmg_path)
     notarize(release_dmg_path)
