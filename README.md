@@ -101,7 +101,7 @@ Shows approximated RMS that was cut("Eaten") in last 2 seconds and current clipp
 
 ### Switchable scales
 
-<img src="Resources/screenshots/screenshot-switch-ticks.gif" alt="switch-db-level-scales" height="250"/>
+<img src="Resources/screenshots/screenshot-switch-ticks.gif" alt="switch-db-level-scales" width="400"/>
 
 Right click on Visualizer to switch between different scales.
 
