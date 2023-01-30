@@ -171,7 +171,10 @@ You can use it on macOS, Windows or Linux.
 Supported formats are: VST3, AU, LV2, CLAP.
 Tested on: macOS 12.6.2
 
-Install plugin via **.dmg** file. copy plugin in format of choice into folder with your plugins.
+Install plugin via **.dmg** file. Drag plugin in format of choice into folder with your plugins.
+
+> **Note**<br />
+> Due to macOS restrictions, you cannot drag files into untrusted directories. Therefore, double click on directory shortcut, open it and drag it directly there.
 
 > **Note**<br />
 > VST3 directory is `/Library/Audio/Plug-ins/VST3`<br />
