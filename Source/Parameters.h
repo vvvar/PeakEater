@@ -23,9 +23,9 @@ Parameter (juce::String const& id, juce::String const& label)
 {
 }
 
-juce::ParameterID getId() const
+juce::String getId() const
 {
-	return juce::ParameterID{ mId, 1};
+	return mId;
 }
 
 juce::String getLabel() const

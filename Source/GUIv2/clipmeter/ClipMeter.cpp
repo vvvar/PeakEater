@@ -59,7 +59,7 @@ void ClipMeter::paint (juce::Graphics& g)
 	drawTicks (mTicks->getTicksList(), colourscheme::TextFocusLevel3, g);
 	drawDbLine (
 		*static_cast<juce::AudioParameterFloat*> (
-			mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId().getParamID())),
+			mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())),
 		colourscheme::TextFocusLevel0, g);
 	drawTicksTexts (mTicks->getTicksList(), colourscheme::TextFocusLevel3, g);
 }

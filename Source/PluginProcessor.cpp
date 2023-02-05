@@ -32,36 +32,36 @@ mInputGain(
 	static_cast<juce::AudioParameterFloat *>(mParameters->getParameter(
 							 pe::params::ParametersProvider::getInstance()
 							 .getInputGain()
-							 .getId().getParamID()))),
+							 .getId()))),
 mOutputGain(
 	static_cast<juce::AudioParameterFloat *>(mParameters->getParameter(
 							 pe::params::ParametersProvider::getInstance()
 							 .getOutputGain()
-							 .getId().getParamID()))),
+							 .getId()))),
 mLinkInOut(
 	static_cast<juce::AudioParameterBool *>(mParameters->getParameter(
 							pe::params::ParametersProvider::getInstance()
 							.getLinkInOut()
-							.getId().getParamID()))),
+							.getId()))),
 mBypass(static_cast<juce::AudioParameterBool *>(mParameters->getParameter(
 							pe::params::ParametersProvider::getInstance()
 							.getBypass()
-							.getId().getParamID()))),
+							.getId()))),
 mCeiling(static_cast<
 		 juce::AudioParameterFloat *>(mParameters->getParameter(
 						      pe::params::ParametersProvider::getInstance()
 						      .getCeiling()
-						      .getId().getParamID()))),
+						      .getId()))),
 mClippingType(
 	static_cast<juce::AudioParameterChoice *>(mParameters->getParameter(
 							  pe::params::ParametersProvider::getInstance()
 							  .getClippingType()
-							  .getId().getParamID()))),
+							  .getId()))),
 mOversampleRate(
 	static_cast<juce::AudioParameterChoice *>(mParameters->getParameter(
 							  pe::params::ParametersProvider::getInstance()
 							  .getOversampleRate()
-							  .getId().getParamID()))),
+							  .getId()))),
 mWaveShaperController(),
 mLevelMeterPostIn(std::make_shared<pe::dsp::LevelMeter<float> >()),
 mLevelMeterPostClipper(std::make_shared<pe::dsp::LevelMeter<float> >()),
