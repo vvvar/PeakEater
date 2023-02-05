@@ -1,5 +1,8 @@
 #pragma once
+
 #include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_audio_processors/juce_audio_processors.h>
+
 #include <string>
 #include <map>
 
@@ -57,6 +60,10 @@ inline float gDbToYPos (float const& dB, float const& maxY, bool isLinear, float
 		}
 	}
 	return yPosCache.at(paramsHash);
+}
+inline bool getBoolParamValue(std::string const& paramId, std::shared_ptr<juce::AudioProcessorValueTreeState> vts)
+{
+	return (vts->getParameter(paramId)->getValue() != 0.0f);
 }
 } // namespace gui
 } // namespace pe

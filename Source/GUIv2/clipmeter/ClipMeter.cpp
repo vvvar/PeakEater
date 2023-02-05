@@ -152,7 +152,14 @@ void ClipMeter::drawTicksTexts (std::vector<float> const& ticksLevels, juce::Col
 		g.setColour (textColor);
 		std::string const dbStr = std::to_string (static_cast<int> (tickLevel)) + "dB";
 		g.drawText (dbStr, 0, yPos, textWidth, textHeight, juce::Justification::left, true);
-		g.drawText (dbStr, tickWidth - textWidth, yPos, textWidth, textHeight, juce::Justification::right, true);
+		g.drawText (
+			dbStr,
+			static_cast<int>(tickWidth - textWidth),
+			yPos,
+			textWidth,
+			textHeight,
+			juce::Justification::right,
+			true);
 	}
 }
 

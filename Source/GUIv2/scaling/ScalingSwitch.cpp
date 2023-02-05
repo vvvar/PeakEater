@@ -30,8 +30,15 @@ void ScalingSwitch::paint (juce::Graphics& g)
 	{
 		color = color.withAlpha (1.0f);
 	}
+	// Draw Border
 	g.setColour (color);
-	g.drawText (mTicks->isLinear() ? "1x" : "2x", getLocalBounds(), juce::RectanglePlacement::centred, true);
+	auto const borderRadius = 10.0f;
+	auto const borderThickness = 1.0f;
+	auto const bounds = getLocalBounds().toFloat().reduced(borderThickness);
+	g.drawRoundedRectangle (bounds, borderRadius, borderThickness);
+	// Draw label
+	g.setColour (color);
+	g.drawText (mTicks->isLinear() ? "1x" : "2x", bounds, juce::RectanglePlacement::centred, true);
 }
 
 void ScalingSwitch::mouseDown (juce::MouseEvent const&)

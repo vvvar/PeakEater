@@ -15,7 +15,7 @@ auto constexpr gParamName = "Bypass";
 }
 BypassButton::BypassButton (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters)
 	: mParameters (parameters)
-	, mIsOn (false)
+	, mIsOn (getBoolParamValue(gParamName, parameters))
 {
 	mParameters->getParameter (gParamName)->addListener (this);
 	setMouseCursor (juce::MouseCursor::PointingHandCursor);
@@ -77,13 +77,13 @@ void BypassButton::mouseDown (juce::MouseEvent const&)
 
 void BypassButton::parameterValueChanged (int, float)
 {
-	mIsOn = (mParameters->getParameter (gParamName)->getValue() != 0.0f);
+	mIsOn = getBoolParamValue(gParamName, mParameters);
 	repaint();
 }
 
 void BypassButton::parameterGestureChanged (int, bool)
 {
-	mIsOn = (mParameters->getParameter (gParamName)->getValue() != 0.0f);
+	mIsOn = getBoolParamValue(gParamName, mParameters);
 	repaint();
 }
 
