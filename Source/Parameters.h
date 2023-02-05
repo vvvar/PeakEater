@@ -1,6 +1,7 @@
 #pragma once
 
 #include <juce_core/juce_core.h>
+#include <juce_audio_processors/juce_audio_processors.h>
 
 //==============================================================================
 /*
@@ -22,9 +23,9 @@ Parameter (juce::String const& id, juce::String const& label)
 {
 }
 
-juce::String getId() const
+juce::ParameterID getId() const
 {
-	return mId;
+	return juce::ParameterID{ mId, 1};
 }
 
 juce::String getLabel() const

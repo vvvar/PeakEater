@@ -32,7 +32,7 @@ void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) overri
 private:
 Header mHeader;
 WorkingPanel mWorkingPanel;
-BypassButton mBypassButton;
+BypassButton mBypassButton; // part of Main Component because when disabled we still need to handle clicks
 juce::TooltipWindow mTooltipWindow{ this, 500 };
 
 std::shared_ptr<juce::AudioProcessorValueTreeState> mParameters;

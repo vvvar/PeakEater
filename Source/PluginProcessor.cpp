@@ -32,32 +32,36 @@ mInputGain(
 	static_cast<juce::AudioParameterFloat *>(mParameters->getParameter(
 							 pe::params::ParametersProvider::getInstance()
 							 .getInputGain()
-							 .getId()))),
+							 .getId().getParamID()))),
 mOutputGain(
 	static_cast<juce::AudioParameterFloat *>(mParameters->getParameter(
 							 pe::params::ParametersProvider::getInstance()
 							 .getOutputGain()
-							 .getId()))),
+							 .getId().getParamID()))),
 mLinkInOut(
 	static_cast<juce::AudioParameterBool *>(mParameters->getParameter(
 							pe::params::ParametersProvider::getInstance()
 							.getLinkInOut()
-							.getId()))),
+							.getId().getParamID()))),
 mBypass(static_cast<juce::AudioParameterBool *>(mParameters->getParameter(
-							pe::params::ParametersProvider::getInstance().getBypass().getId()))),
+							pe::params::ParametersProvider::getInstance()
+							.getBypass()
+							.getId().getParamID()))),
 mCeiling(static_cast<
 		 juce::AudioParameterFloat *>(mParameters->getParameter(
-						      pe::params::ParametersProvider::getInstance().getCeiling().getId()))),
+						      pe::params::ParametersProvider::getInstance()
+						      .getCeiling()
+						      .getId().getParamID()))),
 mClippingType(
 	static_cast<juce::AudioParameterChoice *>(mParameters->getParameter(
 							  pe::params::ParametersProvider::getInstance()
 							  .getClippingType()
-							  .getId()))),
+							  .getId().getParamID()))),
 mOversampleRate(
 	static_cast<juce::AudioParameterChoice *>(mParameters->getParameter(
 							  pe::params::ParametersProvider::getInstance()
 							  .getOversampleRate()
-							  .getId()))),
+							  .getId().getParamID()))),
 mWaveShaperController(),
 mLevelMeterPostIn(std::make_shared<pe::dsp::LevelMeter<float> >()),
 mLevelMeterPostClipper(std::make_shared<pe::dsp::LevelMeter<float> >()),
@@ -206,8 +210,8 @@ void PeakEaterAudioProcessor::processBlock(
 	}
 }
 
-void PeakEaterAudioProcessor::processBlockBypassed(
-	juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages) {
+void PeakEaterAudioProcessor::processBlockBypassed(juce::AudioBuffer<float> &, juce::MidiBuffer &) {
+	// Because we're handling bypass internally
 }
 
 juce::AudioProcessorParameter *

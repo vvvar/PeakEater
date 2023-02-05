@@ -16,32 +16,6 @@ namespace gui
 {
 namespace
 {
-enum class ScalingType : unsigned int
-{
-	kLinear,
-	kLogarithmic
-};
-float gDbToYPos (float const& dB, float const& maxY, float const& maxDb = 36.0f, ScalingType const&& scalingType = ScalingType::kLinear)
-{
-	if (std::isinf (dB))
-	{
-		return maxY;
-	}
-	if (dB >= 0.0f)
-	{
-		return 0.0f;
-	}
-	if (scalingType == ScalingType::kLinear)
-	{
-		return maxY * (std::fabs (dB) / maxDb);
-	}
-	else
-	{
-		auto const logMax = std::log (maxDb);
-		auto const mappedDb = std::log (std::fabs (dB)) / logMax;
-		return maxY * mappedDb;
-	}
-}
 } // namespace
 ClipMeter::ClipMeter (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
                       std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
@@ -63,7 +37,7 @@ ClipMeter::ClipMeter (std::shared_ptr<juce::AudioProcessorValueTreeState> parame
 		mClippingBuffer.push_back (-std::numeric_limits<float>::infinity());
 		mOutputBuffer.push_back (-std::numeric_limits<float>::infinity());
 	}
-	mTimer.startTimer (30);
+	mTimer.startTimerHz (60);
 }
 
 ClipMeter::~ClipMeter()
@@ -83,7 +57,10 @@ void ClipMeter::paint (juce::Graphics& g)
 	drawBuffer (mInputBuffer, colourscheme::ForegroundSecondary, g);
 	drawBuffer (mClippingBuffer, colourscheme::ForegroundPrimary, g);
 	drawTicks (mTicks->getTicksList(), colourscheme::TextFocusLevel3, g);
-	drawDbLine (*static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId())), colourscheme::TextFocusLevel0, g);
+	drawDbLine (
+		*static_cast<juce::AudioParameterFloat*> (
+			mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId().getParamID())),
+		colourscheme::TextFocusLevel0, g);
 	drawTicksTexts (mTicks->getTicksList(), colourscheme::TextFocusLevel3, g);
 }
 
@@ -107,7 +84,7 @@ void ClipMeter::drawBuffer (std::deque<float>& buffer, juce::Colour const& colou
 	p.startNewSubPath (currentPoint);
 	for (auto& db : buffer)
 	{
-		juce::Point<float> nextPoint (offset, gDbToYPos (db, height));
+		juce::Point<float> nextPoint (offset, gDbToYPos (db, height, mTicks->isLinear()));
 		p.lineTo (nextPoint);
 		currentPoint = nextPoint;
 		offset = offset + offsetCoef;
@@ -123,7 +100,7 @@ void ClipMeter::drawDbLine (float const& dB, juce::Colour const& colour, juce::G
 	auto const bounds = getBounds();
 	auto const width = static_cast<float> (bounds.getWidth());
 	auto const height = static_cast<float> (bounds.getHeight());
-	auto const yPos = gDbToYPos (dB, height);
+	auto const yPos = gDbToYPos (dB, height, mTicks->isLinear());
 	juce::Point<float> start (0.0f, yPos);
 	juce::Point<float> end (width, yPos);
 	juce::Line<float> line (start, end);
@@ -143,7 +120,10 @@ void ClipMeter::drawTicks (std::vector<float> const& ticksLevels, juce::Colour c
 	auto const tickWidth = static_cast<float> (bounds.getWidth());
 	for (auto const& tickLevel : ticksLevels)
 	{
-		auto const yPos = gDbToYPos (tickLevel, height);
+		if (tickLevel == 0.0f) {
+			continue; // Small hack to not draw first line and avoid akward artifact
+		}
+		auto const yPos = gDbToYPos (tickLevel, height, mTicks->isLinear());
 		juce::Point<float> start (0.0f, yPos);
 		juce::Point<float> end (tickWidth, yPos);
 		juce::Line<float> line (start, end);
@@ -164,7 +144,7 @@ void ClipMeter::drawTicksTexts (std::vector<float> const& ticksLevels, juce::Col
 	}
 	for (auto const& tickLevel : ticksLevels)
 	{
-		auto const yPos = static_cast<int> (gDbToYPos (tickLevel, height)) + 4;
+		auto const yPos = static_cast<int> (gDbToYPos (tickLevel, height, mTicks->isLinear())) + 4;
 		auto const fontSize = calculateTextSize (getTopLevelComponent()->getBounds().getWidth(), getTopLevelComponent()->getBounds().getHeight());
 		auto const textWidth = fontSize * 3;
 		auto const textHeight = fontSize;

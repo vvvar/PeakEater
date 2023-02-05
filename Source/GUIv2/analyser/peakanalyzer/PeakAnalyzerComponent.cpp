@@ -76,7 +76,7 @@ void PeakAnalyzerComponent::resized()
 	grid.performLayout (getLocalBounds());
 }
 
-void PeakAnalyzerComponent::paint (juce::Graphics& g)
+void PeakAnalyzerComponent::paint (juce::Graphics&)
 {
 	auto const inputAmount = mInputPeakMeter.getMagnitude();
 	auto const outputAmount = mOutputPeakMeter.getMagnitude();

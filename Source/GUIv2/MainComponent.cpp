@@ -44,8 +44,8 @@ void MainComponent::resized()
 
 	auto const bypassWidth = localBounds.getHeight() * 0.1f;
 	auto const bypassHeight = localBounds.getHeight() * 0.1f;
-	auto const paddingTop = localBounds.getHeight() * 0.055f;
-	auto const paddingRight = localBounds.getHeight() * 0.2f;
+	auto const paddingTop = localBounds.getHeight() * 0.08f;
+	auto const paddingRight = localBounds.getHeight() * 0.23f;
 	auto const bypassX = localBounds.getWidth() - bypassWidth - paddingRight;
 	auto const bypassY = 0 + paddingTop;
 	mBypassButton.setBounds (juce::Rectangle<int> (bypassWidth, bypassHeight).withX (bypassX).withY (bypassY));
