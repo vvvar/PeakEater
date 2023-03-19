@@ -15,7 +15,7 @@ auto constexpr gParamName = "Bypass";
 }
 BypassButton::BypassButton (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters)
 	: mParameters (parameters)
-	, mIsOn (false)
+	, mIsOn (getBoolParamValue(gParamName, parameters))
 {
 	mParameters->getParameter (gParamName)->addListener (this);
 	setMouseCursor (juce::MouseCursor::PointingHandCursor);
@@ -70,20 +70,20 @@ void BypassButton::drawBypassButton (juce::Graphics& g)
 	g.drawImage (icon, bounds, juce::RectanglePlacement::centred, true);
 }
 
-void BypassButton::mouseDown (juce::MouseEvent const& event)
+void BypassButton::mouseDown (juce::MouseEvent const&)
 {
 	mParameters->getParameter (gParamName)->setValueNotifyingHost (!mIsOn);
 }
 
-void BypassButton::parameterValueChanged (int parameterIndex, float newValue)
+void BypassButton::parameterValueChanged (int, float)
 {
-	mIsOn = mParameters->getParameter (gParamName)->getValue();
+	mIsOn = getBoolParamValue(gParamName, mParameters);
 	repaint();
 }
 
-void BypassButton::parameterGestureChanged (int parameterIndex, bool gestureIsStarting)
+void BypassButton::parameterGestureChanged (int, bool)
 {
-	mIsOn = mParameters->getParameter (gParamName)->getValue();
+	mIsOn = getBoolParamValue(gParamName, mParameters);
 	repaint();
 }
 

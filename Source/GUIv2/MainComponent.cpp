@@ -1,4 +1,5 @@
 #include "MainComponent.h"
+#include "Utils.h"
 
 namespace pe
 {
@@ -18,9 +19,10 @@ MainComponent::MainComponent (std::shared_ptr<juce::AudioProcessorValueTreeState
 	, mBypassButton (parameters)
 	, mParameters (parameters)
 {
-	mParameters->getParameter (gBypassParamName)->addListener (this);
 	addAndMakeVisible (mWorkingPanel);
 	addAndMakeVisible (mBypassButton);
+	mParameters->getParameter (gBypassParamName)->addListener (this);
+	mWorkingPanel.setEnabled (!getBoolParamValue(gBypassParamName, mParameters));
 }
 
 MainComponent::~MainComponent()
@@ -44,11 +46,12 @@ void MainComponent::resized()
 
 	auto const bypassWidth = localBounds.getHeight() * 0.1f;
 	auto const bypassHeight = localBounds.getHeight() * 0.1f;
-	auto const paddingTop = localBounds.getHeight() * 0.055f;
-	auto const paddingRight = localBounds.getHeight() * 0.2f;
+	auto const paddingTop = localBounds.getHeight() * 0.08f;
+	auto const paddingRight = localBounds.getHeight() * 0.225f;
 	auto const bypassX = localBounds.getWidth() - bypassWidth - paddingRight;
-	auto const bypassY = 0 + paddingTop;
-	mBypassButton.setBounds (juce::Rectangle<int> (bypassWidth, bypassHeight).withX (bypassX).withY (bypassY));
+	auto const bypassY = 0.0f + paddingTop;
+	mBypassButton.setBounds(
+		juce::Rectangle<float>(bypassWidth, bypassHeight).withX(bypassX).withY(bypassY).toNearestInt());
 }
 
 void MainComponent::paint (juce::Graphics& g)
@@ -57,15 +60,15 @@ void MainComponent::paint (juce::Graphics& g)
 	g.fillAll (darkBlue);
 }
 
-void MainComponent::parameterValueChanged (int parameterIndex, float newValue)
+void MainComponent::parameterValueChanged (int, float)
 {
-	mWorkingPanel.setEnabled (!mParameters->getParameter (gBypassParamName)->getValue());
+	mWorkingPanel.setEnabled (!getBoolParamValue(gBypassParamName, mParameters));
 	mWorkingPanel.repaint();
 }
 
-void MainComponent::parameterGestureChanged (int parameterIndex, bool gestureIsStarting)
+void MainComponent::parameterGestureChanged (int, bool)
 {
-	mWorkingPanel.setEnabled (!mParameters->getParameter (gBypassParamName)->getValue());
+	mWorkingPanel.setEnabled (!getBoolParamValue(gBypassParamName, mParameters));
 	mWorkingPanel.repaint();
 }
 } // namespace gui

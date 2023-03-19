@@ -9,6 +9,7 @@
 #include "LinkingPanel.h"
 #include "analyser/AnalyserComponent.h"
 #include "clipmeter/ClipMeter.h"
+#include "scaling/ScalingSwitch.h"
 
 namespace pe
 {
@@ -31,6 +32,7 @@ ClipMeter mClipMeter;
 ControlPanel mControlPanel;
 LinkingPanel mLinkingPanel;
 AnalyserComponent mAnalyserComponent;
+ScalingSwitch mScalingSwitch;
 
 JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CentralPanel)
 };

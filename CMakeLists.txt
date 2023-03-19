@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
-project(PeakEater VERSION 0.5.1)
+project(PeakEater VERSION 0.6.0)
 set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(Dependencies/JUCE)
-add_subdirectory(Dependencies/clap-juce-extensions EXCLUDE_FROM_ALL) 
+add_subdirectory(Dependencies/clap-juce-extensions EXCLUDE_FROM_ALL)
 
 juce_add_plugin(PeakEater
     PLUGIN_MANUFACTURER_CODE Tado
@@ -30,6 +30,7 @@ target_sources(PeakEater
         Source/GUIv2/dial/ceilingdial/CeilingDialLookAndFeel.cpp
         Source/GUIv2/linkinout/LinkInOut.cpp
         Source/GUIv2/bypass/BypassButton.cpp
+        Source/GUIv2/scaling/ScalingSwitch.cpp
         Source/GUIv2/levelmeter/LevelMeterComponent.cpp
         Source/GUIv2/analyser/peakanalyzer/PeakMeter.cpp
         Source/GUIv2/analyser/peakanalyzer/PeakAnalyzerComponent.cpp

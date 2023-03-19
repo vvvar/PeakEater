@@ -137,7 +137,7 @@
     * - Release
     * - Debug
     */
-    "peakeater.config": "Debug",
+    "peakeater.config": "Release",
     "[cpp]": {
         "editor.defaultFormatter": "zachflower.uncrustify"
     },

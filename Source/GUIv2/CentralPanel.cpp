@@ -14,11 +14,13 @@ CentralPanel::CentralPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> 
 	, mControlPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
 	, mLinkingPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
 	, mAnalyserComponent (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
+	, mScalingSwitch(ticks)
 {
 	addAndMakeVisible (mClipMeter);
 	addAndMakeVisible (mControlPanel);
 	addAndMakeVisible (mLinkingPanel);
 	addAndMakeVisible (mAnalyserComponent);
+	addAndMakeVisible (mScalingSwitch);
 }
 
 void CentralPanel::resized()
@@ -46,6 +48,12 @@ void CentralPanel::resized()
 	                             .withHeight(localBounds.proportionOfHeight (0.155f))
 	                             .withX(localBounds.proportionOfWidth (0.1f))
 	                             .withY(localBounds.proportionOfHeight (0.05f)));
+
+	mScalingSwitch.setBounds(localBounds
+	                            .withWidth(localBounds.proportionOfWidth(0.076f))
+	                            .withHeight(localBounds.proportionOfWidth(0.076f))
+	                      		.withX(localBounds.proportionOfWidth (0.84f))
+	                            .withY(localBounds.proportionOfHeight (0.71f)));
 }
 } // namespace gui
 } // namespace pe

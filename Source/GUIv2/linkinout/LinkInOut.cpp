@@ -37,11 +37,11 @@ void LinkInOut::paint (juce::Graphics& g)
 	auto const paddingLeftFactor = 0.1f;
 	auto const paddingRightFactor = 0.9f;
 
-	auto const bounds = getLocalBounds();
-	auto const width = static_cast<float> (bounds.getWidth());
-	auto const height = static_cast<float> (bounds.getHeight());
-	auto const centreX = static_cast<float> (bounds.getCentreX());
-	auto const centreY = static_cast<float> (bounds.getCentreY()) + (height * paddingTopFactor);
+	auto const bounds = getLocalBounds().toFloat();
+	auto const width = bounds.getWidth();
+	auto const height = bounds.getHeight();
+	auto const centreX = bounds.getCentreX();
+	auto const centreY = bounds.getCentreY() + (height * paddingTopFactor);
 
 	// Set color for lines and icon
 	juce::Colour mainColour;
@@ -103,10 +103,17 @@ void LinkInOut::paint (juce::Graphics& g)
 	g.setColour (labelTextColour);
 	auto const fontSize = calculatePrimaryTextSize (getTopLevelComponent()->getBounds().getWidth(), getTopLevelComponent()->getBounds().getHeight());
 	g.setFont (fontSize);
-	g.drawText (juce::String ("Link Input with Output").toUpperCase(), 0, topY, width, height, juce::Justification::centredTop, true);
+	g.drawText (
+		juce::String ("Link Input with Output").toUpperCase(),
+		0,
+		static_cast<int>(topY),
+		static_cast<int>(width),
+		static_cast<int>(height),
+		juce::Justification::centredTop,
+		true);
 }
 
-void LinkInOut::mouseDown (juce::MouseEvent const& event)
+void LinkInOut::mouseDown (juce::MouseEvent const&)
 {
 	if (isEnabled()) // handle click only when component is enabled
 	{
@@ -114,7 +121,7 @@ void LinkInOut::mouseDown (juce::MouseEvent const& event)
 	}
 }
 
-void LinkInOut::mouseEnter (juce::MouseEvent const& event)
+void LinkInOut::mouseEnter (juce::MouseEvent const&)
 {
 	if (isEnabled())
 	{
@@ -126,7 +133,7 @@ void LinkInOut::mouseEnter (juce::MouseEvent const& event)
 	}
 }
 
-void LinkInOut::mouseExit (juce::MouseEvent const& event)
+void LinkInOut::mouseExit (juce::MouseEvent const&)
 {
 	if (isEnabled())
 	{
@@ -138,15 +145,15 @@ void LinkInOut::mouseExit (juce::MouseEvent const& event)
 	}
 }
 
-void LinkInOut::parameterValueChanged (int parameterIndex, float newValue)
+void LinkInOut::parameterValueChanged (int, float)
 {
-	mIsOn = mParameters->getParameter (gParamName)->getValue();
+	mIsOn = (mParameters->getParameter (gParamName)->getValue() != 0.0f);
 	repaint();
 }
 
-void LinkInOut::parameterGestureChanged (int parameterIndex, bool gestureIsStarting)
+void LinkInOut::parameterGestureChanged (int, bool)
 {
-	mIsOn = mParameters->getParameter (gParamName)->getValue();
+	mIsOn = (mParameters->getParameter (gParamName)->getValue() != 0.0f);
 	repaint();
 }
 } // namespace gui

@@ -44,10 +44,14 @@ mLinkInOut(
 							.getLinkInOut()
 							.getId()))),
 mBypass(static_cast<juce::AudioParameterBool *>(mParameters->getParameter(
-							pe::params::ParametersProvider::getInstance().getBypass().getId()))),
+							pe::params::ParametersProvider::getInstance()
+							.getBypass()
+							.getId()))),
 mCeiling(static_cast<
 		 juce::AudioParameterFloat *>(mParameters->getParameter(
-						      pe::params::ParametersProvider::getInstance().getCeiling().getId()))),
+						      pe::params::ParametersProvider::getInstance()
+						      .getCeiling()
+						      .getId()))),
 mClippingType(
 	static_cast<juce::AudioParameterChoice *>(mParameters->getParameter(
 							  pe::params::ParametersProvider::getInstance()
@@ -206,8 +210,8 @@ void PeakEaterAudioProcessor::processBlock(
 	}
 }
 
-void PeakEaterAudioProcessor::processBlockBypassed(
-	juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages) {
+void PeakEaterAudioProcessor::processBlockBypassed(juce::AudioBuffer<float> &, juce::MidiBuffer &) {
+	// Because we're handling bypass internally
 }
 
 juce::AudioProcessorParameter *

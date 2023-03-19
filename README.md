@@ -12,48 +12,34 @@
 
 <!-- TABLE OF CONTENTS -->
 
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li><a href="#about">About</a></li>
-    <li>
-      <a href="#features">Features</a>
-      <ul>
-        <li><a href="#input--output-rms-meters">Input/Output RMS Meters</a></li>
-        <li><a href="#input--output-gain">Input & Output Gain</a></li>
-        <li><a href="#link-input-with-output">Link Input with Output</a></li>
-        <li><a href="#ceiling-control">Ceiling control</a></li>
-        <li><a href="#visualizer">Visualizer</a></li>
-        <li><a href="#analyzer">Analyzer</a></li>
-        <li><a href="#switchable-scales">Switchable scales</a></li>
-        <li><a href="#6-clipping-types">6 Clipping Types</a></li>
-        <li><a href="#oversampling">Oversampling</a></li>
-        <li><a href="#bypass-mode">Bypass mode</a></li>
-        <li><a href="#resizing">Resizing</a></li>
-        <li><a href="#vst3-au-lv2-and-clap-support">VST3, AU, LV2 and CLAP Support</a></li>
-        <li><a href="#available-on-all-major-platforms">macOS, Windows and Linux Support</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#installation">Installation</a>
-      <ul>
-        <li><a href="#macos">macOS</a></li>
-        <li><a href="#windows">Windows</a></li>
-        <li><a href="#linux">Linux</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#building-from-sources">Building from sources</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#build">Build</a></li>
-      </ul>
-    </li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
-  </ol>
-</details>
+Table of Contents
+
+- [About](#about)
+- [Features](#features)
+  - [Input/Output RMS Meters](#rms-meters)
+  - [Input & Output Gain](#input--output-gain)
+  - [Link Input with Output](#link-input-with-output)
+  - [Ceiling Control](#ceiling-control)
+  - [Visualizer](#visualizer)
+  - [Analyzer](#analyzer)
+  - [Configurable Tickmarks](#configurable-tickmarks)
+  - [Configurable Scaling](#configurable-scaling)
+  - [6 Clipping Types](#6-clipping-types)
+  - [Oversampling](#oversampling)
+  - [Bypass Mode](#bypass-mode)
+  - [Resizing](#resizing)
+  - [VST3, AU, LV2 and CLAP Support](#vst3-au-lv2-and-clap-support)
+  - [macOS, Windows and Linux Support](#available-on-all-major-platforms)
+- [Installation](#installation)
+  - [macOS](#macos)
+  - [Windows](#windows)
+  - [Linux](#linux)
+- [Building from sources](#building-from-sources)
+  - [Prerequisites](#prerequisites)
+  - [Build](#build)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
 
 <!-- ABOUT -->
 
@@ -63,7 +49,7 @@ PeakEater is a free, easy to use waveshaping plugin. PeakEater lets you choose b
 
 ## Features
 
-### Input & Output RMS Meters
+### RMS Meters
 
 <img src="Resources/screenshots/screenshot-in.png" alt="input-rms-screen" height="250"/><---><img src="Resources/screenshots/screenshot-out.png" alt="output-rms-screen" height="250"/>
 
@@ -99,11 +85,17 @@ Displays magnitude(in dB's) so you can see how peaks were eaten over time.
 
 Shows approximated RMS that was cut("Eaten") in last 2 seconds and current clipping algorithm. Double-click on numbers to drop it to zero and force to re-calculate.
 
-### Switchable scales
+### Configurable Tickmarks
 
 <img src="Resources/screenshots/screenshot-switch-ticks.gif" alt="switch-db-level-scales" width="400"/>
 
-Right click on Visualizer to switch between different scales.
+Right-Mouse-Click on Visualizer to switch between different tickmarks.
+
+## Configurable Scaling
+
+<img src="Resources/screenshots/screenshot-scaling.gif" alt="switch-db-level-scales" width="400"/>
+
+Also, you can switch between linear and non-linear scaling.
 
 ### 6 Clipping Types
 
