@@ -1,5 +1,5 @@
 name: Publish Release Draft
-run-name: Create release draft for v0.6.0
+run-name: Create release draft for v0.6.1
 on:
   push:
     branches:
@@ -12,9 +12,9 @@ env:
   LV2_TARGET_NAME: PeakEater_LV2
   CLAP_TARGET_NAME: PeakEater_CLAP
   JUCE_REVISION: 4e68af7
-  MACOS_RELEASE_NAME: PeakEater_v0.6.0_macOS
-  WINDOWS_RELEASE_NAME: PeakEater_v0.6.0_Windows
-  LINUX_RELEASE_NAME: PeakEater_v0.6.0_Linux
+  MACOS_RELEASE_NAME: PeakEater_v0.6.1_macOS
+  WINDOWS_RELEASE_NAME: PeakEater_v0.6.1_Windows
+  LINUX_RELEASE_NAME: PeakEater_v0.6.1_Linux
 jobs:
   macos:
     name: macOS
@@ -66,7 +66,7 @@ jobs:
       - name: Checkout JUCE
         run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
       - name: Configure CMake
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
       - name: Build VST3
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
       - name: Build AU
@@ -81,12 +81,12 @@ jobs:
           MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
           MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
           MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
-        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --sign_and_notarize=True --release_version=0.6.0
+        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --sign_and_notarize=True --release_version=0.6.1
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.MACOS_RELEASE_NAME }}
-          path: ${{github.workspace}}/build/release/PeakEater-0.6.0.dmg
+          path: ${{github.workspace}}/build/release/PeakEater-0.6.1.dmg
 
   windows:
     name: Windows
@@ -183,5 +183,5 @@ jobs:
           draft: true
           removeArtifacts: true
           makeLatest: true
-          tag: "v0.6.0"
+          tag: "v0.6.1"
           artifacts: "${{ env.MACOS_RELEASE_NAME }}.zip,${{ env.WINDOWS_RELEASE_NAME }}.zip,${{ env.LINUX_RELEASE_NAME }}.zip"
