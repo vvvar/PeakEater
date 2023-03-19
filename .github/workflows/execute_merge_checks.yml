@@ -1,9 +1,6 @@
 name: Publish Release Draft
 run-name: Create release draft for v0.6.0
-on:
-  push:
-    branches:
-      - master
+on: pull_request
 
 env:
   BUILD_TYPE: Release
