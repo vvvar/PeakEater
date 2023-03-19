@@ -1,5 +1,4 @@
-name: Publish Release Draft
-run-name: Create release draft for v0.6.0
+name: Perform merge checks
 on: pull_request
 
 env:
