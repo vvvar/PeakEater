@@ -1,5 +1,5 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-<Product Id="*" UpgradeCode="12345678-1111-2222-3333-666666666666" Name="PeakEater" Version="0.6.0.0" Manufacturer="T-Audio" Language="1033">
+<Product Id="*" UpgradeCode="12345678-1111-2222-3333-666666666666" Name="PeakEater" Version="0.6.1.0" Manufacturer="T-Audio" Language="1033">
     <Package InstallerVersion="200" InstallScope="perMachine" Compressed="yes" Comments="PeakEater is a free open-source VST3/AU waveshaper plugin"/>
     <MediaTemplate EmbedCab="yes" />
 
