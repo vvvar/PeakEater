@@ -76,7 +76,7 @@ jobs:
       - name: Build LV2
         run: ${{github.workspace}}/Scripts/Build/MacOS.sh ${{env.BUILD_TYPE}} ${{env.LV2_TARGET_NAME}}
       - name: Build CLAP
-        run: ${{github.workspace}}/Scripts/Build/MacOS.sh ${{env.CLAP_TARGET_NAME}}
+        run: ${{github.workspace}}/Scripts/Build/MacOS.sh ${{env.BUILD_TYPE}} ${{env.CLAP_TARGET_NAME}}
       - name: Package
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}

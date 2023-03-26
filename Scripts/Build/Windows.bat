@@ -6,7 +6,7 @@ if not defined CMAKE_BUILD_TYPE (
     echo Build type is not provided. Please pass it as first argument. E.g. Release, Debug
     exit /b 1
 )
-set CMAKE_BUILD_TARGET=%1
+set CMAKE_BUILD_TARGET=%2
 if not defined CMAKE_BUILD_TARGET (
     echo Build target is not provided. Please pass it as second argument. E.g. PeakEater_VST3, PeakEater_AU, PeakEater_LV2, PeakEater_CLAP, all
     exit /b 1
@@ -21,7 +21,7 @@ echo =============================
 @echo on
 
 @rem Configure
-set PROJECT_ROOT=%~dp0\..\..
+set PROJECT_ROOT=%~dp0..\..
 call cmake %PROJECT_ROOT% ^
         -B %PROJECT_ROOT%\build ^
         -G "Visual Studio 17 2022" -A x64 ^
