@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(PeakEater VERSION 0.6.1)
+project(PeakEater VERSION 0.6.2)
 set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(Dependencies/JUCE)

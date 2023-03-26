@@ -1,5 +1,5 @@
 name: Publish Release Draft
-run-name: Create release draft for v0.6.1
+run-name: Create release draft for v0.6.2
 on:
   push:
     branches:
@@ -11,10 +11,10 @@ env:
   AU_TARGET_NAME: PeakEater_AU
   LV2_TARGET_NAME: PeakEater_LV2
   CLAP_TARGET_NAME: PeakEater_CLAP
-  JUCE_REVISION: 4e68af7
-  MACOS_RELEASE_NAME: PeakEater_v0.6.1_macOS
-  WINDOWS_RELEASE_NAME: PeakEater_v0.6.1_Windows
-  LINUX_RELEASE_NAME: PeakEater_v0.6.1_Linux
+  JUCE_REVISION: 69795dc
+  MACOS_RELEASE_NAME: PeakEater_v0.6.2_macOS
+  WINDOWS_RELEASE_NAME: PeakEater_v0.6.2_Windows
+  LINUX_RELEASE_NAME: PeakEater_v0.6.2_Linux
 jobs:
   macos:
     name: macOS
@@ -61,32 +61,34 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - name: Install Python Dependencies
         run: python -m pip install -r ${{github.workspace}}/requirements.txt
+      - name: Install Ninja
+        run: |
+          brew update
+          brew install ninja
       - name: Init Git Submodules
         run: git submodule update --init --recursive
       - name: Checkout JUCE
         run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
-      - name: Configure CMake
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
       - name: Build VST3
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
+        run: ${{github.workspace}}/Scripts/Build/MacOS.sh ${{env.BUILD_TYPE}} ${{env.VST_TARGET_NAME}}
       - name: Build AU
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.AU_TARGET_NAME}}
-      - name: Build CLAP
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
+        run: ${{github.workspace}}/Scripts/Build/MacOS.sh ${{env.BUILD_TYPE}} ${{env.AU_TARGET_NAME}}
       - name: Build LV2
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
+        run: ${{github.workspace}}/Scripts/Build/MacOS.sh ${{env.BUILD_TYPE}} ${{env.LV2_TARGET_NAME}}
+      - name: Build CLAP
+        run: ${{github.workspace}}/Scripts/Build/MacOS.sh ${{env.CLAP_TARGET_NAME}}
       - name: Package
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
           MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
           MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
           MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
-        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --sign_and_notarize=True --release_version=0.6.1
+        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --sign_and_notarize=True --release_version=0.6.2
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.MACOS_RELEASE_NAME }}
-          path: ${{github.workspace}}/build/release/PeakEater-0.6.1.dmg
+          path: ${{github.workspace}}/build/release/PeakEater-0.6.2.dmg
 
   windows:
     name: Windows
@@ -97,14 +99,12 @@ jobs:
         run: git submodule update --init --recursive
       - name: Checkout JUCE
         run: cd ${{github.workspace}}\Dependencies\JUCE && git checkout ${{env.JUCE_REVISION}}
-      - name: Configure CMake
-        run: cmake . -B ${{github.workspace}}\build -G 'Visual Studio 17 2022' -A x64 -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
-        run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
-      - name: Build CLAP
-        run: cmake --build ${{github.workspace}}\build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
+        run: ${{github.workspace}}\Scripts\Build\Windows.bat ${{env.BUILD_TYPE}} ${{env.VST_TARGET_NAME}}
       - name: Build LV2
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
+        run: ${{github.workspace}}\Scripts\Build\Windows.bat ${{env.BUILD_TYPE}} ${{env.LV2_TARGET_NAME}}
+      - name: Build CLAP
+        run: ${{github.workspace}}\Scripts\Build\Windows.bat ${{env.BUILD_TYPE}} ${{env.CLAP_TARGET_NAME}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -124,18 +124,16 @@ jobs:
       - name: Install Build Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ libgtk-3-dev libfreetype6-dev libx11-dev libxinerama-dev libxrandr-dev libxcursor-dev mesa-common-dev libasound2-dev freeglut3-dev libxcomposite-dev libcurl4-openssl-dev
-          sudo apt-get install libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev
+          sudo apt-get install -y g++ ninja libgtk-3-dev libfreetype6-dev libx11-dev libxinerama-dev libxrandr-dev libxcursor-dev mesa-common-dev
+          sudo apt-get install -y libasound2-dev freeglut3-dev libxcomposite-dev libcurl4-openssl-dev libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev
       - name: Checkout JUCE
         run: cd ${{github.workspace}}/Dependencies/JUCE && git checkout ${{env.JUCE_REVISION}}
-      - name: Configure CMake
-        run: cmake . -B ${{github.workspace}}/build -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
       - name: Build VST3
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.VST_TARGET_NAME}}
-      - name: Build CLAP
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.CLAP_TARGET_NAME}}
+        run: ${{github.workspace}}/Scripts/Build/Linux.sh ${{env.BUILD_TYPE}} ${{env.VST_TARGET_NAME}}
       - name: Build LV2
-        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target ${{env.LV2_TARGET_NAME}}
+        run: ${{github.workspace}}/Scripts/Build/Linux.sh ${{env.BUILD_TYPE}} ${{env.LV2_TARGET_NAME}}
+      - name: Build CLAP
+        run: ${{github.workspace}}/Scripts/Build/Linux.sh ${{env.BUILD_TYPE}} ${{env.CLAP_TARGET_NAME}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -183,5 +181,5 @@ jobs:
           draft: true
           removeArtifacts: true
           makeLatest: true
-          tag: "v0.6.1"
+          tag: "v0.6.2"
           artifacts: "${{ env.MACOS_RELEASE_NAME }}.zip,${{ env.WINDOWS_RELEASE_NAME }}.zip,${{ env.LINUX_RELEASE_NAME }}.zip"
