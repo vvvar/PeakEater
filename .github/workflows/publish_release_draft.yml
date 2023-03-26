@@ -139,9 +139,9 @@ jobs:
         with:
           name: ${{ env.LINUX_RELEASE_NAME }}
           path: |
-            ${{github.workspace}}/build/PeakEater_artefacts/VST3/PeakEater.vst3/Contents/x86_64-linux/PeakEater.so
-            ${{github.workspace}}/build/PeakEater_artefacts/LV2/PeakEater.lv2
-            ${{github.workspace}}/build/PeakEater_artefacts/CLAP/PeakEater.clap
+            ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/VST3/PeakEater.vst3/Contents/x86_64-linux/PeakEater.so
+            ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/LV2/PeakEater.lv2
+            ${{github.workspace}}/build/PeakEater_artefacts/${{env.BUILD_TYPE}}/CLAP/PeakEater.clap
 
   release:
     name: Publish Release Draft
