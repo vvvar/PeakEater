@@ -18,7 +18,7 @@ echo Build target: %CMAKE_BUILD_TARGET%
 echo =============================
 
 @rem Print all commands
-echo on
+@echo on
 
 @rem Configure
 set PROJECT_ROOT=%~dp0\..\..
@@ -26,7 +26,7 @@ call cmake %PROJECT_ROOT% ^
         -B %PROJECT_ROOT%\build ^
         -G "Visual Studio 17 2022" -A x64 ^
         -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE ^
-        -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% \
+        -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% ^
         -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON ^
         || exit /b 1
 
