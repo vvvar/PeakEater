@@ -1,6 +1,6 @@
 [Setup]
 AppName=PeakEater
-AppVersion=0.6.1
+AppVersion=0.6.2
 DefaultDirName={cf}
 DefaultGroupName=PeakEater
 OutputBaseFilename=PeakEater-windows

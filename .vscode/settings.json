@@ -110,34 +110,6 @@
     * Commit of JUCE to checkout
     */
     "peakeater.juce_version": "4e68af7",
-    /**
-    * Number of cores to use while build.
-    */
-    "peakeater.cpucores": 2,
-    /** 
-    * Specify target to build.
-    * Possible values are:
-    * - PeakEater
-    * - PeakEater_VST3
-    * - PeakEater_AU
-    * - PeakEater_Standalone
-    * - PeakEater_All(all PeakEater targets - VST, AU, etc.)
-    * - Projucer
-    * - ProjucerData
-    * - AudioPluginHost
-    * - AudioPluginHostData
-    * - UnitTestRunner
-    * - all(build all above targets)
-    */
-    "peakeater.target": "PeakEater_All",
-    /**
-    * CMake build configuration.
-    * Note: If changed, clear re-build is required.
-    * Possible values are:
-    * - Release
-    * - Debug
-    */
-    "peakeater.config": "Release",
     "[cpp]": {
         "editor.defaultFormatter": "zachflower.uncrustify"
     },

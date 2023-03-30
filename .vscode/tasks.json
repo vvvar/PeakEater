@@ -1,5 +1,31 @@
 {
   "version": "2.0.0",
+  "inputs": [
+    {
+      "id": "build_type",
+      "type": "pickString",
+      "description": "Pick build type",
+      "default": "Debug",
+      "options": [
+        "Release",
+        "Debug"
+      ]
+    },
+    {
+      "id": "build_target",
+      "type": "pickString",
+      "description": "What we're targeting today?",
+      "default": "PeakEater_All",
+      "options": [
+        "PeakEater_All",
+        "PeakEater_Standalone",
+        "PeakEater_VST3",
+        "PeakEater_AU",
+        "PeakEater_LV2",
+        "PeakEater_CLAP"
+      ]
+    }
+  ],
   "tasks": [
     {
       "label": "Init Git Submodules",
@@ -23,9 +49,14 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "cmake . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON -DCMAKE_BUILD_TYPE=${config:peakeater.config} && cmake --build build --config ${config:peakeater.config} --target ${config:peakeater.target} -j${config:peakeater.cpucores}",
       "windows": {
-        "command": "cmake . -B build -G 'Visual Studio 17 2022' -A x64 -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON && cmake --build build --config ${config:peakeater.config} --target ${config:peakeater.target} -j${config:peakeater.cpucores}"
+        "command": "${workspaceFolder}/Scripts/Build/Windows.bat ${input:build_type} ${input:build_target}"
+      },
+      "osx": {
+        "command": "${workspaceFolder}/Scripts/Build/MacOS.sh ${input:build_type} ${input:build_target}"
+      },
+      "linux": {
+        "command": "${workspaceFolder}/Scripts/Build/Linux.sh ${input:build_type} ${input:build_target}"
       }
     },
     {
@@ -33,7 +64,7 @@
       "type": "shell",
       "dependsOn": [
         "Init Git Submodules",
-        "Util: Clean Build Dir",
+        "Clean Build Dir",
         "Build"
       ],
       "dependsOrder": "sequence"
@@ -41,15 +72,15 @@
     {
       "label": "Create release package",
       "type": "shell",
-      "command": "python3 ${workspaceFolder}/Scripts/Release/MacOS.py --release_type=${config:peakeater.config} --sign_and_notarize=True --release_version=Development",
+      "command": "python3 ${workspaceFolder}/Scripts/Release/MacOS.py --release_type=${input:build_type} --sign_and_notarize=True --release_version=Development",
       "windows": {
-        "command": "python ${workspaceFolder}/Scripts/Release/Windows.py --release_type=${config:peakeater.config}"
+        "command": "python ${workspaceFolder}/Scripts/Release/Windows.py --release_type=${input:build_type}"
       }
     },
     {
       "label": "Run Standalone",
       "type": "shell",
-      "command": "${workspaceFolder}/build/PeakEater_artefacts/${config:peakeater.config}/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
+      "command": "${workspaceFolder}/build/PeakEater_artefacts/${input:build_type}/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
     },
     {
       "label": "Pip: Install",
