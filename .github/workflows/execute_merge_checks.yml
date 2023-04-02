@@ -49,6 +49,8 @@ jobs:
         run: |
           brew update
           brew install ninja conan
+      - name: Configure Conan
+        run: conan profile detect
       - name: Build
         run: conan create ${{github.workspace}}/juce-conan && conan install ${{github.workspace}} && conan build ${{github.workspace}}
       - name: Package
@@ -74,6 +76,8 @@ jobs:
       - name: Install Tool Requirements
         run: |
           pip install conan
+      - name: Configure Conan
+        run: conan profile detect
       - name: Build
         run: conan create ${{github.workspace}}\juce-conan && conan install ${{github.workspace}} && conan build ${{github.workspace}}
       - name: Upload Artifacts
@@ -97,6 +101,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y g++ ninja-build libgtk-3-dev libfreetype6-dev libx11-dev libxinerama-dev libxrandr-dev libxcursor-dev mesa-common-dev
           sudo apt-get install -y libasound2-dev freeglut3-dev libxcomposite-dev libcurl4-openssl-dev libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev python3-pip
+          python3 -m pip install conan
+      - name: Configure Conan
+        run: conan profile detect
       - name: Build
         run: conan create ${{github.workspace}}/juce-conan && conan install ${{github.workspace}} && conan build ${{github.workspace}}
       - name: Upload Artifacts
