@@ -47,7 +47,7 @@ utils.copy_dir_content_recursive(
     utils.get_build_clap_dir_path(args.release_type), RELEASE_DIR_PATH)
 
 
-def codesign(bin_path: str, resursive: bool = False) -> None:
+def codesign(bin_path, resursive = False):
     """Codesigns bin"""
     utils.log_info(f"Codesigning {bin_path}...")
     identity = os.environ.get('MACOS_APPLE_IDENTITY')
@@ -60,7 +60,7 @@ def codesign(bin_path: str, resursive: bool = False) -> None:
             f"codesign --force -s '{identity}' -v {bin_path} --deep --strict --options=runtime --timestamp")
 
 
-def notarize(bin_path: str) -> None:
+def notarize(bin_path):
     """Notarize and stable bin"""
     apple_id = os.environ.get('MACOS_APPLE_ID')
     password = os.environ.get('MACOS_APPLE_PASSWORD')
