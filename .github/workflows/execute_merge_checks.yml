@@ -48,7 +48,7 @@ jobs:
       - name: Install Tool Requirements
         run: |
           brew update
-          brew install ninja conan
+          brew install ninja conan python3
       - name: Configure Conan
         run: conan profile detect
       - name: Build

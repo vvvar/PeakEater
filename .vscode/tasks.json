@@ -41,7 +41,7 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "cd juce-conan && conan create . && cd .. && conan install . --build=missing && conan build .",
+      "command": "cd juce-conan && conan create . && cd .. && conan install . && conan build .",
     },
     {
       "label": "Build(Clean)",
