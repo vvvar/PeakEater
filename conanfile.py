@@ -11,9 +11,6 @@ class PeakEater(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
 
     requires = "juce/7.0.5@juce/release"
-    default_options = {
-        "juce/*:build_extras": True
-    }
 
     def layout(self):
         cmake_layout(self)

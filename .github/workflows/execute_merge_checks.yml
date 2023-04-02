@@ -52,7 +52,7 @@ jobs:
       - name: Configure Conan
         run: conan profile detect
       - name: Build
-        run: conan create ${{github.workspace}}/juce-conan --options build_extras=True && conan install ${{github.workspace}} && conan build ${{github.workspace}}
+        run: conan create ${{github.workspace}}/juce-conan && conan install ${{github.workspace}} && conan build ${{github.workspace}}
       - name: Package
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
@@ -79,7 +79,7 @@ jobs:
       - name: Configure Conan
         run: conan profile detect
       - name: Build
-        run: conan create ${{github.workspace}}\juce-conan --options build_extras=True && conan install ${{github.workspace}} && conan build ${{github.workspace}}
+        run: conan create ${{github.workspace}}\juce-conan && conan install ${{github.workspace}} && conan build ${{github.workspace}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -107,7 +107,7 @@ jobs:
       - name: Configure Conan
         run: conan profile detect
       - name: Build
-        run: conan create ${{github.workspace}}/juce-conan --options build_extras=True && conan install ${{github.workspace}} && conan build ${{github.workspace}}
+        run: conan create ${{github.workspace}}/juce-conan && conan install ${{github.workspace}} && conan build ${{github.workspace}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
