@@ -28,14 +28,6 @@
   ],
   "tasks": [
     {
-      "label": "Init Git Submodules",
-      "type": "shell",
-      "command": "rm -rf ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout ${config:peakeater.juce_version}",
-      "windows": {
-        "command": "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout ${config:peakeater.juce_version}"
-      }
-    },
-    {
       "label": "Clean Build Dir",
       "type": "shell",
       "command": "rm -rf ${workspaceFolder}/build/",
@@ -49,21 +41,12 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "windows": {
-        "command": "${workspaceFolder}/Scripts/Build/Windows.bat ${input:build_type} ${input:build_target}"
-      },
-      "osx": {
-        "command": "${workspaceFolder}/Scripts/Build/MacOS.sh ${input:build_type} ${input:build_target}"
-      },
-      "linux": {
-        "command": "${workspaceFolder}/Scripts/Build/Linux.sh ${input:build_type} ${input:build_target}"
-      }
+      "command": "cd juce-conan && conan create . && cd .. && conan install . --build=missing && conan build .",
     },
     {
       "label": "Build(Clean)",
       "type": "shell",
       "dependsOn": [
-        "Init Git Submodules",
         "Clean Build Dir",
         "Build"
       ],

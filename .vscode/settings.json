@@ -113,11 +113,12 @@
     "[cpp]": {
         "editor.defaultFormatter": "zachflower.uncrustify"
     },
-    "python.linting.pep8Enabled": true,
-    "python.linting.pylintEnabled": true,
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.autopep8",
-        "editor.formatOnSave": true
-    },
-    "python.linting.enabled": true
+    // "python.linting.pep8Enabled": true,
+    // "python.linting.pylintEnabled": true,
+    // "[python]": {
+    //     "editor.defaultFormatter": "ms-python.autopep8",
+    //     "editor.formatOnSave": true
+    // },
+    // "python.linting.enabled": true,
+    "python.analysis.extraPaths": ["/usr/local/Cellar/conan/2.0.2/libexec/lib/python3.11/site-packages"]
 }
