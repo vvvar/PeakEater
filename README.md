@@ -8,7 +8,7 @@
     · <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new?assignees=&labels=Feature+Request&template=feature_request.md&title="><b>Request Feature</b></a> · <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new?assignees=&labels=Bug&template=bug_report.md&title=%5BBug%5D"><b>Report Bug</b></a>
 </p>
 
-![screenshot](Resources/screenshots/screenshot-mac.png)
+![screenshot](assets/screenshots/screenshot-mac.png)
 
 <!-- TABLE OF CONTENTS -->
 
@@ -51,55 +51,55 @@ PeakEater is a free, easy to use waveshaping plugin. PeakEater lets you choose b
 
 ### RMS Meters
 
-<img src="Resources/screenshots/screenshot-in.png" alt="input-rms-screen" height="250"/><---><img src="Resources/screenshots/screenshot-out.png" alt="output-rms-screen" height="250"/>
+<img src="assets/screenshots/screenshot-in.png" alt="input-rms-screen" height="250"/><---><img src="assets/screenshots/screenshot-out.png" alt="output-rms-screen" height="250"/>
 
 See how loud signal was before and after plugin.
 
 ### Input & Output Gain
 
-<img src="Resources/screenshots/screenshot-in-gain.png" alt="input-gain-screen" height="100"/><---><img src="Resources/screenshots/screenshot-out-gain.png" alt="output-gain-screen" height="100"/>
+<img src="assets/screenshots/screenshot-in-gain.png" alt="input-gain-screen" height="100"/><---><img src="assets/screenshots/screenshot-out-gain.png" alt="output-gain-screen" height="100"/>
 
 Adjusts gain level before and after processing. Input Gain is useful when you're either working with too quiet or too loud signal and Output Gain can be helpful to compensate loss of gain.
 
 ### Link Input with Output
 
-<img src="Resources/screenshots/screenshot-link.png" alt="link-in-out" height="100"/>
+<img src="assets/screenshots/screenshot-link.png" alt="link-in-out" height="100"/>
 
 Use linking to automatically set the Output Gain level to the opposite of the Input Gain. For example, if the Input Gain value is set to +5dB then the Output Gain value will be automatically set to -5dB and vice versa.
 
 ### Ceiling control
 
-<img src="Resources/screenshots/screenshot-ceiling-knob.png" alt="link-in-out" height="100"/>
+<img src="assets/screenshots/screenshot-ceiling-knob.png" alt="link-in-out" height="100"/>
 
 Control your ceiling. Everything above this level would be "eaten". Build-in RMS meter would show you signal level that comes into clipper and help you set threshold.
 
 ### Visualizer
 
-<img src="Resources/screenshots/screenshot-clip-visualizer.png" alt="clip-visualizer" height="100"/>
+<img src="assets/screenshots/screenshot-clip-visualizer.png" alt="clip-visualizer" height="100"/>
 
 Displays magnitude(in dB's) so you can see how peaks were eaten over time.
 
 ### Analyzer
 
-<img src="Resources/screenshots/screenshot-analyzer.png" alt="clip-analyzer" height="100"/>
+<img src="assets/screenshots/screenshot-analyzer.png" alt="clip-analyzer" height="100"/>
 
 Shows approximated RMS that was cut ("Eaten") in last 2 seconds and current clipping algorithm. Double-click on numbers to drop it to zero and force to re-calculate.
 
 ### Configurable Tickmarks
 
-<img src="Resources/screenshots/screenshot-switch-ticks.gif" alt="switch-db-level-scales" width="400"/>
+<img src="assets/screenshots/screenshot-switch-ticks.gif" alt="switch-db-level-scales" width="400"/>
 
 Right-Mouse-Click on Visualizer to switch between different tickmarks.
 
 ## Configurable Scaling
 
-<img src="Resources/screenshots/screenshot-scaling.gif" alt="switch-db-level-scales" width="400"/>
+<img src="assets/screenshots/screenshot-scaling.gif" alt="switch-db-level-scales" width="400"/>
 
 Also, you can switch between linear and non-linear scaling.
 
 ### 6 Clipping Types
 
-<img src="Resources/screenshots/screenshot-clip-type.png" alt="clip-type" height="100"/>
+<img src="assets/screenshots/screenshot-clip-type.png" alt="clip-type" height="100"/>
 
 Choose between 6 clipping functions, from Hard clipping to different types Soft Clip (Up to Arctangent).
 Available clipping functions are:
@@ -115,7 +115,7 @@ You can read more about difference between Hard and Soft clipping [here](https:/
 
 ### Oversampling
 
-<img src="Resources/screenshots/screenshot-oversample.png" alt="oversample" height="100"/>
+<img src="assets/screenshots/screenshot-oversample.png" alt="oversample" height="100"/>
 
 Choose between 2x, 4x, 8x, and 16x oversampling to avoid signal aliasing. You can also turn off oversampling.
 
@@ -125,19 +125,19 @@ You can read more about oversampling [here](https://www.nickwritesablog.com/intr
 
 ### Bypass mode
 
-<img src="Resources/screenshots/screenshot-bypass.png" alt="bypass" height="100"/>
+<img src="assets/screenshots/screenshot-bypass.png" alt="bypass" height="100"/>
 
 Bypasses all plugin's processing. Useful when you need to make side-by-side comparison before and after processing.
 
 ### Resizing
 
-<img src="Resources/screenshots/screenshot-resize.png" alt="bypass" height="100"/>
+<img src="assets/screenshots/screenshot-resize.png" alt="bypass" height="100"/>
 
 Drag the corner to change the size of the window.
 
 ### VST3, AU, LV2 and CLAP support
 
-<img src="Resources/vendorIcons/vst3.png" alt="vst3" height="50"/> <img src="Resources/vendorIcons/audio-units.png" alt="au" height="50"/> <img src="Resources/vendorIcons/lv2.png" alt="lv2" height="50"/> <img src="Resources/vendorIcons/clap.png" alt="clap" height="50"/>
+<img src="assets/vendorIcons/vst3.png" alt="vst3" height="50"/> <img src="assets/vendorIcons/audio-units.png" alt="au" height="50"/> <img src="assets/vendorIcons/lv2.png" alt="lv2" height="50"/> <img src="assets/vendorIcons/clap.png" alt="clap" height="50"/>
 
 You can use either VST3, AU (macOS only), LV2 or CLAP type of plugin.
 
@@ -145,7 +145,7 @@ You can use either VST3, AU (macOS only), LV2 or CLAP type of plugin.
 
 ### Available on all major platforms
 
-<img src="Resources/vendorIcons/macOS.png" alt="macOS" height="30"/> <img src="Resources/vendorIcons/windows.png" alt="windows" height="30"/> <img src="Resources/vendorIcons/linux.png" alt="linux" height="30"/>
+<img src="assets/vendorIcons/macOS.png" alt="macOS" height="30"/> <img src="assets/vendorIcons/windows.png" alt="windows" height="30"/> <img src="assets/vendorIcons/linux.png" alt="linux" height="30"/>
 
 You can use it on macOS, Windows or Linux.
 
@@ -270,4 +270,4 @@ Distributed under the GPL-3.0 License. See [`LICENSE.md`](https://github.com/vvv
 [license-url]: https://github.com/vvvar/PeakEater/blob/master/LICENSE.md
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/vladyslav-voinov-5126a793/
-[product-screenshot]: Resources/screenshots/main.png
+[product-screenshot]: assets/screenshots/main.png

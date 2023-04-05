@@ -28,35 +28,35 @@ juce_add_plugin(${CONAN_PROJECT_NAME}
 
 target_sources(${CONAN_PROJECT_NAME}
     PRIVATE
-    Source/GUIv2/clipmeter/ClipMeter.cpp
-    Source/GUIv2/editableparameter/EditableParameterComponentLookAndFeel.cpp
-    Source/GUIv2/editableparameter/EditableLabelAttachment.cpp
-    Source/GUIv2/editableparameter/EditableParameterComponent.cpp
-    Source/GUIv2/dial/DialLookAndFeel.cpp
-    Source/GUIv2/dial/Dial.cpp
-    Source/GUIv2/dial/gaindial/GainDialLookAndFeel.cpp
-    Source/GUIv2/dial/gaindial/GainDial.cpp
-    Source/GUIv2/dial/ceilingdial/CeilingDial.cpp
-    Source/GUIv2/dial/ceilingdial/CeilingDialLookAndFeel.cpp
-    Source/GUIv2/linkinout/LinkInOut.cpp
-    Source/GUIv2/bypass/BypassButton.cpp
-    Source/GUIv2/scaling/ScalingSwitch.cpp
-    Source/GUIv2/levelmeter/LevelMeterComponent.cpp
-    Source/GUIv2/analyser/peakanalyzer/PeakMeter.cpp
-    Source/GUIv2/analyser/peakanalyzer/PeakAnalyzerComponent.cpp
-    Source/GUIv2/analyser/cliptype/ClipTypeComponent.cpp
-    Source/GUIv2/analyser/AnalyserComponent.cpp
-    Source/GUIv2/ControlPanel.cpp
-    Source/GUIv2/LinkingPanel.cpp
-    Source/GUIv2/LeftPanel.cpp
-    Source/GUIv2/CentralPanel.cpp
-    Source/GUIv2/RightPanel.cpp
-    Source/GUIv2/Header.cpp
-    Source/GUIv2/WorkingPanel.cpp
-    Source/GUIv2/MainComponent.cpp
-    Source/DSP/LevelMeter.cpp
-    Source/PluginEditor.cpp
-    Source/PluginProcessor.cpp)
+    source/GUIv2/clipmeter/ClipMeter.cpp
+    source/GUIv2/editableparameter/EditableParameterComponentLookAndFeel.cpp
+    source/GUIv2/editableparameter/EditableLabelAttachment.cpp
+    source/GUIv2/editableparameter/EditableParameterComponent.cpp
+    source/GUIv2/dial/DialLookAndFeel.cpp
+    source/GUIv2/dial/Dial.cpp
+    source/GUIv2/dial/gaindial/GainDialLookAndFeel.cpp
+    source/GUIv2/dial/gaindial/GainDial.cpp
+    source/GUIv2/dial/ceilingdial/CeilingDial.cpp
+    source/GUIv2/dial/ceilingdial/CeilingDialLookAndFeel.cpp
+    source/GUIv2/linkinout/LinkInOut.cpp
+    source/GUIv2/bypass/BypassButton.cpp
+    source/GUIv2/scaling/ScalingSwitch.cpp
+    source/GUIv2/levelmeter/LevelMeterComponent.cpp
+    source/GUIv2/analyser/peakanalyzer/PeakMeter.cpp
+    source/GUIv2/analyser/peakanalyzer/PeakAnalyzerComponent.cpp
+    source/GUIv2/analyser/cliptype/ClipTypeComponent.cpp
+    source/GUIv2/analyser/AnalyserComponent.cpp
+    source/GUIv2/ControlPanel.cpp
+    source/GUIv2/LinkingPanel.cpp
+    source/GUIv2/LeftPanel.cpp
+    source/GUIv2/CentralPanel.cpp
+    source/GUIv2/RightPanel.cpp
+    source/GUIv2/Header.cpp
+    source/GUIv2/WorkingPanel.cpp
+    source/GUIv2/MainComponent.cpp
+    source/DSP/LevelMeter.cpp
+    source/PluginEditor.cpp
+    source/PluginProcessor.cpp)
 
 target_compile_definitions(${CONAN_PROJECT_NAME}
     PUBLIC
@@ -66,12 +66,12 @@ target_compile_definitions(${CONAN_PROJECT_NAME}
     JUCE_VST3_CAN_REPLACE_VST2=0)
 
 juce_add_binary_data(AudioPluginData SOURCES
-    Resources/link.png
-    Resources/bypass.png
-    Resources/icon.png
-    Resources/logo_full.png
-    Resources/logo_plugin.png
-    Resources/WalkwayUpperBold.ttf)
+    assets/link.png
+    assets/bypass.png
+    assets/icon.png
+    assets/logo_full.png
+    assets/logo_plugin.png
+    assets/WalkwayUpperBold.ttf)
 
 set_target_properties(AudioPluginData PROPERTIES POSITION_INDEPENDENT_CODE ON)
 

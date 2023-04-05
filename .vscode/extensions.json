@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "zachflower.uncrustify",
+        "ms-python.python",
+        "spmeesseman.vscode-taskexplorer",
+        "github.vscode-github-actions",
+        "znck.grammarly",
+        "shd101wyy.markdown-preview-enhanced",
+        "streetsidesoftware.code-spell-checker",
+        "ms-vscode.cpptools-extension-pack"
+    ]
+}

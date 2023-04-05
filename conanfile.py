@@ -1,10 +1,10 @@
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMakeDeps, CMake, cmake_layout
-from conan.tools.system.package_manager import Chocolatey, Brew, Apt
 from conan.tools.files import copy
 from conan.errors import ConanInvalidConfiguration
 
 import os
+
 
 class PeakEater(ConanFile):
     name = "peakeater"
@@ -14,8 +14,8 @@ class PeakEater(ConanFile):
     company = "T-Audio"
     url = "https://github.com/vvvar/PeakEater"
     settings = "os", "arch", "compiler", "build_type"
-    options = { "signed": [True, False] }
-    default_options = { "signed": False }
+    options = {"signed": [True, False]}
+    default_options = {"signed": False}
     options_description = {
         "signed": "Whether binaries are signed with certificate or not"
     }
@@ -23,12 +23,10 @@ class PeakEater(ConanFile):
         "*",
         "!.vscode/*",
         "!build/*",
+        "!config/*",
         "!juce-conan/*",
-        "!Scripts/*",
         "!.env",
         "!.git*",
-        "!.config.pep8",
-        "!.uncrustify.cfg",
     }
 
     requires = "juce/7.0.5@juce/release"
@@ -40,7 +38,7 @@ class PeakEater(ConanFile):
     def layout(self):
         cmake_layout(self)
 
-    def generate(self): 
+    def generate(self):
         toolchain = CMakeToolchain(self, generator="Ninja")
         if self.settings.os == "Macos":
             toolchain.cache_variables["CMAKE_OSX_ARCHITECTURES"] = "x86_64;arm64"
@@ -62,13 +60,17 @@ class PeakEater(ConanFile):
         self.cpp_info.libs = [
             f"{str(self.name)}.clap",
             f"{str(self.name)}.lv2",
-            f"{str(self.name)}.vst3"
+            f"{str(self.name)}.vst3",
         ]
         if self.settings.os == "Macos":
             self.cpp_info.libs.append(f"{str(self.name)}.component")
 
     def package(self):
-        artefacts_folder = os.path.join(self.build_folder, f"{self.name}_artefacts", self.settings.get_safe("build_type"))
+        artefacts_folder = os.path.join(
+            self.build_folder,
+            f"{self.name}_artefacts",
+            self.settings.build_type,  # type: ignore
+        )
         libdir = os.path.join(self.package_folder, self.cpp.package.libdirs[0])
         copy(self, "*", src=os.path.join(artefacts_folder, "CLAP"), dst=libdir)
         copy(self, "*", src=os.path.join(artefacts_folder, "LV2"), dst=libdir)
@@ -79,24 +81,56 @@ class PeakEater(ConanFile):
 
             if self.options.signed:
                 self.output.info("Signing binaries...")
-                identity = os.environ.get('MACOS_APPLE_IDENTITY')
-                self.run(f"codesign --force -s '{identity}' -v {str(self.name)}.clap --deep --strict --options=runtime --timestamp", cwd=libdir, quiet=True)
-                self.run(f"codesign --force -s '{identity}' -v {str(self.name)}.component --deep --strict --options=runtime --timestamp", cwd=libdir, quiet=True)
-                self.run(f"codesign --force -s '{identity}' -v {str(self.name)}.vst3 --deep --strict --options=runtime --timestamp", cwd=libdir, quiet=True)
-                for filename in os.listdir(os.path.join(libdir, f"{str(self.name)}.lv2")): # LV2 is a directory, we need to sign all files from there
-                    self.run(f"codesign --force -s '{identity}' -v {filename} --deep --strict --options=runtime --timestamp", cwd=os.path.join(libdir, f"{str(self.name)}.lv2"), quiet=True)
+                identity = os.environ.get("MACOS_APPLE_IDENTITY")
+                self.run(
+                    f"codesign --force -s '{identity}' -v {str(self.name)}.clap --deep --strict --options=runtime --timestamp",
+                    cwd=libdir,
+                    quiet=True,
+                )
+                self.run(
+                    f"codesign --force -s '{identity}' -v {str(self.name)}.component --deep --strict --options=runtime --timestamp",
+                    cwd=libdir,
+                    quiet=True,
+                )
+                self.run(
+                    f"codesign --force -s '{identity}' -v {str(self.name)}.vst3 --deep --strict --options=runtime --timestamp",
+                    cwd=libdir,
+                    quiet=True,
+                )
+                for filename in os.listdir(
+                    os.path.join(libdir, f"{str(self.name)}.lv2")
+                ):  # LV2 is a directory, we need to sign all files from there
+                    self.run(
+                        f"codesign --force -s '{identity}' -v {filename} --deep --strict --options=runtime --timestamp",
+                        cwd=os.path.join(libdir, f"{str(self.name)}.lv2"),
+                        quiet=True,
+                    )
                 self.output.success("Successfully signed binaries")
 
             self.run("npm install -g appdmg")
-            copy(self, "appdmg-config.json", src=os.path.join(self.source_folder, "Scripts", "Release", "configs"), dst=libdir)
+            copy(
+                self,
+                "appdmg-config.json",
+                src=os.path.join(self.source_folder, "config"),
+                dst=libdir,
+            )
             self.run(f"appdmg appdmg-config.json {str(self.name)}.dmg", cwd=libdir)
-            
-            if self.options.signed:
-                identity = os.environ.get('MACOS_APPLE_IDENTITY')
-                apple_id = os.environ.get('MACOS_APPLE_ID')
-                password = os.environ.get('MACOS_APPLE_PASSWORD')
-                team_id = os.environ.get('MACOS_APPLE_TEAM_ID')
-                self.run(f"codesign --force -s '{identity}' -v {str(self.name)}.dmg --deep --strict --options=runtime --timestamp", cwd=libdir, quiet=True)
-                self.run(f"xcrun notarytool submit {str(self.name)}.dmg --apple-id {apple_id} --password {password} --team-id {team_id} --wait", cwd=libdir, quiet=True)
-                self.run(f"xcrun stapler staple {str(self.name)}.dmg", cwd=libdir, quiet=True)
-                
+
+            if self.options.signed:  # type: ignore
+                identity = os.environ.get("MACOS_APPLE_IDENTITY")
+                apple_id = os.environ.get("MACOS_APPLE_ID")
+                password = os.environ.get("MACOS_APPLE_PASSWORD")
+                team_id = os.environ.get("MACOS_APPLE_TEAM_ID")
+                self.run(
+                    f"codesign --force -s '{identity}' -v {str(self.name)}.dmg --deep --strict --options=runtime --timestamp",
+                    cwd=libdir,
+                    quiet=True,
+                )
+                self.run(
+                    f"xcrun notarytool submit {str(self.name)}.dmg --apple-id {apple_id} --password {password} --team-id {team_id} --wait",
+                    cwd=libdir,
+                    quiet=True,
+                )
+                self.run(
+                    f"xcrun stapler staple {str(self.name)}.dmg", cwd=libdir, quiet=True
+                )
