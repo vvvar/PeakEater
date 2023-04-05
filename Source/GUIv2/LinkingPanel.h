@@ -14,12 +14,8 @@ namespace gui
 class LinkingPanel : public juce::Component
 {
 public:
-LinkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-              std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
-              std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-              std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
+LinkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters);
 
-void paint (juce::Graphics& g) override;
 void resized() override;
 
 private:

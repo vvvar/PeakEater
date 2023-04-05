@@ -19,8 +19,7 @@ class ControlPanel : public juce::Component
 public:
 ControlPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
               std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
-              std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-              std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
+              std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter);
 
 void paint (juce::Graphics& g) override;
 void resized() override;

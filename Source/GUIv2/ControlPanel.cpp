@@ -13,8 +13,7 @@ int constexpr gBorderRadius = 10;
 } // namespace
 ControlPanel::ControlPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
                             std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
-                            std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-                            std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter)
+                            std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter)
 	: juce::Component()
 	, mDial_1 ("Input", parameters, "InputGain")
 	, mDial_2 ("Type", parameters, "ClippingType")

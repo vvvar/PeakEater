@@ -14,7 +14,7 @@ MainComponent::MainComponent (std::shared_ptr<juce::AudioProcessorValueTreeState
                               std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
                               std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter)
 	: juce::Component()
-	, mHeader (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
+	, mHeader (parameters)
 	, mWorkingPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
 	, mBypassButton (parameters)
 	, mParameters (parameters)

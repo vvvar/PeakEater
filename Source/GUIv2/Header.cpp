@@ -5,10 +5,7 @@ namespace pe
 {
 namespace gui
 {
-Header::Header (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
-                std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-                std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter)
+Header::Header (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters)
 	: juce::Component()
 	, mAttachment (*parameters, "Bypass", mBypass)
 {

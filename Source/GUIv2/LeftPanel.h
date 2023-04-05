@@ -15,10 +15,7 @@ namespace gui
 class LeftPanel : public juce::Component
 {
 public:
-LeftPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-           std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
-           std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-           std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter,
+LeftPanel (std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
            std::shared_ptr<Ticks> ticks);
 
 void resized() override;

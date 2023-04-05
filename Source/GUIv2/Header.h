@@ -13,10 +13,7 @@ namespace gui
 class Header : public juce::Component
 {
 public:
-Header (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-        std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
-        std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-        std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
+Header (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters);
 
 void resized() override;
 

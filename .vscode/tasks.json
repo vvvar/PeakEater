@@ -28,15 +28,7 @@
   ],
   "tasks": [
     {
-      "label": "Clean Build Dir",
-      "type": "shell",
-      "command": "rm -rf ${workspaceFolder}/build/",
-      "windows": {
-        "command": "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ${workspaceFolder}/build/"
-      }
-    },
-    {
-      "label": "Conan: Create JUCE",
+      "label": "Conan: Build JUCE",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
@@ -49,7 +41,7 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "conan install . && conan build .",
+      "command": "conan install . && conan build . --options signed=True",
     },
     {
       "label": "Conan: Package",
@@ -60,31 +52,9 @@
       "command": "conan export-pkg .",
     },
     {
-      "label": "Build(Clean)",
-      "type": "shell",
-      "dependsOn": [
-        "Clean Build Dir",
-        "Build"
-      ],
-      "dependsOrder": "sequence"
-    },
-    {
-      "label": "Create release package",
-      "type": "shell",
-      "command": "python3 ${workspaceFolder}/Scripts/Release/MacOS.py --release_type=${input:build_type} --sign_and_notarize=True --release_version=Development",
-      "windows": {
-        "command": "python ${workspaceFolder}/Scripts/Release/Windows.py --release_type=${input:build_type}"
-      }
-    },
-    {
       "label": "Run Standalone",
       "type": "shell",
       "command": "${workspaceFolder}/build/PeakEater_artefacts/${input:build_type}/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
-    },
-    {
-      "label": "Pip: Install",
-      "type": "shell",
-      "command": "python3 -m pip install -r ${workspaceFolder}/requirements.txt"
     }
   ]
 }
