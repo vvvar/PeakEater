@@ -1,3 +1,0 @@
-autopep8==2.0.1
-pylint==2.15.8
-python-dotenv==0.21.0

@@ -19,6 +19,17 @@ class PeakEater(ConanFile):
     options_description = {
         "signed": "Whether binaries are signed with certificate or not"
     }
+    exports_sources = {
+        "*",
+        "!.vscode/*",
+        "!build/*",
+        "!juce-conan/*",
+        "!Scripts/*",
+        "!.env",
+        "!.git*",
+        "!.config.pep8",
+        "!.uncrustify.cfg",
+    }
 
     requires = "juce/7.0.5@juce/release"
 

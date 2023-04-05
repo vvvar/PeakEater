@@ -52,6 +52,14 @@
       "command": "conan export-pkg .",
     },
     {
+      "label": "Conan: Create",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "command": "conan create . --options signed=True",
+    },
+    {
       "label": "Run Standalone",
       "type": "shell",
       "command": "${workspaceFolder}/build/PeakEater_artefacts/${input:build_type}/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
