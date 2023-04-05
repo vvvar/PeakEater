@@ -26,30 +26,30 @@ class PeakEater(ConanFile):
         if self.options.signed and not self.settings.os == "Macos":
             raise ConanInvalidConfiguration("Only macOS supports code-signing")
 
-    def system_requirements(self):
-        self.conf_info.define("tools.system.package_manager:mode", "install")
-        if self.settings.os == "Windows":
-            chocolatey = Chocolatey(self)
-            chocolatey.update()
-            chocolatey.install(["ninja"])
-        elif self.settings.os == "Macos":
-            brew = Brew(self)
-            brew.update()
-            brew.install(["ninja", "node"])
-        elif self.settings.os == "Linux":
-            apt = Apt(self)
-            apt.update()
-            apt.install([
-                "ninja-build",
-                "g++", "libgtk-3-dev",
-                "libfreetype6-dev", "libx11-dev",
-                "libxinerama-dev", "libxrandr-dev",
-                "libxcursor-dev", "mesa-common-dev",
-                "libasound2-dev", "ladspa-sdk",
-                "freeglut3-dev", "libxcomposite-dev",
-                "libcurl4-openssl-dev", "libwebkit2gtk-4.0-37",
-                "libwebkit2gtk-4.0-dev"
-            ])
+    # def system_requirements(self):
+    #     self.conf_info.define("tools.system.package_manager:mode", "install")
+    #     if self.settings.os == "Windows":
+    #         chocolatey = Chocolatey(self)
+    #         chocolatey.update()
+    #         chocolatey.install(["ninja"])
+    #     elif self.settings.os == "Macos":
+    #         brew = Brew(self)
+    #         brew.update()
+    #         brew.install(["ninja", "node"])
+    #     elif self.settings.os == "Linux":
+    #         apt = Apt(self)
+    #         apt.update()
+    #         apt.install([
+    #             "ninja-build",
+    #             "g++", "libgtk-3-dev",
+    #             "libfreetype6-dev", "libx11-dev",
+    #             "libxinerama-dev", "libxrandr-dev",
+    #             "libxcursor-dev", "mesa-common-dev",
+    #             "libasound2-dev", "ladspa-sdk",
+    #             "freeglut3-dev", "libxcomposite-dev",
+    #             "libcurl4-openssl-dev", "libwebkit2gtk-4.0-37",
+    #             "libwebkit2gtk-4.0-dev"
+    #         ])
 
     def layout(self):
         cmake_layout(self)
