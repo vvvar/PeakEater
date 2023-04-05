@@ -52,14 +52,14 @@ jobs:
       - name: Configure Conan
         run: conan profile detect
       - name: Build
-        run: conan create ${{github.workspace}}/juce-conan && conan install ${{github.workspace}} && conan build ${{github.workspace}}
+        run: conan create ${{github.workspace}}/juce-conan && conan install ${{github.workspace}} && conan build ${{github.workspace}} --options signed=True
       - name: Package
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
           MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
           MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
           MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
-        run: python ${{github.workspace}}/Scripts/Release/MacOS.py --release_type=${{env.BUILD_TYPE}} --sign_and_notarize=True --release_version=0.6.2
+        run: conan export-pkg . 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -80,6 +80,8 @@ jobs:
         run: conan profile detect
       - name: Build
         run: conan create ${{github.workspace}}\juce-conan && conan install ${{github.workspace}} && conan build ${{github.workspace}}
+      - name: Package
+        run: conan export-pkg .
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -108,6 +110,8 @@ jobs:
         run: conan profile detect
       - name: Build
         run: conan create ${{github.workspace}}/juce-conan && conan install ${{github.workspace}} && conan build ${{github.workspace}}
+      - name: Package
+        run: conan export-pkg .
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:

@@ -17,3 +17,6 @@ node_modules
 
 # Various vscode logs
 /.vscode/*.log
+
+# Env
+.env

@@ -36,12 +36,28 @@
       }
     },
     {
-      "label": "Build",
+      "label": "Conan: Create JUCE",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "cd juce-conan && conan create . && cd .. && conan install . && conan build .",
+      "command": "conan create juce-conan",
+    },
+    {
+      "label": "Conan: Build",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "command": "conan install . && conan build .",
+    },
+    {
+      "label": "Conan: Package",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "command": "conan export-pkg .",
     },
     {
       "label": "Build(Clean)",
