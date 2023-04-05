@@ -12,25 +12,25 @@
       "x": 100,
       "y": 75,
       "type": "file",
-      "path": "PeakEater.vst3"
+      "path": "peakeater.vst3"
     },
     {
       "x": 225,
       "y": 75,
       "type": "file",
-      "path": "PeakEater.component"
+      "path": "peakeater.component"
     },
     {
       "x": 350,
       "y": 75,
       "type": "file",
-      "path": "PeakEater.lv2"
+      "path": "peakeater.lv2"
     },
     {
       "x": 475,
       "y": 75,
       "type": "file",
-      "path": "PeakEater.clap"
+      "path": "peakeater.clap"
     },
     {
       "x": 100,

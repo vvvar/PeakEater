@@ -89,7 +89,7 @@ class PeakEater(ConanFile):
 
             self.run("npm install -g appdmg")
             copy(self, "appdmg-config.json", src=os.path.join(self.source_folder, "Scripts", "Release", "configs"), dst=libdir)
-            self.run(f"appdmg {os.path.join(libdir, 'appdmg-config.json')} {os.path.join(libdir, str(self.name))}.dmg")
+            self.run(f"appdmg appdmg-config.json {str(self.name)}.dmg", cwd=libdir)
             
             if self.options.signed:
                 identity = os.environ.get('MACOS_APPLE_IDENTITY')
