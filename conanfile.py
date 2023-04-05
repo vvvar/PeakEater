@@ -27,6 +27,7 @@ class PeakEater(ConanFile):
             raise ConanInvalidConfiguration("Only macOS supports code-signing")
 
     def system_requirements(self):
+        self.conf_info.define("tools.system.package_manager:mode", "install")
         if self.settings.os == "Windows":
             chocolatey = Chocolatey(self)
             chocolatey.update()
@@ -86,7 +87,6 @@ class PeakEater(ConanFile):
             self.output.success("Successfully signed binaries")
 
     def package_info(self):
-        self.conf_info.define("tools.system.package_manager:mode", "install")
         self.cpp_info.libs = [
             f"{str(self.name)}.clap",
             f"{str(self.name)}.lv2",
