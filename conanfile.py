@@ -1,7 +1,7 @@
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMakeDeps, CMake, cmake_layout
-from conan.tools.files import copy
-from conan.errors import ConanInvalidConfiguration
+from conan.tools.files import copy, rmdir, mkdir, rm
+from conan.errors import ConanException, ConanInvalidConfiguration
 
 import os
 
@@ -16,9 +16,7 @@ class PeakEater(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     options = {"signed": [True, False]}
     default_options = {"signed": False}
-    options_description = {
-        "signed": "Whether binaries are signed with certificate or not"
-    }
+    options_description = {"signed": "Whether binaries are signed with certificate or not"}
     exports_sources = {
         "*",
         "!.vscode/*",
@@ -55,81 +53,54 @@ class PeakEater(ConanFile):
         cmake.configure()
         cmake.build()
 
-    def package_info(self):
-        self.cpp_info.libs = [
-            f"{str(self.name)}.clap",
-            f"{str(self.name)}.lv2",
-            f"{str(self.name)}.vst3",
-        ]
-        if self.settings.os == "Macos":  # type: ignore
-            self.cpp_info.libs.append(f"{str(self.name)}.component")
-
-    def package(self):
-        artefacts_folder = os.path.join(
-            self.build_folder,
-            f"{self.name}_artefacts",
-            self.settings.get_safe("build_type"),  # type: ignore
-        )
-        libdir = os.path.join(self.package_folder, "lib")
-        copy(self, "*", src=os.path.join(artefacts_folder, "CLAP"), dst=libdir)
-        copy(self, "*", src=os.path.join(artefacts_folder, "LV2"), dst=libdir)
-        copy(self, "*", src=os.path.join(artefacts_folder, "VST3"), dst=libdir)
+        if self.options.signed and self.settings.os == "Macos":  # type: ignore
+            self.output.info("Signing binaries...")
+            identity = os.environ.get("MACOS_APPLE_IDENTITY")
+            artefacts_folder = os.path.join(self.build_folder, f"{self.name}_artefacts", self.settings.get_safe("build_type"))  # type: ignore
+            clap_folder = os.path.join(artefacts_folder, "CLAP")
+            au_folder = os.path.join(artefacts_folder, "AU")
+            vst3_folder = os.path.join(artefacts_folder, "VST3")
+            lv2_folder = os.path.join(artefacts_folder, "LV2", f"{str(self.name)}.lv2")
+            self.run(f"codesign --force -s '{identity}' -v {str(self.name)}.clap --deep --strict --options=runtime --timestamp", cwd=clap_folder, quiet=True)
+            self.run(f"codesign --force -s '{identity}' -v {str(self.name)}.component --deep --strict --options=runtime --timestamp", cwd=au_folder, quiet=True)
+            self.run(f"codesign --force -s '{identity}' -v {str(self.name)}.vst3 --deep --strict --options=runtime --timestamp", cwd=vst3_folder, quiet=True)
+            for filename in os.listdir(lv2_folder):  # LV2 plugin is a folder itself, so we need to sign all files from there
+                self.run(f"codesign --force -s '{identity}' -v {filename} --deep --strict --options=runtime --timestamp", cwd=lv2_folder, quiet=True)
+            self.output.success("Successfully signed binaries")
 
         if self.settings.os == "Macos":  # type: ignore
-            copy(self, "*", src=os.path.join(artefacts_folder, "AU"), dst=libdir)
-
-            if self.options.signed:  # type: ignore
-                self.output.info("Signing binaries...")
-                identity = os.environ.get("MACOS_APPLE_IDENTITY")
-                self.run(
-                    f"codesign --force -s '{identity}' -v {str(self.name)}.clap --deep --strict --options=runtime --timestamp",
-                    cwd=libdir,
-                    quiet=True,
-                )
-                self.run(
-                    f"codesign --force -s '{identity}' -v {str(self.name)}.component --deep --strict --options=runtime --timestamp",
-                    cwd=libdir,
-                    quiet=True,
-                )
-                self.run(
-                    f"codesign --force -s '{identity}' -v {str(self.name)}.vst3 --deep --strict --options=runtime --timestamp",
-                    cwd=libdir,
-                    quiet=True,
-                )
-                for filename in os.listdir(
-                    os.path.join(libdir, f"{str(self.name)}.lv2")
-                ):  # LV2 is a directory, we need to sign all files from there
-                    self.run(
-                        f"codesign --force -s '{identity}' -v {filename} --deep --strict --options=runtime --timestamp",
-                        cwd=os.path.join(libdir, f"{str(self.name)}.lv2"),
-                        quiet=True,
-                    )
-                self.output.success("Successfully signed binaries")
-
+            self.output.info("Building DMG...")
+            artefacts_folder = os.path.join(self.build_folder, f"{self.name}_artefacts", self.settings.get_safe("build_type"))  # type: ignore
+            # Create DMG folder
+            dmg_folder = os.path.join(artefacts_folder, "DMG")
+            rmdir(self, dmg_folder)
+            mkdir(self, dmg_folder)
+            # Copy artefacts there
+            copy(self, "*", src=os.path.join(artefacts_folder, "CLAP"), dst=dmg_folder)
+            copy(self, "*", src=os.path.join(artefacts_folder, "AU"), dst=dmg_folder)
+            copy(self, "*", src=os.path.join(artefacts_folder, "VST3"), dst=dmg_folder)
+            copy(self, "*", src=os.path.join(artefacts_folder, "LV2"), dst=dmg_folder)
+            copy(self, "appdmg-config.json", src=os.path.join(self.source_folder, "config"), dst=dmg_folder)  # type: ignore
+            # Build DMG
             self.run("npm install -g appdmg")
-            copy(
-                self,
-                "appdmg-config.json",
-                src=os.path.join(self.source_folder, "config"),
-                dst=libdir,
-            )
-            self.run(f"appdmg appdmg-config.json {str(self.name)}.dmg", cwd=libdir)
-
+            self.run(f"appdmg appdmg-config.json {str(self.name)}.dmg", cwd=dmg_folder)
+            # When sign required
             if self.options.signed:  # type: ignore
+                # Sign, notarize and staple DMG
                 identity = os.environ.get("MACOS_APPLE_IDENTITY")
                 apple_id = os.environ.get("MACOS_APPLE_ID")
                 password = os.environ.get("MACOS_APPLE_PASSWORD")
                 team_id = os.environ.get("MACOS_APPLE_TEAM_ID")
-                self.run(
-                    f"codesign --force -s '{identity}' -v {str(self.name)}.dmg --deep --strict --options=runtime --timestamp",
-                    cwd=libdir,
-                    quiet=True,
-                )
-                self.run(
-                    f"xcrun notarytool submit {str(self.name)}.dmg --apple-id {apple_id} --password {password} --team-id {team_id} --wait",
-                    cwd=libdir,
-                    quiet=True,
-                )
-                self.run(
-                    f"xcrun stapler staple {str(self.name)}.dmg", cwd=libdir, quiet=True
-                )
+                self.run(f"codesign --force -s '{identity}' -v {str(self.name)}.dmg --deep --strict --options=runtime --timestamp", cwd=dmg_folder, quiet=True)
+                self.run(f"xcrun notarytool submit {str(self.name)}.dmg --apple-id {apple_id} --password {password} --team-id {team_id} --wait", cwd=dmg_folder, quiet=True)
+                self.run(f"xcrun stapler staple {str(self.name)}.dmg", cwd=dmg_folder, quiet=True)
+            # Cleanup tmp files
+            rm(self, ".json", dmg_folder)
+            rmdir(self, os.path.join(dmg_folder, f"{str(self.name)}.clap"))
+            rmdir(self, os.path.join(dmg_folder, f"{str(self.name)}.component"))
+            rmdir(self, os.path.join(dmg_folder, f"{str(self.name)}.vst3"))
+            rmdir(self, os.path.join(dmg_folder, f"{str(self.name)}.lv2"))
+            self.output.success("Successfully built DMG")
+
+    def package(self):
+        raise ConanException(f"{str(self.name)} does not support Conan packaging")

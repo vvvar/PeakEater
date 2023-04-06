@@ -46,23 +46,18 @@ jobs:
       - name: Install System Requirements
         run: |
           brew update
-          brew install ninja node
-      - name: Install Conan
-        id: conan
-        uses: turtlebrowser/get-conan@main
-        with:
-          version: 2.0.2
-      - name: Configure Conan
-        run: conan profile detect
+          brew bundle install --file=${{github.workspace}}/config/system/Brewfile
       - name: Build JUCE
-        run: conan create ${{github.workspace}}/juce-conan
+        run: conan create ${{github.workspace}}/juce-conan -pr:b=${{github.workspace}}/conan/profiles/macos
       - name: Build Project
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
           MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
           MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
           MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
-        run: conan create ${{github.workspace}} --options signed=True
+        run: |
+          conan install ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/macos
+          conan build ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/macos
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -79,18 +74,13 @@ jobs:
       - name: Install System Requirements
         run: |
           chocolatey update
-          chocolatey install ninja
-      - name: Install Conan
-        id: conan
-        uses: turtlebrowser/get-conan@main
-        with:
-          version: 2.0.2
-      - name: Configure Conan
-        run: conan profile detect
+          chocolatey install ${{github.workspace}}/config/system/chocolatey.config
       - name: Build JUCE
-        run: conan create ${{github.workspace}}/juce-conan
+        run: conan create ${{github.workspace}}/juce-conan -pr:b=${{github.workspace}}/conan/profiles/macos
       - name: Build Project
-        run: conan create ${{github.workspace}}
+        run: |
+          conan install ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/windows
+          conan build ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/windows
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -110,22 +100,18 @@ jobs:
       - name: Install System Requirements
         run: |
           sudo apt update
-          sudo apt install -y ninja-build g++ libgtk-3-dev
-          sudo apt install -y libfreetype6-dev libx11-dev libxinerama-dev
-          sudo apt install -y libxrandr-dev libxcursor-dev mesa-common-dev
-          sudo apt install -y libasound2-dev ladspa-sdk freeglut3-dev 
-          sudo apt install -y libxcomposite-dev libcurl4-openssl-dev libwebkit2gtk-4.0-37 libwebkit2gtk-4.0-dev 
+          sudo apt install -y < ${{github.workspace}}/config/system/packages.txt
       - name: Install Conan
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
           version: 2.0.2
-      - name: Configure Conan
-        run: conan profile detect
       - name: Build JUCE
-        run: conan create ${{github.workspace}}/juce-conan
+        run: conan create ${{github.workspace}}/juce-conan -pr:b=${{github.workspace}}/conan/profiles/linux
       - name: Build Project
-        run: conan create ${{github.workspace}}
+        run: |
+          conan install ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/linux
+          conan build ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/linux
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:

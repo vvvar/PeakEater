@@ -1,52 +1,53 @@
 {
   "version": "2.0.0",
-  "inputs": [
-    {
-      "id": "signed",
-      "type": "pickString",
-      "description": "Should executable be signed(macOS only)?",
-      "default": "False",
-      "options": [
-        "True",
-        "False"
-      ]
-    }
-  ],
   "tasks": [
     {
-      "label": "JUCE: Build",
+      "label": "Install: System Dependencies",
+      "type": "shell",
+      "osx": {
+        "command": "brew bundle install --file=${workspaceFolder}/config/system/Brewfile"
+      },
+      "windows": {
+        "command": "chocolatey install ${workspaceFolder}/config/system/chocolatey.config"
+      },
+      "linux": {
+        "command": "apt install -y < ${workspaceFolder}/config/system/packages.txt"
+      }
+    },
+    {
+      "label": "Conan: Build JUCE",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "conan create juce-conan",
+      "osx": {
+        "command": "conan create juce-conan -pr:b=${workspaceFolder}/conan/profiles/macos"
+      },
+      "windows": {
+        "command": "conan create juce-conan -pr:b=${workspaceFolder}/conan/profiles/windows"
+      },
+      "linux": {
+        "command": "conan create juce-conan -pr:b=${workspaceFolder}/conan/profiles/linux"
+      }
     },
     {
-      "label": "PeakEater: Build",
+      "label": "Conan: Build PeakEater",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "conan install . && conan build . --options signed=${input:signed}",
+      "osx": {
+        "command": "conan install . -pr:b=${workspaceFolder}/conan/profiles/macos && conan build . -pr:b=${workspaceFolder}/conan/profiles/macos"
+      },
+      "windows": {
+        "command": "conan install . -pr:b=${workspaceFolder}/conan/profiles/windows && conan build . -pr:b=${workspaceFolder}/conan/profiles/windows"
+      },
+      "linux": {
+        "command": "conan install . -pr:b=${workspaceFolder}/conan/profiles/linux && conan build . -pr:b=${workspaceFolder}/conan/profiles/linux"
+      }
     },
     {
-      "label": "PeakEater: Export Package",
-      "type": "shell",
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "command": "conan export-pkg . --options signed=${input:signed}",
-    },
-    {
-      "label": "PeakEater: Create",
-      "type": "shell",
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "command": "conan create . --options signed=${input:signed}",
-    },
-    {
-      "label": "PeakEater: Run Standalone",
+      "label": "Test: Run PeakEater Standalone",
       "type": "shell",
       "command": "${workspaceFolder}/build/PeakEater_artefacts/${input:build_type}/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
     }
