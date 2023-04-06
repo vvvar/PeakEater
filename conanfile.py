@@ -23,7 +23,6 @@ class PeakEater(ConanFile):
         "*",
         "!.vscode/*",
         "!build/*",
-        "!config/*",
         "!juce-conan/*",
         "!.env",
         "!.git*",
@@ -72,7 +71,6 @@ class PeakEater(ConanFile):
             self.settings.get_safe("build_type"),  # type: ignore
         )
         libdir = os.path.join(self.package_folder, "lib")
-        self.output.info(f"libdir: {libdir}")
         copy(self, "*", src=os.path.join(artefacts_folder, "CLAP"), dst=libdir)
         copy(self, "*", src=os.path.join(artefacts_folder, "LV2"), dst=libdir)
         copy(self, "*", src=os.path.join(artefacts_folder, "VST3"), dst=libdir)
