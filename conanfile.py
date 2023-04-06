@@ -32,7 +32,7 @@ class PeakEater(ConanFile):
     requires = "juce/7.0.5@juce/release"
 
     def validate(self):
-        if self.options.signed and not self.settings.os == "Macos":
+        if self.options.signed and not self.settings.os == "Macos":  # type: ignore
             raise ConanInvalidConfiguration("Only macOS supports code-signing")
 
     def layout(self):
@@ -40,7 +40,7 @@ class PeakEater(ConanFile):
 
     def generate(self):
         toolchain = CMakeToolchain(self, generator="Ninja")
-        if self.settings.os == "Macos":
+        if self.settings.os == "Macos":  # type: ignore
             toolchain.cache_variables["CMAKE_OSX_ARCHITECTURES"] = "x86_64;arm64"
             toolchain.cache_variables["CMAKE_OSX_DEPLOYMENT_TARGET"] = "10.9"
         toolchain.cache_variables["CONAN_PROJECT_NAME"] = str(self.name)
@@ -62,24 +62,24 @@ class PeakEater(ConanFile):
             f"{str(self.name)}.lv2",
             f"{str(self.name)}.vst3",
         ]
-        if self.settings.os == "Macos":
+        if self.settings.os == "Macos":  # type: ignore
             self.cpp_info.libs.append(f"{str(self.name)}.component")
 
     def package(self):
         artefacts_folder = os.path.join(
             self.build_folder,
             f"{self.name}_artefacts",
-            self.settings.build_type,  # type: ignore
+            self.settings.get_safe("build_type"),  # type: ignore
         )
         libdir = os.path.join(self.package_folder, self.cpp.package.libdirs[0])
         copy(self, "*", src=os.path.join(artefacts_folder, "CLAP"), dst=libdir)
         copy(self, "*", src=os.path.join(artefacts_folder, "LV2"), dst=libdir)
         copy(self, "*", src=os.path.join(artefacts_folder, "VST3"), dst=libdir)
 
-        if self.settings.os == "Macos":
+        if self.settings.os == "Macos":  # type: ignore
             copy(self, "*", src=os.path.join(artefacts_folder, "AU"), dst=libdir)
 
-            if self.options.signed:
+            if self.options.signed:  # type: ignore
                 self.output.info("Signing binaries...")
                 identity = os.environ.get("MACOS_APPLE_IDENTITY")
                 self.run(
