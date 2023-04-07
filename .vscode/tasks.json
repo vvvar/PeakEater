@@ -21,13 +21,13 @@
         "$gcc"
       ],
       "osx": {
-        "command": "conan create juce-conan -pr:h=conan/profiles/macos-armv8 -pr:b=conan/profiles/macos-armv8"
+        "command": "conan create juce-conan -pr config/conan/profiles/macos-armv8"
       },
       "windows": {
-        "command": "conan create juce-conan -pr:h=conan/profiles/windows-x86_64 -pr:b=conan/profiles/windows-x86_64"
+        "command": "conan create juce-conan -pr config/conan/profiles/windows-x86_64"
       },
       "linux": {
-        "command": "conan create juce-conan -pr:h=conan/profiles/linux-x86_64 -pr:b=conan/profiles/linux-x86_64"
+        "command": "conan create juce-conan -pr config/conan/profiles/linux-x86_64"
       }
     },
     {
@@ -37,13 +37,13 @@
         "$gcc"
       ],
       "osx": {
-        "command": "conan install . -pr:h=conan/profiles/macos-armv8 -pr:b=conan/profiles/macos-armv8 && conan build . -pr:h=conan/profiles/macos-armv8 -pr:b=conan/profiles/macos-armv8"
+        "command": "conan install . -pr config/conan/profiles/macos-armv8 && conan build . -pr config/conan/profiles/macos-armv8"
       },
       "windows": {
-        "command": "conan install . -pr:h=conan/profiles/windows-x86_64 -pr:b=conan/profiles/windows-x86_64 && conan build . -pr:h=conan/profiles/windows-x86_64 -pr:b=conan/profiles/windows-x86_64"
+        "command": "conan install . -pr config/conan/profiles/windows-x86_64 && conan build . -pr config/conan/profiles/windows-x86_64"
       },
       "linux": {
-        "command": "conan install . -pr:h=conan/profiles/linux-x86_64 -pr:b=conan/profiles/linux-x86_64 && conan build . -pr:h=conan/profiles/linux-x86_64 -pr:b=conan/profiles/linux-x86_64"
+        "command": "conan install . -pr config/conan/profiles/linux-x86_64 && conan build . -pr config/conan/profiles/linux-x86_64"
       }
     },
     {

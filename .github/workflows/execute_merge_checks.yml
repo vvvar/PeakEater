@@ -47,9 +47,11 @@ jobs:
         with:
           version: 2.0.3
       - name: Install Conan Config
-        run: conan config install conan
+        run: |
+          conan profile detect
+          conan config install config/conan
       - name: Build JUCE
-        run: conan create ${{github.workspace}}/juce-conan -pr:b ${{env.CONAN_PROFILE_MACOS}} -pr:h ${{env.CONAN_PROFILE_MACOS}}
+        run: conan create juce-conan -pr ${{env.CONAN_PROFILE_MACOS}}
       - name: Build Project
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
@@ -57,13 +59,13 @@ jobs:
           MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
           MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
         run: |
-          conan install ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_MACOS}} -pr:h ${{env.CONAN_PROFILE_MACOS}}
-          conan build ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_MACOS}} -pr:h ${{env.CONAN_PROFILE_MACOS}}
+          conan install . -pr ${{env.CONAN_PROFILE_MACOS}}
+          conan build . -pr ${{env.CONAN_PROFILE_MACOS}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{env.CONAN_PROFILE_MACOS}}
-          path: ${{github.workspace}}/build/peakeater_artefacts/Release/DMG/peakeater.dmg
+          path: build/peakeater_artefacts/Release/DMG/peakeater.dmg
 
   windows:
     name: Windows
@@ -74,26 +76,30 @@ jobs:
             submodules: 'recursive'
       - name: Install System Requirements
         run: |
-          choco install ${{github.workspace}}\config\system\requirements.windows.choco.config
-          refreshenv
-          ninja --version
-          conan --version
+          choco install config\system\requirements.windows.choco.config
+      - name: Install Conan
+        id: conan
+        uses: turtlebrowser/get-conan@main
+        with:
+          version: 2.0.3
       - name: Install Conan Config
-        run: conan config install ${{github.workspace}}\conan
+        run: |
+          conan profile detect
+          conan config install config\conan
       - name: Build JUCE
-        run: conan create ${{github.workspace}}\juce-conan -pr:b ${{env.CONAN_PROFILE_WINDOWS}} -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
+        run: conan create juce-conan -pr ${{env.CONAN_PROFILE_WINDOWS}}
       - name: Build Project
         run: |
-          conan install ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_WINDOWS}} -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
-          conan build ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_WINDOWS}} -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
+          conan install . -pr ${{env.CONAN_PROFILE_WINDOWS}}
+          conan build . -pr ${{env.CONAN_PROFILE_WINDOWS}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{env.CONAN_PROFILE_WINDOWS}}
           path: |
-            ${{github.workspace}}/build/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-win/peakeater.vst3
-            ${{github.workspace}}/build/peakeater_artefacts/Release/LV2/peakeater.lv2
-            ${{github.workspace}}/build/peakeater_artefacts/Release/CLAP/peakeater.clap
+            build/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-win/peakeater.vst3
+            build/peakeater_artefacts/Release/LV2/peakeater.lv2
+            build/peakeater_artefacts/Release/CLAP/peakeater.clap
 
   linux:
     name: Linux
@@ -105,25 +111,27 @@ jobs:
       - name: Install System Requirements
         run: |
           sudo apt-get update
-          sudo xargs -a ${{github.workspace}}/config/system/requirements.linux.apt.txt apt-get install -y
+          sudo xargs -a config/system/requirements.linux.apt.txt apt-get install -y
       - name: Install Conan
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
           version: 2.0.3
       - name: Install Conan Config
-        run: conan config install ${{github.workspace}}/conan
+        run: |
+          conan profile detect
+          conan config install config/conan
       - name: Build JUCE
-        run: conan create ${{github.workspace}}/juce-conan -pr:b ${{env.CONAN_PROFILE_LINUX}} -pr:h ${{env.CONAN_PROFILE_LINUX}}
+        run: conan create juce-conan -pr ${{env.CONAN_PROFILE_LINUX}}
       - name: Build Project
         run: |
-          conan install ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_LINUX}} -pr:h ${{env.CONAN_PROFILE_LINUX}}
-          conan build ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_LINUX}} -pr:h ${{env.CONAN_PROFILE_LINUX}}
+          conan install . -pr ${{env.CONAN_PROFILE_LINUX}}
+          conan build . -pr ${{env.CONAN_PROFILE_LINUX}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{env.CONAN_PROFILE_LINUX}}
           path: |
-            ${{github.workspace}}/build/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-linux/peakeater.so
-            ${{github.workspace}}/build/peakeater_artefacts/Release/LV2/peakeater.lv2
-            ${{github.workspace}}/build/peakeater_artefacts/Release/CLAP/peakeater.clap
+            build/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-linux/peakeater.so
+            build/peakeater_artefacts/Release/LV2/peakeater.lv2
+            build/peakeater_artefacts/Release/CLAP/peakeater.clap
