@@ -69,7 +69,7 @@ jobs:
             submodules: 'recursive'
       - name: Install System Requirements
         run: |
-          chocolatey install ninja conan
+          choco install ${{github.workspace}}\config\system\requirements.windows.choco.config
           refreshenv
           ninja --version
           conan --version
