@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "esModuleInterop": true
+    },
+    "files": [
+        "node_modules/jest-os-detection/index.d.ts"
+    ]
+}

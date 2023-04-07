@@ -47,6 +47,17 @@
       }
     },
     {
+      "label": "Test: Compilation Database",
+      "type": "shell",
+      "options": {
+        "cwd": "test/compilation_database",
+        "env": {
+          "COMPILE_COMMANDS_PATH": "${workspaceFolder}/build/Release/compile_commands.json"
+        }
+      },
+      "command": "npm run test"
+    },
+    {
       "label": "Test: Run PeakEater Standalone",
       "type": "shell",
       "command": "${workspaceFolder}/build/PeakEater_artefacts/${input:build_type}/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
