@@ -49,13 +49,7 @@
     {
       "label": "Test: Compilation Database",
       "type": "shell",
-      "options": {
-        "cwd": "test/compilation_database",
-        "env": {
-          "COMPILE_COMMANDS_PATH": "${workspaceFolder}/build/Release/compile_commands.json"
-        }
-      },
-      "command": "npm run test"
+      "command": "python3 test/artefacts.test.py"
     },
     {
       "label": "Test: Run PeakEater Standalone",

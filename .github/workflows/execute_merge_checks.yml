@@ -61,13 +61,8 @@ jobs:
         run: |
           conan install . -pr ${{env.CONAN_PROFILE_MACOS}}
           conan build . -pr ${{env.CONAN_PROFILE_MACOS}}
-      - name: Test - Compilation Database
-        env: 
-          COMPILE_COMMANDS_PATH: build/Release/compile_commands.json
-        working-directory: test/compilation_database
-        run: |
-          npm install .
-          node run test
+      - name: Test - Artefacts
+        run: python3 test/artefacts.test.py
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -99,13 +94,8 @@ jobs:
         run: |
           conan install . -pr ${{env.CONAN_PROFILE_WINDOWS}}
           conan build . -pr ${{env.CONAN_PROFILE_WINDOWS}}
-      - name: Test - Compilation Database
-        env: 
-          COMPILE_COMMANDS_PATH: build/Release/compile_commands.json
-        working-directory: test/compilation_database
-        run: |
-          npm install .
-          node run test
+      - name: Test - Artefacts
+        run: python3 test/artefacts.test.py
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -141,13 +131,8 @@ jobs:
         run: |
           conan install . -pr ${{env.CONAN_PROFILE_LINUX}}
           conan build . -pr ${{env.CONAN_PROFILE_LINUX}}
-      - name: Test - Compilation Database
-        env: 
-          COMPILE_COMMANDS_PATH: build/Release/compile_commands.json
-        working-directory: test/compilation_database
-        run: |
-          npm install .
-          node run test
+      - name: Test - Artefacts
+        run: python3 test/artefacts.test.py
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
