@@ -61,12 +61,10 @@ jobs:
         run: |
           conan install . -pr ${{env.CONAN_PROFILE_MACOS}}
           conan build . -pr ${{env.CONAN_PROFILE_MACOS}}
-      - name: Test - Verify Compiler Options 
-        run: python3 test/compilation.test.py
-      - name: Test - Pluginval 
+      - name: Test - Verify Build Artefacts 
+        run: python3 test/artefacts.test.py
+      - name: Test - Pluginval
         run: python3 test/pluginval.test.py
-      - name: Test - Verify DMG 
-        run: python3 test/dmg.test.py
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -98,9 +96,9 @@ jobs:
         run: |
           conan install . -pr ${{env.CONAN_PROFILE_WINDOWS}}
           conan build . -pr ${{env.CONAN_PROFILE_WINDOWS}}
-      - name: Test - Verify Compiler Options 
-        run: python3 test/compilation.test.py
-      - name: Test - Pluginval 
+      - name: Test - Verify Build Artefacts 
+        run: python3 test/artefacts.test.py
+      - name: Test - Pluginval
         run: python3 test/pluginval.test.py
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
@@ -137,9 +135,9 @@ jobs:
         run: |
           conan install . -pr ${{env.CONAN_PROFILE_LINUX}}
           conan build . -pr ${{env.CONAN_PROFILE_LINUX}}
-      - name: Test - Verify Compiler Options 
-        run: python3 test/compilation.test.py
-      - name: Test - Pluginval 
+      - name: Test - Verify Build Artefacts 
+        run: python3 test/artefacts.test.py
+      - name: Test - Pluginval
         run: python3 test/pluginval.test.py
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3

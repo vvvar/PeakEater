@@ -112,14 +112,14 @@ int PeakEaterAudioProcessor::getNumPrograms() {
 }
 
 int PeakEaterAudioProcessor::getCurrentProgram() {
-	return 0;
+	return 1;
 }
 
 void PeakEaterAudioProcessor::setCurrentProgram(int /* index */) {
 }
 
 const juce::String PeakEaterAudioProcessor::getProgramName(int /* index */) {
-	return {};
+	return "default";
 }
 
 void PeakEaterAudioProcessor::changeProgramName(
@@ -208,15 +208,6 @@ void PeakEaterAudioProcessor::processBlock(
 	if (!*mBypass) {
 		mWaveShaperController.process(buffer);
 	}
-}
-
-void PeakEaterAudioProcessor::processBlockBypassed(juce::AudioBuffer<float> &, juce::MidiBuffer &) {
-	// Because we're handling bypass internally
-}
-
-juce::AudioProcessorParameter *
-PeakEaterAudioProcessor::getBypassParameter() const {
-	return mBypass;
 }
 
 //==============================================================================

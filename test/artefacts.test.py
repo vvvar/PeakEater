@@ -1,4 +1,5 @@
 import unittest
+import subprocess
 import os
 import sys
 import json
@@ -8,8 +9,8 @@ def isMac():
     return sys.platform == "darwin"
 
 
-class CompilationTestSuite(unittest.TestCase):
-    """Make sure compilation went as expected"""
+class TestBuildArtefacts(unittest.TestCase):
+    """Make sure build artefacts went produced as expected"""
 
     compile_commands_path = os.path.abspath(os.path.join(__file__, "../..", "build", "Release", "compile_commands.json"))
 
@@ -39,5 +40,17 @@ class CompilationTestSuite(unittest.TestCase):
             for compilation_unit in compile_commands:
                 self.assertIn("-mmacosx-version-min=10.9", compilation_unit["command"])
 
+    @unittest.skipUnless(isMac(), "Only relevant for macOS")
+    def test_dmg_signed(self):
+        """Make sure DMG file has been signed"""
+        dmg_path = os.path.abspath(os.path.join(__file__, "../..", "build", "Release", "peakeater_artefacts", "Release", "DMG", "peakeater.dmg"))
+        process = subprocess.Popen(["codesign", "-dv", "--verify", "--verbose=4", dmg_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        (_, stderr) = process.communicate()
+        self.assertEqual(0, process.returncode)
+        # Because of bug in codesign utility, it returns report into stdout
+        self.assertIn("valid on disk", stderr.decode())
+        self.assertIn("satisfies its Designated Requirement", stderr.decode())
+
+
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

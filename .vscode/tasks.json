@@ -52,14 +52,6 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "options": {
-        "env": {
-          "MACOS_APPLE_IDENTITY": "",
-          "MACOS_APPLE_ID": "",
-          "MACOS_APPLE_PASSWORD": "",
-          "MACOS_APPLE_TEAM_ID": ""
-        }
-      },
       "osx": {
         "command": "conan build . -pr config/conan/profiles/macos-armv8"
       },
@@ -71,16 +63,9 @@
       }
     },
     {
-      "label": "Test: Compilation",
+      "label": "Test: Build Artefacts",
       "type": "shell",
-      "command": "python3 test/compilation.test.py"
-    },
-    {
-      "label": "Test: DMG",
-      "type": "shell",
-      "osx": {
-        "command": "python3 test/dmg.test.py"
-      }
+      "command": "python3 test/artefacts.test.py"
     },
     {
       "label": "Test: Pluginval",
@@ -88,9 +73,11 @@
       "command": "python3 test/pluginval.test.py"
     },
     {
-      "label": "Test: Run PeakEater Standalone",
+      "label": "Test: Run Standalone",
       "type": "shell",
-      "command": "${workspaceFolder}/build/PeakEater_artefacts/${input:build_type}/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
+      "osx": {
+        "command": "build/Release/peakeater_artefacts/Release/Standalone/peakeater.app/Contents/MacOS/peakeater"
+      }
     }
   ]
 }

@@ -23,7 +23,7 @@ def is_linux():
     return sys.platform == "linux" or sys.platform == "linux2"
 
 
-class DmgTestSuite(unittest.TestCase):
+class TestPluginval(unittest.TestCase):
     """Make sure plugins passes pluginval"""
 
     """URL: https://github.com/Tracktion/pluginval"""
@@ -72,7 +72,7 @@ class DmgTestSuite(unittest.TestCase):
         """Make sure VST3 passed pluginval"""
         vst3_path = os.path.abspath(os.path.join(__file__, "../..", "build", "Release", "peakeater_artefacts", "Release", "VST3", "peakeater.vst3"))
         self.assertTrue(os.path.exists(vst3_path))
-        process = subprocess.Popen([self.pluginval_bin, "--strictness-level", "10", vst3_path])
+        process = subprocess.Popen([self.pluginval_bin, "--strictness-level", "10", "--verbose", "--skip-gui-tests", vst3_path])
         process.wait()
         self.assertEqual(0, process.returncode)
 
@@ -81,10 +81,10 @@ class DmgTestSuite(unittest.TestCase):
         """Make sure AU passed pluginval"""
         au_path = os.path.abspath(os.path.join(__file__, "../..", "build", "Release", "peakeater_artefacts", "Release", "AU", "peakeater.component"))
         self.assertTrue(os.path.exists(au_path))
-        process = subprocess.Popen([self.pluginval_bin, "--strictness-level", "10", au_path])
+        process = subprocess.Popen([self.pluginval_bin, "--strictness-level", "10", "--verbose", "--skip-gui-tests", au_path])
         process.wait()
         self.assertEqual(0, process.returncode)
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

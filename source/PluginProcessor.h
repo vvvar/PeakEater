@@ -34,8 +34,6 @@ bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
 #endif
 
 void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
-void processBlockBypassed (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) override;
-juce::AudioProcessorParameter* getBypassParameter() const override;
 
 //==============================================================================
 juce::AudioProcessorEditor* createEditor() override;

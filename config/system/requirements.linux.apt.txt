@@ -1,3 +1,5 @@
+git
+cmake
 ninja-build
 g++
 libgtk-3-dev

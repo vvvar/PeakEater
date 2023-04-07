@@ -67,5 +67,6 @@
         "xcrun",
         "zfile",
         "zipresp"
-    ]
+    ],
+    "terminal.integrated.shell.osx": "/bin/zsh"
 }
