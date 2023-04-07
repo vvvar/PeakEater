@@ -37,10 +37,9 @@ class PeakEater(ConanFile):
 
     def generate(self):
         toolchain = CMakeToolchain(self)
-        toolchain.blocks["apple_system"].values["cmake_osx_architectures"] = "x86_64;arm64"
-        # if self.settings.os == "Macos":  # type: ignore
-        #     toolchain.cache_variables["CMAKE_OSX_ARCHITECTURES"] = "x86_64;arm64"
-        #     toolchain.cache_variables["CMAKE_OSX_DEPLOYMENT_TARGET"] = "10.9"
+        if self.settings.os == "Macos":  # type: ignore
+            toolchain.cache_variables["CMAKE_OSX_ARCHITECTURES"] = "x86_64;arm64"
+            toolchain.cache_variables["CMAKE_OSX_DEPLOYMENT_TARGET"] = "10.9"
         toolchain.cache_variables["CONAN_PROJECT_NAME"] = str(self.name)
         toolchain.cache_variables["CONAN_PROJECT_COMPANY"] = str(self.company)
         toolchain.cache_variables["CONAN_PROJECT_VERSION"] = str(self.version)
@@ -81,10 +80,10 @@ class PeakEater(ConanFile):
             copy(self, "*", src=os.path.join(artefacts_folder, "AU"), dst=dmg_folder)
             copy(self, "*", src=os.path.join(artefacts_folder, "VST3"), dst=dmg_folder)
             copy(self, "*", src=os.path.join(artefacts_folder, "LV2"), dst=dmg_folder)
-            copy(self, "appdmg-config.json", src=os.path.join(self.source_folder, "config"), dst=dmg_folder)  # type: ignore
+            copy(self, "appdmg.json", src=os.path.join(self.source_folder, "config"), dst=dmg_folder)  # type: ignore
             # Build DMG
             self.run("npm install -g appdmg")
-            self.run(f"appdmg appdmg-config.json {str(self.name)}.dmg", cwd=dmg_folder)
+            self.run(f"appdmg appdmg.json {str(self.name)}.dmg", cwd=dmg_folder)
             # When sign required
             if self.options.signed:  # type: ignore
                 # Sign, notarize and staple DMG

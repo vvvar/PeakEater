@@ -41,12 +41,10 @@ jobs:
         run: |
           brew update
           brew bundle install --file=${{github.workspace}}/config/system/requirements.macos.brew.rb
-      - name: Configure Conan
-        run: |
-          conan profile detect
-          conan config install ${{github.workspace}}/conan
+      - name: Install Conan Config
+        run: conan config install ${{github.workspace}}/conan
       - name: Build JUCE
-        run: conan create ${{github.workspace}}/juce-conan -pr:b default -pr:h ${{env.CONAN_PROFILE_MACOS}}
+        run: conan create ${{github.workspace}}/juce-conan -pr:b ${{env.CONAN_PROFILE_MACOS}} -pr:h ${{env.CONAN_PROFILE_MACOS}}
       - name: Build Project
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
@@ -54,8 +52,8 @@ jobs:
           MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
           MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
         run: |
-          conan install ${{github.workspace}} -pr:b default -pr:h ${{env.CONAN_PROFILE_MACOS}}
-          conan build ${{github.workspace}} -pr:b default -pr:h ${{env.CONAN_PROFILE_MACOS}}
+          conan install ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_MACOS}} -pr:h ${{env.CONAN_PROFILE_MACOS}}
+          conan build ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_MACOS}} -pr:h ${{env.CONAN_PROFILE_MACOS}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -71,16 +69,14 @@ jobs:
             submodules: 'recursive'
       - name: Install System Requirements
         run: chocolatey install ninja conan
-      - name: Configure Conan
-        run: |
-          conan profile detect
-          conan config install ${{github.workspace}}/conan
+      - name: Install Conan Config
+        run: conan config install ${{github.workspace}}/conan
       - name: Build JUCE
-        run: conan create ${{github.workspace}}/juce-conan -pr:b default -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
+        run: conan create ${{github.workspace}}/juce-conan -pr:b ${{env.CONAN_PROFILE_WINDOWS}} -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
       - name: Build Project
         run: |
-          conan install ${{github.workspace}} -pr:b default -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
-          conan build ${{github.workspace}} -pr:b default -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
+          conan install ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_WINDOWS}} -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
+          conan build ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_WINDOWS}} -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -100,22 +96,20 @@ jobs:
       - name: Install System Requirements
         run: |
           sudo apt-get update
-          sudo apt-get install -y $(grep -vE "^\s*#" ${{github.workspace}}/config/system/requirements.linux.apt.txt | tr "\n" " ")
+          sudo xargs -a ${{github.workspace}}/config/system/requirements.linux.apt.txt apt-get install -y
       - name: Install Conan
         id: conan
         uses: turtlebrowser/get-conan@main
         with:
           version: 2.0.3
-      - name: Configure Conan
-        run: |
-          conan profile detect
-          conan config install ${{github.workspace}}/conan
+      - name: Install Conan Config
+        run: conan config install ${{github.workspace}}/conan
       - name: Build JUCE
-        run: conan create ${{github.workspace}}/juce-conan -pr:b default -pr:h ${{env.CONAN_PROFILE_LINUX}}
+        run: conan create ${{github.workspace}}/juce-conan -pr:b ${{env.CONAN_PROFILE_LINUX}} -pr:h ${{env.CONAN_PROFILE_LINUX}}
       - name: Build Project
         run: |
-          conan install ${{github.workspace}} -pr:b default -pr:h ${{env.CONAN_PROFILE_LINUX}}
-          conan build ${{github.workspace}} -pr:b default -pr:h ${{env.CONAN_PROFILE_LINUX}}
+          conan install ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_LINUX}} -pr:h ${{env.CONAN_PROFILE_LINUX}}
+          conan build ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_LINUX}} -pr:h ${{env.CONAN_PROFILE_LINUX}}
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:

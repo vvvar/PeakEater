@@ -50,6 +50,7 @@
         "artefacts",
         "cmaketoolchain",
         "codesign",
+        "cppstd",
         "juce",
         "libc",
         "libcxx",

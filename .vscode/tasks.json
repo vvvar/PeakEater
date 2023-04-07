@@ -19,13 +19,13 @@
       "label": "Install: System Requirements",
       "type": "shell",
       "osx": {
-        "command": "brew bundle install --file=${workspaceFolder}/config/system/requirements.macos.brew.rb"
+        "command": "brew update && brew bundle install --file=${workspaceFolder}/config/system/requirements.macos.brew.rb"
       },
       "windows": {
         "command": "chocolatey install ${workspaceFolder}/config/system/requirements.windows.choco.config"
       },
       "linux": {
-        "command": "apt install -y < ${workspaceFolder}/config/system/requirements.linux.apt.txt"
+        "command": "apt-get update && xargs -a ${workspaceFolder}/config/system/requirements.linux.apt.txt apt-get install -y"
       }
     },
     {
@@ -34,7 +34,7 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "conan create juce-conan -pr:h=${input:conan_host_profile} -pr:b=default"
+      "command": "conan create juce-conan -pr:h=${input:conan_host_profile} -pr:b=${input:conan_host_profile}"
     },
     {
       "label": "Conan: Build PeakEater",
@@ -42,7 +42,7 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "conan install . -pr:h=${input:conan_host_profile} -pr:b=default && conan build . -pr:h=${input:conan_host_profile} -pr:b=default"
+      "command": "conan install . -pr:h=${input:conan_host_profile} -pr:b=${input:conan_host_profile} && conan build . -pr:h=${input:conan_host_profile} -pr:b=${input:conan_host_profile}"
     },
     {
       "label": "Test: Run PeakEater Standalone",
