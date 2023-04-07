@@ -16,16 +16,16 @@
   ],
   "tasks": [
     {
-      "label": "Install: System Dependencies",
+      "label": "Install: System Requirements",
       "type": "shell",
       "osx": {
-        "command": "brew bundle install --file=${workspaceFolder}/config/system/Brewfile"
+        "command": "brew bundle install --file=${workspaceFolder}/config/system/requirements.macos.brew.rb"
       },
       "windows": {
-        "command": "chocolatey install ${workspaceFolder}/config/system/chocolatey.config"
+        "command": "chocolatey install ${workspaceFolder}/config/system/requirements.windows.choco.config"
       },
       "linux": {
-        "command": "apt install -y < ${workspaceFolder}/config/system/packages.txt"
+        "command": "apt install -y < ${workspaceFolder}/config/system/requirements.linux.apt.txt"
       }
     },
     {

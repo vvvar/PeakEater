@@ -40,7 +40,7 @@ jobs:
       - name: Install System Requirements
         run: |
           brew update
-          brew bundle install --file=${{github.workspace}}/config/system/Brewfile
+          brew bundle install --file=${{github.workspace}}/config/system/requirements.macos.brew.rb
       - name: Configure Conan
         run: |
           conan profile detect
@@ -70,9 +70,7 @@ jobs:
         with:
             submodules: 'recursive'
       - name: Install System Requirements
-        run: |
-          chocolatey update
-          chocolatey install ${{github.workspace}}/config/system/chocolatey.config
+        run: chocolatey install ${{github.workspace}}/config/system/requirements.windows.choco.config && refreshenv
       - name: Configure Conan
         run: |
           conan profile detect
@@ -101,8 +99,8 @@ jobs:
           submodules: 'recursive'
       - name: Install System Requirements
         run: |
-          sudo apt update
-          sudo apt install -y < ${{github.workspace}}/config/system/packages.txt
+          sudo apt-get update
+          sudo apt-get install -y <${{github.workspace}}/config/system/requirements.linux.apt.txt
       - name: Install Conan
         id: conan
         uses: turtlebrowser/get-conan@main
