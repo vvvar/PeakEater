@@ -6,4 +6,4 @@ compiler.runtime=dynamic
 compiler.version=193
 os=Windows
 [options]
-signed=False
+peakeater:signed=False

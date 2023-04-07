@@ -53,6 +53,7 @@
         "libc",
         "libcxx",
         "libdir",
+        "libstdc",
         "msvc",
         "notarytool",
         "peakeater",
