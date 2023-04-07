@@ -70,7 +70,7 @@ jobs:
         with:
             submodules: 'recursive'
       - name: Install System Requirements
-        run: chocolatey install ${{github.workspace}}/config/system/requirements.windows.choco.config && refreshenv
+        run: chocolatey install ninja conan
       - name: Configure Conan
         run: |
           conan profile detect
