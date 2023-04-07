@@ -1,31 +1,17 @@
 {
   "version": "2.0.0",
-  "inputs": [
-    {
-      "id": "conan_host_profile",
-      "description": "Which conan profile use as a host profile?",
-      "type": "pickString",
-      "default": "default",
-      "options": [
-        "default",
-        "conan/profiles/linux-x86_64",
-        "conan/profiles/macos-armv8",
-        "conan/profiles/windows-x86_64"
-      ]
-    }
-  ],
   "tasks": [
     {
       "label": "Install: System Requirements",
       "type": "shell",
       "osx": {
-        "command": "brew update && brew bundle install --file=${workspaceFolder}/config/system/requirements.macos.brew.rb"
+        "command": "brew update && brew bundle install --file=config/system/requirements.macos.brew.rb"
       },
       "windows": {
-        "command": "chocolatey install ${workspaceFolder}/config/system/requirements.windows.choco.config"
+        "command": "chocolatey install config/system/requirements.windows.choco.config"
       },
       "linux": {
-        "command": "apt-get update && xargs -a ${workspaceFolder}/config/system/requirements.linux.apt.txt apt-get install -y"
+        "command": "apt-get update && xargs -a config/system/requirements.linux.apt.txt apt-get install -y"
       }
     },
     {
@@ -34,7 +20,15 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "conan create juce-conan -pr:h=${input:conan_host_profile} -pr:b=${input:conan_host_profile}"
+      "osx": {
+        "command": "conan create juce-conan -pr:h=conan/profiles/macos-armv8 -pr:b=conan/profiles/macos-armv8"
+      },
+      "windows": {
+        "command": "conan create juce-conan -pr:h=conan/profiles/windows-x86_64 -pr:b=conan/profiles/windows-x86_64"
+      },
+      "linux": {
+        "command": "conan create juce-conan -pr:h=conan/profiles/linux-x86_64 -pr:b=conan/profiles/linux-x86_64"
+      }
     },
     {
       "label": "Conan: Build PeakEater",
@@ -42,7 +36,15 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "conan install . -pr:h=${input:conan_host_profile} -pr:b=${input:conan_host_profile} && conan build . -pr:h=${input:conan_host_profile} -pr:b=${input:conan_host_profile}"
+      "osx": {
+        "command": "conan install . -pr:h=conan/profiles/macos-armv8 -pr:b=conan/profiles/macos-armv8 && conan build . -pr:h=conan/profiles/macos-armv8 -pr:b=conan/profiles/macos-armv8"
+      },
+      "windows": {
+        "command": "conan install . -pr:h=conan/profiles/windows-x86_64 -pr:b=conan/profiles/windows-x86_64 && conan build . -pr:h=conan/profiles/windows-x86_64 -pr:b=conan/profiles/windows-x86_64"
+      },
+      "linux": {
+        "command": "conan install . -pr:h=conan/profiles/linux-x86_64 -pr:b=conan/profiles/linux-x86_64 && conan build . -pr:h=conan/profiles/linux-x86_64 -pr:b=conan/profiles/linux-x86_64"
+      }
     },
     {
       "label": "Test: Run PeakEater Standalone",

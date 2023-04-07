@@ -68,11 +68,13 @@ jobs:
         with:
             submodules: 'recursive'
       - name: Install System Requirements
-        run: chocolatey install ninja conan
+        run: |
+          chocolatey install ninja conan
+          refreshenv
       - name: Install Conan Config
-        run: conan config install ${{github.workspace}}/conan
+        run: conan config install ${{github.workspace}}\conan
       - name: Build JUCE
-        run: conan create ${{github.workspace}}/juce-conan -pr:b ${{env.CONAN_PROFILE_WINDOWS}} -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
+        run: conan create ${{github.workspace}}\juce-conan -pr:b ${{env.CONAN_PROFILE_WINDOWS}} -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
       - name: Build Project
         run: |
           conan install ${{github.workspace}} -pr:b ${{env.CONAN_PROFILE_WINDOWS}} -pr:h ${{env.CONAN_PROFILE_WINDOWS}}
