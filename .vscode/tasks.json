@@ -15,35 +15,51 @@
       }
     },
     {
-      "label": "Conan: Build JUCE",
+      "label": "Conan: Create JUCE",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
       "osx": {
-        "command": "conan create juce-conan -pr:b=${workspaceFolder}/conan/profiles/macos"
+        "command": "conan create juce-conan -pr=${workspaceFolder}/conan/profiles/macos"
       },
       "windows": {
-        "command": "conan create juce-conan -pr:b=${workspaceFolder}/conan/profiles/windows"
+        "command": "conan create juce-conan -pr=${workspaceFolder}/conan/profiles/windows"
       },
       "linux": {
-        "command": "conan create juce-conan -pr:b=${workspaceFolder}/conan/profiles/linux"
+        "command": "conan create juce-conan -pr=${workspaceFolder}/conan/profiles/linux"
       }
     },
     {
-      "label": "Conan: Build PeakEater",
+      "label": "Conan: Install Requirments",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
       "osx": {
-        "command": "conan install . -pr:b=${workspaceFolder}/conan/profiles/macos && conan build . -pr:b=${workspaceFolder}/conan/profiles/macos"
+        "command": "conan install . -pr=${workspaceFolder}/conan/profiles/macos"
       },
       "windows": {
-        "command": "conan install . -pr:b=${workspaceFolder}/conan/profiles/windows && conan build . -pr:b=${workspaceFolder}/conan/profiles/windows"
+        "command": "conan install . -pr=${workspaceFolder}/conan/profiles/windows"
       },
       "linux": {
-        "command": "conan install . -pr:b=${workspaceFolder}/conan/profiles/linux && conan build . -pr:b=${workspaceFolder}/conan/profiles/linux"
+        "command": "conan install . -pr=${workspaceFolder}/conan/profiles/linux"
+      }
+    },
+    {
+      "label": "Conan: Build",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "osx": {
+        "command": "conan build . -pr=${workspaceFolder}/conan/profiles/macos"
+      },
+      "windows": {
+        "command": "conan build . -pr=${workspaceFolder}/conan/profiles/windows"
+      },
+      "linux": {
+        "command": "conan build . -pr=${workspaceFolder}/conan/profiles/linux"
       }
     },
     {

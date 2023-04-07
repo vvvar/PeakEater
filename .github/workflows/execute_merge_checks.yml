@@ -56,8 +56,8 @@ jobs:
           MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
           MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
         run: |
-          conan install ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/macos
-          conan build ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/macos
+          conan install ${{github.workspace}} -pr=${{github.workspace}}/conan/profiles/macos
+          conan build ${{github.workspace}} -pr=${{github.workspace}}/conan/profiles/macos
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -79,8 +79,8 @@ jobs:
         run: conan create ${{github.workspace}}/juce-conan -pr:b=${{github.workspace}}/conan/profiles/macos
       - name: Build Project
         run: |
-          conan install ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/windows
-          conan build ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/windows
+          conan install ${{github.workspace}} -pr=${{github.workspace}}/conan/profiles/windows
+          conan build ${{github.workspace}} -pr=${{github.workspace}}/conan/profiles/windows
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -110,8 +110,8 @@ jobs:
         run: conan create ${{github.workspace}}/juce-conan -pr:b=${{github.workspace}}/conan/profiles/linux
       - name: Build Project
         run: |
-          conan install ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/linux
-          conan build ${{github.workspace}} -pr:b=${{github.workspace}}/conan/profiles/linux
+          conan install ${{github.workspace}} -pr=${{github.workspace}}/conan/profiles/linux
+          conan build ${{github.workspace}} -pr=${{github.workspace}}/conan/profiles/linux
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
