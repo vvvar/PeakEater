@@ -5,3 +5,5 @@ compiler=gcc
 compiler.libcxx=libstdc++11
 compiler.version=9
 os=Linux
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja

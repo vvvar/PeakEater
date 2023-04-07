@@ -5,5 +5,10 @@ compiler=apple-clang
 compiler.libcxx=libc++
 compiler.version=14
 os=Macos
+os.version=10.9
+
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja
+
 [options]
 peakeater/*:signed=True

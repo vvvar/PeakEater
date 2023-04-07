@@ -36,10 +36,11 @@ class PeakEater(ConanFile):
         cmake_layout(self)
 
     def generate(self):
-        toolchain = CMakeToolchain(self, generator="Ninja")
-        if self.settings.os == "Macos":  # type: ignore
-            toolchain.cache_variables["CMAKE_OSX_ARCHITECTURES"] = "x86_64;arm64"
-            toolchain.cache_variables["CMAKE_OSX_DEPLOYMENT_TARGET"] = "10.9"
+        toolchain = CMakeToolchain(self)
+        toolchain.blocks["apple_system"].values["cmake_osx_architectures"] = "x86_64;arm64"
+        # if self.settings.os == "Macos":  # type: ignore
+        #     toolchain.cache_variables["CMAKE_OSX_ARCHITECTURES"] = "x86_64;arm64"
+        #     toolchain.cache_variables["CMAKE_OSX_DEPLOYMENT_TARGET"] = "10.9"
         toolchain.cache_variables["CONAN_PROJECT_NAME"] = str(self.name)
         toolchain.cache_variables["CONAN_PROJECT_COMPANY"] = str(self.company)
         toolchain.cache_variables["CONAN_PROJECT_VERSION"] = str(self.version)

@@ -1,5 +1,19 @@
 {
   "version": "2.0.0",
+  "inputs": [
+    {
+      "id": "conan_host_profile",
+      "description": "Which conan profile use as a host profile?",
+      "type": "pickString",
+      "default": "default",
+      "options": [
+        "default",
+        "conan/profiles/linux-x86_64",
+        "conan/profiles/macos-armv8",
+        "conan/profiles/windows-x86_64"
+      ]
+    }
+  ],
   "tasks": [
     {
       "label": "Install: System Dependencies",
@@ -20,47 +34,15 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "osx": {
-        "command": "conan create juce-conan -pr:h=${workspaceFolder}/conan/profiles/macos -pr:b=${workspaceFolder}/conan/profiles/macos"
-      },
-      "windows": {
-        "command": "conan create juce-conan -pr:h=${workspaceFolder}/conan/profiles/windows -pr:b=${workspaceFolder}/conan/profiles/windows"
-      },
-      "linux": {
-        "command": "conan create juce-conan -pr=${workspaceFolder}/conan/profiles/linux -pr:b=${workspaceFolder}/conan/profiles/linux"
-      }
+      "command": "conan create juce-conan -pr:h=${input:conan_host_profile} -pr:b=default"
     },
     {
-      "label": "Conan: Install Requirments",
+      "label": "Conan: Build PeakEater",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
-      "osx": {
-        "command": "conan install . -pr:h=${workspaceFolder}/conan/profiles/macos -pr:b=${workspaceFolder}/conan/profiles/macos"
-      },
-      "windows": {
-        "command": "conan install . -pr:h=${workspaceFolder}/conan/profiles/windows -pr:b=${workspaceFolder}/conan/profiles/windows"
-      },
-      "linux": {
-        "command": "conan install . -pr=${workspaceFolder}/conan/profiles/linux -pr:b=${workspaceFolder}/conan/profiles/linux"
-      }
-    },
-    {
-      "label": "Conan: Build",
-      "type": "shell",
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "osx": {
-        "command": "conan build . -pr:h=${workspaceFolder}/conan/profiles/macos -pr:b=${workspaceFolder}/conan/profiles/macos"
-      },
-      "windows": {
-        "command": "conan build . -pr:h=${workspaceFolder}/conan/profiles/windows -pr:b=${workspaceFolder}/conan/profiles/widows"
-      },
-      "linux": {
-        "command": "conan build . -pr:h=${workspaceFolder}/conan/profiles/linux -pr:b=${workspaceFolder}/conan/profiles/linux"
-      }
+      "command": "conan install . -pr:h=${input:conan_host_profile} -pr:b=default && conan build . -pr:h=${input:conan_host_profile} -pr:b=default"
     },
     {
       "label": "Test: Run PeakEater Standalone",

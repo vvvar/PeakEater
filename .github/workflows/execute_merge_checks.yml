@@ -4,7 +4,7 @@ on: pull_request
 env:
   CONAN_PROFILE_MACOS: macos-armv8
   CONAN_PROFILE_WINDOWS: windows-x86_64
-  CONAN_PROFILE_LINUX: windows-x86_64
+  CONAN_PROFILE_LINUX: linux-x86_64
 jobs:
   macos:
     name: macOS
