@@ -51,7 +51,7 @@ jobs:
           conan profile detect
           conan config install config/conan
       - name: Build JUCE
-        run: conan create juce-conan -pr ${{env.CONAN_PROFILE_MACOS}}
+        run: conan create modules/juce-conan -pr ${{env.CONAN_PROFILE_MACOS}}
       - name: Build Project
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
@@ -91,7 +91,7 @@ jobs:
           conan profile detect
           conan config install config\conan
       - name: Build JUCE
-        run: conan create juce-conan -pr ${{env.CONAN_PROFILE_WINDOWS}}
+        run: conan create modules/juce-conan -pr ${{env.CONAN_PROFILE_WINDOWS}}
       - name: Build Project
         run: |
           conan install . -pr ${{env.CONAN_PROFILE_WINDOWS}}
@@ -130,7 +130,7 @@ jobs:
           conan profile detect
           conan config install config/conan
       - name: Build JUCE
-        run: conan create juce-conan -pr ${{env.CONAN_PROFILE_LINUX}}
+        run: conan create modules/juce-conan -pr ${{env.CONAN_PROFILE_LINUX}}
       - name: Build Project
         run: |
           conan install . -pr ${{env.CONAN_PROFILE_LINUX}}

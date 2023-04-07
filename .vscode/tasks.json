@@ -21,13 +21,13 @@
         "$gcc"
       ],
       "osx": {
-        "command": "conan create juce-conan -pr config/conan/profiles/macos-armv8"
+        "command": "conan create modules/juce-conan -pr config/conan/profiles/macos-armv8"
       },
       "windows": {
-        "command": "conan create juce-conan -pr config/conan/profiles/windows-x86_64"
+        "command": "conan create modules/juce-conan -pr config/conan/profiles/windows-x86_64"
       },
       "linux": {
-        "command": "conan create juce-conan -pr config/conan/profiles/linux-x86_64"
+        "command": "conan create modules/juce-conan -pr config/conan/profiles/linux-x86_64"
       }
     },
     {
