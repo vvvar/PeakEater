@@ -8,8 +8,8 @@ def isMac():
     return sys.platform == "darwin"
 
 
-class BuildArtefactsTestSuite(unittest.TestCase):
-    """Set of tests to check result of the build"""
+class CompilationTestSuite(unittest.TestCase):
+    """Make sure compilation went as expected"""
 
     compile_commands_path = os.path.abspath(os.path.join(__file__, "../..", "build", "Release", "compile_commands.json"))
 
@@ -38,7 +38,6 @@ class BuildArtefactsTestSuite(unittest.TestCase):
             compile_commands = json.load(f)
             for compilation_unit in compile_commands:
                 self.assertIn("-mmacosx-version-min=10.9", compilation_unit["command"])
-
 
 if __name__ == "__main__":
     unittest.main()

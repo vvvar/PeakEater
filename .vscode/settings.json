@@ -61,8 +61,11 @@
         "msvc",
         "notarytool",
         "peakeater",
+        "pluginval",
         "ULFO",
         "vvvar",
-        "xcrun"
+        "xcrun",
+        "zfile",
+        "zipresp"
     ]
 }

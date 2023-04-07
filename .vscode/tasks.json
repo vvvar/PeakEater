@@ -31,25 +31,61 @@
       }
     },
     {
-      "label": "Conan: Build PeakEater",
+      "label": "Conan: Install Requirements",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
       "osx": {
-        "command": "conan install . -pr config/conan/profiles/macos-armv8 && conan build . -pr config/conan/profiles/macos-armv8"
+        "command": "conan install . -pr config/conan/profiles/macos-armv8"
       },
       "windows": {
-        "command": "conan install . -pr config/conan/profiles/windows-x86_64 && conan build . -pr config/conan/profiles/windows-x86_64"
+        "command": "conan install . -pr config/conan/profiles/windows-x86_64"
       },
       "linux": {
-        "command": "conan install . -pr config/conan/profiles/linux-x86_64 && conan build . -pr config/conan/profiles/linux-x86_64"
+        "command": "conan install . -pr config/conan/profiles/linux-x86_64"
       }
     },
     {
-      "label": "Test: Compilation Database",
+      "label": "Conan: Build PeakEater",
       "type": "shell",
-      "command": "python3 test/artefacts.test.py"
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "options": {
+        "env": {
+          "MACOS_APPLE_IDENTITY": "",
+          "MACOS_APPLE_ID": "",
+          "MACOS_APPLE_PASSWORD": "",
+          "MACOS_APPLE_TEAM_ID": ""
+        }
+      },
+      "osx": {
+        "command": "conan build . -pr config/conan/profiles/macos-armv8"
+      },
+      "windows": {
+        "command": "conan build . -pr config/conan/profiles/windows-x86_64"
+      },
+      "linux": {
+        "command": "conan build . -pr config/conan/profiles/linux-x86_64"
+      }
+    },
+    {
+      "label": "Test: Compilation",
+      "type": "shell",
+      "command": "python3 test/compilation.test.py"
+    },
+    {
+      "label": "Test: DMG",
+      "type": "shell",
+      "osx": {
+        "command": "python3 test/dmg.test.py"
+      }
+    },
+    {
+      "label": "Test: Pluginval",
+      "type": "shell",
+      "command": "python3 test/pluginval.test.py"
     },
     {
       "label": "Test: Run PeakEater Standalone",
