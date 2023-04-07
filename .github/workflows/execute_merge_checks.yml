@@ -71,6 +71,8 @@ jobs:
         run: |
           chocolatey install ninja conan
           refreshenv
+          ninja --version
+          conan --version
       - name: Install Conan Config
         run: conan config install ${{github.workspace}}\conan
       - name: Build JUCE
