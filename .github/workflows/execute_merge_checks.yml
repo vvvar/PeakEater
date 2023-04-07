@@ -40,9 +40,14 @@ jobs:
       - name: Install System Requirements
         run: |
           brew update
-          brew bundle install --file=${{github.workspace}}/config/system/requirements.macos.brew.rb
+          brew bundle install --file=config/system/requirements.macos.brew.rb
+      - name: Install Conan
+        id: conan
+        uses: turtlebrowser/get-conan@main
+        with:
+          version: 2.0.3
       - name: Install Conan Config
-        run: conan config install ${{github.workspace}}/conan
+        run: conan config install conan
       - name: Build JUCE
         run: conan create ${{github.workspace}}/juce-conan -pr:b ${{env.CONAN_PROFILE_MACOS}} -pr:h ${{env.CONAN_PROFILE_MACOS}}
       - name: Build Project
