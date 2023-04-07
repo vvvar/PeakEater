@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{env.CONAN_PROFILE_MACOS}}
-          path: build/peakeater_artefacts/Release/DMG/peakeater.dmg
+          path: build/Release/peakeater_artefacts/Release/DMG/peakeater.dmg
 
   windows:
     name: Windows
@@ -97,9 +97,9 @@ jobs:
         with:
           name: ${{env.CONAN_PROFILE_WINDOWS}}
           path: |
-            build/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-win/peakeater.vst3
-            build/peakeater_artefacts/Release/LV2/peakeater.lv2
-            build/peakeater_artefacts/Release/CLAP/peakeater.clap
+            build/Release/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-win/peakeater.vst3
+            build/Release/peakeater_artefacts/Release/LV2/peakeater.lv2
+            build/Release/peakeater_artefacts/Release/CLAP/peakeater.clap
 
   linux:
     name: Linux
@@ -132,6 +132,6 @@ jobs:
         with:
           name: ${{env.CONAN_PROFILE_LINUX}}
           path: |
-            build/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-linux/peakeater.so
-            build/peakeater_artefacts/Release/LV2/peakeater.lv2
-            build/peakeater_artefacts/Release/CLAP/peakeater.clap
+            build/Release/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-linux/peakeater.so
+            build/Release/peakeater_artefacts/Release/LV2/peakeater.lv2
+            build/Release/peakeater_artefacts/Release/CLAP/peakeater.clap
