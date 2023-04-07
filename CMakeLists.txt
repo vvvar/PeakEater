@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(${CONAN_PROJECT_NAME} VERSION ${CONAN_PROJECT_VERSION})
 
+# Force all platforms to use C++17
 set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
