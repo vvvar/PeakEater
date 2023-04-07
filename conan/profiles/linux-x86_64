@@ -5,5 +5,3 @@ compiler=gcc
 compiler.libcxx=libstdc++11
 compiler.version=9
 os=Linux
-[options]
-peakeater:signed=False

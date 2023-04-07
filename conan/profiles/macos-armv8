@@ -6,4 +6,4 @@ compiler.libcxx=libc++
 compiler.version=14
 os=Macos
 [options]
-peakeater:signed=True
+peakeater/*:signed=True
