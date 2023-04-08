@@ -58,6 +58,7 @@ jobs:
           conan create modules/juce-conan
           conan install .
           conan build .
+          conan export-pkg .
       - name: Test
         run: |
           conan create modules/pluginval-conan
@@ -94,6 +95,7 @@ jobs:
           conan create modules/juce-conan
           conan install .
           conan build .
+          conan export-pkg .
       - name: Test
         run: |
           conan create modules/pluginval-conan
@@ -134,6 +136,7 @@ jobs:
           conan create modules/juce-conan
           conan install .
           conan build .
+          conan export-pkg .
       - name: Test
         run: |
           conan create modules/pluginval-conan

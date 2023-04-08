@@ -1,6 +1,6 @@
 <!-- HEADER -->
 
-<h1 align="center"><a href="https://github.com/vvvar/PeakEater"><img width="100" src="Scripts/Release/assets/icon-mac.png" /></a></h1>
+<h1 align="center"><a href="https://github.com/vvvar/PeakEater"><img width="100" src="assets/icon-mac.png" /></a></h1>
 <h1 align="center">PeakEater</h1>
 <p align="center">Free open-source VST3/AU/LV2/CLAP wave shaping plugin for macOS, Windows and Linux.</p>
 <p align="center">
