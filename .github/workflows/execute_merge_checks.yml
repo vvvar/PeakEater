@@ -13,7 +13,7 @@ jobs:
           submodules: 'recursive'
       - uses: turtlebrowser/get-conan@main
         with:
-          version: 2.0.3  
+          version: 2.0.2  
       - name: Provision
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.MACOS_BUILD_CERTIFICATE_BASE64 }}
@@ -75,7 +75,7 @@ jobs:
             submodules: 'recursive'
       - uses: turtlebrowser/get-conan@main
         with:
-          version: 2.0.3  
+          version: 2.0.2  
       - name: Setup
         run: |
           choco install config\system\requirements.windows.choco.config
@@ -110,7 +110,7 @@ jobs:
           submodules: 'recursive'
       - uses: turtlebrowser/get-conan@main
         with:
-          version: 2.0.3  
+          version: 2.0.2 
       - name: Setup
         run: |
           sudo apt-get update
