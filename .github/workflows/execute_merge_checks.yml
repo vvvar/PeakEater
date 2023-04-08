@@ -6,7 +6,7 @@ jobs:
     name: macOS
     runs-on: macos-12
     env:
-      CONAN_DEFAULT_PROFILE: ${{ github.workspace }}/config/conan/macos-armv8.pr
+      CONAN_DEFAULT_PROFILE: ${{ github.workspace }}/config/conan/macos-armv8.profile
     steps:
       - uses: actions/checkout@v3
         with:
@@ -68,7 +68,7 @@ jobs:
     name: Windows
     runs-on: windows-2022
     env:
-      CONAN_DEFAULT_PROFILE: ${{ github.workspace }}/config/conan/windows-x86_64.pr
+      CONAN_DEFAULT_PROFILE: ${{ github.workspace }}/config/conan/windows-x86_64.profile
     steps:
       - uses: actions/checkout@v3
         with:
@@ -103,7 +103,7 @@ jobs:
     name: Linux
     runs-on: ubuntu-20.04
     env:
-      CONAN_DEFAULT_PROFILE: ${{ github.workspace }}/config/conan/linux-x86_64.pr
+      CONAN_DEFAULT_PROFILE: ${{ github.workspace }}/config/conan/linux-x86_64.profile
     steps:
       - uses: actions/checkout@v3
         with:

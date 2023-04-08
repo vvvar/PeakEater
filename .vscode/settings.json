@@ -5,7 +5,7 @@
     },
     "files.associations": {
         // Stop VS Code from auto-formattin Conan Profiles
-        "*.pr": "ini",
+        "*.profile": "ini",
     },
     "uncrustify.configPath.osx": "${workspaceFolder}/config/uncrustify.cfg",
     "uncrustify.configPath.windows": "${workspaceFolder}/config/uncrustify.cfg",
@@ -80,14 +80,14 @@
     "terminal.integrated.shell.osx": "/bin/zsh",
     "terminal.integrated.env.osx": {
         "CONAN_LOG_RUN_TO_FILE": "1",
-        "CONAN_DEFAULT_PROFILE": "${workspaceFolder}/config/conan/profiles/macos-armv8.pr"
+        "CONAN_DEFAULT_PROFILE": "${workspaceFolder}/config/conan/macos-armv8.profile"
     },
     "terminal.integrated.env.windows": {
         "CONAN_LOG_RUN_TO_FILE": "1",
-        "CONAN_DEFAULT_PROFILE": "${workspaceFolder}/config/conan/profiles/windows-x86_64.pr"
+        "CONAN_DEFAULT_PROFILE": "${workspaceFolder}/config/conan/windows-x86_64.profile"
     },
     "terminal.integrated.env.linux": {
         "CONAN_LOG_RUN_TO_FILE": "1",
-        "CONAN_DEFAULT_PROFILE": "${workspaceFolder}/config/conan/profiles/linux-x86_64.pr"
+        "CONAN_DEFAULT_PROFILE": "${workspaceFolder}/config/conan/linux-x86_64.profile"
     },
 }
