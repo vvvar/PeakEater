@@ -15,7 +15,7 @@
       }
     },
     {
-      "label": "Conan: Create JUCE",
+      "label": "Conan: Dependencies: Create JUCE",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
@@ -31,7 +31,23 @@
       }
     },
     {
-      "label": "Conan: Install Requirements",
+      "label": "Conan: Dependencies: Create pluginval",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "osx": {
+        "command": "conan create modules/pluginval-conan -pr config/conan/profiles/macos-armv8"
+      },
+      "windows": {
+        "command": "conan create modules/pluginval-conan -pr config/conan/profiles/windows-x86_64"
+      },
+      "linux": {
+        "command": "conan create modules/pluginval-conan -pr config/conan/profiles/linux-x86_64"
+      }
+    },
+    {
+      "label": "Conan: PeakEater: Install",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
@@ -47,7 +63,7 @@
       }
     },
     {
-      "label": "Conan: Build PeakEater",
+      "label": "Conan: PeakEater: Build",
       "type": "shell",
       "problemMatcher": [
         "$gcc"

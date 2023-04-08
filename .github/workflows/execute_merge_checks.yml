@@ -50,8 +50,10 @@ jobs:
         run: |
           conan profile detect
           conan config install config/conan
-      - name: Build JUCE
-        run: conan create modules/juce-conan -pr ${{env.CONAN_PROFILE_MACOS}}
+      - name: Build Conan Dependencies
+        run: |
+          conan create modules/pluginval-conan -pr ${{env.CONAN_PROFILE_MACOS}}
+          conan create modules/juce-conan -pr ${{env.CONAN_PROFILE_MACOS}}
       - name: Build Project
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
@@ -63,8 +65,6 @@ jobs:
           conan build . -pr ${{env.CONAN_PROFILE_MACOS}}
       - name: Test - Verify Build Artefacts 
         run: python3 test/artefacts.test.py
-      - name: Test - Pluginval
-        run: python3 test/pluginval.test.py
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -90,16 +90,16 @@ jobs:
         run: |
           conan profile detect
           conan config install config\conan
-      - name: Build JUCE
-        run: conan create modules/juce-conan -pr ${{env.CONAN_PROFILE_WINDOWS}}
+      - name: Build Conan Dependencies
+        run: |
+          conan create modules/pluginval-conan -pr ${{env.CONAN_PROFILE_MACOS}}
+          conan create modules/juce-conan -pr ${{env.CONAN_PROFILE_MACOS}}
       - name: Build Project
         run: |
           conan install . -pr ${{env.CONAN_PROFILE_WINDOWS}}
           conan build . -pr ${{env.CONAN_PROFILE_WINDOWS}}
       - name: Test - Verify Build Artefacts 
         run: python3 test/artefacts.test.py
-      - name: Test - Pluginval
-        run: python3 test/pluginval.test.py
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -129,16 +129,16 @@ jobs:
         run: |
           conan profile detect
           conan config install config/conan
-      - name: Build JUCE
-        run: conan create modules/juce-conan -pr ${{env.CONAN_PROFILE_LINUX}}
+      - name: Build Conan Dependencies
+        run: |
+          conan create modules/pluginval-conan -pr ${{env.CONAN_PROFILE_MACOS}}
+          conan create modules/juce-conan -pr ${{env.CONAN_PROFILE_MACOS}}
       - name: Build Project
         run: |
           conan install . -pr ${{env.CONAN_PROFILE_LINUX}}
           conan build . -pr ${{env.CONAN_PROFILE_LINUX}}
       - name: Test - Verify Build Artefacts 
         run: python3 test/artefacts.test.py
-      - name: Test - Pluginval
-        run: python3 test/pluginval.test.py
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:

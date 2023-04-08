@@ -48,6 +48,7 @@
         "appdmg",
         "armv",
         "artefacts",
+        "buildenv",
         "cmaketoolchain",
         "codesign",
         "cppstd",
