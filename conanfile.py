@@ -83,6 +83,8 @@ class PeakEater(ConanFile):
             user_au_plugins = os.path.join(Path.home(), "Library", "Audio", "Plug-Ins", "Components")
             rmdir(self, os.path.join(user_au_plugins, au_plugin_name))
             copy(self, "*", src=os.path.join(artefacts_folder, "AU"), dst=user_au_plugins)
+            # Validate file is there
+            self.run(f"file {os.path.join(user_au_plugins, f'{str(self.name)}.component')}")
             # Then, trigger AudioComponentRegistrar and auval to register it
             self.run("killall -9 AudioComponentRegistrar", ignore_errors=True)
             self.run("auval -a", ignore_errors=True)
