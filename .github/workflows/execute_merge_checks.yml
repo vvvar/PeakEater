@@ -38,10 +38,11 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-      - name: Install System Requirements
+      - name: Setup
         run: |
           brew update
           brew bundle install --file=config/system/requirements.macos.brew.rb
+          conan profile detect
       - name: Build
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
@@ -75,9 +76,10 @@ jobs:
       - uses: turtlebrowser/get-conan@main
         with:
           version: 2.0.3  
-      - name: Install System Requirements
+      - name: Setup
         run: |
           choco install config\system\requirements.windows.choco.config
+          conan profile detect
       - name: Build
         run: |
           conan create modules\juce-conan
@@ -109,10 +111,11 @@ jobs:
       - uses: turtlebrowser/get-conan@main
         with:
           version: 2.0.3  
-      - name: Install System Requirements
+      - name: Setup
         run: |
           sudo apt-get update
           sudo xargs -a config/system/requirements.linux.apt.txt apt-get install -y
+          conan profile detect
       - name: Build
         run: |
           conan create modules/juce-conan
