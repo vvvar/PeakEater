@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Install: System Requirements",
+      "label": "System: Install Requirements",
       "type": "shell",
       "osx": {
         "command": "brew update && brew bundle install --file=config/system/requirements.macos.brew.rb"
@@ -15,7 +15,7 @@
       }
     },
     {
-      "label": "Conan: Dependencies: Create JUCE",
+      "label": "Dependencies: Build JUCE",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
@@ -23,7 +23,7 @@
       "command": "conan create modules/juce-conan"
     },
     {
-      "label": "Conan: Dependencies: Create pluginval",
+      "label": "Dependencies: Build pluginval",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
@@ -31,7 +31,7 @@
       "command": "conan create modules/pluginval-conan",
     },
     {
-      "label": "Conan: PeakEater: Build",
+      "label": "PeakEater: Build",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
@@ -39,7 +39,7 @@
       "command": "conan install . && conan build ."
     },
     {
-      "label": "Conan: PeakEater: Export Package",
+      "label": "PeakEater: Export Package",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
@@ -47,7 +47,7 @@
       "command": "conan export-pkg ."
     },
     {
-      "label": "Conan: PeakEater: Test",
+      "label": "PeakEater: Test",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
@@ -55,17 +55,7 @@
       "command": "conan test test peakeater/0.6.3@vvvar/testing"
     },
     {
-      "label": "Test: Build Artefacts",
-      "type": "shell",
-      "command": "python3 test/artefacts.test.py"
-    },
-    {
-      "label": "Test: Pluginval",
-      "type": "shell",
-      "command": "python3 test/pluginval.test.py"
-    },
-    {
-      "label": "Test: Run Standalone",
+      "label": "PeakEater: Run(Standalone)",
       "type": "shell",
       "osx": {
         "command": "build/Release/peakeater_artefacts/Release/Standalone/peakeater.app/Contents/MacOS/peakeater"
