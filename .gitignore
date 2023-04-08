@@ -3,6 +3,7 @@
 
 # Build dir
 /build
+/test/build
 
 CMakeUserPresets.json
 

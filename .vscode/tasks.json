@@ -20,15 +20,7 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "osx": {
-        "command": "conan create modules/juce-conan -pr config/conan/profiles/macos-armv8"
-      },
-      "windows": {
-        "command": "conan create modules/juce-conan -pr config/conan/profiles/windows-x86_64"
-      },
-      "linux": {
-        "command": "conan create modules/juce-conan -pr config/conan/profiles/linux-x86_64"
-      }
+      "command": "conan create modules/juce-conan"
     },
     {
       "label": "Conan: Dependencies: Create pluginval",
@@ -36,31 +28,7 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "osx": {
-        "command": "conan create modules/pluginval-conan -pr config/conan/profiles/macos-armv8",
-      },
-      "windows": {
-        "command": "conan create modules/pluginval-conan -pr config/conan/profiles/windows-x86_64"
-      },
-      "linux": {
-        "command": "conan create modules/pluginval-conan -pr config/conan/profiles/linux-x86_64"
-      }
-    },
-    {
-      "label": "Conan: PeakEater: Install",
-      "type": "shell",
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "osx": {
-        "command": "conan install . -pr config/conan/profiles/macos-armv8"
-      },
-      "windows": {
-        "command": "conan install . -pr config/conan/profiles/windows-x86_64"
-      },
-      "linux": {
-        "command": "conan install . -pr config/conan/profiles/linux-x86_64"
-      }
+      "command": "conan create modules/pluginval-conan",
     },
     {
       "label": "Conan: PeakEater: Build",
@@ -68,15 +36,23 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "osx": {
-        "command": "conan build . -pr config/conan/profiles/macos-armv8"
-      },
-      "windows": {
-        "command": "conan build . -pr config/conan/profiles/windows-x86_64"
-      },
-      "linux": {
-        "command": "conan build . -pr config/conan/profiles/linux-x86_64"
-      }
+      "command": "conan install . && conan build ."
+    },
+    {
+      "label": "Conan: PeakEater: Export Package",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "command": "conan export-pkg ."
+    },
+    {
+      "label": "Conan: PeakEater: Test",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "command": "conan test test peakeater/0.6.3@vvvar/testing"
     },
     {
       "label": "Test: Build Artefacts",

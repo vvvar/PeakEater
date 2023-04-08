@@ -48,22 +48,21 @@ jobs:
         run: |
           conan profile detect
           conan config install config/conan
-      - name: Build Conan Dependencies
-        run: |
-          conan create modules/pluginval-conan
-          conan create modules/juce-conan
-      - name: Build Project
+      - name: Build
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
           MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
           MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
           MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
         run: |
+          conan create modules/juce-conan
           conan install .
           conan build .
-      - name: Test - Verify Build Artefacts 
-        run: python3 test/artefacts.test.py
-      - name: Upload Artifacts
+      - name: Test
+        run: |
+          conan create modules/pluginval-conan
+          conan test test peakeater/0.6.3@vvvar/testing
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
           name: peakeater-macos
@@ -90,17 +89,16 @@ jobs:
         run: |
           conan profile detect
           conan config install config\conan
-      - name: Build Conan Dependencies
+      - name: Build
         run: |
-          conan create modules/pluginval-conan
           conan create modules/juce-conan
-      - name: Build Project
-        run: |
           conan install .
           conan build .
-      - name: Test - Verify Build Artefacts 
-        run: python3 test/artefacts.test.py
-      - name: Upload Artifacts
+      - name: Test
+        run: |
+          conan create modules/pluginval-conan
+          conan test test peakeater/0.6.3@vvvar/testing
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
           name: peakeater-windows
@@ -131,17 +129,16 @@ jobs:
         run: |
           conan profile detect
           conan config install config/conan
-      - name: Build Conan Dependencies
+      - name: Build
         run: |
-          conan create modules/pluginval-conan
           conan create modules/juce-conan
-      - name: Build Project
-        run: |
           conan install .
           conan build .
-      - name: Test - Verify Build Artefacts 
-        run: python3 test/artefacts.test.py
-      - name: Upload Artifacts
+      - name: Test
+        run: |
+          conan create modules/pluginval-conan
+          conan test test peakeater/0.6.3@vvvar/testing
+      - name: Upload
         uses: actions/upload-artifact@v3
         with:
           name: peakeater-linux

@@ -6,7 +6,6 @@ from conan.tools.env import VirtualBuildEnv
 from conan.api.output import ConanOutput, Color
 
 import os
-from pathlib import Path
 
 
 def log_conan_stage(f):
@@ -40,7 +39,6 @@ class PeakEater(ConanFile):
     }
 
     requires = "juce/7.0.5@juce/release"
-    tool_requires = "pluginval/1.0.3@pluginval/release"
 
     def validate(self):
         if self.options.signed and not self.settings.os == "Macos":  # type: ignore
@@ -67,31 +65,7 @@ class PeakEater(ConanFile):
         cmake.configure()
         cmake.build()
         self._sign()
-        self._test()
         self._bundle()
-
-    @log_conan_stage
-    def _test(self):
-        artefacts_folder = os.path.join(self.build_folder, f"{self.name}_artefacts", self.settings.get_safe("build_type"))  # type: ignore
-        vst3_plugin = os.path.join(artefacts_folder, "VST3", f"{str(self.name)}.vst3")
-        self.run(f"pluginval --strictness-level 10 --verbose --skip-gui-tests --validate-in-process --validate {vst3_plugin}")  # --skip-gui-tests
-        if self.settings.os == "Macos":  # type: ignore
-            # NOTE: Hack to let macOS register and eventually test AU plugin
-            # NOTE: Discussion - https://github.com/Tracktion/pluginval/issues/39
-            # First, copy AU plugin to user plugins folder(~/Library/Audio/Plug-Ins/Components)
-            au_plugin_name = f"{str(self.name)}.component"
-            user_au_plugins = os.path.join(Path.home(), "Library", "Audio", "Plug-Ins", "Components")
-            rmdir(self, os.path.join(user_au_plugins, au_plugin_name))
-            copy(self, "*", src=os.path.join(artefacts_folder, "AU"), dst=user_au_plugins)
-            # Validate file is there
-            self.run(f"file {os.path.join(user_au_plugins, f'{str(self.name)}.component')}")
-            # Then, trigger AudioComponentRegistrar and auval to register it
-            self.run("killall -9 AudioComponentRegistrar", ignore_errors=True)
-            self.run("auval -a", ignore_errors=True)
-            # Finally, test it from user's AU plugin folder
-            self.run(f"pluginval --strictness-level 10 --verbose --skip-gui-tests --validate-in-process --validate {os.path.join(user_au_plugins, f'{str(self.name)}.component')}")
-            # Cleanup after the test
-            rmdir(self, os.path.join(user_au_plugins, au_plugin_name))
 
     @log_conan_stage
     def _sign(self):
@@ -166,5 +140,20 @@ class PeakEater(ConanFile):
         self.run(f"xcrun stapler staple {filename}", cwd=cwd, quiet=True)
         self.output.success(f"Successfully notarized {filename}!")
 
+    def package_info(self):
+        self.cpp_info.resdirs = ["data"]
+
     def package(self):
-        raise ConanException(f"{str(self.name)} does not support Conan packaging")
+        # Package bins(plugins, installers, etc.)
+        bin_folder = os.path.join(str(self.package_folder), "bin")
+        artefacts_folder = os.path.join(self.build_folder, f"{self.name}_artefacts", self.settings.get_safe("build_type"))  # type: ignore
+        copy(self, "*", src=os.path.join(artefacts_folder, "VST3"), dst=bin_folder)
+        copy(self, "*", src=os.path.join(artefacts_folder, "CLAP"), dst=bin_folder)
+        copy(self, "*", src=os.path.join(artefacts_folder, "LV2"), dst=bin_folder)
+        if self.settings.os == "Macos":  # type: ignore
+            copy(self, "*", src=os.path.join(artefacts_folder, "AU"), dst=bin_folder)
+            copy(self, "*", src=os.path.join(artefacts_folder, "DMG"), dst=bin_folder)
+        # Package various build data(build logs, compile database, etc). Useful for analysis
+        data_folder = os.path.join(str(self.package_folder), "data")
+        copy(self, "compile_commands.json", src=self.build_folder, dst=data_folder)
+        copy(self, "build.ninja", src=self.build_folder, dst=data_folder)

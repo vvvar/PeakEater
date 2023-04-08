@@ -49,12 +49,14 @@
         "armv",
         "artefacts",
         "auval",
+        "bindirs",
         "buildenv",
         "cmaketoolchain",
         "codesign",
         "cppstd",
         "hexlabs",
         "juce",
+        "killall",
         "libc",
         "libcxx",
         "libdir",
@@ -64,11 +66,24 @@
         "notarytool",
         "peakeater",
         "pluginval",
+        "resdirs",
         "ULFO",
         "vvvar",
         "xcrun",
         "zfile",
         "zipresp"
     ],
-    "terminal.integrated.shell.osx": "/bin/zsh"
+    "terminal.integrated.shell.osx": "/bin/zsh",
+    "terminal.integrated.env.osx": {
+        "CONAN_LOG_RUN_TO_FILE": "1",
+        "CONAN_DEFAULT_PROFILE": "${workspaceFolder}/config/conan/profiles/macos-armv8"
+    },
+    "terminal.integrated.env.windows": {
+        "CONAN_LOG_RUN_TO_FILE": "1",
+        "CONAN_DEFAULT_PROFILE": "${workspaceFolder}/config/conan/profiles/windows-x86_64"
+    },
+    "terminal.integrated.env.linux": {
+        "CONAN_LOG_RUN_TO_FILE": "1",
+        "CONAN_DEFAULT_PROFILE": "${workspaceFolder}/config/conan/profiles/linux-x86_64"
+    },
 }
