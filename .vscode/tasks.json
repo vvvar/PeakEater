@@ -47,6 +47,14 @@
       "command": "conan export-pkg ."
     },
     {
+      "label": "PeakEater: SCA",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "command": "cppcheck --project=build/Release/compile_commands.json --enable=all --cppcheck-build-dir=build/Release/cppcheck --std=c++17 --report-progress"
+    },
+    {
       "label": "PeakEater: Test",
       "type": "shell",
       "problemMatcher": [
