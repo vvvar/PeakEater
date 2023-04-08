@@ -37,7 +37,7 @@
         "$gcc"
       ],
       "osx": {
-        "command": "conan create modules/pluginval-conan -pr config/conan/profiles/macos-armv8"
+        "command": "conan create modules/pluginval-conan -pr config/conan/profiles/macos-armv8",
       },
       "windows": {
         "command": "conan create modules/pluginval-conan -pr config/conan/profiles/windows-x86_64"

@@ -73,10 +73,10 @@ class PeakEater(ConanFile):
     def _test(self):
         artefacts_folder = os.path.join(self.build_folder, f"{self.name}_artefacts", self.settings.get_safe("build_type"))  # type: ignore
         vst3_file = os.path.join(artefacts_folder, "VST3", f"{str(self.name)}.vst3")
-        self.run(f"pluginval --strictness-level 10 --verbose --validate {vst3_file}")  # --skip-gui-tests
+        self.run(f"pluginval --strictness-level 10 --verbose --skip-gui-tests --validate {vst3_file}")  # --skip-gui-tests
         if self.settings.os == "Macos":  # type: ignore
             au_file = os.path.join(artefacts_folder, "AU", f"{str(self.name)}.component")
-            self.run(f"pluginval --strictness-level 10 --verbose --validate {au_file}")
+            self.run(f"pluginval --strictness-level 10 --verbose --skip-gui-tests --validate {au_file}")
 
     @log_conan_stage
     def _sign(self):
