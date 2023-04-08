@@ -84,7 +84,7 @@ class PeakEater(ConanFile):
             rmdir(self, os.path.join(user_au_plugins, au_plugin_name))
             copy(self, "*", src=os.path.join(artefacts_folder, "AU"), dst=user_au_plugins)
             # Then, trigger auval to register it
-            self.run("auval -al", ignore_errors=True)
+            self.run("auval -a", ignore_errors=True)
             # Finally, test it from user's AU plugin folder
             self.run(f"pluginval --strictness-level 10 --verbose --skip-gui-tests --validate-in-process --validate {os.path.join(user_au_plugins, f'{str(self.name)}.component')}")
             # Cleanup after the test
