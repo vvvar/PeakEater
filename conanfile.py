@@ -6,6 +6,7 @@ from conan.tools.env import VirtualBuildEnv
 from conan.api.output import ConanOutput, Color
 
 import os
+from pathlib import Path
 
 
 def log_conan_stage(f):
@@ -20,7 +21,7 @@ def log_conan_stage(f):
 
 class PeakEater(ConanFile):
     name = "peakeater"
-    version = "0.6.2"
+    version = "0.6.3"
     user = "vvvar"
     channel = "testing"
     company = "T-Audio"
@@ -72,11 +73,22 @@ class PeakEater(ConanFile):
     @log_conan_stage
     def _test(self):
         artefacts_folder = os.path.join(self.build_folder, f"{self.name}_artefacts", self.settings.get_safe("build_type"))  # type: ignore
-        vst3_file = os.path.join(artefacts_folder, "VST3", f"{str(self.name)}.vst3")
-        self.run(f"pluginval --strictness-level 10 --verbose --skip-gui-tests --validate {vst3_file}")  # --skip-gui-tests
+        vst3_plugin = os.path.join(artefacts_folder, "VST3", f"{str(self.name)}.vst3")
+        self.run(f"pluginval --strictness-level 10 --verbose --skip-gui-tests --validate-in-process --validate {vst3_plugin}")  # --skip-gui-tests
         if self.settings.os == "Macos":  # type: ignore
-            au_file = os.path.join(artefacts_folder, "AU", f"{str(self.name)}.component")
-            self.run(f"pluginval --strictness-level 10 --verbose --skip-gui-tests --validate {au_file}")
+            # NOTE: Hack to let macOS register and eventually test AU plugin
+            # NOTE: Discussion - https://github.com/Tracktion/pluginval/issues/39
+            # First, copy AU plugin to user plugins folder(~/Library/Audio/Plug-Ins/Components)
+            au_plugin_name = f"{str(self.name)}.component"
+            user_au_plugins = os.path.join(Path.home(), "Library", "Audio", "Plug-Ins", "Components")
+            rmdir(self, os.path.join(user_au_plugins, au_plugin_name))
+            copy(self, "*", src=os.path.join(artefacts_folder, "AU"), dst=user_au_plugins)
+            # Then, trigger auval to register it
+            self.run("auval -al", ignore_errors=True)
+            # Finally, test it from user's AU plugin folder
+            self.run(f"pluginval --strictness-level 10 --verbose --skip-gui-tests --validate-in-process --validate {os.path.join(user_au_plugins, f'{str(self.name)}.component')}")
+            # Cleanup after the test
+            rmdir(self, os.path.join(user_au_plugins, au_plugin_name))
 
     @log_conan_stage
     def _sign(self):
