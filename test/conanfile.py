@@ -32,8 +32,8 @@ def mac_only(f):
 
 
 class Test(ConanFile):
-    settings = "os", "compiler", "build_type", "arch"
-    generators = "CMakeDeps", "CMakeToolchain"
+    settings = "os", "arch", "compiler", "build_type"
+    generators = "CMakeDeps"
 
     def requirements(self):
         self.requires(self.tested_reference_str)  # type: ignore
@@ -44,6 +44,7 @@ class Test(ConanFile):
         pass
 
     def layout(self):
+        self.cpp_info.set_property("tools.cmake.cmake_layout:build_folder_vars", ["settings.build_type"])
         cmake_layout(self)
 
     def test(self):
@@ -106,7 +107,7 @@ class Test(ConanFile):
         """Test VST3 Plugin with pluginval"""
         vst3 = "".join(filter(lambda a: ".vst3" in a, os.listdir(bin_dir)))
         assert vst3, f"VST3 plugin not found in {bin_dir}. What's actually inside: {str(os.listdir(bin_dir))}"
-        self.run(f"pluginval --strictness-level 10 --verbose --skip-gui-tests --validate-in-process --validate {os.path.join(bin_dir, vst3)}")
+        self._pluginval(os.path.join(bin_dir, vst3))
 
     @mac_only
     @log_conan_stage
@@ -130,9 +131,17 @@ class Test(ConanFile):
         self.run("killall -9 AudioComponentRegistrar", ignore_errors=True)
         self.run("auval -a", ignore_errors=True)
         # Finally, test it from user plugin folder
-        self.run(f"pluginval --strictness-level 10 --verbose --skip-gui-tests --validate-in-process --validate {os.path.join(user_au_plugins, au_plugin_name)}")
+        self._pluginval(os.path.join(user_au_plugins, au_plugin_name))
         # Cleanup after the test
         rmdir(self, os.path.join(user_au_plugins, au_plugin_name))
+
+    def _pluginval(self, plugin):
+        # Max level
+        strictness = 10
+        # GUI does not work on a CI
+        skip_gui_test = "--skip-gui-tests" if self.settings.os in ["Linux"] else ""  # type: ignore
+        output_dir = os.path.join(self.build_folder, "pluginval")  # type: ignore
+        self.run(f"pluginval --strictness-level {strictness} --verbose {skip_gui_test} --validate-in-process --output-dir {output_dir} --validate {plugin}")
 
     @mac_only
     @log_conan_stage
