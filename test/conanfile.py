@@ -36,9 +36,8 @@ class Test(ConanFile):
     generators = "CMakeDeps"
 
     def requirements(self):
+        self.tool_requires("pluginval/1.0.3@pluginval/release")  # type: ignore
         self.requires(self.tested_reference_str)  # type: ignore
-
-    tool_requires = "pluginval/1.0.3@pluginval/release"
 
     def build(self):
         pass
@@ -138,8 +137,8 @@ class Test(ConanFile):
     def _pluginval(self, plugin):
         # Max level
         strictness = 10
-        # GUI does not work on a CI
-        skip_gui_test = "--skip-gui-tests" if self.settings.os in ["Linux"] else ""  # type: ignore
+        # GUI does not work on a CI(except Windows)
+        skip_gui_test = "--skip-gui-tests" if self.settings.os in ["Macos", "Linux"] else ""  # type: ignore
         output_dir = os.path.join(self.build_folder, "pluginval")  # type: ignore
         self.run(f"pluginval --strictness-level {strictness} --verbose {skip_gui_test} --validate-in-process --output-dir {output_dir} --validate {plugin}")
 
