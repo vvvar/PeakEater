@@ -45,7 +45,7 @@ Table of Contents
 
 ## About
 
-PeakEater is a free, easy to use waveshaping plugin. PeakEater lets you choose between different [waveshaping](https://en.wikipedia.org/wiki/Waveshaper) [functions](https://en.wikipedia.org/wiki/Sigmoid_function) to clip everything above ceiling level. Therefore, you can boost overall volume of your track safely without worying that some nasty peak would go above maximum allowed volume level of your DAW. It supports variours <a href="#features">features</a> such as multiple clipping types, oversampling and visualizations of clipping process that aims to make clipping easy and fun.
+PeakEater is a free, easy to use waveshaping plugin. PeakEater lets you choose between different [waveshaping](https://en.wikipedia.org/wiki/Waveshaper) [functions](https://en.wikipedia.org/wiki/Sigmoid_function) to clip everything above ceiling level. Therefore, you can boost overall volume of your track safely without worrying that some nasty peak would go above maximum allowed volume level of your DAW. It supports various <a href="#features">features</a> such as multiple clipping types, oversampling and visualizations of clipping process that aims to make clipping easy and fun.
 
 ## Features
 
@@ -83,7 +83,7 @@ Displays magnitude(in dB's) so you can see how peaks were eaten over time.
 
 <img src="Resources/screenshots/screenshot-analyzer.png" alt="clip-analyzer" height="100"/>
 
-Shows approximated RMS that was cut("Eaten") in last 2 seconds and current clipping algorithm. Double-click on numbers to drop it to zero and force to re-calculate.
+Shows approximated RMS that was cut ("Eaten") in last 2 seconds and current clipping algorithm. Double-click on numbers to drop it to zero and force to re-calculate.
 
 ### Configurable Tickmarks
 
@@ -101,7 +101,7 @@ Also, you can switch between linear and non-linear scaling.
 
 <img src="Resources/screenshots/screenshot-clip-type.png" alt="clip-type" height="100"/>
 
-Choose between 6 clipping functions, from Hard clipping to different types Soft Clip(Up to Arctangent).
+Choose between 6 clipping functions, from Hard clipping to different types Soft Clip (Up to Arctangent).
 Available clipping functions are:
 
 - Hard
@@ -127,7 +127,7 @@ You can read more about oversampling [here](https://www.nickwritesablog.com/intr
 
 <img src="Resources/screenshots/screenshot-bypass.png" alt="bypass" height="100"/>
 
-Bypasses all plugin's processing. Useful when you need to make side-by-side comparsion before and after processing.
+Bypasses all plugin's processing. Useful when you need to make side-by-side comparison before and after processing.
 
 ### Resizing
 
@@ -139,7 +139,7 @@ Drag the corner to change the size of the window.
 
 <img src="Resources/vendorIcons/vst3.png" alt="vst3" height="50"/> <img src="Resources/vendorIcons/audio-units.png" alt="au" height="50"/> <img src="Resources/vendorIcons/lv2.png" alt="lv2" height="50"/> <img src="Resources/vendorIcons/clap.png" alt="clap" height="50"/>
 
-You can use either VST3, AU(macOS only), LV2 or CLAP type of plugin.
+You can use either VST3, AU (macOS only), LV2 or CLAP type of plugin.
 
 > **Warning** LV2 and CLAP support is experimental and may be unstable.
 
