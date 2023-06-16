@@ -10,18 +10,18 @@ namespace pe
 namespace gui
 {
 
-class Header : public juce::Component
-{
-public:
-Header (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters);
+    class Header : public juce::Component
+    {
+    public:
+        Header (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters);
 
-void resized() override;
+        void resized() override;
 
-private:
-juce::ImageComponent mLogo;
-juce::ToggleButton mBypass;
-juce::AudioProcessorValueTreeState::ButtonAttachment mAttachment;
-JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Header)
-};
+    private:
+        juce::ImageComponent mLogo;
+        juce::ToggleButton mBypass;
+        juce::AudioProcessorValueTreeState::ButtonAttachment mAttachment;
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Header)
+    };
 } // namespace gui
 } // namespace pe

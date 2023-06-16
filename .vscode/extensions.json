@@ -1,13 +1,17 @@
 {
     "recommendations": [
-        "zachflower.uncrustify",
+        "ms-vscode.cpptools",
         "ms-python.python",
-        "spmeesseman.vscode-taskexplorer",
         "github.vscode-github-actions",
-        "znck.grammarly",
         "shd101wyy.markdown-preview-enhanced",
         "streetsidesoftware.code-spell-checker",
+        "znck.grammarly",
+        "sonarsource.sonarlint-vscode",
+        "spmeesseman.vscode-taskexplorer",
+        "ms-vscode-remote.remote-containers",
+    ],
+    "unwantedRecommendations": [
         "ms-vscode.cpptools-extension-pack",
-        "ms-vscode-remote.remote-containers"
+        "ms-vscode.cmake-tools"
     ]
 }

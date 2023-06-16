@@ -11,24 +11,24 @@ namespace pe
 {
 namespace gui
 {
-class AnalyserComponent
-	: public juce::Component
-{
-public:
-AnalyserComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                   std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
-                   std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-                   std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
-~AnalyserComponent() override;
+    class AnalyserComponent
+        : public juce::Component
+    {
+    public:
+        AnalyserComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+                           std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
+                           std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
+                           std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+        ~AnalyserComponent() override;
 
-void resized() override;
-void paint (juce::Graphics& g) override;
+        void resized() override;
+        void paint (juce::Graphics& g) override;
 
-private:
-ClipTypeComponent mClipTypeComponent;
-PeakAnalyzerComponent mPeakAnalyzerComponent;
+    private:
+        ClipTypeComponent mClipTypeComponent;
+        PeakAnalyzerComponent mPeakAnalyzerComponent;
 
-JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AnalyserComponent)
-};
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AnalyserComponent)
+    };
 } // namespace gui
 } // namespace pe

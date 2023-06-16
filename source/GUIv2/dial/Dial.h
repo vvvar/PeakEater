@@ -9,27 +9,27 @@ namespace pe
 {
 namespace gui
 {
-class Dial : public juce::Component
-{
-public:
-Dial (std::string const& labelText,
-      std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-      std::string const& parameterId);
-~Dial() override;
+    class Dial : public juce::Component
+    {
+    public:
+        Dial (std::string const& labelText,
+              std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+              std::string const& parameterId);
+        ~Dial() override;
 
-void resized() override;
+        void resized() override;
 
-protected:
-DialLookAndFeel mLookAndFeel;
-juce::Slider mSlider;
-juce::Label mLabel;
-EditableParameterComponent mDialValue;
-juce::AudioProcessorValueTreeState::SliderAttachment mSliderAttachment;
+    protected:
+        DialLookAndFeel mLookAndFeel;
+        juce::Slider mSlider;
+        juce::Label mLabel;
+        EditableParameterComponent mDialValue;
+        juce::AudioProcessorValueTreeState::SliderAttachment mSliderAttachment;
 
-JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Dial)
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Dial)
 
-private:
-void updateFontSize();
-};
+    private:
+        void updateFontSize();
+    };
 } // namespace gui
 } // namespace pe

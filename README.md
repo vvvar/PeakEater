@@ -208,32 +208,16 @@ Extract zip and copy plugin in format of choice into folder with your plugins.
 
 ### Prerequisites
 
-- [Git](https://git-scm.com) 2.39.0+
-- [CMake](https://cmake.org) 3.15+
-- [Python](https://www.python.org) 3.8.1+
+- [Just](https://github.com/casey/just) 1.13.0+
 
-### Build
+### Building
 
-Clone this repo:
-
-```
-git clone --recurse-submodules https://github.com/vvvar/PeakEater.git
+```sh
+just setup
+just build
 ```
 
-If you're using VS Code, then use Build tasks provided in [settings.json](.vscode/settings.json).
-For manual build, checkout proper versions of dependencies:
-
-```
-cd Dependencies/JUCE && git checkout 4e68af7 && cd ../clap-juce-extensions/JUCE && git checkout cf93cac
-```
-
-Run cmake build:
-
-```
-mkdir build && cd build
-cmake .. -DJUCE_BUILD_EXAMPLES=OFF -DJUCE_BUILD_EXTRAS=ON
-cmake --build .
-```
+Build artifacts will be stored in the `/build/Release/peakeater_artefacts`.
 
 <!-- CONTRIBUTING -->
 

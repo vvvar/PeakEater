@@ -3,7 +3,8 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/source",
+                "~/.conan2/p/**"
             ],
             "defines": [],
             "macFrameworkPath": [
@@ -13,7 +14,7 @@
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-x64",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+            "compileCommands": "${workspaceFolder}/build/Release/compile_commands.json",
             "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],

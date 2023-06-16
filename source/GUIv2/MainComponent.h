@@ -13,31 +13,31 @@ namespace pe
 namespace gui
 {
 
-class MainComponent
-	: public juce::Component,
-	public juce::AudioProcessorParameter::Listener
-{
-public:
-MainComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-               std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
-               std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-               std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
-~MainComponent() override;
+    class MainComponent
+        : public juce::Component,
+          public juce::AudioProcessorParameter::Listener
+    {
+    public:
+        MainComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+                       std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
+                       std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
+                       std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+        ~MainComponent() override;
 
-void resized() override;
-void paint (juce::Graphics& g) override;
-void parameterValueChanged (int parameterIndex, float newValue) override;
-void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override;
+        void resized() override;
+        void paint (juce::Graphics& g) override;
+        void parameterValueChanged (int parameterIndex, float newValue) override;
+        void parameterGestureChanged (int parameterIndex, bool gestureIsStarting) override;
 
-private:
-Header mHeader;
-WorkingPanel mWorkingPanel;
-BypassButton mBypassButton; // part of Main Component because when disabled we still need to handle clicks
-juce::TooltipWindow mTooltipWindow{ this, 500 };
+    private:
+        Header mHeader;
+        WorkingPanel mWorkingPanel;
+        BypassButton mBypassButton; // part of Main Component because when disabled we still need to handle clicks
+        juce::TooltipWindow mTooltipWindow { this, 500 };
 
-std::shared_ptr<juce::AudioProcessorValueTreeState> mParameters;
+        std::shared_ptr<juce::AudioProcessorValueTreeState> mParameters;
 
-JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
-};
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
+    };
 } // namespace gui
 } // namespace pe

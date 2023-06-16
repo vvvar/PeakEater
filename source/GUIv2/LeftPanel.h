@@ -12,19 +12,19 @@ namespace pe
 namespace gui
 {
 
-class LeftPanel : public juce::Component
-{
-public:
-LeftPanel (std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
-           std::shared_ptr<Ticks> ticks);
+    class LeftPanel : public juce::Component
+    {
+    public:
+        LeftPanel (std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
+                   std::shared_ptr<Ticks> ticks);
 
-void resized() override;
-void paint (juce::Graphics& g) override;
+        void resized() override;
+        void paint (juce::Graphics& g) override;
 
-private:
-LevelMeterComponent mLevelMeter;
+    private:
+        LevelMeterComponent mLevelMeter;
 
-JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LeftPanel)
-};
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LeftPanel)
+    };
 } // namespace gui
 } // namespace pe

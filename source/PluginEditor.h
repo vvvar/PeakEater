@@ -18,22 +18,22 @@ namespace pe
 class PeakEaterAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& audioProcessor,
-                               std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                               std::shared_ptr<pe::dsp::LevelMeter<float> > inputLevelMeter,
-                               std::shared_ptr<pe::dsp::LevelMeter<float> > clippingLevelMeter,
-                               std::shared_ptr<pe::dsp::LevelMeter<float> > outputLevelMeter);
-~PeakEaterAudioProcessorEditor() override;
+    PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& audioProcessor,
+                                   std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+                                   std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
+                                   std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
+                                   std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+    ~PeakEaterAudioProcessorEditor() override;
 
-//==============================================================================
-void paint (juce::Graphics&) override;
-void resized() override;
+    //==============================================================================
+    void paint (juce::Graphics&) override;
+    void resized() override;
 
 private:
-//==============================================================================
-pe::gui::MainComponent mMainComponent;
+    //==============================================================================
+    pe::gui::MainComponent mMainComponent;
 
-//==============================================================================
-JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeakEaterAudioProcessorEditor)
+    //==============================================================================
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PeakEaterAudioProcessorEditor)
 };
 } // namespace pe

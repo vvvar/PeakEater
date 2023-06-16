@@ -1,7 +1,10 @@
 git
+jq
 cmake
-ccache
+cppcheck
 ninja-build
+clang-format
+clang-tidy
 g++
 libgtk-3-dev
 libfreetype6-dev

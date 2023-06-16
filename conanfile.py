@@ -29,14 +29,8 @@ class PeakEater(ConanFile):
     options = {"signed": [True, False]}
     default_options = {"signed": False}
     options_description = {"signed": "Whether binaries are signed with certificate or not"}
-    exports_sources = {
-        "*",
-        "!.vscode/*",
-        "!build/*",
-        "!juce-conan/*",
-        "!.env",
-        "!.git*",
-    }
+    exports_sources = {"assets", "modules", "source", "CMakeLists.txt"}
+    package_type = "application"
 
     requires = "juce/7.0.5@juce/release"
 
@@ -66,8 +60,6 @@ class PeakEater(ConanFile):
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
-        self._sign()
-        self._bundle()
 
     @log_conan_stage
     def _sign(self):
@@ -146,6 +138,9 @@ class PeakEater(ConanFile):
         self.cpp_info.resdirs = ["data"]
 
     def package(self):
+        # Sign & create bundle
+        self._sign()
+        self._bundle()
         # Package bins(plugins, installers, etc.)
         bin_folder = os.path.join(str(self.package_folder), "bin")
         artefacts_folder = os.path.join(self.build_folder, f"{self.name}_artefacts", self.settings.get_safe("build_type"))  # type: ignore

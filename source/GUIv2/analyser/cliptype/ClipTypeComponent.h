@@ -7,22 +7,22 @@ namespace pe
 {
 namespace gui
 {
-class ClipTypeComponent
-	: public juce::Component
-{
-public:
-ClipTypeComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters);
-~ClipTypeComponent() override;
+    class ClipTypeComponent
+        : public juce::Component
+    {
+    public:
+        ClipTypeComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters);
+        ~ClipTypeComponent() override;
 
-void paint (juce::Graphics& g) override;
-void mouseDown (juce::MouseEvent const& event) override;
-std::vector<float>const& getCurrentWave() const;
+        void paint (juce::Graphics& g) override;
+        void mouseDown (juce::MouseEvent const& event) override;
+        std::vector<float> const& getCurrentWave() const;
 
-private:
-std::shared_ptr<juce::AudioProcessorValueTreeState> mParameters;
-std::map<juce::String const, std::vector<float> const> mClippedWaveTables;
+    private:
+        std::shared_ptr<juce::AudioProcessorValueTreeState> mParameters;
+        std::map<juce::String const, std::vector<float> const> mClippedWaveTables;
 
-JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ClipTypeComponent)
-};
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ClipTypeComponent)
+    };
 } // namespace gui
 } // namespace pe

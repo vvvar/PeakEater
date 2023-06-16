@@ -11,17 +11,17 @@ namespace pe
 namespace gui
 {
 
-class LinkingPanel : public juce::Component
-{
-public:
-LinkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters);
+    class LinkingPanel : public juce::Component
+    {
+    public:
+        LinkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters);
 
-void resized() override;
+        void resized() override;
 
-private:
-LinkInOut mLinkInOut;
+    private:
+        LinkInOut mLinkInOut;
 
-JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LinkingPanel)
-};
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LinkingPanel)
+    };
 } // namespace gui
 } // namespace pe

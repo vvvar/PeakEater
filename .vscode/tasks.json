@@ -2,72 +2,43 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "System: Install Requirements",
+      "label": "Setup",
+      "detail": "Setup all project dependencies(system, dependent projects, etc.)",
       "type": "shell",
-      "osx": {
-        "command": "brew update && brew bundle install --file=config/system/requirements.macos.brew.rb"
-      },
-      "windows": {
-        "command": "chocolatey install config/system/requirements.windows.choco.config"
-      },
-      "linux": {
-        "command": "apt-get update && xargs -a config/system/requirements.linux.apt.txt apt-get install -y"
-      }
+      "command": "just setup"
     },
     {
-      "label": "Dependencies: Build JUCE",
+      "label": "Build",
+      "detail": "Build the project",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "conan create modules/juce-conan"
+      "command": "just build"
     },
     {
-      "label": "Dependencies: Build pluginval",
+      "label": "Run",
+      "detail": "Run the project as a standalone application",
+      "type": "shell",
+      "command": "just run"
+    },
+    {
+      "label": "SCA",
+      "detail": "Run static code analysis",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "conan create modules/pluginval-conan",
+      "command": "just sca"
     },
     {
-      "label": "PeakEater: Build",
+      "label": "Pacakge",
+      "detail": "Bundle & package the project as a Conan pakckage",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "conan install . && conan build ."
+      "command": "just pacakge"
     },
-    {
-      "label": "PeakEater: Export Package",
-      "type": "shell",
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "command": "conan export-pkg ."
-    },
-    {
-      "label": "PeakEater: SCA",
-      "type": "shell",
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "command": "cppcheck --project=build/Release/compile_commands.json --enable=all --cppcheck-build-dir=build/Release/cppcheck --std=c++17 --report-progress"
-    },
-    {
-      "label": "PeakEater: Test",
-      "type": "shell",
-      "problemMatcher": [
-        "$gcc"
-      ],
-      "command": "conan test test peakeater/0.6.3@vvvar/testing"
-    },
-    {
-      "label": "PeakEater: Run(Standalone)",
-      "type": "shell",
-      "osx": {
-        "command": "build/Release/peakeater_artefacts/Release/Standalone/peakeater.app/Contents/MacOS/peakeater"
-      }
-    }
   ]
 }

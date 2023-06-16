@@ -13,14 +13,14 @@ namespace pe
 {
 namespace dsp
 {
-namespace waveshaping
-{
+    namespace waveshaping
+    {
 
-template <typename T>
-int sgn (T x)
-{
-	return (T (0) < x) - (x < T (0));
-}
-} // namespace waveshaping
+        template <typename T>
+        int sgn (T x)
+        {
+            return (T (0) < x) - (x < T (0));
+        }
+    } // namespace waveshaping
 } // namespace dsp
 } // namespace pe

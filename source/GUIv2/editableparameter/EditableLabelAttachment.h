@@ -7,18 +7,18 @@ namespace pe
 {
 namespace gui
 {
-class EditableLabelAttachment : public juce::ParameterAttachment
-{
-public:
-EditableLabelAttachment (juce::RangedAudioParameter& parameter, juce::Label& labelComponent);
-~EditableLabelAttachment() override;
+    class EditableLabelAttachment : public juce::ParameterAttachment
+    {
+    public:
+        EditableLabelAttachment (juce::RangedAudioParameter& parameter, juce::Label& labelComponent);
+        ~EditableLabelAttachment() override;
 
-private:
-juce::RangedAudioParameter& mParameter;
-juce::Label& mLabelComponent;
+    private:
+        juce::RangedAudioParameter& mParameter;
+        juce::Label& mLabelComponent;
 
-void onParameterChanged (float newValue);
-void onLabelTextChanged();
-};
+        void onParameterChanged (float newValue);
+        void onLabelTextChanged();
+    };
 } // namespace gui
 } // namespace pe
