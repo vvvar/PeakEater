@@ -12,11 +12,7 @@ cleanup:
 # Cleanup build, temp and all generated files
 [windows]
 cleanup:
-    Remove-Item build -Recurse -Force
-    Remove-Item CMakeUserPresets.json -Force
-    Remove-Item test/build -Recurse -Force
-    Remove-Item test/CMakeUserPresets.json -Force
-    Remove-Item Testing -Recurse -Force
+    echo "Cleaning is not supported on Windows yet"
     
 [macos]
 [private]
