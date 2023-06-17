@@ -29,7 +29,7 @@ class PeakEater(ConanFile):
     options = {"signed": [True, False]}
     default_options = {"signed": False}
     options_description = {"signed": "Whether binaries are signed with certificate or not"}
-    exports_sources = {"assets", "modules", "source", "CMakeLists.txt"}
+    exports_sources = "assets", "modules", "source", "CMakeLists.txt"
     package_type = "application"
 
     requires = "juce/7.0.5@juce/release"
