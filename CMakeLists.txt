@@ -12,9 +12,6 @@ project(${CONAN_PROJECT_NAME} VERSION ${CONAN_PROJECT_VERSION})
 # Export compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
-# Use C++20
-set(CMAKE_CXX_STANDARD 20)
-
 find_package(JUCE CONFIG REQUIRED)
 
 include(FetchContent)

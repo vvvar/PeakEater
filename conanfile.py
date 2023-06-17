@@ -43,7 +43,6 @@ class PeakEater(ConanFile):
 
     def generate(self):
         toolchain = CMakeToolchain(self)
-        toolchain.blocks.remove("cppstd")  # Because we're setting CPP standard in CMake
         toolchain.blocks.remove("apple_system")  # Because Conan forces x86_64 build(from settings)
         toolchain.cache_variables["CMAKE_OSX_ARCHITECTURES"] = "x86_64;arm64"
         toolchain.cache_variables["CMAKE_OSX_DEPLOYMENT_TARGET"] = "10.9"

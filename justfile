@@ -1,3 +1,14 @@
+# Choose conan profile based on platform
+conan_profile := if os() == "macos" {
+    "macos"
+} else if os() == "windows" {
+    "windows"
+} else if os() == "linux" {
+    "linux"
+} else {
+    "default"
+}
+
 # Cleanup build, temp and all generated files
 [unix]
 cleanup:
@@ -39,10 +50,10 @@ setup-git:
 setup-conan:
     pip3 install -r config/system/requirements.dev.pip.txt
     conan profile detect --force
-    conan config install config/global.conf
-    conan create modules/juce-conan
-    conan create modules/pluginval-conan
-    conan install .
+    conan config install config/conan
+    conan create modules/juce-conan -pr {{conan_profile}}
+    conan create modules/pluginval-conan -pr {{conan_profile}}
+    conan install . -pr {{conan_profile}}
 
 # Setup the project
 setup: cleanup
@@ -53,13 +64,13 @@ setup: cleanup
 # Build, sign and bundle the project
 [macos]
 build:
-    conan build . -o signed=True
+    conan build . -pr {{conan_profile}} -o signed=True
 
 # Build the project(signing and bundling are not supported yet)
 [windows]
 [linux]
 build:
-    conan build .
+    conan build . -pr {{conan_profile}}
 
 # Run static code analysis
 sca:
@@ -72,4 +83,4 @@ run:
 
 # Package an application as a Conan package and test it with test project
 package:
-    conan export-pkg . -tf test
+    conan export-pkg . -pr {{conan_profile}} -tf test

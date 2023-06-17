@@ -1,4 +1,3 @@
-brew "python3"
 brew "cmake"
 brew "ccache"
 brew "clang-format"
