@@ -9,6 +9,15 @@ cleanup:
     rm -rf ~/.conan2/p
     rm -f config/system/requirements.macos.brew.rb.lock.json
 
+# Cleanup build, temp and all generated files
+[windows]
+cleanup:
+    rd /s /q build
+    rd /s /q test/build
+    rd /s /q Testing
+    del /s /q CMakeUserPresets.json
+    del /s /q test/CMakeUserPresets.json
+    
 [macos]
 [private]
 setup-system:
@@ -39,15 +48,22 @@ setup-conan:
     conan create modules/pluginval-conan
     conan install .
 
-# Setup project's dependencies
+# Setup the project
 setup: cleanup
-    just setup-system
-    just setup-git
-    just setup-conan
+    just setup-system # Install system dependencies
+    just setup-git    # Initialize git dependencies
+    just setup-conan  # Setup conan & install project dependencies
 
-# Build project
+# Build, sign and bundle the project
+[macos]
 build:
-    conan build . 
+    conan build . -o signed=True
+
+# Build the project(signing and bundling are not supported yet)
+[windows]
+[linux]
+build:
+    conan build .
 
 # Run static code analysis
 sca:
@@ -58,17 +74,6 @@ sca:
 run:
     open build/Release/peakeater_artefacts/Release/Standalone/peakeater.app
 
-# Sign & bundle an application as a Conan package
-[macos]
+# Package an application as a Conan package and test it with test project
 package:
-    conan export-pkg . -o signed=True -tf test
-
-# Sign & bundle an application as a Conan package
-[windows]
-package:
-    conan export-pkg . -o -tf test
-
-# Sign & bundle an application as a Conan package
-[linux]
-package:
-    conan export-pkg . -o -tf test
+    conan export-pkg . -tf test

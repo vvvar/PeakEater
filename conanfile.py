@@ -60,6 +60,10 @@ class PeakEater(ConanFile):
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
+        # Sign & bundle ad part of the build because
+        # we may want to test run signed plugin in DAW before packaging
+        self._sign()
+        self._bundle()
 
     @log_conan_stage
     def _sign(self):
@@ -138,9 +142,6 @@ class PeakEater(ConanFile):
         self.cpp_info.resdirs = ["data"]
 
     def package(self):
-        # Sign & create bundle
-        self._sign()
-        self._bundle()
         # Package bins(plugins, installers, etc.)
         bin_folder = os.path.join(str(self.package_folder), "bin")
         artefacts_folder = os.path.join(self.build_folder, f"{self.name}_artefacts", self.settings.get_safe("build_type"))  # type: ignore
