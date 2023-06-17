@@ -37,15 +37,15 @@ jobs:
       - name: Setup
         run: just setup
       - name: Build
-        run: just build
-      - name: SCA
-        run: just sca
-      - name: Package
         env:
           MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
           MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
           MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
           MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
+        run: just build
+      - name: SCA
+        run: just sca
+      - name: Package
         run: just package
       - name: Upload
         uses: actions/upload-artifact@v3
