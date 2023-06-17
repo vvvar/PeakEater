@@ -12,11 +12,11 @@ cleanup:
 # Cleanup build, temp and all generated files
 [windows]
 cleanup:
-    rd /s /q build
-    rd /s /q test/build
-    rd /s /q Testing
-    del /s /q CMakeUserPresets.json
-    del /s /q test/CMakeUserPresets.json
+    Remove-Item build -Recurse -Force
+    Remove-Item CMakeUserPresets.json -Force
+    Remove-Item test/build -Recurse -Force
+    Remove-Item test/CMakeUserPresets.json -Force
+    Remove-Item Testing -Recurse -Force
     
 [macos]
 [private]
