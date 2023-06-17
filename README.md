@@ -209,6 +209,14 @@ Extract zip and copy plugin in format of choice into folder with your plugins.
 ### Prerequisites
 
 - [Just](https://github.com/casey/just) 1.13.0+
+- [Brew](https://brew.sh) 4.0.23+(macOS only)
+- [NodeJS](https://nodejs.org/en) 18.16.0+(macOS only)
+- [Chocolatey](https://chocolatey.org) 1.4.0+(Windows only)
+
+#### MacOS
+
+-
+- [NodeJS](https://nodejs.org/en) 18.16.0+(only for packaging)
 
 ### Building
 

@@ -23,7 +23,7 @@ setup-system:
 [windows]
 [private]
 setup-system:
-    chocolatey install config/system/requirements.windows.choco.config --ignore-package-exit-codes
+    choco install config/system/requirements.windows.choco.config --ignore-package-exit-codes
 
 [linux]
 [private]
