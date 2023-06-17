@@ -7,6 +7,9 @@ jobs:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
+      - uses: extractions/setup-just@v1
+        with:
+          just-version: 1.13.0
       - name: Provision
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.MACOS_BUILD_CERTIFICATE_BASE64 }}
@@ -64,6 +67,9 @@ jobs:
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v3
+      - uses: extractions/setup-just@v1
+        with:
+          just-version: 1.13.0
       - name: Setup
         run: just setup
       - name: Build
@@ -88,6 +94,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
+      - uses: extractions/setup-just@v1
+        with:
+          just-version: 1.13.0
       - name: Setup
         run: just setup
       - name: Build
