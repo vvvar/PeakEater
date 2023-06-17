@@ -1,5 +1,5 @@
 brew "ninja"
-brew "node"
+brew "node@18"
 brew "cmake"
 brew "ccache"
 brew "llvm"
