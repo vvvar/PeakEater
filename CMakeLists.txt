@@ -97,8 +97,8 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 
 if(APPLE)
     if(CODESIGN)
-        if(NOT $ENV{MACOS_APPLE_DEVELOPER_ID})
-            message(FATAL_ERROR "CODESIGN option is turned ON, but MACOS_APPLE_DEVELOPER_ID env variable is not set")
+        if(NOT DEFINED ENV{MACOS_APPLE_DEVELOPER_ID})
+            message(FATAL_ERROR "CODESIGN option is turned ON, but MACOS_APPLE_DEVELOPER_ID env variable is not defined")
         endif()
 
         # Codesign all plugins before we've bundled them
