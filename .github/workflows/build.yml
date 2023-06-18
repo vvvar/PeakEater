@@ -1,0 +1,139 @@
+name: Build, test & package
+
+on:
+  workflow_call:
+    secrets:
+      MACOS_BUILD_CERTIFICATE_BASE64:
+        required: true
+      MACOS_P12_PASSWORD:
+        required: true
+      MACOS_BUILD_PROVISION_PROFILE_BASE64:
+        required: true
+      MACOS_KEYCHAIN_PASSWORD:
+        required: true
+      MACOS_APPLE_ID:
+        required: true
+      MACOS_APPLE_PASSWORD:
+        required: true
+      MACOS_APPLE_TEAM_ID:
+        required: true
+      MACOS_APPLE_IDENTITY:
+        required: true
+
+jobs:
+  macos:
+    name: macOS
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v3
+      - uses: extractions/setup-just@v1
+        with:
+          just-version: 1.13.0
+      - name: Provision
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.MACOS_BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.MACOS_P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.MACOS_BUILD_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
+          MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
+          MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
+          MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          # import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode --output $PP_PATH
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          # store creds in notarytool(needed to natarise DMG)
+          xcrun notarytool store-credentials "APPLE_SIGN_PROFILE" --apple-id $MACOS_APPLE_ID --password $MACOS_APPLE_PASSWORD --team-id $MACOS_APPLE_TEAM_ID
+      - name: Setup
+        run: just setup
+      - name: Build
+        env:
+          MACOS_APPLE_DEVELOPER_ID: ${{ secrets.MACOS_APPLE_IDENTITY }}
+        run: just build
+      - name: SCA
+        run: just sca
+      - name: Package
+        run: just package
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-macos
+          path: |
+            test/build/[abc]-release?/pluginval
+            build/Release/peakeater_artefacts/Release/build.ninja
+            build/Release/peakeater_artefacts/Release/compile_commands.json
+            build/Release/peakeater_artefacts/Release/AU/peakeater.component
+            build/Release/peakeater_artefacts/Release/CLAP/peakeater.clap
+            build/Release/peakeater_artefacts/Release/DMG/peakeater.dmg
+            build/Release/peakeater_artefacts/Release/LV2/peakeater.lv2
+            build/Release/peakeater_artefacts/Release/Standalone/peakeater.app
+            build/Release/peakeater_artefacts/Release/VST3/peakeater.vst3
+
+  windows:
+    name: Windows
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v3
+      - uses: extractions/setup-just@v1
+        with:
+          just-version: 1.13.0
+      - name: Setup
+        run: just setup
+      - name: Build
+        run: just build
+      - name: Package
+        run: just package
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-windows
+          path: |
+            test/build/[abc]-release?/pluginval
+            build/Release/peakeater_artefacts/Release/build.ninja
+            build/Release/peakeater_artefacts/Release/compile_commands.json
+            build/Release/peakeater_artefacts/Release/CLAP/peakeater.clap
+            build/Release/peakeater_artefacts/Release/LV2/peakeater.lv2
+            build/Release/peakeater_artefacts/Release/Standalone/peakeater.exe
+            build/Release/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-win/peakeater.vst3
+
+  linux:
+    name: Linux
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: extractions/setup-just@v1
+        with:
+          just-version: 1.13.0
+      - name: Setup
+        run: just setup
+      - name: Build
+        run: just build
+      - name: SCA
+        run: just sca
+      - name: Package
+        run: just package
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-linux
+          path: |
+            test/build/[abc]-release?/pluginval
+            build/Release/peakeater_artefacts/Release/build.ninja
+            build/Release/peakeater_artefacts/Release/compile_commands.json
+            build/Release/peakeater_artefacts/Release/LV2/peakeater.lv2
+            build/Release/peakeater_artefacts/Release/CLAP/peakeater.clap
+            build/Release/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-linux/peakeater.so
