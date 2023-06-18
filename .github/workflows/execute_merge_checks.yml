@@ -16,6 +16,9 @@ jobs:
           P12_PASSWORD: ${{ secrets.MACOS_P12_PASSWORD }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.MACOS_BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
+          MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
+          MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
+          MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
@@ -34,14 +37,13 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          # store creds in notarytool(needed to natarise DMG)
+          xcrun notarytool store-credentials "APPLE_SIGN_PROFILE" --apple-id $MACOS_APPLE_ID --password $MACOS_APPLE_PASSWORD --team-id $MACOS_APPLE_TEAM_ID
       - name: Setup
         run: just setup
       - name: Build
         env:
-          MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
-          MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
-          MACOS_APPLE_PASSWORD: ${{ secrets.MACOS_APPLE_PASSWORD }}
-          MACOS_APPLE_TEAM_ID: ${{ secrets.MACOS_APPLE_TEAM_ID }}
+          MACOS_APPLE_DEVELOPER_ID: ${{ secrets.MACOS_APPLE_IDENTITY }}
         run: just build
       - name: SCA
         run: just sca

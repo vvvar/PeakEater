@@ -1,1 +1,2 @@
 conan==2.0.4
+dmgbuild==1.6.1

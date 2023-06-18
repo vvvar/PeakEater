@@ -1,3 +1,5 @@
+set dotenv-load
+
 # Choose conan profile based on platform
 conan_profile := if os() == "macos" {
     "macos"
@@ -7,6 +9,12 @@ conan_profile := if os() == "macos" {
     "linux"
 } else {
     "default"
+}
+# If MACOS_APPLE_DEVELOPER_ID is provided then we have to codesign
+codesign := if env_var_or_default("MACOS_APPLE_DEVELOPER_ID", "") == "" {
+    "False"
+} else {
+    "True"
 }
 
 # Cleanup build, temp and all generated files
@@ -51,9 +59,8 @@ setup-conan:
     pip3 install -r config/system/requirements.dev.pip.txt
     conan profile detect --force
     conan config install config/conan
-    conan create modules/juce-conan -pr {{conan_profile}}
-    conan create modules/pluginval-conan -pr {{conan_profile}}
-    conan install . -pr {{conan_profile}}
+    conan create modules/juce-conan -pr:h {{conan_profile}} -pr:b {{conan_profile}}
+    conan create modules/pluginval-conan -pr:h {{conan_profile}} -pr:b {{conan_profile}}
 
 # Setup the project
 setup: cleanup
@@ -62,15 +69,9 @@ setup: cleanup
     just setup-conan  # Setup conan & install project dependencies
 
 # Build, sign and bundle the project
-[macos]
 build:
-    conan build . -pr {{conan_profile}} -o signed=True
-
-# Build the project(signing and bundling are not supported yet)
-[windows]
-[linux]
-build:
-    conan build . -pr {{conan_profile}}
+    conan install . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -o signed={{codesign}}
+    conan build . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -o signed={{codesign}}
 
 # Run static code analysis
 sca:
@@ -83,4 +84,4 @@ run:
 
 # Package an application as a Conan package and test it with test project
 package:
-    conan export-pkg . -pr {{conan_profile}} -tf test
+    conan export-pkg . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -tf test

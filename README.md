@@ -22,7 +22,7 @@ Table of Contents
   - [Ceiling Control](#ceiling-control)
   - [Visualizer](#visualizer)
   - [Analyzer](#analyzer)
-  - [Configurable Tickmarks](#configurable-tickmarks)
+  - [Configurable Tick marks](#configurable-tick-marks)
   - [Configurable Scaling](#configurable-scaling)
   - [6 Clipping Types](#6-clipping-types)
   - [Oversampling](#oversampling)
@@ -39,13 +39,13 @@ Table of Contents
   - [Build](#build)
 - [Contributing](#contributing)
 - [License](#license)
-- [Acknowledgements](#acknowledgements)
+- [Acknowledgments](#acknowledgments)
 
 <!-- ABOUT -->
 
 ## About
 
-PeakEater is a free, easy to use waveshaping plugin. PeakEater lets you choose between different [waveshaping](https://en.wikipedia.org/wiki/Waveshaper) [functions](https://en.wikipedia.org/wiki/Sigmoid_function) to clip everything above ceiling level. Therefore, you can boost overall volume of your track safely without worrying that some nasty peak would go above maximum allowed volume level of your DAW. It supports various <a href="#features">features</a> such as multiple clipping types, oversampling and visualizations of clipping process that aims to make clipping easy and fun.
+PeakEater is a free, easy-to-use wave-shaping plugin. PeakEater lets you choose between different [wave-shaping](https://en.wikipedia.org/wiki/Waveshaper) [functions](https://en.wikipedia.org/wiki/Sigmoid_function) to clip everything above ceiling level. Therefore, you can boost the overall volume of your track safely without worrying that some nasty peak would go above the maximum allowed volume level of your DAW. It supports various <a href="#features">features</a> such as multiple clipping types, oversampling and visualizations of a clipping process that aims to make clipping easy and fun.
 
 ## Features
 
@@ -53,13 +53,13 @@ PeakEater is a free, easy to use waveshaping plugin. PeakEater lets you choose b
 
 <img src="assets/screenshots/screenshot-in.png" alt="input-rms-screen" height="250"/><---><img src="assets/screenshots/screenshot-out.png" alt="output-rms-screen" height="250"/>
 
-See how loud signal was before and after plugin.
+See how loud the signal was before and after the plugin.
 
 ### Input & Output Gain
 
 <img src="assets/screenshots/screenshot-in-gain.png" alt="input-gain-screen" height="100"/><---><img src="assets/screenshots/screenshot-out-gain.png" alt="output-gain-screen" height="100"/>
 
-Adjusts gain level before and after processing. Input Gain is useful when you're either working with too quiet or too loud signal and Output Gain can be helpful to compensate loss of gain.
+Adjusts gain level before and after processing. Input Gain is useful when you're either working with too quiet or too loud a signal and Output Gain can be helpful to compensate for loss of gain.
 
 ### Link Input with Output
 
@@ -71,7 +71,7 @@ Use linking to automatically set the Output Gain level to the opposite of the In
 
 <img src="assets/screenshots/screenshot-ceiling-knob.png" alt="link-in-out" height="100"/>
 
-Control your ceiling. Everything above this level would be "eaten". Build-in RMS meter would show you signal level that comes into clipper and help you set threshold.
+Control your ceiling. Everything above this level would be "eaten". Build-in RMS meter would show you the signal level that comes into the clipper and help you set the threshold.
 
 ### Visualizer
 
@@ -83,13 +83,13 @@ Displays magnitude(in dB's) so you can see how peaks were eaten over time.
 
 <img src="assets/screenshots/screenshot-analyzer.png" alt="clip-analyzer" height="100"/>
 
-Shows approximated RMS that was cut ("Eaten") in last 2 seconds and current clipping algorithm. Double-click on numbers to drop it to zero and force to re-calculate.
+Shows approximated RMS that was cut ("Eaten") in the last 2 seconds and current clipping algorithm. Double-click on numbers to drop them to zero and force them re-calculate.
 
-### Configurable Tickmarks
+### Configurable Tick marks
 
 <img src="assets/screenshots/screenshot-switch-ticks.gif" alt="switch-db-level-scales" width="400"/>
 
-Right-Mouse-Click on Visualizer to switch between different tickmarks.
+Right-Mouse-Click on Visualizer to switch between different tick marks.
 
 ## Configurable Scaling
 
@@ -101,7 +101,7 @@ Also, you can switch between linear and non-linear scaling.
 
 <img src="assets/screenshots/screenshot-clip-type.png" alt="clip-type" height="100"/>
 
-Choose between 6 clipping functions, from Hard clipping to different types Soft Clip (Up to Arctangent).
+Choose between 6 clipping functions, from Hard clipping to different types of Soft Clip (Up to Arctangent).
 Available clipping functions are:
 
 - Hard
@@ -111,7 +111,7 @@ Available clipping functions are:
 - Algebraic
 - Arctangent
 
-You can read more about difference between Hard and Soft clipping [here](https://www.hackaudio.com/digital-signal-processing/distortion-effects/hard-clipping/) and [here](https://www.hackaudio.com/digital-signal-processing/distortion-effects/soft-clipping/).
+You can read more about the difference between Hard and Soft clipping [here](https://www.hackaudio.com/digital-signal-processing/distortion-effects/hard-clipping/) and [here](https://www.hackaudio.com/digital-signal-processing/distortion-effects/soft-clipping/).
 
 ### Oversampling
 
@@ -127,7 +127,7 @@ You can read more about oversampling [here](https://www.nickwritesablog.com/intr
 
 <img src="assets/screenshots/screenshot-bypass.png" alt="bypass" height="100"/>
 
-Bypasses all plugin's processing. Useful when you need to make side-by-side comparison before and after processing.
+Bypasses all plugin's processing. Useful when you need to make side-by-side comparisons before and after processing.
 
 ### Resizing
 
@@ -155,16 +155,16 @@ You can use it on macOS, Windows or Linux.
 
 ## Installation
 
-1. Go to <a href="https://github.com/vvvar/PeakEater/releases/latest"><b>latest release</b></a> page.
-2. In the Assets section choose installer for your platform.
+1. Go to <a href="https://github.com/vvvar/PeakEater/releases/latest"><b>the latest release</b></a> page.
+2. In the Assets section choose the installer for your platform.
 
 ### macOS
 
-Supported formats are: VST3, AU, LV2, CLAP.
+Supported formats are VST3, AU, LV2 and CLAP.
 Tested on: macOS 12.6.2
 Processors: Intel(x86_64), Apple Silicon M1+(arm64)
 
-Install plugin via **.dmg** file. Drag plugin in format of choice into folder with your plugins.
+Install the plugin via the **.dmg** file. Drag the plugin in a format of your choice into the folder with your plugins.
 
 > **Note**<br />
 > Plugin is build as an Universal Binary. This means that same plugin supports both x86_64 and Apple Silicon(M1+). Just install it and it will automatically run natively with respect to your processor.
@@ -180,10 +180,10 @@ Install plugin via **.dmg** file. Drag plugin in format of choice into folder wi
 
 ### Windows
 
-Supported formats are: VST3, AU, LV2, CLAP.
+Supported formats are VST3, AU, LV2 and CLAP.
 Tested on: Windows 10 21H2
 
-Extract zip and copy plugin in format of choice into folder with your plugins.
+Extract the zip and copy the plugin in the format of choice into the folder with your plugins.
 
 > **Note**<br />
 > Standard VST3 folder is `C:\Program Files\Common Files\VST3`<br />
@@ -192,10 +192,10 @@ Extract zip and copy plugin in format of choice into folder with your plugins.
 
 ### Linux
 
-Supported formats are: VST3, AU, LV2, CLAP.
+Supported formats are VST3, AU, LV2 and CLAP.
 Tested on: Ubuntu 18.04
 
-Extract zip and copy plugin in format of choice into folder with your plugins.
+Extract the zip and copy the plugin in a format of your choice into the folder with your plugins.
 
 > **Note**<br />
 > Standard VST3 directory is `~/.vst3`<br />
@@ -206,18 +206,12 @@ Extract zip and copy plugin in format of choice into folder with your plugins.
 
 ## Building from sources
 
-### Prerequisites
+#### Prerequisites
 
 - [Just](https://github.com/casey/just) 1.13.0+
-- [Python3](https://www.python.org) 3.11.4+
+- [Python](https://www.python.org) 3.11.4+
 - [Brew](https://brew.sh) 4.0.23+(macOS only)
-- [NodeJS](https://nodejs.org/en) 18.16.0+(macOS only)
 - [Chocolatey](https://chocolatey.org) 1.4.0+(Windows only)
-
-#### MacOS
-
--
-- [NodeJS](https://nodejs.org/en) 18.16.0+(only for packaging)
 
 ### Building
 
@@ -227,6 +221,26 @@ just build
 ```
 
 Build artifacts will be stored in the `/build/Release/peakeater_artefacts`.
+
+### Code signing on macOS
+
+By default, code signing is turned **off**. To enable it:
+
+1. Make sure you have a valid [Apple Developer ID](https://developer.apple.com/support/developer-id/), [Apple Team ID](https://developer.apple.com/forums/thread/77563) and your signing certificate is installed on your Mac(Use [this guide](https://melatonin.dev/blog/how-to-code-sign-and-notarize-macos-audio-plugins-in-ci/) as a starting point. Be aware - they are **not free**)
+
+2. Create a file called `.env` with the following content(replace the value with your Apple Developer ID):
+
+```env
+MACOS_APPLE_DEVELOPER_ID=Developer ID Application: John Doe (XXXXX6XX42)
+```
+
+3. Auth in the `notarytool`(used to notarize DMG):
+
+```sh
+xcrun notarytool store-credentials "APPLE_SIGN_PROFILE" --apple-id <YOUR_APPLE_ID> --password <YOUR_APPLE_ID_PASSWORD> --team-id <YOUR_TEAM_ID>
+```
+
+After this just run the build. CMake will automatically sign all binaries.
 
 <!-- CONTRIBUTING -->
 
@@ -245,12 +259,12 @@ Distributed under the GPL-3.0 License. See [`LICENSE.md`](https://github.com/vvv
 
 <!-- ACKNOWLEDGEMENTS -->
 
-## Acknowledgements
+## Acknowledgments
 
 - [JUCE](https://github.com/juce-framework/JUCE) - Framework for multi-platform audio applications
 - [clap-juce-extensions](https://github.com/free-audio/clap-juce-extensions) - CLAP support for JUCE
 - [Free Clip](https://gitlab.com/JHVenn/Free-Clip) by [Venn Audio](https://www.vennaudio.com)
-- [The Audio Programmer](https://theaudioprogrammer.com) for providing extensive video-lessons on audio programming and DSP
+- [The Audio Programmer](https://theaudioprogrammer.com) for providing extensive video lessons on audio programming and DSP
 - Testers-volunteers and active supporters - [George Budilov](), [Blue Four](https://soundcloud.com/bluefour), Garmata Music
 - Everyone who provided active feedback all this time
 

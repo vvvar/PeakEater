@@ -1,5 +1,3 @@
-include(default)
-
 [settings]
 arch=x86_64
 build_type=Release
@@ -8,3 +6,6 @@ compiler.cppstd=20
 compiler.libcxx=libc++
 compiler.version=14
 os=Macos
+
+[conf]
+tools.build:cxxflags=["-arch x86_64", "-arch arm64", "-mmacosx-version-min=10.9"]

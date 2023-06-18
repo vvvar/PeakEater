@@ -32,13 +32,13 @@
       "command": "just sca"
     },
     {
-      "label": "Pacakge",
+      "label": "Package",
       "detail": "Bundle & package the project as a Conan pakckage",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "just pacakge"
+      "command": "just package"
     },
   ]
 }

@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
-project(${CONAN_PROJECT_NAME} VERSION ${CONAN_PROJECT_VERSION})
+project(${CMAKE_PROJECT_NAME} VERSION ${CMAKE_PROJECT_VERSION})
+
+# For this to work, the following ENV variables must be set:
+# - MACOS_APPLE_DEVELOPER_ID: Apple Developer ID(for ex. "Developer ID Application: John Doe (XXXXX6XX42)")
+option(CODESIGN "Codesign plugins and bundle(macOS only)" OFF)
 
 # Export compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
@@ -14,7 +18,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(clap-juce-extensions)
 
-juce_add_plugin(${CONAN_PROJECT_NAME}
+juce_add_plugin(${CMAKE_PROJECT_NAME}
     PLUGIN_MANUFACTURER_CODE Tado
     PLUGIN_CODE Tape
     LV2URI ${CONAN_PROJECT_URL}
@@ -23,9 +27,9 @@ juce_add_plugin(${CONAN_PROJECT_NAME}
     AU_MAIN_TYPE kAudioUnitType_Effect
     HARDENED_RUNTIME_ENABLED True
     COMPANY_NAME ${CONAN_PROJECT_COMPANY}
-    PRODUCT_NAME ${CONAN_PROJECT_NAME})
+    PRODUCT_NAME ${CMAKE_PROJECT_NAME})
 
-target_sources(${CONAN_PROJECT_NAME}
+target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
     source/GUIv2/clipmeter/ClipMeter.cpp
     source/GUIv2/editableparameter/EditableParameterComponentLookAndFeel.cpp
@@ -57,7 +61,7 @@ target_sources(${CONAN_PROJECT_NAME}
     source/PluginEditor.cpp
     source/PluginProcessor.cpp)
 
-target_compile_definitions(${CONAN_PROJECT_NAME}
+target_compile_definitions(${CMAKE_PROJECT_NAME}
     PUBLIC
     JUCE_DISPLAY_SPLASH_SCREEN=0
     JUCE_WEB_BROWSER=0
@@ -74,13 +78,13 @@ juce_add_binary_data(AudioPluginData SOURCES
 
 set_target_properties(AudioPluginData PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-juce_generate_juce_header(${CONAN_PROJECT_NAME})
+juce_generate_juce_header(${CMAKE_PROJECT_NAME})
 
-clap_juce_extensions_plugin(TARGET ${CONAN_PROJECT_NAME}
+clap_juce_extensions_plugin(TARGET ${CMAKE_PROJECT_NAME}
     CLAP_ID "com.T-Audio.peakeater"
     CLAP_FEATURES audio-effect)
 
-target_link_libraries(${CONAN_PROJECT_NAME}
+target_link_libraries(${CMAKE_PROJECT_NAME}
     PRIVATE
     AudioPluginData # If we'd created a binary data target, we'd link to it here
     juce::juce_dsp
@@ -90,3 +94,50 @@ target_link_libraries(${CONAN_PROJECT_NAME}
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags)
+
+if(APPLE)
+    if(CODESIGN)
+        if(NOT $ENV{MACOS_APPLE_DEVELOPER_ID})
+            message(FATAL_ERROR "CODESIGN option is turned ON, but MACOS_APPLE_DEVELOPER_ID env variable is not set")
+        endif()
+
+        # Codesign all plugins before we've bundled them
+        add_custom_command(TARGET ${CMAKE_PROJECT_NAME}_AU VERBATIM POST_BUILD
+            COMMAND codesign --force -s $ENV{MACOS_APPLE_DEVELOPER_ID} -v $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_AU> --deep --strict --options=runtime --timestamp
+            COMMENT "Codesigning AU")
+        add_custom_command(TARGET ${CMAKE_PROJECT_NAME}_CLAP VERBATIM POST_BUILD
+            COMMAND codesign --force -s $ENV{MACOS_APPLE_DEVELOPER_ID} -v $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_CLAP> --deep --strict --options=runtime --timestamp
+            COMMENT "Codesigning CLAP")
+        add_custom_command(TARGET ${CMAKE_PROJECT_NAME}_LV2 VERBATIM POST_BUILD # lv2 is special, sign only TARGET_FILE
+            COMMAND codesign --force -s $ENV{MACOS_APPLE_DEVELOPER_ID} -v $<TARGET_FILE:${CMAKE_PROJECT_NAME}_LV2> --deep --strict --options=runtime --timestamp
+            COMMENT "Codesigning LV2")
+        add_custom_command(TARGET ${CMAKE_PROJECT_NAME}_VST3 VERBATIM POST_BUILD
+            COMMAND codesign --force -s $ENV{MACOS_APPLE_DEVELOPER_ID} -v $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_VST3> --deep --strict --options=runtime --timestamp
+            COMMENT "Codesigning VST3")
+    endif()
+
+    # Build DMG
+    set(_OSX_DMG_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/DMG")
+    set(_OSX_DMG_FILE "${_OSX_DMG_DIR}/${CMAKE_PROJECT_NAME}.dmg")
+    set_target_properties(${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE) # otherwise dmg couldn't use TARGET_BUNDLE_DIR
+    get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY) # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
+    add_custom_target(dmg ALL
+        VERBATIM
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${_OSX_DMG_DIR}
+        COMMAND dmgbuild -s ${PROJECT_SOURCE_DIR}/config/dmgbuild.py -D au=$<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_AU> -D clap=$<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_CLAP> -D lv2=${_LV2_OUT_DIR} -D vst3=$<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_VST3> "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}" ${_OSX_DMG_FILE}
+        COMMENT "Building DMG")
+    add_dependencies(dmg ${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3)
+
+    if(CODESIGN)
+        # Codesign, notarise and staple DMG
+        add_custom_command(TARGET dmg VERBATIM POST_BUILD
+            COMMAND codesign --force -s $ENV{MACOS_APPLE_DEVELOPER_ID} -v ${_OSX_DMG_FILE} --deep --strict --options=runtime --timestamp
+            COMMAND xcrun notarytool submit ${_OSX_DMG_FILE} --keychain-profile "APPLE_SIGN_PROFILE" --wait
+            COMMAND xcrun stapler staple ${_OSX_DMG_FILE}
+            COMMENT "Codesigning, notarizing and stapling DMG")
+    endif()
+endif()
+
+# Print available CMake targets for the debugging purpose
+get_property(target_names DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY BUILDSYSTEM_TARGETS)
+message(DEBUG " Available CMake targets are: ${target_names} ")
