@@ -16,7 +16,7 @@ jobs:
       MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
 
   release:
-    name: Publish Release Draft
+    name: Bundle & publish release draft
     runs-on: ubuntu-latest
     needs: [build]
     steps:
@@ -40,9 +40,9 @@ jobs:
         run: |
           zip -r macos{.zip,}
           mkdir windows/tmp
-          mv windows/VST3/PeakEater.vst3/Contents/x86_64-win/PeakEater.vst3 windows/tmp
-          rm -rf windows/VST3/PeakEater.vst3
-          mv windows/tmp/PeakEater.vst3 windows/VST3
+          mv windows/VST3/peakeater.vst3/Contents/x86_64-win/peakeater.vst3 windows/tmp
+          rm -rf windows/VST3/peakeater.vst3
+          mv windows/tmp/peakeater.vst3 windows/VST3
           rm -rf windows/tmp
           zip -r windows{.zip,}
           zip -r linux{.zip,}

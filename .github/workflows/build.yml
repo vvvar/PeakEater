@@ -64,10 +64,10 @@ jobs:
         env:
           MACOS_APPLE_DEVELOPER_ID: ${{ secrets.MACOS_APPLE_IDENTITY }}
         run: just build
-      - name: SCA
+      - name: Test
+        run: just test
+      - name: Static Code Analysis
         run: just sca
-      - name: Package
-        run: just package
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
@@ -95,8 +95,8 @@ jobs:
         run: just setup
       - name: Build
         run: just build
-      - name: Package
-        run: just package
+      - name: Test
+        run: just test
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
@@ -122,10 +122,10 @@ jobs:
         run: just setup
       - name: Build
         run: just build
-      - name: SCA
+      - name: Test
+        run: just test
+      - name: Static Code Analysis
         run: just sca
-      - name: Package
-        run: just package
       - name: Upload
         uses: actions/upload-artifact@v3
         with:

@@ -1,3 +1,4 @@
+# Enable .env integration
 set dotenv-load
 
 # Choose conan profile based on platform
@@ -10,7 +11,8 @@ conan_profile := if os() == "macos" {
 } else {
     "default"
 }
-# If MACOS_APPLE_DEVELOPER_ID is provided then we have to codesign
+
+# When MACOS_APPLE_DEVELOPER_ID is set then we can codesign
 codesign := if env_var_or_default("MACOS_APPLE_DEVELOPER_ID", "") == "" {
     "False"
 } else {
@@ -73,7 +75,7 @@ build:
     conan install . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -o signed={{codesign}}
     conan build . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -o signed={{codesign}}
 
-# Run static code analysis
+# Run Static Code Analysis
 sca:
     cppcheck --project=build/Release/compile_commands.json --enable=all --report-progress --check-config --suppress=missingIncludeSystem
 
@@ -83,5 +85,5 @@ run:
     open build/Release/peakeater_artefacts/Release/Standalone/peakeater.app
 
 # Package an application as a Conan package and test it with test project
-package:
+test:
     conan export-pkg . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -tf test
