@@ -71,7 +71,7 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: build-macos
+          name: macos
           path: |
             test/build/[abc]-release?/pluginval
             build/Release/peakeater_artefacts/Release/build.ninja
@@ -100,7 +100,7 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: build-windows
+          name: windows
           path: |
             test/build/[abc]-release?/pluginval
             build/Release/peakeater_artefacts/Release/build.ninja
@@ -129,7 +129,7 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: build-linux
+          name: linux
           path: |
             test/build/[abc]-release?/pluginval
             build/Release/peakeater_artefacts/Release/build.ninja
