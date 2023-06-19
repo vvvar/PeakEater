@@ -1,6 +1,4 @@
 brew "cmake"
-brew "ccache"
 brew "clang-format"
 brew "ninja"
 brew "cppcheck"
-brew "jq"

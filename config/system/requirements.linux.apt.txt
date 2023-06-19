@@ -1,5 +1,4 @@
 git
-jq
 cmake
 cppcheck
 ninja-build
