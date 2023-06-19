@@ -95,6 +95,9 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags)
 
+# otherwise, TARGET_BUNDLE_DIR wouldn't work
+set_target_properties(${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE)
+
 if(APPLE)
     if(CODESIGN)
         if(NOT DEFINED ENV{MACOS_APPLE_DEVELOPER_ID})
@@ -119,7 +122,6 @@ if(APPLE)
     # Build DMG
     set(_OSX_DMG_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/DMG")
     set(_OSX_DMG_FILE "${_OSX_DMG_DIR}/${CMAKE_PROJECT_NAME}.dmg")
-    set_target_properties(${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE) # otherwise dmg couldn't use TARGET_BUNDLE_DIR
     get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY) # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
     add_custom_target(dmg ALL
         VERBATIM
@@ -140,7 +142,6 @@ else()
     # Archive everything into ZIP
     set(_ARCHIVE_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/Archive")
     set(_ARCHIVE_FILE "${_ARCHIVE_DIR}/${CMAKE_PROJECT_NAME}.zip")
-    set_target_properties(${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE) # otherwise we cant use TARGET_BUNDLE_DIR
     get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY) # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
     add_custom_target(archive ALL
         VERBATIM
