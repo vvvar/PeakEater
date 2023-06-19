@@ -120,7 +120,7 @@ if(APPLE)
     set(_OSX_DMG_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/DMG")
     set(_OSX_DMG_FILE "${_OSX_DMG_DIR}/${CMAKE_PROJECT_NAME}.dmg")
 
-    # otherwise, TARGET_BUNDLE_DIR wouldn't work
+    # macOS specific. Marks as CFBundle. Otherwise - TARGET_BUNDLE_DIR wouldn't work
     set_target_properties(${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE)
     get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY) # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
     add_custom_target(dmg ALL
@@ -144,12 +144,11 @@ else()
     set(_ARCHIVE_FILE "${_ARCHIVE_DIR}/${CMAKE_PROJECT_NAME}.zip")
 
     # otherwise, TARGET_BUNDLE_DIR wouldn't work
-    set_target_properties(${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE)
     get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY) # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
     add_custom_target(archive ALL
         VERBATIM
         COMMAND ${CMAKE_COMMAND} -E make_directory ${_ARCHIVE_DIR}
-        COMMAND ${CMAKE_COMMAND} -E tar cf ${_ARCHIVE_FILE} --format=zip $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_CLAP> ${_LV2_OUT_DIR} $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_VST3>
+        COMMAND ${CMAKE_COMMAND} -E tar cf ${_ARCHIVE_FILE} --format=zip $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}_CLAP> ${_LV2_OUT_DIR} $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}_VST3>
         COMMENT "Archiving everything")
     add_dependencies(archive ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3)
 endif()
