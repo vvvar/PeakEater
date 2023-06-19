@@ -43,7 +43,7 @@ jobs:
       - id: get-version
         run: |
           version=$( conan inspect . --format json | jq '.version' )
-          echo "::set-output name=version::$version"
+          echo "version=$version" >> $GITHUB_OUTPUT
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
