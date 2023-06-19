@@ -17,10 +17,14 @@ jobs:
 
   release:
     name: Bundle & publish release draft
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22
     needs: [build]
     steps:
       - uses: actions/checkout@v3
+      - name: Setup
+        run: |
+          apt-get install jq
+          pip3 install conan==2.0.4
       - name: Download macOS Artifacts
         uses: actions/download-artifact@v3
         with:
