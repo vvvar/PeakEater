@@ -25,30 +25,25 @@ jobs:
         run: |
           sudo apt-get install jq
           pip3 install conan==2.0.4
-      - name: Download macOS Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: macos
-          path: macos
-      - name: Download Windows Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: windows
-          path: windows
-      - name: Download Linux Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: linux
-          path: linux
       - id: get-version
         run: |
           version=$( conan inspect . --format json | jq '.version' )
           echo "version=$version" >> $GITHUB_OUTPUT
-      - name: Include version in artifacts names
-        run: |
-          mv macos.zip peakeater-macOS-${{ steps.get-version.outputs.version }}-universal.zip
-          mv windows.zip peakeater-Windows-${{ steps.get-version.outputs.version }}-x86_64.zip
-          mv linux.zip peakeater-linux-${{ steps.get-version.outputs.version }}-x86_64.zip
+      - name: Download macOS Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: macos
+          path: peakeater-macOS-${{ steps.get-version.outputs.version }}-universal.zip
+      - name: Download Windows Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: windows
+          path: peakeater-Windows-${{ steps.get-version.outputs.version }}-x86_64.zip
+      - name: Download Linux Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: linux
+          path: peakeater-linux-${{ steps.get-version.outputs.version }}-x86_64.zip
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
