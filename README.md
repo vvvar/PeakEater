@@ -226,18 +226,34 @@ Build artifacts will be stored in the `/build/Release/peakeater_artefacts`.
 
 By default, code signing is turned **off**. To enable it:
 
-1. Make sure you have a valid [Apple Developer ID](https://developer.apple.com/support/developer-id/), [Apple Team ID](https://developer.apple.com/forums/thread/77563) and your signing certificate is installed on your Mac(Use [this guide](https://melatonin.dev/blog/how-to-code-sign-and-notarize-macos-audio-plugins-in-ci/) as a starting point. Be aware - they are **not free**)
+1. Make sure you have a valid [Apple Developer ID](https://developer.apple.com/support/developer-id/), [Apple Team ID](https://developer.apple.com/forums/thread/77563) and your signing certificate installed on your Mac(Use [this guide](https://melatonin.dev/blog/how-to-code-sign-and-notarize-macos-audio-plugins-in-ci/) as a starting point. Be aware - they are **not free**)
 
-2. Create a file called `.env` with the following content(replace the value with your Apple Developer ID):
+2. Create a file called `.env` with the following content(replace the value with your Apple Developer ID, Apple ID, password from your Apple ID and Team ID):
 
 ```env
-MACOS_APPLE_DEVELOPER_ID=Developer ID Application: John Doe (XXXXX6XX42)
+MACOS_APPLE_DEVELOPER_ID="Developer ID Application: John Doe (XXXXX6XX42)"
+MACOS_APPLE_ID="johndoe@gmail.com"
+MACOS_APPLE_PASSWORD="jhnd-oejh-ndoe-jhnn"
+MACOS_APPLE_TEAM_ID="JHNDO6E642"
 ```
 
-3. Auth in the `notarytool`(used to notarize DMG):
+3. Setup the `notarytool`(used to notarize DMG):
 
 ```sh
-xcrun notarytool store-credentials "APPLE_SIGN_PROFILE" --apple-id <YOUR_APPLE_ID> --password <YOUR_APPLE_ID_PASSWORD> --team-id <YOUR_TEAM_ID>
+just setup-notarytool
+```
+
+You should see something like this in the terminal:
+
+```
+xcrun notarytool store-credentials "APPLE_SIGN_PROFILE" --apple-id $MACOS_APPLE_ID --password $MACOS_APPLE_PASSWORD --team-id $MACOS_APPLE_TEAM_ID
+
+This process stores your credentials securely in the Keychain. You reference these credentials later using a profile name.
+
+Validating your credentials...
+Success. Credentials validated.
+Credentials saved to Keychain.
+To use them, specify `--keychain-profile "APPLE_SIGN_PROFILE"`
 ```
 
 After this just run the build. CMake will automatically sign all binaries.

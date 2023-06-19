@@ -136,8 +136,20 @@ if(APPLE)
             COMMAND xcrun stapler staple ${_OSX_DMG_FILE}
             COMMENT "Codesigning, notarizing and stapling DMG")
     endif()
+else()
+    # Archive everything into ZIP
+    set(_ARCHIVE_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/Archive")
+    set(_ARCHIVE_FILE "${_ARCHIVE_DIR}/${CMAKE_PROJECT_NAME}.zip")
+    set_target_properties(${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE) # otherwise we cant use TARGET_BUNDLE_DIR
+    get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY) # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
+    add_custom_target(archive ALL
+        VERBATIM
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${_ARCHIVE_DIR}
+        COMMAND ${CMAKE_COMMAND} -E tar cf ${_ARCHIVE_FILE} --format=zip $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_CLAP> ${_LV2_OUT_DIR} $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_VST3>
+        COMMENT "Archiving everything")
+    add_dependencies(archive ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3)
 endif()
 
 # Print available CMake targets for the debugging purpose
 get_property(target_names DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY BUILDSYSTEM_TARGETS)
-message(DEBUG " Available CMake targets are: ${target_names} ")
+message(DEBUG " Available CMake targets are: ${target_names}")

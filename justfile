@@ -64,6 +64,12 @@ setup-conan:
     conan create modules/juce-conan -pr:h {{conan_profile}} -pr:b {{conan_profile}}
     conan create modules/pluginval-conan -pr:h {{conan_profile}} -pr:b {{conan_profile}}
 
+# Auth in macOS notarytool. Needed to notarize dmg
+[private]
+[macos]
+setup-notarytool:
+    xcrun notarytool store-credentials "APPLE_SIGN_PROFILE" --apple-id $MACOS_APPLE_ID --password $MACOS_APPLE_PASSWORD --team-id $MACOS_APPLE_TEAM_ID
+
 # Setup the project
 setup: cleanup
     just setup-system # Install system dependencies

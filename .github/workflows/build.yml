@@ -72,16 +72,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: macos
-          path: |
-            test/build/[abc]-release?/pluginval
-            build/Release/peakeater_artefacts/Release/build.ninja
-            build/Release/peakeater_artefacts/Release/compile_commands.json
-            build/Release/peakeater_artefacts/Release/AU/peakeater.component
-            build/Release/peakeater_artefacts/Release/CLAP/peakeater.clap
-            build/Release/peakeater_artefacts/Release/DMG/peakeater.dmg
-            build/Release/peakeater_artefacts/Release/LV2/peakeater.lv2
-            build/Release/peakeater_artefacts/Release/Standalone/peakeater.app
-            build/Release/peakeater_artefacts/Release/VST3/peakeater.vst3
+          path: build/Release/peakeater_artefacts/Release/DMG/peakeater.dmg
 
   windows:
     name: Windows
@@ -101,14 +92,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows
-          path: |
-            test/build/[abc]-release?/pluginval
-            build/Release/peakeater_artefacts/Release/build.ninja
-            build/Release/peakeater_artefacts/Release/compile_commands.json
-            build/Release/peakeater_artefacts/Release/CLAP/peakeater.clap
-            build/Release/peakeater_artefacts/Release/LV2/peakeater.lv2
-            build/Release/peakeater_artefacts/Release/Standalone/peakeater.exe
-            build/Release/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-win/peakeater.vst3
+          path: build/Release/peakeater_artefacts/Release/Archive/peakeater.zip
 
   linux:
     name: Linux
@@ -130,10 +114,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: linux
-          path: |
-            test/build/[abc]-release?/pluginval
-            build/Release/peakeater_artefacts/Release/build.ninja
-            build/Release/peakeater_artefacts/Release/compile_commands.json
-            build/Release/peakeater_artefacts/Release/LV2/peakeater.lv2
-            build/Release/peakeater_artefacts/Release/CLAP/peakeater.clap
-            build/Release/peakeater_artefacts/Release/VST3/peakeater.vst3/Contents/x86_64-linux/peakeater.so
+          path: build/Release/peakeater_artefacts/Release/Archive/peakeater.zip
