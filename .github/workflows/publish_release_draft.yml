@@ -17,7 +17,7 @@ jobs:
 
   release:
     name: Bundle & publish release draft
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [build]
     steps:
       - uses: actions/checkout@v3
@@ -27,7 +27,7 @@ jobs:
           pip3 install conan==2.0.4
       - id: get-version
         run: |
-          version=$( conan inspect . --format json | jq '.version' )
+          version=$( conan inspect . --format json | jq -r '.version' )
           echo "version=$version" >> $GITHUB_OUTPUT
       - name: Download macOS Artifacts
         uses: actions/download-artifact@v3
