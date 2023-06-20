@@ -1,5 +1,8 @@
 name: Create release draft
-on: pull_request
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
