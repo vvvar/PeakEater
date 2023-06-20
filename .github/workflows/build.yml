@@ -58,7 +58,7 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           # store creds in notarytool(needed to natarise DMG)
           xcrun notarytool store-credentials "APPLE_SIGN_PROFILE" --apple-id $MACOS_APPLE_ID --password $MACOS_APPLE_PASSWORD --team-id $MACOS_APPLE_TEAM_ID
-      - name: Setup
+      - name: Setup environment & dependencies
         run: just setup
       - name: Build
         env:
@@ -68,7 +68,7 @@ jobs:
         run: just test
       - name: Static Code Analysis
         run: just sca
-      - name: Upload
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: macos
@@ -82,13 +82,13 @@ jobs:
       - uses: extractions/setup-just@v1
         with:
           just-version: 1.13.0
-      - name: Setup
+      - name: Setup environment & dependencies
         run: just setup
       - name: Build
         run: just build
       - name: Test
         run: just test
-      - name: Upload
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: windows
@@ -102,7 +102,7 @@ jobs:
       - uses: extractions/setup-just@v1
         with:
           just-version: 1.13.0
-      - name: Setup
+      - name: Setup environment & dependencies
         run: just setup
       - name: Build
         run: just build
@@ -110,7 +110,7 @@ jobs:
         run: just test
       - name: Static Code Analysis
         run: just sca
-      - name: Upload
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: linux

@@ -25,25 +25,31 @@ jobs:
         run: |
           sudo apt-get install jq
           pip3 install conan==2.0.4
+      - name: Download macOS build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: macos
+          path: build/macos
+      - name: Download Windows build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: windows
+          path: build/windows
+      - name: Download Linux build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: linux
+          path: build/linux
       - id: get-version
         run: |
           version=$( conan inspect . --format json | jq -r '.version' )
           echo "version=$version" >> $GITHUB_OUTPUT
-      - name: Download macOS Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: macos
-          path: peakeater-macOS-${{ steps.get-version.outputs.version }}-universal.zip
-      - name: Download Windows Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: windows
-          path: peakeater-Windows-${{ steps.get-version.outputs.version }}-x86_64.zip
-      - name: Download Linux Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: linux
-          path: peakeater-linux-${{ steps.get-version.outputs.version }}-x86_64.zip
+      - name: Prepare release artifacts
+        run: |
+          mkdir release
+          mv build/macos/peakeater.dmg release/peakeater-macOS-${{ steps.get-version.outputs.version }}-universal.dmg
+          mv build/windows/peakeater.zip release/peakeater-Windows-${{ steps.get-version.outputs.version }}-x86_64.zip
+          mv build/linux/peakeater.zip release/peakeater-linux-${{ steps.get-version.outputs.version }}-x86_64.zip
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
@@ -51,4 +57,4 @@ jobs:
           removeArtifacts: true
           makeLatest: true
           tag: "v${{ steps.get-version.outputs.version }}"
-          artifacts: "peakeater-macOS-${{ steps.get-version.outputs.version }}-universal.zip,peakeater-Windows-${{ steps.get-version.outputs.version }}-x86_64.zip,peakeater-linux-${{ steps.get-version.outputs.version }}-x86_64.zip"
+          artifacts: "release/*"
