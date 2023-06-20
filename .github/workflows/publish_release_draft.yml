@@ -16,41 +16,35 @@ jobs:
       MACOS_APPLE_IDENTITY: ${{ secrets.MACOS_APPLE_IDENTITY }}
 
   release:
-    name: Bundle & publish release draft
+    name: Release
     runs-on: ubuntu-22.04
     needs: [build]
     steps:
       - uses: actions/checkout@v3
-      - name: Setup
-        run: |
-          sudo apt-get install jq
-          pip3 install conan==2.0.4
-      - name: Download macOS build artifacts
+      - name: Download macOS build
         uses: actions/download-artifact@v3
         with:
           name: macos
-          path: build/macos
-      - name: Download Windows build artifacts
+          path: release
+      - name: Download Windows build
         uses: actions/download-artifact@v3
         with:
           name: windows
-          path: build/windows
-      - name: Download Linux build artifacts
+          path: release
+      - name: Download Linux build
         uses: actions/download-artifact@v3
         with:
           name: linux
-          path: build/linux
-      - id: get-version
+          path: release
+      - name: Get release version
+        id: get-version
         run: |
+          sudo apt-get install jq
+          pip3 install conan==2.0.4
           version=$( conan inspect . --format json | jq -r '.version' )
           echo "version=$version" >> $GITHUB_OUTPUT
-      - name: Prepare release artifacts
-        run: |
-          mkdir release
-          mv build/macos/peakeater.dmg release/peakeater-macOS-${{ steps.get-version.outputs.version }}-universal.dmg
-          mv build/windows/peakeater.zip release/peakeater-Windows-${{ steps.get-version.outputs.version }}-x86_64.zip
-          mv build/linux/peakeater.zip release/peakeater-linux-${{ steps.get-version.outputs.version }}-x86_64.zip
-      - uses: ncipollo/release-action@v1
+      - name: Create release draft
+        uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
           draft: true

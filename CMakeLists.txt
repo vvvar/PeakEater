@@ -118,7 +118,7 @@ if(APPLE)
 
     # Build DMG
     set(_OSX_DMG_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/DMG")
-    set(_OSX_DMG_FILE "${_OSX_DMG_DIR}/${CMAKE_PROJECT_NAME}.dmg")
+    set(_OSX_DMG_FILE "${_OSX_DMG_DIR}/${CMAKE_PROJECT_NAME}-v${CMAKE_PROJECT_VERSION}-macOS-universal.dmg")
 
     # macOS specific. Marks as CFBundle. Otherwise - TARGET_BUNDLE_DIR wouldn't work
     set_target_properties(${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE)
@@ -141,7 +141,7 @@ if(APPLE)
 else()
     # Archive everything into ZIP
     set(_ARCHIVE_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/Archive")
-    set(_ARCHIVE_FILE "${_ARCHIVE_DIR}/${CMAKE_PROJECT_NAME}.zip")
+    set(_ARCHIVE_FILE "${_ARCHIVE_DIR}/${CMAKE_PROJECT_NAME}-v${CMAKE_PROJECT_VERSION}-${CMAKE_HOST_SYSTEM_NAME}-x86_64.zip")
 
     # otherwise, TARGET_BUNDLE_DIR wouldn't work
     get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY) # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work

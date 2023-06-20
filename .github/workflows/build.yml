@@ -58,7 +58,7 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           # store creds in notarytool(needed to natarise DMG)
           xcrun notarytool store-credentials "APPLE_SIGN_PROFILE" --apple-id $MACOS_APPLE_ID --password $MACOS_APPLE_PASSWORD --team-id $MACOS_APPLE_TEAM_ID
-      - name: Setup environment & dependencies
+      - name: Set up build environment
         run: just setup
       - name: Build
         env:
@@ -72,7 +72,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: macos
-          path: build/Release/peakeater_artefacts/Release/DMG/peakeater.dmg
+          path: build/Release/peakeater_artefacts/Release/DMG/*.dmg
 
   windows:
     name: Windows
@@ -82,7 +82,7 @@ jobs:
       - uses: extractions/setup-just@v1
         with:
           just-version: 1.13.0
-      - name: Setup environment & dependencies
+      - name: Set up build environment
         run: just setup
       - name: Build
         run: just build
@@ -92,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows
-          path: build/Release/peakeater_artefacts/Release/Archive/peakeater.zip
+          path: build/Release/peakeater_artefacts/Release/Archive/*.zip
 
   linux:
     name: Linux
@@ -102,7 +102,7 @@ jobs:
       - uses: extractions/setup-just@v1
         with:
           just-version: 1.13.0
-      - name: Setup environment & dependencies
+      - name: Set up build environment
         run: just setup
       - name: Build
         run: just build
@@ -114,4 +114,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: linux
-          path: build/Release/peakeater_artefacts/Release/Archive/peakeater.zip
+          path: build/Release/peakeater_artefacts/Release/Archive/*.zip
