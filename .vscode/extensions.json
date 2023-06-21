@@ -1,0 +1,17 @@
+{
+    "recommendations": [
+        "ms-vscode.cpptools",
+        "ms-python.python",
+        "github.vscode-github-actions",
+        "shd101wyy.markdown-preview-enhanced",
+        "streetsidesoftware.code-spell-checker",
+        "znck.grammarly",
+        "sonarsource.sonarlint-vscode",
+        "spmeesseman.vscode-taskexplorer",
+        "ms-vscode-remote.remote-containers",
+    ],
+    "unwantedRecommendations": [
+        "ms-vscode.cpptools-extension-pack",
+        "ms-vscode.cmake-tools"
+    ]
+}

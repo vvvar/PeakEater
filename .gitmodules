@@ -1,6 +1,6 @@
-[submodule "Dependencies/JUCE"]
-	path = Dependencies/JUCE
-	url = https://github.com/juce-framework/JUCE.git
-[submodule "Dependencies/clap-juce-extensions"]
-	path = Dependencies/clap-juce-extensions
-	url = https://github.com/free-audio/clap-juce-extensions.git
+[submodule "modules/juce-conan"]
+	path = modules/juce-conan
+	url = https://github.com/vvvar/juce-conan.git
+[submodule "modules/pluginval-conan"]
+	path = modules/pluginval-conan
+	url = https://github.com/vvvar/pluginval-conan.git

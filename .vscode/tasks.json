@@ -1,91 +1,44 @@
 {
   "version": "2.0.0",
-  "inputs": [
-    {
-      "id": "build_type",
-      "type": "pickString",
-      "description": "Pick build type",
-      "default": "Debug",
-      "options": [
-        "Release",
-        "Debug"
-      ]
-    },
-    {
-      "id": "build_target",
-      "type": "pickString",
-      "description": "What we're targeting today?",
-      "default": "PeakEater_All",
-      "options": [
-        "PeakEater_All",
-        "PeakEater_Standalone",
-        "PeakEater_VST3",
-        "PeakEater_AU",
-        "PeakEater_LV2",
-        "PeakEater_CLAP"
-      ]
-    }
-  ],
   "tasks": [
     {
-      "label": "Init Git Submodules",
+      "label": "Setup",
+      "detail": "Setup all project dependencies(system, dependent projects, etc.)",
       "type": "shell",
-      "command": "rm -rf ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout ${config:peakeater.juce_version}",
-      "windows": {
-        "command": "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ${workspaceFolder}/Dependencies/ && git submodule update --init --recursive && cd ${workspaceFolder}/Dependencies/JUCE && git checkout ${config:peakeater.juce_version}"
-      }
-    },
-    {
-      "label": "Clean Build Dir",
-      "type": "shell",
-      "command": "rm -rf ${workspaceFolder}/build/",
-      "windows": {
-        "command": "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue ${workspaceFolder}/build/"
-      }
+      "command": "just setup"
     },
     {
       "label": "Build",
+      "detail": "Build the project",
       "type": "shell",
       "problemMatcher": [
         "$gcc"
       ],
-      "windows": {
-        "command": "${workspaceFolder}/Scripts/Build/Windows.bat ${input:build_type} ${input:build_target}"
-      },
-      "osx": {
-        "command": "${workspaceFolder}/Scripts/Build/MacOS.sh ${input:build_type} ${input:build_target}"
-      },
-      "linux": {
-        "command": "${workspaceFolder}/Scripts/Build/Linux.sh ${input:build_type} ${input:build_target}"
-      }
+      "command": "just build"
     },
     {
-      "label": "Build(Clean)",
+      "label": "Run",
+      "detail": "Run the project as a standalone application",
       "type": "shell",
-      "dependsOn": [
-        "Init Git Submodules",
-        "Clean Build Dir",
-        "Build"
+      "command": "just run"
+    },
+    {
+      "label": "SCA",
+      "detail": "Run static code analysis",
+      "type": "shell",
+      "problemMatcher": [
+        "$gcc"
       ],
-      "dependsOrder": "sequence"
+      "command": "just sca"
     },
     {
-      "label": "Create release package",
+      "label": "Test",
+      "detail": "Test the project",
       "type": "shell",
-      "command": "python3 ${workspaceFolder}/Scripts/Release/MacOS.py --release_type=${input:build_type} --sign_and_notarize=True --release_version=Development",
-      "windows": {
-        "command": "python ${workspaceFolder}/Scripts/Release/Windows.py --release_type=${input:build_type}"
-      }
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "command": "just test"
     },
-    {
-      "label": "Run Standalone",
-      "type": "shell",
-      "command": "${workspaceFolder}/build/PeakEater_artefacts/${input:build_type}/Standalone/PeakEater.app/Contents/MacOS/PeakEater"
-    },
-    {
-      "label": "Pip: Install",
-      "type": "shell",
-      "command": "python3 -m pip install -r ${workspaceFolder}/requirements.txt"
-    }
   ]
 }
