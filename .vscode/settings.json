@@ -80,13 +80,13 @@
         "algorithm": "cpp"
     },
     "[python]": {
-        "editor.defaultFormatter": "ms-python.python"
+        "editor.defaultFormatter": "ms-python.black-formatter"
     },
     "python.languageServer": "Pylance",
     "python.analysis.extraPaths": [
         "/usr/local/Cellar/conan/2.0.3/libexec/lib/python3.11/site-packages"
     ],
-    "python.formatting.provider": "black",
+    "python.formatting.provider": "none",
     "python.formatting.blackArgs": [
         "--line-length",
         "180"
