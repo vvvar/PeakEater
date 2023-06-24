@@ -1,39 +1,45 @@
-/*
-   ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin editor.
-
-   ==============================================================================
- */
-
 #include "PluginEditor.h"
 
 namespace pe
 {
 //==============================================================================
-PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& audioProcessor,
-                                                              std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                                                              std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                                                              std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                                                              std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter)
-    : juce::AudioProcessorEditor (audioProcessor), mMainComponent (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter)
+PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (
+    PeakEaterAudioProcessor& audioProcessor,
+    std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+    std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
+    std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
+    std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter)
+    : juce::AudioProcessorEditor (audioProcessor),
+      mMainComponent (parameters,
+                      inputLevelMeter,
+                      clippingLevelMeter,
+                      outputLevelMeter),
+      mAudioProcessor (audioProcessor)
 {
+    auto const size = mAudioProcessor.getPluginSizeState();
+    auto const constraints = mAudioProcessor.getPluginSizeConstraints();
+
     addAndMakeVisible (mMainComponent);
+
+    setSize (size.width, size.height);
     setResizable (true, true);
-    setResizeLimits (640, 400, 3840, 2400);
-    getConstrainer()->setFixedAspectRatio (16.0 / 10.0);
-    setSize (640, 400);
+
+    setResizeLimits (constraints.minWidth,
+                     constraints.minHeight,
+                     constraints.maxWidth,
+                     constraints.maxHeight);
+    getConstrainer()->setFixedAspectRatio (constraints.aspectRatio);
 }
 
 PeakEaterAudioProcessorEditor::~PeakEaterAudioProcessorEditor()
 {
+    // Call to destructor indicates plugin window has been closed
+    // We are saving it's state to keep resized with/height
+    mAudioProcessor.setPluginSizeState ({ getWidth(), getHeight() });
 }
 
 //==============================================================================
-void PeakEaterAudioProcessorEditor::paint (juce::Graphics& g)
-{
-    g.fillAll();
-}
+void PeakEaterAudioProcessorEditor::paint (juce::Graphics& g) { g.fillAll(); }
 
 void PeakEaterAudioProcessorEditor::resized()
 {
