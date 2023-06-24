@@ -24,7 +24,7 @@ BreakBeforeBraces: Allman
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: false
 BreakStringLiterals: false
-ColumnLimit: 0
+ColumnLimit: 150
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
@@ -62,7 +62,7 @@ Language: ObjC
 BasedOnStyle: Chromium
 AlignTrailingComments: true
 BreakBeforeBraces: Allman
-ColumnLimit: 0
+ColumnLimit: 150
 IndentWidth: 4
 KeepEmptyLinesAtTheStartOfBlocks: false
 ObjCSpaceAfterProperty: true

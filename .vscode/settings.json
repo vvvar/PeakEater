@@ -77,7 +77,11 @@
         "unordered_set": "cpp",
         "variant": "cpp",
         "vector": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "__verbose_abort": "cpp",
+        "bit": "cpp",
+        "shared_mutex": "cpp",
+        "thread": "cpp"
     },
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter"
