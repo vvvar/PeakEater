@@ -43,7 +43,6 @@ class Test(ConanFile):
         pass
 
     def layout(self):
-        self.cpp_info.set_property("tools.cmake.cmake_layout:build_folder_vars", ["settings.build_type"])
         cmake_layout(self)
 
     def test(self):

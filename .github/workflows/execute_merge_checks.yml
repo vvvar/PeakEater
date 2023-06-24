@@ -1,5 +1,8 @@
 name: Ensure PR is ready to me merged
-on: pull_request
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:

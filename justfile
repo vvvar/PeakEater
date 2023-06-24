@@ -92,4 +92,4 @@ run:
 
 # Package an application as a Conan package and test it with test project
 test:
-    conan export-pkg . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -tf test
+    conan export-pkg . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -tf test -c tools.cmake.cmake_layout:build_folder_vars="['settings.build_type']"

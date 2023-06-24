@@ -72,7 +72,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: macos
-          path: build/Release/peakeater_artefacts/Release/DMG/*.dmg
+          path: |
+            build/Release/peakeater_artefacts/Release/DMG/*.dmg
+            test/build/release/pluginval/*.txt
 
   windows:
     name: Windows
@@ -92,7 +94,9 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows
-          path: build/Release/peakeater_artefacts/Release/Archive/*.zip
+          path: |
+            build/Release/peakeater_artefacts/Release/Archive/*.zip
+            test/build/release/pluginval/*.txt
 
   linux:
     name: Linux
@@ -114,4 +118,6 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: linux
-          path: build/Release/peakeater_artefacts/Release/Archive/*.zip
+          path: |
+            build/Release/peakeater_artefacts/Release/Archive/*.zip
+            test/build/release/pluginval/*.txt

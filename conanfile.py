@@ -8,7 +8,7 @@ import os
 
 class PeakEater(ConanFile):
     name = "peakeater"
-    version = "0.6.4"
+    version = "0.6.5"
     user = "vvvar"
     channel = "testing"
     company = "T-Audio"
