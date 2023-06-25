@@ -158,14 +158,18 @@ if(APPLE)
         add_test(NAME Codesign_DMG COMMAND codesign -dv --verify --verbose=4 ${_OSX_DMG_FILE})
     endif()
 else()
+    # The way of getting path to .vst3 is tricky since actual bin is inside ARCHIVE_OUTPUT_DIRECTORY
+    set(_VST3_BUNDLE "$<GENEX_EVAL:$<TARGET_PROPERTY:${CMAKE_PROJECT_NAME}_VST3,ARCHIVE_OUTPUT_DIRECTORY>>/${CMAKE_PROJECT_NAME}.vst3")
+    # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
+    get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY)
+
     # Archive everything into ZIP
     set(_ARCHIVE_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/Archive")
     set(_ARCHIVE_FILE "${_ARCHIVE_DIR}/${CMAKE_PROJECT_NAME}-v${CMAKE_PROJECT_VERSION}-${CMAKE_HOST_SYSTEM_NAME}-x86_64.zip")
-    get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY) # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
     add_custom_target(archive ALL
         VERBATIM
         COMMAND ${CMAKE_COMMAND} -E make_directory ${_ARCHIVE_DIR}
-        COMMAND ${CMAKE_COMMAND} -E tar cf ${_ARCHIVE_FILE} --format=zip $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}_CLAP> ${_LV2_OUT_DIR} $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}_VST3>
+        COMMAND ${CMAKE_COMMAND} -E tar cf ${_ARCHIVE_FILE} --format=zip $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}_CLAP> ${_LV2_OUT_DIR} ${_VST3_BUNDLE}
         COMMENT "Archiving everything")
     add_dependencies(archive ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3)
 
@@ -173,5 +177,5 @@ else()
     # NOTE#1: Unlike macOS, TARGET_FILE_DIR is used because unlike macOS is a file here
     # NOTE#2: Only Windows supports GUI on a CI, thus check for it
     add_test(NAME Pluginval_VST3
-        COMMAND pluginval --strictness-level 10 --verbose $<$<NOT:$<BOOL:${WIN32}>>:--skip-gui-tests> --validate-in-process --output-dir ${_PLUGINVAL_OUT_DIR} $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}_VST3>)
+        COMMAND pluginval --strictness-level 10 --verbose $<$<NOT:$<BOOL:${WIN32}>>:--skip-gui-tests> --validate-in-process --output-dir ${_PLUGINVAL_OUT_DIR} ${_VST3_BUNDLE})
 endif()
