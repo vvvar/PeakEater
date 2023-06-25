@@ -96,16 +96,17 @@ run:
 [macos]
 test:
     # Cleanup leftovers from previous test
-    rm -rf ~/Library/Audio/Plug-Ins/Components/peakeater.component
-    # Copy AU to the user AU plugins folder(~/Library/Audio/Plug-Ins/Components) because macOS makes a scan there
-    cp -R build/Release/peakeater_artefacts/Release/AU/peakeater.component ~/Library/Audio/Plug-Ins/Components
+    rm -rf /Library/Audio/Plug-Ins/Components/peakeater.component
+    # Copy AU to the user AU plugins folder(/Library/Audio/Plug-Ins/Components) because macOS makes a scan there
+    # Copy to the the global AU dir because user-dir is not supported on a CI
+    cp -R build/Release/peakeater_artefacts/Release/AU/peakeater.component /Library/Audio/Plug-Ins/Components
     # Trigger AudioComponentRegistrar and auval, this will force macOS to scan & register new AU plugin
     killall -9 AudioComponentRegistrar
     auval -a
     # Finally, we can test. Source conanbuild.sh because path to pluginval is set there
     source build/Release/generators/conanbuild.sh && ctest --progress --verbose --test-dir build/Release
     # Cleanup at the end
-    rm -rf ~/Library/Audio/Plug-Ins/Components/peakeater.component
+    rm -rf /Library/Audio/Plug-Ins/Components/peakeater.component
 
 # Run a test suite
 [linux]
