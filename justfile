@@ -16,13 +16,6 @@ conan_profile := if os() == "macos" {
     "default"
 }
 
-# When MACOS_APPLE_DEVELOPER_ID is set then we can codesign
-codesign := if env_var_or_default("MACOS_APPLE_DEVELOPER_ID", "") == "" {
-    "False"
-} else {
-    "True"
-}
-
 # Cleanup build, temp and all generated files
 [unix]
 cleanup:
@@ -82,8 +75,8 @@ setup: cleanup
 
 # Build, sign and bundle the project
 build:
-    conan install . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -o signed={{codesign}}
-    conan build . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -o signed={{codesign}}
+    conan install . -pr:h {{conan_profile}} -pr:b {{conan_profile}}
+    conan build . -pr:h {{conan_profile}} -pr:b {{conan_profile}}
 
 # Run Static Code Analysis
 sca:

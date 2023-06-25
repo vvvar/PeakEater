@@ -11,9 +11,6 @@ class PeakEater(ConanFile):
     company = "T-Audio"
     url = "https://github.com/vvvar/PeakEater"
     settings = "os", "arch", "compiler", "build_type"
-    options = {"signed": [True, False]}
-    default_options = {"signed": False}
-    options_description = {"signed": "Whether binaries are signed with the certificate or not"}
     exports_sources = "assets", "modules", "source", "CMakeLists.txt"
     package_type = "application"
 
@@ -30,7 +27,6 @@ class PeakEater(ConanFile):
         toolchain.cache_variables["CMAKE_PROJECT_VERSION"] = str(self.version)
         toolchain.cache_variables["CONAN_PROJECT_COMPANY"] = str(self.company)
         toolchain.cache_variables["CONAN_PROJECT_URL"] = str(self.url)
-        toolchain.cache_variables["CODESIGN"] = self.options.signed  # type: ignore
         toolchain.generate()
         dependencies = CMakeDeps(self)
         dependencies.generate()
