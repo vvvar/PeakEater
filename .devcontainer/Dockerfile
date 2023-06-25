@@ -1,4 +1,4 @@
-FROM arm64v8/ubuntu
+FROM ubuntu
 
 RUN apt update
 RUN apt install -y git

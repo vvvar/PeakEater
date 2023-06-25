@@ -6,10 +6,12 @@ conan_profile := if os() == "macos" {
     "macos"
 } else if os() == "windows" {
     "windows"
-} else if "{{os()}}-{{arch()}}" == "linux-x86_64" {
-    "linux"
-} else if os() + arch() == "linuxarm" {
-    "linux-arm"
+} else if os() == "linux" {
+    if arch() == "aarch64" {
+        "linux-arm"
+    } else {
+        "linux"
+    }
 } else {
     "default"
 }
