@@ -2,7 +2,7 @@
 
 <h1 align="center"><a href="https://github.com/vvvar/PeakEater"><img width="100" src="assets/icon-mac.png" /></a></h1>
 <h1 align="center">PeakEater</h1>
-<p align="center">Free open-source VST3/AU/LV2/CLAP wave shaping plugin for macOS, Windows and Linux. Verified by pluginval.</p>
+<p align="center">Free open-source VST3/AU/LV2/CLAP wave shaping plugin for macOS, Windows and Linux.</p>
 <p align="center">
     <a href="https://github.com/vvvar/PeakEater/releases/latest"><b>Download</b></a>
     · <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new?assignees=&labels=Feature+Request&template=feature_request.md&title="><b>Request Feature</b></a> · <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new?assignees=&labels=Bug&template=bug_report.md&title=%5BBug%5D"><b>Report Bug</b></a>
@@ -152,9 +152,11 @@ You can use it on macOS, Windows or Linux.
 
 > **Warning** Linux support is experimental and may be unstable.
 
-### Verified by Pluginval <img src="assets/pluginval.png" alt="Pluginval" height="30"/>
+### <a id="verified-by-pluginval"></a> Verified by Pluginval <img src="assets/pluginval.png" alt="Pluginval" height="20"/>
 
-VST3 and AU versions are verified by [Tracktion Pluginval](https://www.tracktion.com/develop/pluginval) on strictness level 10(maximum possible level) for all platforms(+ GUI Mode is ensured on Windows). Starting from v0.6.5, you may find proofs of Pluginval verification in the "Assets" section on the Release page.
+> pluginval is a cross-platform plugin validator and tester application. It is designed to be used by both plugin and host developers to ensure stability and compatibility between plugins and hosts. [GitHub Project Link](https://github.com/Tracktion/pluginval/tree/develop)
+
+VST3 and AU versions are verified by [Tracktion Pluginval](https://www.tracktion.com/develop/pluginval) for all platforms. Maximum possible strictness level 10 is used. For macOS and Linux - Headless Mode is being used and GUI Mode is used for Windows. Starting from v0.6.5, you may find proofs of Pluginval verification in the "Assets" section on the Release page(*.txt files are split by platform and plugin format).
 
 <!-- INSTALLATION -->
 
