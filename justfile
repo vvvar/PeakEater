@@ -111,7 +111,7 @@ test:
 [linux]
 test:
     # Source conanbuild.sh because path to pluginval is set there
-    source build/Release/generators/conanbuild.sh && ctest --progress --verbose --test-dir build/Release
+    . build/Release/generators/conanbuild.sh && ctest --progress --verbose --test-dir build/Release
 
 # Run a test suite
 [windows]

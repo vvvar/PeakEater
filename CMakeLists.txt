@@ -173,5 +173,5 @@ else()
     # NOTE#1: Unlike macOS, TARGET_FILE_DIR is used because unlike macOS is a file here
     # NOTE#2: Only Windows supports GUI on a CI, thus check for it
     add_test(NAME Pluginval_VST3
-        COMMAND pluginval --strictness-level 10 --verbose $<$<NOT:$<BOOL:${WIN32}>>:--skip-gui-tests> --validate-in-process --output-dir ${_PLUGINVAL_OUT_DIR} $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}_VST3)
+        COMMAND pluginval --strictness-level 10 --verbose $<$<NOT:$<BOOL:${WIN32}>>:--skip-gui-tests> --validate-in-process --output-dir ${_PLUGINVAL_OUT_DIR} $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}_VST3>)
 endif()
