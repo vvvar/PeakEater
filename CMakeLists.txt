@@ -1,16 +1,14 @@
 cmake_minimum_required(VERSION 3.15)
 project(${CMAKE_PROJECT_NAME} VERSION ${CMAKE_PROJECT_VERSION})
 
-# For this to work, the following ENV variables must be set:
-# - MACOS_APPLE_DEVELOPER_ID: Apple Developer ID(for ex. "Developer ID Application: John Doe (XXXXX6XX42)")
-option(CODESIGN "Codesign plugins and bundle(macOS only)" OFF)
+include(FetchContent)
+include(CTest)
 
 # Export compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 find_package(JUCE CONFIG REQUIRED)
 
-include(FetchContent)
 FetchContent_Declare(
     clap-juce-extensions
     GIT_REPOSITORY https://github.com/free-audio/clap-juce-extensions.git
@@ -95,64 +93,89 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags)
 
-if(APPLE)
-    if(CODESIGN)
-        if(NOT DEFINED ENV{MACOS_APPLE_DEVELOPER_ID})
-            message(FATAL_ERROR "CODESIGN option is turned ON, but MACOS_APPLE_DEVELOPER_ID env variable is not defined")
-        endif()
+# Where to store the result of the Pluginval run
+set(_PLUGINVAL_OUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/Pluginval")
 
-        # Codesign all plugins before we've bundled them
+# Adding targets for testing, signing and packaging which are very platform-specific
+# NOTE: only macOS supports signing at the moment
+if(APPLE)
+    # Test we haven't missed any compiler options. Makes sense only on macOS at the moment
+    add_test(NAME CompileOptions COMMAND python3 ${PROJECT_SOURCE_DIR}/test/test_compile_options.py --compile_commands=${CMAKE_BINARY_DIR}/compile_commands.json)
+
+    # Marks as CFBundle. Setting this globally because:
+    # 1. Without it, TARGET_BUNDLE_DIR won't work
+    # 2. TARGET_BUNDLE_DIR is used while bundling, signing and testing for macOS
+    set_target_properties(${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE)
+
+    # Test VST3 and AU with Pluginval
+    add_test(NAME Pluginval_VST3
+        COMMAND pluginval --strictness-level 10 --verbose --skip-gui-tests --validate-in-process --output-dir ${_PLUGINVAL_OUT_DIR} $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_VST3>)
+    add_test(NAME Pluginval_AU
+        COMMAND pluginval --strictness-level 10 --verbose --skip-gui-tests --validate-in-process --output-dir ${_PLUGINVAL_OUT_DIR} $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_AU>)
+
+    # Optionally, codesign all plugins before we've bundled them(ensure it with tests)
+    if(DEFINED ENV{MACOS_APPLE_DEVELOPER_ID})
         add_custom_command(TARGET ${CMAKE_PROJECT_NAME}_AU VERBATIM POST_BUILD
             COMMAND codesign --force -s $ENV{MACOS_APPLE_DEVELOPER_ID} -v $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_AU> --deep --strict --options=runtime --timestamp
             COMMENT "Codesigning AU")
+        add_test(NAME Codesign_AU COMMAND codesign -dv --verify --verbose=4 $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_AU>)
+
         add_custom_command(TARGET ${CMAKE_PROJECT_NAME}_CLAP VERBATIM POST_BUILD
             COMMAND codesign --force -s $ENV{MACOS_APPLE_DEVELOPER_ID} -v $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_CLAP> --deep --strict --options=runtime --timestamp
             COMMENT "Codesigning CLAP")
+        add_test(NAME Codesign_CLAP COMMAND codesign -dv --verify --verbose=4 $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_CLAP>)
+
         add_custom_command(TARGET ${CMAKE_PROJECT_NAME}_LV2 VERBATIM POST_BUILD # lv2 is special, sign only TARGET_FILE
             COMMAND codesign --force -s $ENV{MACOS_APPLE_DEVELOPER_ID} -v $<TARGET_FILE:${CMAKE_PROJECT_NAME}_LV2> --deep --strict --options=runtime --timestamp
             COMMENT "Codesigning LV2")
+        add_test(NAME Codesign_LV2 COMMAND codesign -dv --verify --verbose=4 $<TARGET_FILE:${CMAKE_PROJECT_NAME}_LV2>)
+
         add_custom_command(TARGET ${CMAKE_PROJECT_NAME}_VST3 VERBATIM POST_BUILD
             COMMAND codesign --force -s $ENV{MACOS_APPLE_DEVELOPER_ID} -v $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_VST3> --deep --strict --options=runtime --timestamp
             COMMENT "Codesigning VST3")
+        add_test(NAME Codesign_VST3 COMMAND codesign -dv --verify --verbose=4 $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_VST3>)
     endif()
 
     # Build DMG
     set(_OSX_DMG_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/DMG")
     set(_OSX_DMG_FILE "${_OSX_DMG_DIR}/${CMAKE_PROJECT_NAME}-v${CMAKE_PROJECT_VERSION}-macOS-universal.dmg")
-
-    # macOS specific. Marks as CFBundle. Otherwise - TARGET_BUNDLE_DIR wouldn't work
-    set_target_properties(${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE)
     get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY) # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
-    add_custom_target(dmg ALL
+    add_custom_target(DMG ALL
+        BYPRODUCTS ${_OSX_DMG_FILE}
         VERBATIM
         COMMAND ${CMAKE_COMMAND} -E make_directory ${_OSX_DMG_DIR}
         COMMAND dmgbuild -s ${PROJECT_SOURCE_DIR}/config/dmgbuild.py -D au=$<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_AU> -D clap=$<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_CLAP> -D lv2=${_LV2_OUT_DIR} -D vst3=$<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_VST3> "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}" ${_OSX_DMG_FILE}
         COMMENT "Building DMG")
-    add_dependencies(dmg ${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3)
+    add_dependencies(DMG ${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3)
 
-    if(CODESIGN)
-        # Codesign, notarise and staple DMG
-        add_custom_command(TARGET dmg VERBATIM POST_BUILD
+    # Optionally, codesign, notarize and stable the DMG(ensure it with test)
+    if(DEFINED ENV{MACOS_APPLE_DEVELOPER_ID})
+        add_custom_command(TARGET DMG VERBATIM POST_BUILD
             COMMAND codesign --force -s $ENV{MACOS_APPLE_DEVELOPER_ID} -v ${_OSX_DMG_FILE} --deep --strict --options=runtime --timestamp
             COMMAND xcrun notarytool submit ${_OSX_DMG_FILE} --keychain-profile "APPLE_SIGN_PROFILE" --wait
             COMMAND xcrun stapler staple ${_OSX_DMG_FILE}
             COMMENT "Codesigning, notarizing and stapling DMG")
+        add_test(NAME Codesign_DMG COMMAND codesign -dv --verify --verbose=4 ${_OSX_DMG_FILE})
     endif()
 else()
+    # The way of getting path to .vst3 is tricky since actual bin is inside ARCHIVE_OUTPUT_DIRECTORY
+    set(_VST3_BUNDLE "$<GENEX_EVAL:$<TARGET_PROPERTY:${CMAKE_PROJECT_NAME}_VST3,ARCHIVE_OUTPUT_DIRECTORY>>/${CMAKE_PROJECT_NAME}.vst3")
+    # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
+    get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY)
+
     # Archive everything into ZIP
     set(_ARCHIVE_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/Archive")
     set(_ARCHIVE_FILE "${_ARCHIVE_DIR}/${CMAKE_PROJECT_NAME}-v${CMAKE_PROJECT_VERSION}-${CMAKE_HOST_SYSTEM_NAME}-x86_64.zip")
-
-    # otherwise, TARGET_BUNDLE_DIR wouldn't work
-    get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY) # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
     add_custom_target(archive ALL
         VERBATIM
         COMMAND ${CMAKE_COMMAND} -E make_directory ${_ARCHIVE_DIR}
-        COMMAND ${CMAKE_COMMAND} -E tar cf ${_ARCHIVE_FILE} --format=zip $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}_CLAP> ${_LV2_OUT_DIR} $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}_VST3>
+        COMMAND ${CMAKE_COMMAND} -E tar cf ${_ARCHIVE_FILE} --format=zip $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}_CLAP> ${_LV2_OUT_DIR} ${_VST3_BUNDLE}
         COMMENT "Archiving everything")
     add_dependencies(archive ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3)
-endif()
 
-# Print available CMake targets for the debugging purpose
-get_property(target_names DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY BUILDSYSTEM_TARGETS)
-message(DEBUG " Available CMake targets are: ${target_names}")
+    # Test VST3 with Pluginval(only non-macOS-specific format supported)
+    # NOTE#1: Unlike macOS, TARGET_FILE_DIR is used because unlike macOS is a file here
+    # NOTE#2: Only Windows supports GUI on a CI, thus check for it
+    add_test(NAME Pluginval_VST3
+        COMMAND pluginval --strictness-level 10 --verbose $<$<NOT:$<BOOL:${WIN32}>>:--skip-gui-tests> --validate-in-process --output-dir ${_PLUGINVAL_OUT_DIR} ${_VST3_BUNDLE})
+endif()

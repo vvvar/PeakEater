@@ -1,3 +1,8 @@
 {
-    "image": "ubuntu:20.04"
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "forwardPorts": [
+        3000
+    ]
 }

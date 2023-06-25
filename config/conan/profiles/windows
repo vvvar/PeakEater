@@ -6,3 +6,6 @@ compiler.cppstd=20
 compiler.runtime=dynamic
 compiler.version=193
 os=Windows
+
+[conf]
+tools.env.virtualenv:powershell=True

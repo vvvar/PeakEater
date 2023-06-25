@@ -71,8 +71,13 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: macos
+          name: macos-build
           path: build/Release/peakeater_artefacts/Release/DMG/*.dmg
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-test
+          path: build/Release/peakeater_artefacts/Release/Pluginval/*.txt
 
   windows:
     name: Windows
@@ -91,8 +96,13 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: windows
+          name: windows-build
           path: build/Release/peakeater_artefacts/Release/Archive/*.zip
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-test
+          path: build/Release/peakeater_artefacts/Release/Pluginval/*.txt
 
   linux:
     name: Linux
@@ -113,5 +123,10 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: linux
+          name: linux-build
           path: build/Release/peakeater_artefacts/Release/Archive/*.zip
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-test
+          path: build/Release/peakeater_artefacts/Release/Pluginval/*.txt

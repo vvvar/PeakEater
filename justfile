@@ -7,17 +7,18 @@ conan_profile := if os() == "macos" {
 } else if os() == "windows" {
     "windows"
 } else if os() == "linux" {
-    "linux"
+    if arch() == "aarch64" {
+        "linux-arm"
+    } else {
+        "linux"
+    }
 } else {
     "default"
 }
 
-# When MACOS_APPLE_DEVELOPER_ID is set then we can codesign
-codesign := if env_var_or_default("MACOS_APPLE_DEVELOPER_ID", "") == "" {
-    "False"
-} else {
-    "True"
-}
+# Just uses "sh" on Windows by default.
+# Force use powershell since Conan fails to lift virtualenv with sh
+set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 
 # Cleanup build, temp and all generated files
 [unix]
@@ -44,6 +45,8 @@ setup-system:
 [windows]
 [private]
 setup-system:
+    # Whtout it PowerShell will ask any .ps1 script to be digitally signed
+    Set-ExecutionPolicy -ExecutionPolicy unrestricted
     choco install config/system/requirements.windows.choco.config --ignore-package-exit-codes
 
 [linux]
@@ -78,8 +81,8 @@ setup: cleanup
 
 # Build, sign and bundle the project
 build:
-    conan install . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -o signed={{codesign}}
-    conan build . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -o signed={{codesign}}
+    conan install . -pr:h {{conan_profile}} -pr:b {{conan_profile}}
+    conan build . -pr:h {{conan_profile}} -pr:b {{conan_profile}}
 
 # Run Static Code Analysis
 sca:
@@ -90,6 +93,41 @@ sca:
 run:
     open build/Release/peakeater_artefacts/Release/Standalone/peakeater.app
 
-# Package an application as a Conan package and test it with test project
+# Runs plugin as a standalone app
+[windows]
+run:
+    build/Release/peakeater_artefacts/Release/Standalone/peakeater.exe
+
+# Run a test suite
+# macOS requires a special tratment because how Mac works with AU.
+# macOS requires AU plugins to be registered in order to be discoverable.
+# Registration means it is placed either in system or in user's AU folder and
+# special utility is called.
+# Discussion - https://github.com/Tracktion/pluginval/issues/39
+[macos]
 test:
-    conan export-pkg . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -tf test
+    # In case there's no AU user dir
+    mkdir -p ~/Library/Audio/Plug-Ins/Components
+    # Cleanup leftovers from previous test
+    rm -rf ~/Library/Audio/Plug-Ins/Components/peakeater.component
+    # Copy AU to the user AU plugins folder(~/Library/Audio/Plug-Ins/Components) because macOS makes a scan there
+    cp -R build/Release/peakeater_artefacts/Release/AU/peakeater.component ~/Library/Audio/Plug-Ins/Components
+    # Trigger AudioComponentRegistrar and auval, this will force macOS to scan & register new AU plugin
+    killall -9 AudioComponentRegistrar
+    auval -a
+    # Finally, we can test. Source conanbuild.sh because path to pluginval is set there
+    source build/Release/generators/conanbuild.sh && ctest --progress --verbose --test-dir build/Release
+    # Cleanup at the end
+    rm -rf ~/Library/Audio/Plug-Ins/Components/peakeater.component
+
+# Run a test suite
+[linux]
+test:
+    # Source conanbuild.sh because path to pluginval is set there
+    . build/Release/generators/conanbuild.sh && ctest --progress --verbose --test-dir build/Release
+
+# Run a test suite
+[windows]
+test:
+    # Run conanbuild.ps1 because path to pluginval is set there
+    ./build/Release/generators/conanbuild.ps1; ctest --progress --verbose --test-dir build/Release

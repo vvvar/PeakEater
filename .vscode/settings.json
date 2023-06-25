@@ -159,4 +159,10 @@
         "zipresp"
     ],
     "sonarlint.pathToCompileCommands": "${workspaceFolder}/build/Release/compile_commands.json",
+    // Bandaid because occasinally git is not added to the Path which breaks just
+    // Keep untill this resolved - https://github.com/casey/just/issues/1517
+    // VS Code-only since it is installation issue which works fine on a CI
+    "terminal.integrated.env.windows": {
+        "Path": "${env:Path};C:\\Program Files\\Git\\bin"
+    },
 }

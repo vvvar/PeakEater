@@ -30,6 +30,7 @@ Table of Contents
   - [Resizing](#resizing)
   - [VST3, AU, LV2 and CLAP Support](#vst3-au-lv2-and-clap-support)
   - [macOS, Windows and Linux Support](#available-on-all-major-platforms)
+  - [Verified by Pluginval](#verified-by-pluginval)
 - [Installation](#installation)
   - [macOS](#macos)
   - [Windows](#windows)
@@ -151,6 +152,12 @@ You can use it on macOS, Windows or Linux.
 
 > **Warning** Linux support is experimental and may be unstable.
 
+### <a id="verified-by-pluginval"></a> Verified by Pluginval <img src="assets/pluginval.png" alt="Pluginval" height="20"/>
+
+> pluginval is a cross-platform plugin validator and tester application. It is designed to be used by both plugin and host developers to ensure stability and compatibility between plugins and hosts. [GitHub Project Link](https://github.com/Tracktion/pluginval/tree/develop)
+
+VST3 and AU versions are verified by [Tracktion Pluginval](https://www.tracktion.com/develop/pluginval) for all platforms. Maximum possible strictness level 10 is used. For macOS and Linux - Headless Mode is being used and GUI Mode is used for Windows. Starting from v0.6.5, you may find proofs of Pluginval verification in the "Assets" section on the Release page(*.txt files are split by platform and plugin format).
+
 <!-- INSTALLATION -->
 
 ## Installation
@@ -211,7 +218,11 @@ Extract the zip and copy the plugin in a format of your choice into the folder w
 - [Just](https://github.com/casey/just) 1.13.0+
 - [Python](https://www.python.org) 3.11.4+
 - [Brew](https://brew.sh) 4.0.23+(macOS only)
+- [C++ Build Tools for Visual Studio 2022](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022)(Windows only)
 - [Chocolatey](https://chocolatey.org) 1.4.0+(Windows only)
+
+> **Note**<br />
+> It is recommended to use PowerShell on Windows
 
 ### Building
 
@@ -286,11 +297,3 @@ Distributed under the GPL-3.0 License. See [`LICENSE.md`](https://github.com/vvv
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[issues-shield]: https://img.shields.io/github/issues/vvvar/PeakEater?style=for-the-badge
-[issues-url]: https://github.com/vvvar/PeakEater/issues
-[license-shield]: https://img.shields.io/github/license/vvvar/PeakEater?style=for-the-badge
-[license-url]: https://github.com/vvvar/PeakEater/blob/master/LICENSE.md
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/vladyslav-voinov-5126a793/
-[product-screenshot]: assets/screenshots/main.png
