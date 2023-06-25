@@ -94,6 +94,34 @@ sca:
 run:
     open build/Release/peakeater_artefacts/Release/Standalone/peakeater.app
 
-# Package an application as a Conan package and test it with test project
+# Run a test suite
+# macOS requires a special tratment because how Mac works with AU.
+# macOS requires AU plugins to be registered in order to be discoverable.
+# Registration means it is placed either in system or in user's AU folder and
+# special utility is called.
+# Discussion - https://github.com/Tracktion/pluginval/issues/39
+[macos]
 test:
-    conan export-pkg . -pr:h {{conan_profile}} -pr:b {{conan_profile}} -tf test
+    # Cleanup leftovers from previous test
+    rm -rf ~/Library/Audio/Plug-Ins/Components/peakeater.component
+    # Copy AU to the user AU plugins folder(~/Library/Audio/Plug-Ins/Components) because macOS makes a scan there
+    cp -R build/Release/peakeater_artefacts/Release/AU/peakeater.component ~/Library/Audio/Plug-Ins/Components
+    # Trigger AudioComponentRegistrar and auval, this will force macOS to scan & register new AU plugin
+    killall -9 AudioComponentRegistrar
+    auval -a
+    # Finally, we can test. Source conanbuild.sh because path to pluginval is set there
+    source build/Release/generators/conanbuild.sh && ctest --progress --verbose --test-dir build/Release
+    # Cleanup at the end
+    rm -rf ~/Library/Audio/Plug-Ins/Components/peakeater.component
+
+# Run a test suite
+[linux]
+test:
+    # Source conanbuild.sh because path to pluginval is set there
+    source build/Release/generators/conanbuild.sh && ctest --progress --verbose --test-dir build/Release
+
+# Run a test suite
+[windows]
+test:
+    # Run conanbuild.bat because path to pluginval is set there
+    .\build\Release\generators\conanbuild.bat && ctest --progress --verbose --test-dir build/Release

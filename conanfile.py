@@ -1,9 +1,6 @@
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMakeDeps, CMake, cmake_layout
-from conan.tools.files import copy
 from conan.tools.env import VirtualBuildEnv
-
-import os
 
 
 class PeakEater(ConanFile):
@@ -21,6 +18,7 @@ class PeakEater(ConanFile):
     package_type = "application"
 
     requires = "juce/7.0.5@juce/release"
+    tool_requires = "pluginval/1.0.3@pluginval/release"
 
     def layout(self):
         cmake_layout(self)
@@ -43,21 +41,3 @@ class PeakEater(ConanFile):
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
-
-    def package_info(self):
-        self.cpp_info.resdirs = ["data"]
-
-    def package(self):
-        # Package bins(plugins, installers, etc.)
-        bin_folder = os.path.join(str(self.package_folder), "bin")
-        artefacts_folder = os.path.join(self.build_folder, f"{self.name}_artefacts", self.settings.get_safe("build_type"))  # type: ignore
-        copy(self, "*", src=os.path.join(artefacts_folder, "VST3"), dst=bin_folder)
-        copy(self, "*", src=os.path.join(artefacts_folder, "CLAP"), dst=bin_folder)
-        copy(self, "*", src=os.path.join(artefacts_folder, "LV2"), dst=bin_folder)
-        if self.settings.os == "Macos":  # type: ignore
-            copy(self, "*", src=os.path.join(artefacts_folder, "AU"), dst=bin_folder)
-            copy(self, "*", src=os.path.join(artefacts_folder, "DMG"), dst=bin_folder)
-        # Package various build data(build logs, compile database, etc). Useful for analysis
-        data_folder = os.path.join(str(self.package_folder), "data")
-        copy(self, "compile_commands.json", src=self.build_folder, dst=data_folder)
-        copy(self, "build.ninja", src=self.build_folder, dst=data_folder)

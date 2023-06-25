@@ -124,6 +124,7 @@ if(APPLE)
     set_target_properties(${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE)
     get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY) # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
     add_custom_target(dmg ALL
+        BYPRODUCTS ${_OSX_DMG_FILE}
         VERBATIM
         COMMAND ${CMAKE_COMMAND} -E make_directory ${_OSX_DMG_DIR}
         COMMAND dmgbuild -s ${PROJECT_SOURCE_DIR}/config/dmgbuild.py -D au=$<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_AU> -D clap=$<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_CLAP> -D lv2=${_LV2_OUT_DIR} -D vst3=$<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_VST3> "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}" ${_OSX_DMG_FILE}
@@ -156,3 +157,25 @@ endif()
 # Print available CMake targets for the debugging purpose
 get_property(target_names DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY BUILDSYSTEM_TARGETS)
 message(DEBUG " Available CMake targets are: ${target_names}")
+
+# Testing
+include(CTest)
+set(_PLUGINVAL_DIR "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_artefacts/${CMAKE_BUILD_TYPE}/Pluginval")
+add_test(NAME Pluginval_VST3
+    COMMAND pluginval --strictness-level 10 --verbose $<$<NOT:$<BOOL:${WIN32}>>:--skip-gui-tests> --validate-in-process --output-dir ${_PLUGINVAL_DIR} $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_VST3>)
+
+if(APPLE)
+    add_test(NAME Pluginval_AU
+        COMMAND pluginval --strictness-level 10 --verbose $<$<NOT:$<BOOL:${WIN32}>>:--skip-gui-tests> --validate-in-process --output-dir ${_PLUGINVAL_DIR} $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_AU>)
+
+    if(CODESIGN)
+        # Verify code-signing
+        add_test(NAME Codesign_AU COMMAND codesign -dv --verify --verbose=4 $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_AU>)
+        add_test(NAME Codesign_CLAP COMMAND codesign -dv --verify --verbose=4 $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_CLAP>)
+        add_test(NAME Codesign_LV2 COMMAND codesign -dv --verify --verbose=4 $<TARGET_FILE:${CMAKE_PROJECT_NAME}_LV2>)
+        add_test(NAME Codesign_VST3 COMMAND codesign -dv --verify --verbose=4 $<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_NAME}_VST3>)
+        add_test(NAME Codesign_DMG COMMAND codesign -dv --verify --verbose=4 ${_OSX_DMG_FILE})
+    endif()
+endif()
+
+add_test(NAME CompileOptions COMMAND python3 ${PROJECT_SOURCE_DIR}/test/test_compile_options.py --compile_commands=${CMAKE_BINARY_DIR}/compile_commands.json)

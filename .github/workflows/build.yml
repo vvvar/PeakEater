@@ -73,8 +73,8 @@ jobs:
         with:
           name: macos
           path: |
-            build/**/peakeater_artefacts/Release/DMG/*.dmg
-            test/build/**/pluginval/*.txt
+            build/Release/peakeater_artefacts/Release/DMG/*.dmg
+            build/Release/peakeater_artefacts/Release/Pluginval/*.txt
 
   windows:
     name: Windows
@@ -95,8 +95,8 @@ jobs:
         with:
           name: windows
           path: |
-            build/**/peakeater_artefacts/Release/Archive/*.zip
-            test/build/**/pluginval/*.txt
+            build/Release/peakeater_artefacts/Release/Archive/*.zip
+            build/Release/peakeater_artefacts/Release/Pluginval/*.txt
 
   linux:
     name: Linux
@@ -119,5 +119,5 @@ jobs:
         with:
           name: linux
           path: |
-            build/**/peakeater_artefacts/Release/Archive/*.zip
-            test/build/**/pluginval/*.txt
+            build/Release/peakeater_artefacts/Release/Archive/*.zip
+            build/Release/peakeater_artefacts/Release/Pluginval/*.txt
