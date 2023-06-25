@@ -2,7 +2,7 @@
 
 <h1 align="center"><a href="https://github.com/vvvar/PeakEater"><img width="100" src="assets/icon-mac.png" /></a></h1>
 <h1 align="center">PeakEater</h1>
-<p align="center">Free open-source VST3/AU/LV2/CLAP wave shaping plugin for macOS, Windows and Linux.</p>
+<p align="center">Free open-source VST3/AU/LV2/CLAP wave shaping plugin for macOS, Windows and Linux. Verified by pluginval.</p>
 <p align="center">
     <a href="https://github.com/vvvar/PeakEater/releases/latest"><b>Download</b></a>
     · <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new?assignees=&labels=Feature+Request&template=feature_request.md&title="><b>Request Feature</b></a> · <a target="_blank" href="https://github.com/vvvar/PeakEater/issues/new?assignees=&labels=Bug&template=bug_report.md&title=%5BBug%5D"><b>Report Bug</b></a>
@@ -30,6 +30,7 @@ Table of Contents
   - [Resizing](#resizing)
   - [VST3, AU, LV2 and CLAP Support](#vst3-au-lv2-and-clap-support)
   - [macOS, Windows and Linux Support](#available-on-all-major-platforms)
+  - [Verified by Pluginval](#verified-by-pluginval)
 - [Installation](#installation)
   - [macOS](#macos)
   - [Windows](#windows)
@@ -150,6 +151,10 @@ You can use either VST3, AU (macOS only), LV2 or CLAP type of plugin.
 You can use it on macOS, Windows or Linux.
 
 > **Warning** Linux support is experimental and may be unstable.
+
+### Verified by Pluginval <img src="assets/pluginval.png" alt="Pluginval" height="30"/>
+
+VST3 and AU versions are verified by [Tracktion Pluginval](https://www.tracktion.com/develop/pluginval) on strictness level 10(maximum possible level) for all platforms(+ GUI Mode is ensured on Windows). Starting from v0.6.5, you may find proofs of Pluginval verification in the "Assets" section on the Release page.
 
 <!-- INSTALLATION -->
 
@@ -290,11 +295,3 @@ Distributed under the GPL-3.0 License. See [`LICENSE.md`](https://github.com/vvv
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[issues-shield]: https://img.shields.io/github/issues/vvvar/PeakEater?style=for-the-badge
-[issues-url]: https://github.com/vvvar/PeakEater/issues
-[license-shield]: https://img.shields.io/github/license/vvvar/PeakEater?style=for-the-badge
-[license-url]: https://github.com/vvvar/PeakEater/blob/master/LICENSE.md
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/vladyslav-voinov-5126a793/
-[product-screenshot]: assets/screenshots/main.png
