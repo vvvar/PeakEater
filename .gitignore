@@ -1,23 +1,15 @@
 # MacOS indexing files
 .DS_Store
 
+# Various vscode logs
+/.vscode/*.log
+
 # Build dir
 /build
 /test/build
 
+# CMake workflow
 CMakeUserPresets.json
-
-# Projucer auto-gen files
-/JuceLibraryCode
-
-# Python cache
-Scripts/Release/__pycache__
-
-# node
-node_modules
-
-# Various vscode logs
-/.vscode/*.log
 
 # Env
 .env
