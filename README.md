@@ -211,7 +211,11 @@ Extract the zip and copy the plugin in a format of your choice into the folder w
 - [Just](https://github.com/casey/just) 1.13.0+
 - [Python](https://www.python.org) 3.11.4+
 - [Brew](https://brew.sh) 4.0.23+(macOS only)
+- [C++ Build Tools for Visual Studio 2022](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022)(Windows only)
 - [Chocolatey](https://chocolatey.org) 1.4.0+(Windows only)
+
+> **Note**<br />
+> It is recommended to use PowerShell on Windows
 
 ### Building
 

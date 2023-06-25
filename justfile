@@ -16,6 +16,10 @@ conan_profile := if os() == "macos" {
     "default"
 }
 
+# Just uses "sh" on Windows by default.
+# Force use powershell since Conan fails to lift virtualenv with sh
+set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
+
 # Cleanup build, temp and all generated files
 [unix]
 cleanup:
@@ -41,6 +45,8 @@ setup-system:
 [windows]
 [private]
 setup-system:
+    # Whtout it PowerShell will ask any .ps1 script to be digitally signed
+    Set-ExecutionPolicy -ExecutionPolicy unrestricted
     choco install config/system/requirements.windows.choco.config --ignore-package-exit-codes
 
 [linux]
@@ -87,6 +93,11 @@ sca:
 run:
     open build/Release/peakeater_artefacts/Release/Standalone/peakeater.app
 
+# Runs plugin as a standalone app
+[windows]
+run:
+    build/Release/peakeater_artefacts/Release/Standalone/peakeater.exe
+
 # Run a test suite
 # macOS requires a special tratment because how Mac works with AU.
 # macOS requires AU plugins to be registered in order to be discoverable.
@@ -95,18 +106,19 @@ run:
 # Discussion - https://github.com/Tracktion/pluginval/issues/39
 [macos]
 test:
+    # In case there's no AU user dir
+    mkdir -p ~/Library/Audio/Plug-Ins/Components
     # Cleanup leftovers from previous test
-    rm -rf /Library/Audio/Plug-Ins/Components/peakeater.component
-    # Copy AU to the user AU plugins folder(/Library/Audio/Plug-Ins/Components) because macOS makes a scan there
-    # Copy to the the global AU dir because user-dir is not supported on a CI
-    cp -R build/Release/peakeater_artefacts/Release/AU/peakeater.component /Library/Audio/Plug-Ins/Components
+    rm -rf ~/Library/Audio/Plug-Ins/Components/peakeater.component
+    # Copy AU to the user AU plugins folder(~/Library/Audio/Plug-Ins/Components) because macOS makes a scan there
+    cp -R build/Release/peakeater_artefacts/Release/AU/peakeater.component ~/Library/Audio/Plug-Ins/Components
     # Trigger AudioComponentRegistrar and auval, this will force macOS to scan & register new AU plugin
     killall -9 AudioComponentRegistrar
     auval -a
     # Finally, we can test. Source conanbuild.sh because path to pluginval is set there
     source build/Release/generators/conanbuild.sh && ctest --progress --verbose --test-dir build/Release
     # Cleanup at the end
-    rm -rf /Library/Audio/Plug-Ins/Components/peakeater.component
+    rm -rf ~/Library/Audio/Plug-Ins/Components/peakeater.component
 
 # Run a test suite
 [linux]
@@ -117,5 +129,5 @@ test:
 # Run a test suite
 [windows]
 test:
-    # Run conanbuild.bat because path to pluginval is set there
-    .\build\Release\generators\conanbuild.bat && ctest --progress --verbose --test-dir build/Release
+    # Run conanbuild.ps1 because path to pluginval is set there
+    ./build/Release/generators/conanbuild.ps1; ctest --progress --verbose --test-dir build/Release
