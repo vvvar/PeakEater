@@ -14,7 +14,11 @@
       "problemMatcher": [
         "$gcc"
       ],
-      "command": "just build"
+      "command": "just build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
       "label": "Run",
@@ -39,6 +43,6 @@
         "$gcc"
       ],
       "command": "just test"
-    },
+    }
   ]
 }

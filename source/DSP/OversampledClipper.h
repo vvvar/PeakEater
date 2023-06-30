@@ -34,13 +34,11 @@ namespace dsp
 
             //==============================================================================
             OversampledClipper (const unsigned int factor = 1) noexcept
-                : oversampler (2, factor, Oversampling::filterHalfBandPolyphaseIIR, false)
+                : oversampler (2, factor, Oversampling::filterHalfBandPolyphaseIIR, true)
             {
             }
 
-            ~OversampledClipper() override
-            {
-            }
+            ~OversampledClipper() override {}
 
             //==============================================================================
             /** Inheritet implemented methods */
@@ -53,7 +51,8 @@ namespace dsp
                 const auto oversampledSpec = createOversampledSpec (spec);
 
                 /** Setup pre-filter*/
-                *preFilter.state = *juce::dsp::IIR::Coefficients<T>::makeLowPass (oversampledSpec.sampleRate, calculateCutoff (oversampledSpec.sampleRate));
+                *preFilter.state = *juce::dsp::IIR::Coefficients<T>::makeLowPass (
+                    oversampledSpec.sampleRate, calculateCutoff (oversampledSpec.sampleRate));
                 preFilter.prepare (oversampledSpec);
 
                 /** Setup clipper*/
@@ -62,7 +61,8 @@ namespace dsp
                 setClippingType (DEFAULT_CLIPPING_TYPE);
 
                 /** Setup post-filter*/
-                *postFilter.state = *juce::dsp::IIR::Coefficients<T>::makeLowPass (oversampledSpec.sampleRate, calculateCutoff (oversampledSpec.sampleRate));
+                *postFilter.state = *juce::dsp::IIR::Coefficients<T>::makeLowPass (
+                    oversampledSpec.sampleRate, calculateCutoff (oversampledSpec.sampleRate));
                 postFilter.prepare (oversampledSpec);
             }
 
@@ -88,15 +88,9 @@ namespace dsp
 
             // ==============================================================================
             /** Public interface */
-            void setCeiling (float ceilingDbValue) noexcept
-            {
-                clipper.setThreshold (ceilingDbValue);
-            }
+            void setCeiling (float ceilingDbValue) noexcept { clipper.setThreshold (ceilingDbValue); }
 
-            void setClippingType (ClippingType clippingType) noexcept
-            {
-                clipper.setClippingType (clippingType);
-            }
+            void setClippingType (ClippingType clippingType) noexcept { clipper.setClippingType (clippingType); }
 
         private:
             //==============================================================================

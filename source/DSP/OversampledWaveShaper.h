@@ -26,7 +26,8 @@ namespace dsp
             X2 = 0,
             X4 = 1,
             X8 = 2,
-            X16 = 3
+            X16 = 3,
+            X32 = 4
         };
 
         using OversampledWaveShaperEventHandler = std::function<void (juce::AudioBuffer<float>&)>;
@@ -45,13 +46,11 @@ namespace dsp
 
             //==============================================================================
             OversampledWaveShaper() noexcept
-                : clipper2x (1), clipper4x (2), clipper8x (3), clipper16x (4), clipper (&clipper2x)
+                : clipper2x (1), clipper4x (2), clipper8x (3), clipper16x (4), clipper32x (5), clipper (&clipper2x)
             {
             }
 
-            ~OversampledWaveShaper() override
-            {
-            }
+            ~OversampledWaveShaper() override {}
 
             //==============================================================================
             /** Inheritet implemented methods */
@@ -68,6 +67,7 @@ namespace dsp
                 clipper4x.prepare (spec);
                 clipper8x.prepare (spec);
                 clipper16x.prepare (spec);
+                clipper32x.prepare (spec);
 
                 /** Setup output gain */
                 outputGain.prepare (spec);
@@ -83,6 +83,7 @@ namespace dsp
                 clipper4x.reset();
                 clipper8x.reset();
                 clipper16x.reset();
+                clipper32x.reset();
                 outputGain.reset();
             }
 
@@ -120,15 +121,9 @@ namespace dsp
 
             // ==============================================================================
             /** Public interface */
-            void onPostInputGain (OversampledWaveShaperEventHandler const& handler)
-            {
-                mPostInputGainHandler = handler;
-            }
+            void onPostInputGain (OversampledWaveShaperEventHandler const& handler) { mPostInputGainHandler = handler; }
 
-            void onPostCeiling (OversampledWaveShaperEventHandler const& handler)
-            {
-                mPostCeilingHandler = handler;
-            }
+            void onPostCeiling (OversampledWaveShaperEventHandler const& handler) { mPostCeilingHandler = handler; }
 
             void onPostOutputGain (OversampledWaveShaperEventHandler const& handler)
             {
@@ -142,15 +137,9 @@ namespace dsp
                 mPostOutputGainHandler = nullptr;
             }
 
-            void setInputGain (float gainDbValue) noexcept
-            {
-                inputGain.setGainDecibels (gainDbValue);
-            }
+            void setInputGain (float gainDbValue) noexcept { inputGain.setGainDecibels (gainDbValue); }
 
-            void setOutputGain (float gainDbValue) noexcept
-            {
-                outputGain.setGainDecibels (gainDbValue);
-            }
+            void setOutputGain (float gainDbValue) noexcept { outputGain.setGainDecibels (gainDbValue); }
 
             void setCeiling (float ceilingDbValue) noexcept
             {
@@ -159,6 +148,7 @@ namespace dsp
                 clipper4x.setCeiling (ceilingDbValue);
                 clipper8x.setCeiling (ceilingDbValue);
                 clipper16x.setCeiling (ceilingDbValue);
+                clipper32x.setCeiling (ceilingDbValue);
             }
 
             void setClippingType (ClippingType clippingType) noexcept
@@ -168,6 +158,7 @@ namespace dsp
                 clipper4x.setClippingType (clippingType);
                 clipper8x.setClippingType (clippingType);
                 clipper16x.setClippingType (clippingType);
+                clipper32x.setClippingType (clippingType);
             }
 
             void setOversamplingRate (OversamplingRate oversamplingRate) noexcept
@@ -188,6 +179,9 @@ namespace dsp
                         break;
                     case X16:
                         clipper = &clipper16x;
+                        break;
+                    case X32:
+                        clipper = &clipper32x;
                         break;
                     default:
                         clipper = &clipper1x;
@@ -211,6 +205,7 @@ namespace dsp
             OversampledClipper<T> clipper4x;
             OversampledClipper<T> clipper8x;
             OversampledClipper<T> clipper16x;
+            OversampledClipper<T> clipper32x;
             juce::dsp::ProcessorBase* clipper; // Current clipper
 
             //==============================================================================
