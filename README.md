@@ -118,7 +118,7 @@ You can read more about the difference between Hard and Soft clipping [here](htt
 
 <img src="assets/screenshots/screenshot-oversample.png" alt="oversample" height="100"/>
 
-Choose between 2x, 4x, 8x, and 16x oversampling to avoid signal aliasing. You can also turn off oversampling.
+Choose between 2x, 4x, 8x, 16x and 32x oversampling to avoid signal aliasing. You can also turn off oversampling.
 
 > **Note** High values of oversampling may hurt CPU performance.
 
