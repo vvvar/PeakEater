@@ -102,10 +102,9 @@ if(APPLE)
     # Test we haven't missed any compiler options. Makes sense only on macOS at the moment
     add_test(NAME CompileOptions COMMAND python3 ${PROJECT_SOURCE_DIR}/test/test_compile_options.py --compile_commands=${CMAKE_BINARY_DIR}/compile_commands.json)
 
-    # Marks as CFBundle. Setting this globally because:
-    # 1. Without it, TARGET_BUNDLE_DIR won't work
-    # 2. TARGET_BUNDLE_DIR is used while bundling, signing and testing for macOS
-    set_target_properties(${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_CLAP ${CMAKE_PROJECT_NAME}_LV2 ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE)
+    # Marks VST and AU as CFBundle. Without it, TARGET_BUNDLE_DIR won't work and we need it
+    # to get paths to sign and package them
+    set_target_properties(${CMAKE_PROJECT_NAME}_AU ${CMAKE_PROJECT_NAME}_VST3 PROPERTIES BUNDLE TRUE)
 
     # Test VST3 and AU with Pluginval
     add_test(NAME Pluginval_VST3
@@ -160,6 +159,7 @@ if(APPLE)
 else()
     # The way of getting path to .vst3 is tricky since actual bin is inside ARCHIVE_OUTPUT_DIRECTORY
     set(_VST3_BUNDLE "$<GENEX_EVAL:$<TARGET_PROPERTY:${CMAKE_PROJECT_NAME}_VST3,ARCHIVE_OUTPUT_DIRECTORY>>/${CMAKE_PROJECT_NAME}.vst3")
+
     # Getting it like this since lv2 folder is not a bundle, so TARGET_BUNDLE_DIR wont work
     get_target_property(_LV2_OUT_DIR ${CMAKE_PROJECT_NAME}_LV2 LIBRARY_OUTPUT_DIRECTORY)
 
