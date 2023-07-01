@@ -33,7 +33,8 @@ namespace controller
     public:
         //==============================================================================
         WaveShaperController()
-            : waveShaper(), previousLinkInOut (false), previousInputGain (0.0f), previousOutputGain (0.0f), previousCeiling (0.0f), previousClippingType (0), previousOversampleRate (0)
+            : waveShaper(), previousLinkInOut (false), previousInputGain (0.0f), previousOutputGain (0.0f),
+              previousCeiling (0.0f), previousClippingType (0), previousOversampleRate (0)
         {
         }
 
@@ -53,10 +54,7 @@ namespace controller
             waveShaper.onPostOutputGain (handler);
         }
 
-        void unsubscribeFromAll()
-        {
-            waveShaper.unsubscribeFromAll();
-        }
+        void unsubscribeFromAll() { waveShaper.unsubscribeFromAll(); }
 
         void handleParametersChange (WaveShaperPrameters parameters) noexcept
         {
@@ -104,25 +102,13 @@ namespace controller
             waveShaper.setOutputGain (previousOutputGain);
         }
 
-        void process (juce::AudioBuffer<T>& buffer)
-        {
-            waveShaper.process (buffer);
-        }
+        void process (juce::AudioBuffer<T>& buffer) { waveShaper.process (buffer); }
 
-        void reset()
-        {
-            waveShaper.reset();
-        }
+        void reset() { waveShaper.reset(); }
 
-        float getPreviousInputGain() const
-        {
-            return previousInputGain;
-        }
+        float getPreviousInputGain() const { return previousInputGain; }
 
-        float getPreviousOutputGain() const
-        {
-            return previousOutputGain;
-        }
+        float getPreviousOutputGain() const { return previousOutputGain; }
 
     private:
         //==============================================================================
@@ -174,6 +160,8 @@ namespace controller
                     return OversamplingRate::X8;
                 case 4:
                     return OversamplingRate::X16;
+                case 5:
+                    return OversamplingRate::X32;
                 default:
                     return OversamplingRate::X1;
             }

@@ -17,20 +17,11 @@ namespace params
     class Parameter
     {
     public:
-        Parameter (juce::String const& id, juce::String const& label)
-            : mId (id), mLabel (label)
-        {
-        }
+        Parameter (juce::String const& id, juce::String const& label) : mId (id), mLabel (label) {}
 
-        juce::String getId() const
-        {
-            return mId;
-        }
+        juce::String getId() const { return mId; }
 
-        juce::String getLabel() const
-        {
-            return mLabel;
-        }
+        juce::String getLabel() const { return mLabel; }
 
     private:
         juce::String mId;
@@ -46,10 +37,7 @@ namespace params
         {
         }
 
-        juce::NormalisableRange<T>& getRange()
-        {
-            return mRange;
-        }
+        juce::NormalisableRange<T>& getRange() { return mRange; }
 
     private:
         juce::NormalisableRange<T> mRange;
@@ -63,10 +51,7 @@ namespace params
         {
         }
 
-        juce::StringArray& getChoices()
-        {
-            return mChoices;
-        }
+        juce::StringArray& getChoices() { return mChoices; }
 
     private:
         juce::StringArray mChoices;
@@ -83,60 +68,47 @@ namespace params
 
         juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
         {
-            return {
-                std::make_unique<juce::AudioParameterFloat> (mInputGain.getId(), mInputGain.getLabel(), mInputGain.getRange(), 0.0f),
-                std::make_unique<juce::AudioParameterFloat> (mOutputGain.getId(), mOutputGain.getLabel(), mOutputGain.getRange(), 0.0f),
-                std::make_unique<juce::AudioParameterFloat> (mCeiling.getId(), mCeiling.getLabel(), mCeiling.getRange(), 0.0f),
-                std::make_unique<juce::AudioParameterBool> (mLinkInOut.getId(), mLinkInOut.getLabel(), false),
-                std::make_unique<juce::AudioParameterBool> (mBypass.getId(), mBypass.getLabel(), false),
-                std::make_unique<juce::AudioParameterChoice> (mClippingType.getId(), mClippingType.getLabel(), mClippingType.getChoices(), 0),
-                std::make_unique<juce::AudioParameterChoice> (mOversampleRate.getId(), mOversampleRate.getLabel(), mOversampleRate.getChoices(), 0)
-            };
+            return { std::make_unique<juce::AudioParameterFloat> (
+                         mInputGain.getId(), mInputGain.getLabel(), mInputGain.getRange(), 0.0f),
+                     std::make_unique<juce::AudioParameterFloat> (
+                         mOutputGain.getId(), mOutputGain.getLabel(), mOutputGain.getRange(), 0.0f),
+                     std::make_unique<juce::AudioParameterFloat> (
+                         mCeiling.getId(), mCeiling.getLabel(), mCeiling.getRange(), 0.0f),
+                     std::make_unique<juce::AudioParameterBool> (mLinkInOut.getId(), mLinkInOut.getLabel(), false),
+                     std::make_unique<juce::AudioParameterBool> (mBypass.getId(), mBypass.getLabel(), false),
+                     std::make_unique<juce::AudioParameterChoice> (
+                         mClippingType.getId(), mClippingType.getLabel(), mClippingType.getChoices(), 0),
+                     std::make_unique<juce::AudioParameterChoice> (
+                         mOversampleRate.getId(), mOversampleRate.getLabel(), mOversampleRate.getChoices(), 0) };
         }
 
-        RangedParameter<float>& getInputGain()
-        {
-            return mInputGain;
-        }
+        RangedParameter<float>& getInputGain() { return mInputGain; }
 
-        RangedParameter<float>& getOutputGain()
-        {
-            return mOutputGain;
-        }
+        RangedParameter<float>& getOutputGain() { return mOutputGain; }
 
-        RangedParameter<float>& getCeiling()
-        {
-            return mCeiling;
-        }
+        RangedParameter<float>& getCeiling() { return mCeiling; }
 
-        Parameter& getBypass()
-        {
-            return mBypass;
-        }
+        Parameter& getBypass() { return mBypass; }
 
-        Parameter& getLinkInOut()
-        {
-            return mLinkInOut;
-        }
+        Parameter& getLinkInOut() { return mLinkInOut; }
 
-        ChoicingParameter& getClippingType()
-        {
-            return mClippingType;
-        }
+        ChoicingParameter& getClippingType() { return mClippingType; }
 
-        ChoicingParameter& getOversampleRate()
-        {
-            return mOversampleRate;
-        }
+        ChoicingParameter& getOversampleRate() { return mOversampleRate; }
 
     private:
         ParametersProvider()
-            : mInputGain ("InputGain", "INPUT", { -36.0f, 36.0f, 0.1f, 0.5f, true }), mOutputGain ("OutputGain", "OUTPUT", { -36.0f, 36.0f, 0.1f, 0.5f, true }), mCeiling ("Ceiling", "CEILING", { -36.0f, 0.0f, 0.1f, 1.9f, false }), mBypass ("Bypass", "BYPASS"), mLinkInOut ("LinkInOut", "IN<->OUT"), mClippingType ("ClippingType", "ALGORITHM", { "HARD", "QUINTIC", "CUBIC", "TANGENT", "ALGEBRAIC", "ARCTANGENT" }), mOversampleRate ("OversampleRate", "OVERSAMPLE", { "OFF", "x2", "x4", "x8", "x16" })
+            : mInputGain ("InputGain", "INPUT", { -36.0f, 36.0f, 0.1f, 0.5f, true }),
+              mOutputGain ("OutputGain", "OUTPUT", { -36.0f, 36.0f, 0.1f, 0.5f, true }),
+              mCeiling ("Ceiling", "CEILING", { -36.0f, 0.0f, 0.1f, 1.9f, false }), mBypass ("Bypass", "BYPASS"),
+              mLinkInOut ("LinkInOut", "IN<->OUT"),
+              mClippingType ("ClippingType",
+                             "ALGORITHM",
+                             { "HARD", "QUINTIC", "CUBIC", "TANGENT", "ALGEBRAIC", "ARCTANGENT" }),
+              mOversampleRate ("OversampleRate", "OVERSAMPLE", { "OFF", "x2", "x4", "x8", "x16", "x32" })
         {
         }
-        ~ParametersProvider()
-        {
-        }
+        ~ParametersProvider() {}
 
         RangedParameter<float> mInputGain;
         RangedParameter<float> mOutputGain;
