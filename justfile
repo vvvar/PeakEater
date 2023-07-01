@@ -28,7 +28,6 @@ cleanup:
     rm -rf test/build
     rm -f test/CMakeUserPresets.json
     rm -rf Testing
-    rm -rf ~/.conan2/p
     rm -f config/system/requirements.macos.brew.rb.lock.json
 
 # Cleanup build, temp and all generated files
