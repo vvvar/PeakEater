@@ -40,7 +40,7 @@ namespace dsp
         T tanclip (T x) noexcept
         {
             float soft = 0.0f;
-            return JMath::tanh ((1.0f - 0.5f * soft) * x);
+            return std::tanh ((1.0f - 0.5f * soft) * x);
         }
 
         template <typename T>
