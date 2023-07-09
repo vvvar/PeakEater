@@ -5,7 +5,7 @@ from conan.tools.env import VirtualBuildEnv
 
 class PeakEater(ConanFile):
     name = "peakeater"
-    version = "0.7.2"
+    version = "0.8.0"
     user = "vvvar"
     channel = "testing"
     company = "T-Audio"

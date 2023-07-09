@@ -6,14 +6,8 @@ namespace pe
 PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (
     PeakEaterAudioProcessor& audioProcessor,
     std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-    std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-    std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-    std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter)
-    : juce::AudioProcessorEditor (audioProcessor),
-      mMainComponent (parameters,
-                      inputLevelMeter,
-                      clippingLevelMeter,
-                      outputLevelMeter),
+    gui::LevelMetersPack const&& levelMetersPack)
+    : juce::AudioProcessorEditor (audioProcessor), mMainComponent (parameters, levelMetersPack),
       mAudioProcessor (audioProcessor)
 {
     auto const size = mAudioProcessor.getPluginSizeState();
@@ -24,10 +18,7 @@ PeakEaterAudioProcessorEditor::PeakEaterAudioProcessorEditor (
     setSize (size.width, size.height);
     setResizable (true, true);
 
-    setResizeLimits (constraints.minWidth,
-                     constraints.minHeight,
-                     constraints.maxWidth,
-                     constraints.maxHeight);
+    setResizeLimits (constraints.minWidth, constraints.minHeight, constraints.maxWidth, constraints.maxHeight);
     getConstrainer()->setFixedAspectRatio (constraints.aspectRatio);
 }
 
@@ -41,8 +32,5 @@ PeakEaterAudioProcessorEditor::~PeakEaterAudioProcessorEditor()
 //==============================================================================
 void PeakEaterAudioProcessorEditor::paint (juce::Graphics& g) { g.fillAll(); }
 
-void PeakEaterAudioProcessorEditor::resized()
-{
-    mMainComponent.setBounds (getLocalBounds());
-}
+void PeakEaterAudioProcessorEditor::resized() { mMainComponent.setBounds (getLocalBounds()); }
 } // namespace pe

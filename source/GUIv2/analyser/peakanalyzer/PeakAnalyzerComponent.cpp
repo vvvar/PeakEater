@@ -22,10 +22,13 @@ namespace gui
             return ! (value < low) && (value < high);
         }
     } // namespace
-    PeakAnalyzerComponent::PeakAnalyzerComponent (std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                                                  std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                                                  std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter)
-        : mInputLevelMeter (inputLevelMeter), mClippingLevelMeter (clippingLevelMeter), mOutputLevelMeter (outputLevelMeter), mInputPeakMeter (gAnalyzerSampleRateHz, gMinDbValInOut), mOutputPeakMeter (gAnalyzerSampleRateHz, gMinDbValInOut), mEatenPeakMeter (gAnalyzerSampleRateHz, gMinDbValEaten), mUpdateTimer (std::bind (&PeakAnalyzerComponent::onUpdateTick, this)), mInputLabel(), mOutputLabel(), mEatenLabel()
+    PeakAnalyzerComponent::PeakAnalyzerComponent (LevelMetersPack const& levelMetersPack)
+        : mInputLevelMeter (levelMetersPack.inputLevelMeter), mClippingLevelMeter (levelMetersPack.clippingLevelMeter),
+          mOutputLevelMeter (levelMetersPack.outputLevelMeter), mInputPeakMeter (gAnalyzerSampleRateHz, gMinDbValInOut),
+          mOutputPeakMeter (gAnalyzerSampleRateHz, gMinDbValInOut),
+          mEatenPeakMeter (gAnalyzerSampleRateHz, gMinDbValEaten),
+          mUpdateTimer (std::bind (&PeakAnalyzerComponent::onUpdateTick, this)), mInputLabel(), mOutputLabel(),
+          mEatenLabel()
     {
         mInputLabel.setJustificationType (juce::Justification::verticallyCentred);
         mOutputLabel.setJustificationType (juce::Justification::verticallyCentred);
@@ -44,10 +47,7 @@ namespace gui
         addMouseListener (this, true);
     }
 
-    PeakAnalyzerComponent::~PeakAnalyzerComponent()
-    {
-        setLookAndFeel (nullptr);
-    }
+    PeakAnalyzerComponent::~PeakAnalyzerComponent() { setLookAndFeel (nullptr); }
 
     void PeakAnalyzerComponent::resized()
     {
@@ -59,7 +59,8 @@ namespace gui
         grid.templateColumns = { Track (Fr (1)) };
         grid.items = { Item (mInputLabel), Item (mOutputLabel), Item (mEatenLabel) };
 
-        auto const fontSize = calculatePrimaryTextSize (getTopLevelComponent()->getBounds().getWidth(), getTopLevelComponent()->getBounds().getHeight());
+        auto const fontSize = calculatePrimaryTextSize (getTopLevelComponent()->getBounds().getWidth(),
+                                                        getTopLevelComponent()->getBounds().getHeight());
         mInputLabel.setFont (fontSize);
         mOutputLabel.setFont (fontSize);
         mEatenLabel.setFont (fontSize);
@@ -87,12 +88,13 @@ namespace gui
         }
 
         auto const stringifyMagnitude = [] (float magnitude)
-        {
-            return gToStringWithPrecision (gRoundDb (magnitude), 1) + " dB";
-        };
-        mInputLabel.setText ("Input: " + stringifyMagnitude (inputAmount), juce::NotificationType::dontSendNotification);
-        mOutputLabel.setText ("Output: " + stringifyMagnitude (outputAmount), juce::NotificationType::dontSendNotification);
-        mEatenLabel.setText ("Eaten: " + stringifyMagnitude (eatenAmount), juce::NotificationType::dontSendNotification);
+        { return gToStringWithPrecision (gRoundDb (magnitude), 1) + " dB"; };
+        mInputLabel.setText ("Input: " + stringifyMagnitude (inputAmount),
+                             juce::NotificationType::dontSendNotification);
+        mOutputLabel.setText ("Output: " + stringifyMagnitude (outputAmount),
+                              juce::NotificationType::dontSendNotification);
+        mEatenLabel.setText ("Eaten: " + stringifyMagnitude (eatenAmount),
+                             juce::NotificationType::dontSendNotification);
     }
 
     void PeakAnalyzerComponent::mouseDown (juce::MouseEvent const& event)

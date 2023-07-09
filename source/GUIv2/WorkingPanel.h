@@ -3,9 +3,9 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 
-#include "../DSP/LevelMeter.h"
 #include "CentralPanel.h"
 #include "LeftPanel.h"
+#include "LevelMetersPack.h"
 #include "RightPanel.h"
 #include "Ticks.h"
 
@@ -18,9 +18,7 @@ namespace gui
     {
     public:
         WorkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                      std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                      std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                      std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+                      LevelMetersPack const& levelMetersPack);
 
         void resized() override;
 

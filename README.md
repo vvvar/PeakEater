@@ -26,6 +26,7 @@ Table of Contents
   - [Configurable Scaling](#configurable-scaling)
   - [6 Clipping Types](#6-clipping-types)
   - [Oversampling](#oversampling)
+  - [Dry/Wet](#dry-wet)
   - [Bypass Mode](#bypass-mode)
   - [Resizing](#resizing)
   - [VST3, AU, LV2 and CLAP Support](#vst3-au-lv2-and-clap-support)
@@ -123,6 +124,12 @@ Choose between 2x, 4x, 8x, 16x and 32x oversampling to avoid signal aliasing. Yo
 > **Note** High values of oversampling may hurt CPU performance.
 
 You can read more about oversampling [here](https://www.nickwritesablog.com/introduction-to-oversampling-for-alias-reduction/).
+
+### <a id="dry-wet"></a> Dry/Wet
+
+<img src="assets/screenshots/dry-wet.gif" alt="drywet" height="200"/>
+
+Control mix between original and clipped signal. Useful when the clipper is used as an exciter.
 
 ### Bypass mode
 

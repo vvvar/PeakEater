@@ -68,6 +68,8 @@ private:
     juce::AudioParameterFloat* mCeiling;
     juce::AudioParameterChoice* mClippingType;
     juce::AudioParameterChoice* mOversampleRate;
+    juce::AudioParameterFloat* mDryWet;
+    juce::dsp::DryWetMixer<float> mDryWetMixer;
 
     pe::controller::WaveShaperController<float> mWaveShaperController;
     std::shared_ptr<pe::dsp::LevelMeter<float>> mLevelMeterPostIn;

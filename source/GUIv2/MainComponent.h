@@ -3,8 +3,8 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 
-#include "../DSP/LevelMeter.h"
 #include "Header.h"
+#include "LevelMetersPack.h"
 #include "WorkingPanel.h"
 #include "bypass/BypassButton.h"
 
@@ -13,15 +13,11 @@ namespace pe
 namespace gui
 {
 
-    class MainComponent
-        : public juce::Component,
-          public juce::AudioProcessorParameter::Listener
+    class MainComponent : public juce::Component, public juce::AudioProcessorParameter::Listener
     {
     public:
         MainComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                       std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                       std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                       std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+                       LevelMetersPack const& levelMetersPack);
         ~MainComponent() override;
 
         void resized() override;

@@ -2,6 +2,7 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
+#include "GUIv2/LevelMetersPack.h"
 #include "GUIv2/MainComponent.h"
 #include "PluginProcessor.h"
 
@@ -10,12 +11,9 @@ namespace pe
 class PeakEaterAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-    PeakEaterAudioProcessorEditor (
-        PeakEaterAudioProcessor& audioProcessor,
-        std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-        std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-        std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-        std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+    PeakEaterAudioProcessorEditor (PeakEaterAudioProcessor& audioProcessor,
+                                   std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+                                   gui::LevelMetersPack const&& levelMetersPack);
     ~PeakEaterAudioProcessorEditor() override;
 
     void paint (juce::Graphics& g) override;

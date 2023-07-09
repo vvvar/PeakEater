@@ -10,14 +10,9 @@ namespace gui
         auto constexpr gBypassParamName = "Bypass";
     }
     MainComponent::MainComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                                  std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                                  std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                                  std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter)
-        : juce::Component(),
-          mHeader (parameters),
-          mWorkingPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter),
-          mBypassButton (parameters),
-          mParameters (parameters)
+                                  LevelMetersPack const& levelMetersPack)
+        : juce::Component(), mHeader (parameters), mWorkingPanel (parameters, levelMetersPack),
+          mBypassButton (parameters), mParameters (parameters)
     {
         addAndMakeVisible (mWorkingPanel);
         addAndMakeVisible (mBypassButton);

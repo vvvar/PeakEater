@@ -3,7 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 
-#include "../../DSP/LevelMeter.h"
+#include "../LevelMetersPack.h"
 #include "./cliptype/ClipTypeComponent.h"
 #include "./peakanalyzer/PeakAnalyzerComponent.h"
 
@@ -11,14 +11,11 @@ namespace pe
 {
 namespace gui
 {
-    class AnalyserComponent
-        : public juce::Component
+    class AnalyserComponent : public juce::Component
     {
     public:
         AnalyserComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                           std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                           std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                           std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+                           LevelMetersPack const& levelMetersPack);
         ~AnalyserComponent() override;
 
         void resized() override;
