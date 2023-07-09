@@ -1,0 +1,5 @@
+[conf]
+# Turn on sanitizers
+# WARN: You MUST rebuild everything for this to work
+# https://clang.llvm.org/docs/AddressSanitizer.html
+tools.build:cxxflags+={{ ["-fsanitize=address", "-g"] if os.getenv("SANITIZE") else [] }}

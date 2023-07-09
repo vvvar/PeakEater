@@ -15,7 +15,7 @@ class TestCompileOptions(unittest.TestCase):
         with open(compile_commands_path, encoding="utf-8") as f:
             compile_commands = json.load(f)
             for compilation_unit in compile_commands:
-                assert "-mmacosx-version-min=10.9" in compilation_unit["command"]
+                assert "-mmacosx-version-min=10.10" in compilation_unit["command"]
 
     @unittest.skipUnless(IS_MACOS, "Only relevant for macOS")
     def test_macos_universal_binaries(self):

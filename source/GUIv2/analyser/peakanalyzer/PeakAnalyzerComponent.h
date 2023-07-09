@@ -7,20 +7,17 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <numeric>
 
-#include "../../../DSP/LevelMeter.h"
+#include "../../LevelMetersPack.h"
 #include "PeakMeter.h"
 
 namespace pe
 {
 namespace gui
 {
-    class PeakAnalyzerComponent
-        : public juce::Component
+    class PeakAnalyzerComponent : public juce::Component
     {
     public:
-        PeakAnalyzerComponent (std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                               std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                               std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter);
+        PeakAnalyzerComponent (LevelMetersPack const& levelMetersPack);
         ~PeakAnalyzerComponent() override;
 
         void resized() override;
@@ -31,10 +28,7 @@ namespace gui
         class UpdateTimer : public juce::Timer
         {
         public:
-            UpdateTimer (std::function<void()> callback)
-                : mCallback (callback)
-            {
-            }
+            UpdateTimer (std::function<void()> callback) : mCallback (callback) {}
 
             void timerCallback() override
             {

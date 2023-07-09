@@ -17,14 +17,17 @@ namespace params
     class Parameter
     {
     public:
-        Parameter (juce::String const& id, juce::String const& label) : mId (id), mLabel (label) {}
+        Parameter (int const hint, juce::String const& id, juce::String const& label)
+            : mParameterID (id, hint), mLabel (label)
+        {
+        }
 
-        juce::String getId() const { return mId; }
+        [[nodiscard]] juce::ParameterID const& getId() const { return mParameterID; }
 
         juce::String getLabel() const { return mLabel; }
 
     private:
-        juce::String mId;
+        juce::ParameterID const mParameterID;
         juce::String mLabel;
     };
 
@@ -32,8 +35,11 @@ namespace params
     class RangedParameter : public Parameter
     {
     public:
-        RangedParameter (juce::String const& id, juce::String const& label, juce::NormalisableRange<T> const& range)
-            : Parameter (id, label), mRange (range)
+        RangedParameter (int const hint,
+                         juce::String const& id,
+                         juce::String const& label,
+                         juce::NormalisableRange<T> const&& range)
+            : Parameter (hint, id, label), mRange (range)
         {
         }
 
@@ -46,8 +52,11 @@ namespace params
     class ChoicingParameter : public Parameter
     {
     public:
-        ChoicingParameter (juce::String const& id, juce::String const& label, juce::StringArray const&& choices)
-            : Parameter (id, label), mChoices (choices)
+        ChoicingParameter (int const hint,
+                           juce::String const& id,
+                           juce::String const& label,
+                           juce::StringArray const&& choices)
+            : Parameter (hint, id, label), mChoices (choices)
         {
         }
 
@@ -68,18 +77,22 @@ namespace params
 
         juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
         {
-            return { std::make_unique<juce::AudioParameterFloat> (
-                         mInputGain.getId(), mInputGain.getLabel(), mInputGain.getRange(), 0.0f),
-                     std::make_unique<juce::AudioParameterFloat> (
-                         mOutputGain.getId(), mOutputGain.getLabel(), mOutputGain.getRange(), 0.0f),
-                     std::make_unique<juce::AudioParameterFloat> (
-                         mCeiling.getId(), mCeiling.getLabel(), mCeiling.getRange(), 0.0f),
-                     std::make_unique<juce::AudioParameterBool> (mLinkInOut.getId(), mLinkInOut.getLabel(), false),
-                     std::make_unique<juce::AudioParameterBool> (mBypass.getId(), mBypass.getLabel(), false),
-                     std::make_unique<juce::AudioParameterChoice> (
-                         mClippingType.getId(), mClippingType.getLabel(), mClippingType.getChoices(), 0),
-                     std::make_unique<juce::AudioParameterChoice> (
-                         mOversampleRate.getId(), mOversampleRate.getLabel(), mOversampleRate.getChoices(), 0) };
+            return {
+                std::make_unique<juce::AudioParameterFloat> (
+                    mInputGain.getId(), mInputGain.getLabel(), mInputGain.getRange(), 0.0f),
+                std::make_unique<juce::AudioParameterFloat> (
+                    mOutputGain.getId(), mOutputGain.getLabel(), mOutputGain.getRange(), 0.0f),
+                std::make_unique<juce::AudioParameterFloat> (
+                    mCeiling.getId(), mCeiling.getLabel(), mCeiling.getRange(), 0.0f),
+                std::make_unique<juce::AudioParameterBool> (mLinkInOut.getId(), mLinkInOut.getLabel(), false),
+                std::make_unique<juce::AudioParameterBool> (mBypass.getId(), mBypass.getLabel(), false),
+                std::make_unique<juce::AudioParameterChoice> (
+                    mClippingType.getId(), mClippingType.getLabel(), mClippingType.getChoices(), 0),
+                std::make_unique<juce::AudioParameterChoice> (
+                    mOversampleRate.getId(), mOversampleRate.getLabel(), mOversampleRate.getChoices(), 0),
+                std::make_unique<juce::AudioParameterFloat> (
+                    mDryWet.getId(), mDryWet.getLabel(), mDryWet.getRange(), 1.0f),
+            };
         }
 
         RangedParameter<float>& getInputGain() { return mInputGain; }
@@ -96,16 +109,20 @@ namespace params
 
         ChoicingParameter& getOversampleRate() { return mOversampleRate; }
 
+        RangedParameter<float>& getDryWet() { return mDryWet; }
+
     private:
         ParametersProvider()
-            : mInputGain ("InputGain", "INPUT", { -36.0f, 36.0f, 0.1f, 0.5f, true }),
-              mOutputGain ("OutputGain", "OUTPUT", { -36.0f, 36.0f, 0.1f, 0.5f, true }),
-              mCeiling ("Ceiling", "CEILING", { -36.0f, 0.0f, 0.1f, 1.9f, false }), mBypass ("Bypass", "BYPASS"),
-              mLinkInOut ("LinkInOut", "IN<->OUT"),
-              mClippingType ("ClippingType",
+            : mInputGain (1, "InputGain", "INPUT", { -36.0f, 36.0f, 0.1f, 0.5f, true }),
+              mOutputGain (2, "OutputGain", "OUTPUT", { -36.0f, 36.0f, 0.1f, 0.5f, true }),
+              mCeiling (3, "Ceiling", "CEILING", { -36.0f, 0.0f, 0.1f, 1.9f, false }), mBypass (4, "Bypass", "BYPASS"),
+              mLinkInOut (5, "LinkInOut", "INOUT"),
+              mClippingType (6,
+                             "ClippingType",
                              "ALGORITHM",
                              { "HARD", "QUINTIC", "CUBIC", "TANGENT", "ALGEBRAIC", "ARCTANGENT" }),
-              mOversampleRate ("OversampleRate", "OVERSAMPLE", { "OFF", "x2", "x4", "x8", "x16", "x32" })
+              mOversampleRate (7, "OversampleRate", "OVERSAMPLE", { "OFF", "x2", "x4", "x8", "x16", "x32" }),
+              mDryWet (8, "DryWet", "DRYWET", { 0.0f, 1.0f, 0.001f })
         {
         }
         ~ParametersProvider() {}
@@ -117,6 +134,7 @@ namespace params
         Parameter mLinkInOut;
         ChoicingParameter mClippingType;
         ChoicingParameter mOversampleRate;
+        RangedParameter<float> mDryWet;
     };
 } // namespace params
 } // namespace pe

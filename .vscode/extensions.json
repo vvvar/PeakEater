@@ -2,6 +2,7 @@
     "recommendations": [
         "ms-vscode.cpptools",
         "ms-python.python",
+        "samuelcolvin.jinjahtml",
         "josetr.cmake-language-support-vscode",
         "github.vscode-github-actions",
         "shd101wyy.markdown-preview-enhanced",

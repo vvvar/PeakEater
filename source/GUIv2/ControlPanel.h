@@ -3,7 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 
-#include "../DSP/LevelMeter.h"
+#include "LevelMetersPack.h"
 #include "clipmeter/ClipMeter.h"
 #include "dial/Dial.h"
 #include "dial/ceilingdial/CeilingDial.h"
@@ -18,8 +18,7 @@ namespace gui
     {
     public:
         ControlPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                      std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                      std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter);
+                      LevelMetersPack const& levelMetersPack);
 
         void paint (juce::Graphics& g) override;
         void resized() override;
@@ -30,6 +29,7 @@ namespace gui
         CeilingDial mDial_3;
         Dial mDial_4;
         GainDial mDial_5;
+        Dial mDial_6;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlPanel)
     };

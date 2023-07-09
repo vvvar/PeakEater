@@ -5,10 +5,9 @@ namespace pe
 namespace gui
 {
     WorkingPanel::WorkingPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                                std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                                std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                                std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter)
-        : juce::Component(), mTicks (std::make_shared<Ticks>()), mLeftPanel (inputLevelMeter, mTicks), mCentralPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter, mTicks), mRightPanel (parameters, inputLevelMeter, clippingLevelMeter, outputLevelMeter, mTicks)
+                                LevelMetersPack const& levelMetersPack)
+        : juce::Component(), mTicks (std::make_shared<Ticks>()), mLeftPanel (levelMetersPack, mTicks),
+          mCentralPanel (parameters, levelMetersPack, mTicks), mRightPanel (levelMetersPack, mTicks)
     {
         addAndMakeVisible (mLeftPanel);
         addAndMakeVisible (mCentralPanel);

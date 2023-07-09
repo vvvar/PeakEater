@@ -1,6 +1,9 @@
 {
     // Languages settings
     "editor.formatOnSave": true,
+    "[jinja]": {
+        "editor.formatOnSave": false
+    },
     "files.associations": {
         "*.profile": "ini",
         "__bit_reference": "cpp",
@@ -81,7 +84,13 @@
         "__verbose_abort": "cpp",
         "bit": "cpp",
         "shared_mutex": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "*.jinja": "jinja",
+        "cinttypes": "cpp",
+        "forward_list": "cpp",
+        "regex": "cpp",
+        "valarray": "cpp",
+        "random": "cpp"
     },
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter"
@@ -158,11 +167,12 @@
         "zfile",
         "zipresp"
     ],
-    "sonarlint.pathToCompileCommands": "${workspaceFolder}/build/Release/compile_commands.json",
+    "sonarlint.pathToCompileCommands": "${workspaceFolder}/build/Debug/compile_commands.json",
     // Bandaid because occasinally git is not added to the Path which breaks just
     // Keep untill this resolved - https://github.com/casey/just/issues/1517
     // VS Code-only since it is installation issue which works fine on a CI
     "terminal.integrated.env.windows": {
         "Path": "${env:Path};C:\\Program Files\\Git\\bin"
     },
+    "terminal.integrated.scrollback": 999999999999
 }

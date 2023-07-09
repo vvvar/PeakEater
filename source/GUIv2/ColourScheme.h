@@ -1,26 +1,18 @@
 #pragma once
+
 #include <juce_graphics/juce_graphics.h>
 
-namespace pe
+namespace pe::gui::colourscheme
 {
-namespace gui
-{
-    namespace colourscheme
-    {
-        static auto BackgroundPrimary = juce::Colour (30, 30, 30);
-        static auto BackgroundSecondary = juce::Colour (50, 50, 50);
-        static auto BackgroundTertiary = juce::Colour (179, 179, 179);
-
-        static auto ForegroundPrimary = juce::Colour (47, 132, 175);
-        static auto ForegroundSecondary = juce::Colour (171, 14, 54);
-        static auto ForegroundTertiary = juce::Colour (28, 212, 184);
-
-        static auto Warning = juce::Colour (255, 214, 0);
-
-        static auto TextFocusLevel0 = juce::Colour (255, 255, 255);
-        static auto TextFocusLevel1 = juce::Colour (255, 255, 255).withAlpha (0.70f);
-        static auto TextFocusLevel2 = juce::Colour (255, 255, 255).withAlpha (0.50f);
-        static auto TextFocusLevel3 = juce::Colour (255, 255, 255).withAlpha (0.38f);
-    } // namespace colourscheme
-} // namespace gui
-} // namespace pe
+static juce::Colour const BackgroundPrimary = juce::Colour::fromRGB (30, 30, 30);
+static juce::Colour const BackgroundSecondary = juce::Colour::fromRGB (50, 50, 50);
+static juce::Colour const BackgroundTertiary = juce::Colour::fromRGB (179, 179, 179);
+static juce::Colour const ForegroundPrimary = juce::Colour::fromRGB (47, 132, 175);
+static juce::Colour const ForegroundSecondary = juce::Colour::fromRGB (171, 14, 54);
+static juce::Colour const ForegroundTertiary = juce::Colour::fromRGB (28, 212, 184);
+static juce::Colour const Warning = juce::Colour::fromRGB (255, 214, 0);
+static juce::Colour const TextFocusLevel0 = juce::Colour::fromRGB (255, 255, 255);
+static juce::Colour const TextFocusLevel1 = juce::Colour::fromRGBA (255, 255, 255, 178);
+static juce::Colour const TextFocusLevel2 = juce::Colour::fromRGBA (255, 255, 255, 128);
+static juce::Colour const TextFocusLevel3 = juce::Colour::fromRGBA (255, 255, 255, 97);
+} // namespace pe::gui::colourscheme

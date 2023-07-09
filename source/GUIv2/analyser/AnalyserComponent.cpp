@@ -18,19 +18,14 @@ namespace gui
         int constexpr gBorderRadius = 10;
     } // namespace
     AnalyserComponent::AnalyserComponent (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                                          std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                                          std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter,
-                                          std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter)
-        : mClipTypeComponent (parameters), mPeakAnalyzerComponent (inputLevelMeter, clippingLevelMeter, outputLevelMeter)
+                                          LevelMetersPack const& levelMetersPack)
+        : mClipTypeComponent (parameters), mPeakAnalyzerComponent (levelMetersPack)
     {
         addAndMakeVisible (mClipTypeComponent);
         addAndMakeVisible (mPeakAnalyzerComponent);
     }
 
-    AnalyserComponent::~AnalyserComponent()
-    {
-        setLookAndFeel (nullptr);
-    }
+    AnalyserComponent::~AnalyserComponent() { setLookAndFeel (nullptr); }
 
     void AnalyserComponent::resized()
     {
