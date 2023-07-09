@@ -129,7 +129,7 @@ You can read more about oversampling [here](https://www.nickwritesablog.com/intr
 
 <img src="assets/screenshots/dry-wet.gif" alt="drywet" height="200"/>
 
-Control mix between original and clipped signal. Useful when clipper is used as an exciter.
+Control mix between original and clipped signal. Useful when the clipper is used as an exciter.
 
 ### Bypass mode
 
