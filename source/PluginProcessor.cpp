@@ -1,55 +1,63 @@
 #include "PluginProcessor.h"
-#include "PluginEditor.h"
 
 #include "Parameters.h"
-
-// namespace
-// {
-// int constexpr gMinWidth = 640;
-// int constexpr gMinHeight = 400;
-// int constexpr gMaxWidth = 3840;
-// int constexpr gMaxHeight = 2400;
-// double constexpr aspectRatio = 16.0 / 10.0;
-// } // namespace
+#include "PluginEditor.h"
 
 //==============================================================================
+namespace {
+pe::processor::ClippingType parameterChoiceToClippingType(int const &parameterChoice) {
+    switch (parameterChoice) {
+        case 0:
+            return pe::processor::ClippingType::HARD;
+        case 1:
+            return pe::processor::ClippingType::QUINTIC;
+        case 2:
+            return pe::processor::ClippingType::CUBIC;
+        case 3:
+            return pe::processor::ClippingType::HYPERBOLIC_TAN;
+        case 4:
+            return pe::processor::ClippingType::ALGEBRAIC;
+        case 5:
+            return pe::processor::ClippingType::ARCTANGENT;
+        default:
+            return pe::processor::ClippingType::HARD;
+    }
+}
+}  // namespace
+
 PeakEaterAudioProcessor::PeakEaterAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-    : AudioProcessor (BusesProperties()
-#if ! JucePlugin_IsMidiEffect
-#if ! JucePlugin_IsSynth
-                          .withInput ("Input", juce::AudioChannelSet::stereo(), true)
+    : AudioProcessor(BusesProperties()
+#if !JucePlugin_IsMidiEffect
+#if !JucePlugin_IsSynth
+                         .withInput("Input", juce::AudioChannelSet::stereo(), true)
 #endif
-                          .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
+                         .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-                          ),
+                         ),
 #endif
-      mParameters (std::make_shared<juce::AudioProcessorValueTreeState> (
-          *this,
-          nullptr,
-          juce::Identifier (JucePlugin_Name),
-          pe::params::ParametersProvider::getInstance().createParameterLayout())),
-      mInputGain (static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (
-          pe::params::ParametersProvider::getInstance().getInputGain().getId().getParamID()))),
-      mOutputGain (static_cast<juce::AudioParameterFloat*> (mParameters->getParameter (
-          pe::params::ParametersProvider::getInstance().getOutputGain().getId().getParamID()))),
-      mLinkInOut (static_cast<juce::AudioParameterBool*> (mParameters->getParameter (
-          pe::params::ParametersProvider::getInstance().getLinkInOut().getId().getParamID()))),
-      mBypass (static_cast<juce::AudioParameterBool*> (
-          mParameters->getParameter (pe::params::ParametersProvider::getInstance().getBypass().getId().getParamID()))),
-      mCeiling (static_cast<juce::AudioParameterFloat*> (
-          mParameters->getParameter (pe::params::ParametersProvider::getInstance().getCeiling().getId().getParamID()))),
-      mClippingType (static_cast<juce::AudioParameterChoice*> (mParameters->getParameter (
-          pe::params::ParametersProvider::getInstance().getClippingType().getId().getParamID()))),
-      mOversampleRate (static_cast<juce::AudioParameterChoice*> (mParameters->getParameter (
-          pe::params::ParametersProvider::getInstance().getOversampleRate().getId().getParamID()))),
-      mDryWet (static_cast<juce::AudioParameterFloat*> (
-          mParameters->getParameter (pe::params::ParametersProvider::getInstance().getDryWet().getId().getParamID()))),
-      mWaveShaperController(), mLevelMeterPostIn (std::make_shared<pe::dsp::LevelMeter<float>>()),
-      mLevelMeterPostClipper (std::make_shared<pe::dsp::LevelMeter<float>>()),
-      mLevelMeterPostOut (std::make_shared<pe::dsp::LevelMeter<float>>()),
-      mPluginSizeState ({ mPluginSizeConstraints.minWidth, mPluginSizeConstraints.minHeight })
-{
+      mParameters(std::make_shared<juce::AudioProcessorValueTreeState>(
+          *this, nullptr, juce::Identifier(JucePlugin_Name), pe::params::ParametersProvider::getInstance().createParameterLayout())),
+      mInputGain(static_cast<juce::AudioParameterFloat *>(
+          mParameters->getParameter(pe::params::ParametersProvider::getInstance().getInputGain().getId().getParamID()))),
+      mOutputGain(static_cast<juce::AudioParameterFloat *>(
+          mParameters->getParameter(pe::params::ParametersProvider::getInstance().getOutputGain().getId().getParamID()))),
+      mLinkInOut(static_cast<juce::AudioParameterBool *>(
+          mParameters->getParameter(pe::params::ParametersProvider::getInstance().getLinkInOut().getId().getParamID()))),
+      mBypass(static_cast<juce::AudioParameterBool *>(
+          mParameters->getParameter(pe::params::ParametersProvider::getInstance().getBypass().getId().getParamID()))),
+      mCeiling(static_cast<juce::AudioParameterFloat *>(
+          mParameters->getParameter(pe::params::ParametersProvider::getInstance().getCeiling().getId().getParamID()))),
+      mClippingType(static_cast<juce::AudioParameterChoice *>(
+          mParameters->getParameter(pe::params::ParametersProvider::getInstance().getClippingType().getId().getParamID()))),
+      mOversampleRate(static_cast<juce::AudioParameterChoice *>(
+          mParameters->getParameter(pe::params::ParametersProvider::getInstance().getOversampleRate().getId().getParamID()))),
+      mDryWet(static_cast<juce::AudioParameterFloat *>(
+          mParameters->getParameter(pe::params::ParametersProvider::getInstance().getDryWet().getId().getParamID()))),
+      mLevelMeterPostIn(std::make_shared<pe::dsp::LevelMeter<float>>()),
+      mLevelMeterPostClipper(std::make_shared<pe::dsp::LevelMeter<float>>()),
+      mLevelMeterPostOut(std::make_shared<pe::dsp::LevelMeter<float>>()),
+      mPluginSizeState({mPluginSizeConstraints.minWidth, mPluginSizeConstraints.minHeight}) {
 }
 
 PeakEaterAudioProcessor::~PeakEaterAudioProcessor() {}
@@ -57,8 +65,7 @@ PeakEaterAudioProcessor::~PeakEaterAudioProcessor() {}
 //==============================================================================
 const juce::String PeakEaterAudioProcessor::getName() const { return JucePlugin_Name; }
 
-bool PeakEaterAudioProcessor::acceptsMidi() const
-{
+bool PeakEaterAudioProcessor::acceptsMidi() const {
 #if JucePlugin_WantsMidiInput
     return true;
 #else
@@ -66,8 +73,7 @@ bool PeakEaterAudioProcessor::acceptsMidi() const
 #endif
 }
 
-bool PeakEaterAudioProcessor::producesMidi() const
-{
+bool PeakEaterAudioProcessor::producesMidi() const {
 #if JucePlugin_ProducesMidiOutput
     return true;
 #else
@@ -75,8 +81,7 @@ bool PeakEaterAudioProcessor::producesMidi() const
 #endif
 }
 
-bool PeakEaterAudioProcessor::isMidiEffect() const
-{
+bool PeakEaterAudioProcessor::isMidiEffect() const {
 #if JucePlugin_IsMidiEffect
     return true;
 #else
@@ -86,63 +91,54 @@ bool PeakEaterAudioProcessor::isMidiEffect() const
 
 double PeakEaterAudioProcessor::getTailLengthSeconds() const { return 0.0; }
 
-int PeakEaterAudioProcessor::getNumPrograms()
-{
-    return 1; // NB: some hosts don't cope very well if you tell them there are 0
-        // programs,
-    // so this should be at least 1, even if you're not really implementing
-    // programs.
+int PeakEaterAudioProcessor::getNumPrograms() {
+    return 1;  // NB: some hosts don't cope very well if you tell them there are 0
+               // programs,
+               // so this should be at least 1, even if you're not really implementing
+               // programs.
 }
 
 int PeakEaterAudioProcessor::getCurrentProgram() { return 1; }
 
-void PeakEaterAudioProcessor::setCurrentProgram (int /* index */) {}
+void PeakEaterAudioProcessor::setCurrentProgram(int /* index */) {}
 
-const juce::String PeakEaterAudioProcessor::getProgramName (int /* index */) { return "default"; }
+const juce::String PeakEaterAudioProcessor::getProgramName(int /* index */) { return "default"; }
 
-void PeakEaterAudioProcessor::changeProgramName (int /* index */, const juce::String& /* newName */) {}
+void PeakEaterAudioProcessor::changeProgramName(int /* index */, juce::String const & /* newName */) {}
 
 //==============================================================================
-void PeakEaterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
-{
-    mWaveShaperController.onPostInputGain ([this] (auto& buffer) -> auto { mLevelMeterPostIn->updateLevels (buffer); });
-    mWaveShaperController.onPostCeiling ([this] (auto& buffer) -> auto
-                                         { mLevelMeterPostClipper->updateLevels (buffer); });
-    mWaveShaperController.onPostOutputGain ([this] (auto& buffer) -> auto
-                                            { mLevelMeterPostOut->updateLevels (buffer); });
-    mWaveShaperController.prepare ({ *mInputGain, *mOutputGain, *mCeiling, *mClippingType, *mOversampleRate },
-                                   { sampleRate, static_cast<juce::uint32> (samplesPerBlock), 2 });
-    mDryWetMixer.prepare ({ sampleRate, static_cast<juce::uint32> (samplesPerBlock), 2 });
+void PeakEaterAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
+    juce::dsp::ProcessSpec const spec{sampleRate, static_cast<juce::uint32>(samplesPerBlock), 2};
+    pe::processor::MainProcessor::EvenHandlers const handlers{
+        .postInput = std::bind_front(&pe::dsp::LevelMeter<float>::updateLevels, mLevelMeterPostIn),
+        .postClipping = std::bind_front(&pe::dsp::LevelMeter<float>::updateLevels, mLevelMeterPostClipper),
+        .postOutput = std::bind_front(&pe::dsp::LevelMeter<float>::updateLevels, mLevelMeterPostOut)};
+    mainProcessor.prepare(spec, handlers);
 }
 
-void PeakEaterAudioProcessor::releaseResources()
-{
+void PeakEaterAudioProcessor::releaseResources() {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    mWaveShaperController.unsubscribeFromAll();
-    mWaveShaperController.reset();
-    mDryWetMixer.reset();
+    mainProcessor.reset();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool PeakEaterAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
-{
+bool PeakEaterAudioProcessor::isBusesLayoutSupported(BusesLayout const &layouts) const {
 #if JucePlugin_IsMidiEffect
-    juce::ignoreUnused (layouts);
+    juce::ignoreUnused(layouts);
     return true;
 #else
     // This is the place where you check if the layout is supported.
     // In this template code we only support mono or stereo.
     // Some plugin hosts, such as certain GarageBand versions, will only
     // load plugins that support stereo bus layouts.
-    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
-        && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
+    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono() &&
+        layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
         // This checks if the input layout matches the output layout
-#if ! JucePlugin_IsSynth
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
-        return false;
+#if !JucePlugin_IsSynth
+    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet()) return false;
 #endif
 
     return true;
@@ -150,103 +146,60 @@ bool PeakEaterAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 }
 #endif
 
-void PeakEaterAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& /* midiMessages */)
-{
+void PeakEaterAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer & /* midiMessages */) {
     juce::ScopedNoDenormals noDenormals;
 
-    auto totalNumInputChannels = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-    {
-        buffer.clear (i, 0, buffer.getNumSamples());
-    }
-    mDryWetMixer.pushDrySamples (buffer);
-    if (*mLinkInOut)
-    {
-        float const inGainValue = *mInputGain;
-        float const outGainValue = *mOutputGain;
-        float const prevInGainValue = mWaveShaperController.getPreviousInputGain();
-        float const prevOutGainValue = mWaveShaperController.getPreviousOutputGain();
-        if (inGainValue != prevInGainValue) // Input gain changed, sync output
-        {
-            *mOutputGain = -inGainValue;
-        }
-        else if (outGainValue != prevOutGainValue) // Output gain changed, sync input
-        {
-            *mInputGain = -outGainValue;
-        }
-        else // nothing chnaged, sync out with in
-        {
-            *mOutputGain = -inGainValue;
-        }
-    }
-    mWaveShaperController.handleParametersChange (
-        { *mInputGain, *mOutputGain, *mCeiling, *mClippingType, *mOversampleRate });
-    if (! *mBypass)
-    {
-        mWaveShaperController.process (buffer);
-    }
-    mDryWetMixer.setWetMixProportion (*mDryWet);
-    mDryWetMixer.mixWetSamples (buffer);
+    mainProcessor.updateParameters({.inputGain = *mInputGain,
+                                    .factorOversampling = static_cast<size_t>(*mOversampleRate),
+                                    .clippingType = parameterChoiceToClippingType(*mClippingType),
+                                    .ceiling = *mCeiling,
+                                    .outputGain = *mOutputGain,
+                                    .dryWetProportion = *mDryWet});
+    juce::dsp::AudioBlock<float> audioBlock(buffer);
+    mainProcessor.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
 }
 
 //==============================================================================
-bool PeakEaterAudioProcessor::hasEditor() const
-{
-    return true; // (change this to false if you choose to not supply an editor)
+bool PeakEaterAudioProcessor::hasEditor() const {
+    return true;  // (change this to false if you choose to not supply an
+                  // editor)
 }
 
-juce::AudioProcessorEditor* PeakEaterAudioProcessor::createEditor()
-{
-    return new pe::PeakEaterAudioProcessorEditor (*this,
-                                                  mParameters,
-                                                  { .inputLevelMeter = mLevelMeterPostIn,
-                                                    .clippingLevelMeter = mLevelMeterPostClipper,
-                                                    .outputLevelMeter = mLevelMeterPostOut });
+juce::AudioProcessorEditor *PeakEaterAudioProcessor::createEditor() {
+    return new pe::PeakEaterAudioProcessorEditor(
+        *this, mParameters,
+        {.inputLevelMeter = mLevelMeterPostIn, .clippingLevelMeter = mLevelMeterPostClipper, .outputLevelMeter = mLevelMeterPostOut});
 }
 
 //==============================================================================
-void PeakEaterAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
-{
+void PeakEaterAudioProcessor::getStateInformation(juce::MemoryBlock &destData) {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
     auto state = mParameters->copyState();
-    std::unique_ptr<juce::XmlElement> xml (state.createXml());
-    copyXmlToBinary (*xml, destData);
+    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
-void PeakEaterAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
-{
+void PeakEaterAudioProcessor::setStateInformation(void const *data, int sizeInBytes) {
     // You should use this method to restore your parameters from this memory
     // block, whose contents will have been created by the getStateInformation()
     // call.
-    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
 
-    if (xmlState.get() != nullptr)
-    {
-        if (xmlState->hasTagName (mParameters->state.getType()))
-        {
-            mParameters->replaceState (juce::ValueTree::fromXml (*xmlState));
+    if (xmlState.get() != nullptr) {
+        if (xmlState->hasTagName(mParameters->state.getType())) {
+            mParameters->replaceState(juce::ValueTree::fromXml(*xmlState));
         }
     }
 }
 
-PeakEaterAudioProcessor::PluginSizeConstraints PeakEaterAudioProcessor::getPluginSizeConstraints() const
-{
-    return mPluginSizeConstraints;
-}
+PeakEaterAudioProcessor::PluginSizeConstraints PeakEaterAudioProcessor::getPluginSizeConstraints() const { return mPluginSizeConstraints; }
 
-void PeakEaterAudioProcessor::setPluginSizeState (PluginSizeState const&& pluginSizeState)
-{
-    mPluginSizeState = pluginSizeState;
-}
+void PeakEaterAudioProcessor::setPluginSizeState(PluginSizeState const &&pluginSizeState) { mPluginSizeState = pluginSizeState; }
 
-PeakEaterAudioProcessor::PluginSizeState PeakEaterAudioProcessor::getPluginSizeState() const
-{
-    return mPluginSizeState;
-}
+PeakEaterAudioProcessor::PluginSizeState PeakEaterAudioProcessor::getPluginSizeState() const { return mPluginSizeState; }
 
 //==============================================================================
 // This creates new instances of the plugin..
-juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter() { return new PeakEaterAudioProcessor(); }
+juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() { return new PeakEaterAudioProcessor(); }
