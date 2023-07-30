@@ -9,29 +9,23 @@
 #include "dial/ceilingdial/CeilingDial.h"
 #include "dial/gaindial/GainDial.h"
 
-namespace pe
-{
-namespace gui
-{
+namespace pe::gui {
 
-    class ControlPanel : public juce::Component
-    {
-    public:
-        ControlPanel (std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                      LevelMetersPack const& levelMetersPack);
+class ControlPanel : public juce::Component {
+   public:
+    ControlPanel(std::shared_ptr<juce::AudioProcessorValueTreeState> parameters, LevelMetersPack const& levelMetersPack);
 
-        void paint (juce::Graphics& g) override;
-        void resized() override;
+    void paint(juce::Graphics& g) override;
+    void resized() override;
 
-    private:
-        GainDial mDial_1;
-        Dial mDial_2;
-        CeilingDial mDial_3;
-        Dial mDial_4;
-        GainDial mDial_5;
-        Dial mDial_6;
+   private:
+    GainDial inputGain;
+    Dial clippingType;
+    CeilingDial ceiling;
+    Dial oversample;
+    Dial dryWet;
+    GainDial outputGain;
 
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ControlPanel)
-    };
-} // namespace gui
-} // namespace pe
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ControlPanel)
+};
+}  // namespace pe::gui
