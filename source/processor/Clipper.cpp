@@ -54,7 +54,6 @@ void Clipper<SampleType>::prepare(juce::dsp::ProcessSpec const& spec) {
     //-----------------------------------------------------------
     // Setup dry/wet
     dryWet.prepare(oversampledSpec);
-    dryWet.setMixingRule(juce::dsp::DryWetMixingRule::balanced);
     //-----------------------------------------------------------
     // Prepare wave shaper
     waveShaper.prepare(oversampledSpec);
