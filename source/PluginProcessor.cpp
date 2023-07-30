@@ -5,23 +5,39 @@
 
 //==============================================================================
 namespace {
-pe::processor::ClippingType parameterChoiceToClippingType(int const &parameterChoice) {
+[[nodiscard]] pe::processor::ClippingType parameterChoiceToClippingType(int const &parameterChoice) {
+    using ClippingType = pe::processor::ClippingType;
+    ClippingType clippingType = ClippingType::HARD;
     switch (parameterChoice) {
         case 0:
-            return pe::processor::ClippingType::HARD;
+            clippingType = ClippingType::HARD;
+            break;
         case 1:
-            return pe::processor::ClippingType::QUINTIC;
+            clippingType = ClippingType::QUINTIC;
+            break;
         case 2:
-            return pe::processor::ClippingType::CUBIC;
+            clippingType = ClippingType::CUBIC;
+            break;
         case 3:
-            return pe::processor::ClippingType::HYPERBOLIC_TAN;
+            clippingType = ClippingType::HYPERBOLIC_TAN;
+            break;
         case 4:
-            return pe::processor::ClippingType::ALGEBRAIC;
+            clippingType = ClippingType::ALGEBRAIC;
+            break;
         case 5:
-            return pe::processor::ClippingType::ARCTANGENT;
+            clippingType = ClippingType::ARCTANGENT;
+            break;
         default:
-            return pe::processor::ClippingType::HARD;
+            clippingType = ClippingType::HARD;
+            break;
     }
+    return clippingType;
+}
+//-----------------------------------------------------------
+// Return true if a and b almost equal(with tolerance)
+bool cmpf(float const a, float const b) {
+    float const epsilon = 0.005f;
+    return (::fabs(a - b) < epsilon);
 }
 }  // namespace
 
@@ -92,21 +108,25 @@ bool PeakEaterAudioProcessor::isMidiEffect() const {
 double PeakEaterAudioProcessor::getTailLengthSeconds() const { return 0.0; }
 
 int PeakEaterAudioProcessor::getNumPrograms() {
-    return 1;  // NB: some hosts don't cope very well if you tell them there are 0
-               // programs,
-               // so this should be at least 1, even if you're not really implementing
-               // programs.
+    // NB: some hosts don't cope very well if you tell them there are 0
+    // programs,
+    // so this should be at least 1, even if you're not really implementing
+    // programs.
+    return 1;
 }
 
 int PeakEaterAudioProcessor::getCurrentProgram() { return 1; }
 
-void PeakEaterAudioProcessor::setCurrentProgram(int /* index */) {}
+void PeakEaterAudioProcessor::setCurrentProgram(int /* index */) {
+    // Since we are not supporting presets
+}
 
 const juce::String PeakEaterAudioProcessor::getProgramName(int /* index */) { return "default"; }
 
-void PeakEaterAudioProcessor::changeProgramName(int /* index */, juce::String const & /* newName */) {}
+void PeakEaterAudioProcessor::changeProgramName(int /* index */, juce::String const & /* newName */) {
+    // Since we are not supporting presets
+}
 
-//==============================================================================
 void PeakEaterAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
     juce::dsp::ProcessSpec const spec{sampleRate, static_cast<juce::uint32>(samplesPerBlock), 2};
     pe::processor::MainProcessor::EvenHandlers const handlers{
@@ -133,12 +153,15 @@ bool PeakEaterAudioProcessor::isBusesLayoutSupported(BusesLayout const &layouts)
     // Some plugin hosts, such as certain GarageBand versions, will only
     // load plugins that support stereo bus layouts.
     if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono() &&
-        layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
+        layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo()) {
         return false;
+    }
 
-        // This checks if the input layout matches the output layout
+    // This checks if the input layout matches the output layout
 #if !JucePlugin_IsSynth
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet()) return false;
+    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet()) {
+        return false;
+    }
 #endif
 
     return true;
@@ -148,14 +171,45 @@ bool PeakEaterAudioProcessor::isBusesLayoutSupported(BusesLayout const &layouts)
 
 void PeakEaterAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer & /* midiMessages */) {
     juce::ScopedNoDenormals const noDenormals;
-
+    if (*mLinkInOut) {
+        //-----------------------------------------------------------
+        // We need to sync Input and Output.
+        // Sync means that Input and Output are having opposite values.
+        // For ex. when input = -16 then output = +16.
+        // First - detect which value has changed, it could be only one at time
+        float const nextInputGainValue = *mInputGain;
+        float const nextOutputGainValue = *mOutputGain;
+        float const currentInGainValue = mainProcessor.inputGain.getGainDecibels();
+        float const currentOutGainValue = mainProcessor.outputGain.getGainDecibels();
+        if (!cmpf(nextInputGainValue, currentInGainValue)) {
+            //-----------------------------------------------------------
+            // Input gain changed - sync output with it
+            *mOutputGain = -nextInputGainValue;
+        } else if (!cmpf(nextOutputGainValue, currentOutGainValue)) {
+            //-----------------------------------------------------------
+            // Output gain changed - sync input with it
+            *mInputGain = -nextOutputGainValue;
+        } else if (!cmpf(currentInGainValue, currentOutGainValue)) {
+            //-----------------------------------------------------------
+            // Nothing changed but link is on and current input is different
+            // from current output. Means we have turned link-in-out ON but
+            // haven't moved any slider yet, so we have to sync then now
+            *mOutputGain = -nextInputGainValue;
+        } else {
+            //-----------------------------------------------------------
+            // Everything already synced - do nothing
+        }
+    }
+    //-----------------------------------------------------------
+    // Propagate params to DSP
     mainProcessor.updateParameters({.inputGain = *mInputGain,
                                     .factorOversampling = static_cast<size_t>(*mOversampleRate),
                                     .clippingType = parameterChoiceToClippingType(*mClippingType),
                                     .ceiling = *mCeiling,
                                     .outputGain = *mOutputGain,
                                     .dryWetProportion = *mDryWet});
-
+    //-----------------------------------------------------------
+    // Avoid any processing when bypass enabled to save resources
     juce::dsp::AudioBlock<float> audioBlock(buffer);
     juce::dsp::ProcessContextReplacing const context(audioBlock);
     if (!*mBypass) {
@@ -163,7 +217,6 @@ void PeakEaterAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juc
     }
 }
 
-//==============================================================================
 bool PeakEaterAudioProcessor::hasEditor() const {
     // change this to false if you choose to not supply an editor
     return true;
@@ -175,13 +228,12 @@ juce::AudioProcessorEditor *PeakEaterAudioProcessor::createEditor() {
         {.inputLevelMeter = mLevelMeterPostIn, .clippingLevelMeter = mLevelMeterPostClipper, .outputLevelMeter = mLevelMeterPostOut});
 }
 
-//==============================================================================
 void PeakEaterAudioProcessor::getStateInformation(juce::MemoryBlock &destData) {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
-    auto state = mParameters->copyState();
-    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    auto const state = mParameters->copyState();
+    std::unique_ptr<juce::XmlElement> const xml(state.createXml());
     copyXmlToBinary(*xml, destData);
 }
 
@@ -189,12 +241,10 @@ void PeakEaterAudioProcessor::setStateInformation(void const *data, int sizeInBy
     // You should use this method to restore your parameters from this memory
     // block, whose contents will have been created by the getStateInformation()
     // call.
-    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+    std::unique_ptr<juce::XmlElement> const xmlState(getXmlFromBinary(data, sizeInBytes));
 
-    if (xmlState.get() != nullptr) {
-        if (xmlState->hasTagName(mParameters->state.getType())) {
-            mParameters->replaceState(juce::ValueTree::fromXml(*xmlState));
-        }
+    if ((xmlState.get() != nullptr) && (xmlState->hasTagName(mParameters->state.getType()))) {
+        mParameters->replaceState(juce::ValueTree::fromXml(*xmlState));
     }
 }
 

@@ -12,14 +12,14 @@ class PeakEaterAudioProcessor : public juce::AudioProcessor {
     PeakEaterAudioProcessor();
     ~PeakEaterAudioProcessor() override;
 
-    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int maximumExpectedSamplesPerBlock) override;
     void releaseResources() override;
 
 #ifndef JucePlugin_PreferredChannelConfigurations
     bool isBusesLayoutSupported(BusesLayout const& layouts) const override;
 #endif
 
-    void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+    void processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) override;
 
     juce::AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override;

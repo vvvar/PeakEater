@@ -147,6 +147,7 @@
         "bindirs",
         "buildenv",
         "cmaketoolchain",
+        "cmpf",
         "codesign",
         "cppstd",
         "Downsample",

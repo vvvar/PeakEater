@@ -31,7 +31,6 @@ class MainProcessor {
 
     void updateParameters(Parameters const&& parameters);
 
-   private:
     juce::dsp::Gain<float> inputGain;
     ClippingBlock<float> clippingBlock;
     juce::dsp::Gain<float> outputGain;
