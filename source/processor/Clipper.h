@@ -194,10 +194,10 @@ class Clipper {
         return static_cast<unsigned int>((sampleRate / 2.0) * 0.98);
     }
 
-    SampleType calculateQ(float const octaves) const noexcept {
+    SampleType calculateQ(size_t const octaves) const noexcept {
         // Maximum 4 octaves allowed, no negative octaves
-        jassert(octaves >= static_cast<SampleType>(0.0) & octaves <= static_cast<SampleType>(4.0));
-        return static_cast<SampleType>(1.0) / ::sqrtf(octaves);
+        jassert(octaves >= static_cast<SampleType>(0.0) && octaves <= static_cast<SampleType>(4.0));
+        return static_cast<SampleType>(1) / ::sqrt(static_cast<SampleType>(octaves));
     }
 
     //==============================================================================

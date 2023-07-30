@@ -147,7 +147,7 @@ bool PeakEaterAudioProcessor::isBusesLayoutSupported(BusesLayout const &layouts)
 #endif
 
 void PeakEaterAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer & /* midiMessages */) {
-    juce::ScopedNoDenormals noDenormals;
+    juce::ScopedNoDenormals const noDenormals;
 
     mainProcessor.updateParameters({.inputGain = *mInputGain,
                                     .factorOversampling = static_cast<size_t>(*mOversampleRate),
@@ -155,14 +155,18 @@ void PeakEaterAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juc
                                     .ceiling = *mCeiling,
                                     .outputGain = *mOutputGain,
                                     .dryWetProportion = *mDryWet});
+
     juce::dsp::AudioBlock<float> audioBlock(buffer);
-    mainProcessor.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+    juce::dsp::ProcessContextReplacing const context(audioBlock);
+    if (!*mBypass) {
+        mainProcessor.process(context);
+    }
 }
 
 //==============================================================================
 bool PeakEaterAudioProcessor::hasEditor() const {
-    return true;  // (change this to false if you choose to not supply an
-                  // editor)
+    // change this to false if you choose to not supply an editor
+    return true;
 }
 
 juce::AudioProcessorEditor *PeakEaterAudioProcessor::createEditor() {
