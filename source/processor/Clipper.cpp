@@ -84,6 +84,7 @@ template <typename SampleType>
 void Clipper<SampleType>::process(juce::dsp::ProcessContextReplacing<SampleType> const& context) {
     //-----------------------------------------------------------
     // Create oversampled context
+    // NOTE: When oversampling factor is 0 this will return normal audio block
     auto oversampledAudioBlock = oversampler.processSamplesUp(context.getInputBlock());
     auto oversampledContext = juce::dsp::ProcessContextReplacing<SampleType>(oversampledAudioBlock);
     //-----------------------------------------------------------
@@ -92,7 +93,12 @@ void Clipper<SampleType>::process(juce::dsp::ProcessContextReplacing<SampleType>
     // First, filter everything above Nyquist freq. Otherwise,
     // running these freq's through wave shaping function will
     // produce aliasing(even on oversampled signal)
-    preFilter.process(oversampledContext);
+    // NOTE: Relevant only for oversampled clipping since
+    //       applying this to the non-oversampled signal will
+    //       cut frequencies within the hearing spectrum
+    if (oversamplingFactor > 0) {
+        preFilter.process(oversampledContext);
+    }
     //-----------------------------------------------------------
     // Then, boost gain so that signal will activate sigmoid
     // function in wave shaper(and limit it)
@@ -114,7 +120,12 @@ void Clipper<SampleType>::process(juce::dsp::ProcessContextReplacing<SampleType>
     //-----------------------------------------------------------
     // Filter anything above Nyquist till the end of the spectrum
     // so that we will not abruptly cut them while down sampling
-    postFilter.process(oversampledContext);
+    // NOTE: Relevant only for oversampled clipping since
+    //       applying this to the non-oversampled signal will
+    //       cut frequencies within the hearing spectrum
+    if (oversamplingFactor > 0) {
+        postFilter.process(oversampledContext);
+    }
     //-----------------------------------------------------------
     // Finally, down sample everything to the original sample rate
     oversampler.processSamplesDown(context.getOutputBlock());
