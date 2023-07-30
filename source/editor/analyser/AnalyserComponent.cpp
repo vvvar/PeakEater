@@ -6,7 +6,7 @@
 
 #include "../ColourScheme.h"
 #include "../Utils.h"
-#include "processor/ClippingFunctions.h"
+#include "processor/Sigmoid.h"
 
 namespace pe {
 namespace gui {

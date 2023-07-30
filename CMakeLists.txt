@@ -31,6 +31,7 @@ target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
 
     # DSP
+    source/processor/Clipper.cpp
     source/processor/LevelMeter.cpp
 
     # GUI
