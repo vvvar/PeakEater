@@ -4,7 +4,9 @@ namespace pe::processor {
 
 void MainProcessor::prepare(juce::dsp::ProcessSpec const& spec, EvenHandlers const& handlers) {
     inputGain.prepare(spec);
-    clippingBlock.prepare(spec);
+    for (auto& clipper : clippers) {
+        clipper.prepare(spec);
+    }
     outputGain.prepare(spec);
     eventHandlers = handlers;
 }
@@ -18,7 +20,11 @@ void MainProcessor::process(juce::dsp::ProcessContextReplacing<float> const& con
     }
     //-----------------------------------------------------------
     // Clip & report post-clip levels
-    clippingBlock.process(context);
+    for (auto& clipper : clippers) {
+        if (clipper.getOversamplingFactor() == oversamplingFactor) {
+            clipper.process(context);
+        }
+    }
     if (eventHandlers.postClipping) {
         eventHandlers.postClipping(context.getOutputBlock());
     }
@@ -30,22 +36,26 @@ void MainProcessor::process(juce::dsp::ProcessContextReplacing<float> const& con
 }
 
 void MainProcessor::reset() {
+    // Reset DSP
+    outputGain.reset();
+    for (auto& clipper : clippers) {
+        clipper.reset();
+    }
+    inputGain.reset();
     // Unsubscribe handlers
     eventHandlers.postInput = nullptr;
     eventHandlers.postClipping = nullptr;
     eventHandlers.postOutput = nullptr;
-    // Reset DSP
-    outputGain.reset();
-    clippingBlock.reset();
-    inputGain.reset();
 }
 
 void MainProcessor::updateParameters(Parameters const&& parameters) {
     inputGain.setGainDecibels(parameters.inputGain);
-    clippingBlock.setOversamplingFactor(parameters.factorOversampling);
-    clippingBlock.setDryWetProportion(parameters.dryWetProportion);
-    clippingBlock.setClippingType(parameters.clippingType);
-    clippingBlock.setThreshold(parameters.ceiling);
+    oversamplingFactor = parameters.factorOversampling;
+    for (auto& clipper : clippers) {
+        clipper.setDryWetProportion(parameters.dryWetProportion);
+        clipper.setClippingType(parameters.clippingType);
+        clipper.setThreshold(parameters.ceiling);
+    }
     outputGain.setGainDecibels(parameters.outputGain);
 }
 

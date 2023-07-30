@@ -31,8 +31,12 @@ class MainProcessor {
 
     void updateParameters(Parameters const&& parameters);
 
+    //-----------------------------------------------------------
+    // Properties
+    size_t oversamplingFactor = 0;
     juce::dsp::Gain<float> inputGain;
-    ClippingBlock<float> clippingBlock;
+    std::array<Clipper<float>, 6> clippers{Clipper<float>{0}, Clipper<float>{1}, Clipper<float>{2},
+                                           Clipper<float>{3}, Clipper<float>{4}, Clipper<float>{5}};
     juce::dsp::Gain<float> outputGain;
     EvenHandlers eventHandlers;
 };
