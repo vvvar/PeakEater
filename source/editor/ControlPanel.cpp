@@ -38,7 +38,7 @@ void ControlPanel::resized() {
     using Item = juce::GridItem;
     grid.templateRows = {Track(Fr(1))};
     grid.templateColumns = {Track(Fr(1)), Track(Fr(1)), Track(Fr(1)), Track(Fr(1)), Track(Fr(1)), Track(Fr(1))};
-    grid.items = {Item(inputGain), Item(clippingType), Item(ceiling), Item(oversample), Item(dryWet), Item(outputGain)};
+    grid.items = {Item(inputGain), Item(clippingType), Item(ceiling), Item(dryWet), Item(oversample), Item(outputGain)};
     auto bounds = getLocalBounds();
     bounds.removeFromTop(5);
     bounds.removeFromLeft(5);
