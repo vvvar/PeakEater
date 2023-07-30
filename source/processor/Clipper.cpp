@@ -136,32 +136,31 @@ void Clipper<SampleType>::setThreshold(SampleType const threshold) {
 template <typename SampleType>
 void Clipper<SampleType>::setClippingType(ClippingType const type) {
     switch (type) {
-        using enum pe::processor::ClippingType;
-        case LOGARITHMIC:
+        case ClippingType::LOGARITHMIC:
             waveShaper.functionToUse = processor::logiclip;
             break;
-        case HARD:
+        case ClippingType::HARD:
             waveShaper.functionToUse = processor::hardclip;
             break;
-        case QUINTIC:
+        case ClippingType::QUINTIC:
             waveShaper.functionToUse = processor::quintic;
             break;
-        case CUBIC:
+        case ClippingType::CUBIC:
             waveShaper.functionToUse = processor::cubicBasic;
             break;
-        case HYPERBOLIC_TAN:
+        case ClippingType::HYPERBOLIC_TAN:
             waveShaper.functionToUse = processor::tanclip;
             break;
-        case ALGEBRAIC:
+        case ClippingType::ALGEBRAIC:
             waveShaper.functionToUse = processor::algClip;
             break;
-        case ARCTANGENT:
+        case ClippingType::ARCTANGENT:
             waveShaper.functionToUse = processor::arcClip;
             break;
-        case SIN:
+        case ClippingType::SIN:
             waveShaper.functionToUse = processor::sinclip;
             break;
-        case LIMIT:
+        case ClippingType::LIMIT:
             waveShaper.functionToUse = processor::limitclip;
             break;
         default:
