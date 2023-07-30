@@ -49,9 +49,11 @@ class Clipper {
 
     [[nodiscard]] size_t getOversamplingFactor() const;
 
+    juce::dsp::Oversampling<SampleType> oversampler;
+
    private:
     size_t oversamplingFactor = 0;
-    juce::dsp::Oversampling<SampleType> oversampler;
+
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<SampleType>, juce::dsp::IIR::Coefficients<SampleType>> preFilter;
     juce::dsp::Gain<SampleType> preGain;
     juce::dsp::DryWetMixer<SampleType> dryWet;

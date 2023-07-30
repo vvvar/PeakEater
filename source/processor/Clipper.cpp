@@ -105,14 +105,14 @@ void Clipper<SampleType>::process(juce::dsp::ProcessContextReplacing<SampleType>
     //-----------------------------------------------------------
     // Right before we've clipped the signal - remember dry signal.
     // We will use it to mix with clipped signal later on
-    dryWet.pushDrySamples(oversampledContext.getInputBlock());
+    // dryWet.pushDrySamples(oversampledContext.getInputBlock());
     //-----------------------------------------------------------
     // Finally, we can pass samples to the sigmoid and limit them
     waveShaper.process(oversampledContext);
     //-----------------------------------------------------------
     // Immediately mix them with dry signal to avoid any comb
     // filter effect because gain and filter has slight delays
-    dryWet.mixWetSamples(oversampledContext.getOutputBlock());
+    // dryWet.mixWetSamples(oversampledContext.getOutputBlock());
     //-----------------------------------------------------------
     // Bring original gain back
     postGain.process(oversampledContext);

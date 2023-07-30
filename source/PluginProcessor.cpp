@@ -130,6 +130,7 @@ void PeakEaterAudioProcessor::changeProgramName(int /* index */, juce::String co
 
 void PeakEaterAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
     juce::dsp::ProcessSpec const spec{sampleRate, static_cast<juce::uint32>(samplesPerBlock), 2};
+    dryWet.prepare(spec);
     inputGain.prepare(spec);
     for (auto &clipper : clippers) {
         clipper.prepare(spec);
@@ -140,6 +141,7 @@ void PeakEaterAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlo
 void PeakEaterAudioProcessor::releaseResources() {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    dryWet.reset();
     outputGain.reset();
     for (auto &clipper : clippers) {
         clipper.reset();
@@ -220,6 +222,7 @@ void PeakEaterAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juc
     juce::dsp::AudioBlock<float> audioBlock(buffer);
     juce::dsp::ProcessContextReplacing const context(audioBlock);
     if (!*mBypass) {
+        dryWet.pushDrySamples(context.getInputBlock());
         inputGain.process(context);
         mLevelMeterPostIn->updateLevels(context.getOutputBlock());
         for (auto &clipper : clippers) {
@@ -230,6 +233,13 @@ void PeakEaterAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juc
         mLevelMeterPostClipper->updateLevels(context.getOutputBlock());
         outputGain.process(context);
         mLevelMeterPostOut->updateLevels(context.getOutputBlock());
+        dryWet.setWetMixProportion(*mDryWet);
+        for (auto &clipper : clippers) {
+            if (clipper.getOversamplingFactor() == static_cast<size_t>(*mOversampleRate)) {
+                dryWet.setWetLatency(clipper.oversampler.getLatencyInSamples());
+            }
+        }
+        dryWet.mixWetSamples(context.getOutputBlock());
     }
 }
 
