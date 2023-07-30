@@ -9,7 +9,8 @@
 namespace pe {
 class PeakEaterAudioProcessorEditor : public juce::AudioProcessorEditor {
    public:
-    PeakEaterAudioProcessorEditor(PeakEaterAudioProcessor& audioProcessor, std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
+    PeakEaterAudioProcessorEditor(processor::PeakEaterAudioProcessor& audioProcessor,
+                                  std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
                                   gui::LevelMetersPack const&& levelMetersPack);
     ~PeakEaterAudioProcessorEditor() override;
 
@@ -18,7 +19,7 @@ class PeakEaterAudioProcessorEditor : public juce::AudioProcessorEditor {
 
    private:
     pe::gui::MainComponent mMainComponent;
-    PeakEaterAudioProcessor& mAudioProcessor;
+    processor::PeakEaterAudioProcessor& mAudioProcessor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PeakEaterAudioProcessorEditor)
 };

@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-namespace pe::shared {
+namespace pe::processor {
 
 namespace {
 template <typename T>
@@ -74,4 +74,4 @@ template <typename T>
 T limitclip(T x) noexcept {
     return juce::jlimit(-0.1f, 0.1f, x);
 }
-}  // namespace pe::shared
+}  // namespace pe::processor

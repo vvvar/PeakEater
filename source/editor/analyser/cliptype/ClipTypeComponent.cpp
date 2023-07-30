@@ -6,7 +6,7 @@
 
 #include "../../ColourScheme.h"
 #include "../../Utils.h"
-#include "shared/ClippingFunctions.h"
+#include "processor/ClippingFunctions.h"
 
 namespace pe::gui {
 namespace {
@@ -40,12 +40,12 @@ std::vector<float> generateClippedSineWave(std::function<float(float)> clippingF
 }  // namespace
 ClipTypeComponent::ClipTypeComponent(std::shared_ptr<juce::AudioProcessorValueTreeState> parameters) : mParameters(parameters) {
     mClippedWaveTables.emplace("DEFAULT", std::vector<float>());
-    mClippedWaveTables.emplace("HARD", generateClippedSineWave(shared::hardclip<float>));
-    mClippedWaveTables.emplace("QUINTIC", generateClippedSineWave(shared::quintic<float>));
-    mClippedWaveTables.emplace("CUBIC", generateClippedSineWave(shared::cubicBasic<float>));
-    mClippedWaveTables.emplace("TANGENT", generateClippedSineWave(shared::tanclip<float>));
-    mClippedWaveTables.emplace("ALGEBRAIC", generateClippedSineWave(shared::algClip<float>));
-    mClippedWaveTables.emplace("ARCTANGENT", generateClippedSineWave(shared::arcClip<float>));
+    mClippedWaveTables.emplace("HARD", generateClippedSineWave(processor::hardclip<float>));
+    mClippedWaveTables.emplace("QUINTIC", generateClippedSineWave(processor::quintic<float>));
+    mClippedWaveTables.emplace("CUBIC", generateClippedSineWave(processor::cubicBasic<float>));
+    mClippedWaveTables.emplace("TANGENT", generateClippedSineWave(processor::tanclip<float>));
+    mClippedWaveTables.emplace("ALGEBRAIC", generateClippedSineWave(processor::algClip<float>));
+    mClippedWaveTables.emplace("ARCTANGENT", generateClippedSineWave(processor::arcClip<float>));
 }
 
 ClipTypeComponent::~ClipTypeComponent() { setLookAndFeel(nullptr); }

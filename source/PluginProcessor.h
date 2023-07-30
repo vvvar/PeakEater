@@ -4,8 +4,10 @@
 
 #include <memory>
 
-#include "processor/MainProcessor.h"
-#include "shared/LevelMeter.h"
+#include "processor/Clipper.h"
+#include "processor/LevelMeter.h"
+
+namespace pe::processor {
 
 class PeakEaterAudioProcessor : public juce::AudioProcessor {
    public:
@@ -67,13 +69,19 @@ class PeakEaterAudioProcessor : public juce::AudioProcessor {
     juce::AudioParameterChoice* mOversampleRate;
     juce::AudioParameterFloat* mDryWet;
 
-    pe::processor::MainProcessor mainProcessor;
-    std::shared_ptr<pe::dsp::LevelMeter<float>> mLevelMeterPostIn;
-    std::shared_ptr<pe::dsp::LevelMeter<float>> mLevelMeterPostClipper;
-    std::shared_ptr<pe::dsp::LevelMeter<float>> mLevelMeterPostOut;
+    juce::dsp::Gain<float> inputGain;
+    std::array<Clipper<float>, 6> clippers{Clipper<float>{0}, Clipper<float>{1}, Clipper<float>{2},
+                                           Clipper<float>{3}, Clipper<float>{4}, Clipper<float>{5}};
+    juce::dsp::Gain<float> outputGain;
+
+    std::shared_ptr<processor::LevelMeter<float>> mLevelMeterPostIn;
+    std::shared_ptr<processor::LevelMeter<float>> mLevelMeterPostClipper;
+    std::shared_ptr<processor::LevelMeter<float>> mLevelMeterPostOut;
 
     PluginSizeConstraints mPluginSizeConstraints;
     PluginSizeState mPluginSizeState;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PeakEaterAudioProcessor)
 };
+
+}  // namespace pe::processor

@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-#include "shared/ClippingFunctions.h"
+#include "processor/ClippingFunctions.h"
 
 namespace pe::processor {
 
@@ -132,34 +132,34 @@ class Clipper {
     void setClippingType(ClippingType const type) {
         switch (type) {
             case ClippingType::LOGARITHMIC:
-                waveShaper.functionToUse = shared::logiclip;
+                waveShaper.functionToUse = processor::logiclip;
                 break;
             case ClippingType::HARD:
-                waveShaper.functionToUse = shared::hardclip;
+                waveShaper.functionToUse = processor::hardclip;
                 break;
             case ClippingType::QUINTIC:
-                waveShaper.functionToUse = shared::quintic;
+                waveShaper.functionToUse = processor::quintic;
                 break;
             case ClippingType::CUBIC:
-                waveShaper.functionToUse = shared::cubicBasic;
+                waveShaper.functionToUse = processor::cubicBasic;
                 break;
             case ClippingType::HYPERBOLIC_TAN:
-                waveShaper.functionToUse = shared::tanclip;
+                waveShaper.functionToUse = processor::tanclip;
                 break;
             case ClippingType::ALGEBRAIC:
-                waveShaper.functionToUse = shared::algClip;
+                waveShaper.functionToUse = processor::algClip;
                 break;
             case ClippingType::ARCTANGENT:
-                waveShaper.functionToUse = shared::arcClip;
+                waveShaper.functionToUse = processor::arcClip;
                 break;
             case ClippingType::SIN:
-                waveShaper.functionToUse = shared::sinclip;
+                waveShaper.functionToUse = processor::sinclip;
                 break;
             case ClippingType::LIMIT:
-                waveShaper.functionToUse = shared::limitclip;
+                waveShaper.functionToUse = processor::limitclip;
                 break;
             default:
-                waveShaper.functionToUse = shared::hardclip;
+                waveShaper.functionToUse = processor::hardclip;
                 break;
         }
     }

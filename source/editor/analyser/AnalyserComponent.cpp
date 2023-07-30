@@ -6,7 +6,7 @@
 
 #include "../ColourScheme.h"
 #include "../Utils.h"
-#include "shared/ClippingFunctions.h"
+#include "processor/ClippingFunctions.h"
 
 namespace pe {
 namespace gui {

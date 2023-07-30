@@ -4,13 +4,13 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
 #include "../Ticks.h"
-#include "shared/LevelMeter.h"
+#include "processor/LevelMeter.h"
 
 namespace pe {
 namespace gui {
 class LevelMeterComponent : public juce::Component {
    public:
-    LevelMeterComponent(std::shared_ptr<pe::dsp::LevelMeter<float>> levelMeter, std::shared_ptr<Ticks> ticks, std::string const& name);
+    LevelMeterComponent(std::shared_ptr<processor::LevelMeter<float>> levelMeter, std::shared_ptr<Ticks> ticks, std::string const& name);
     ~LevelMeterComponent() override;
 
     void resized() override;
@@ -36,7 +36,7 @@ class LevelMeterComponent : public juce::Component {
     std::string mName;
     LevelMeterTimer mMeterTimer;
     std::shared_ptr<Ticks> mTicks;
-    std::shared_ptr<pe::dsp::LevelMeter<float>> mLevelMeter;
+    std::shared_ptr<processor::LevelMeter<float>> mLevelMeter;
     juce::NormalisableRange<float> mRange;
     juce::LinearSmoothedValue<float> mSmoothedGain;
     juce::Label mLabel;

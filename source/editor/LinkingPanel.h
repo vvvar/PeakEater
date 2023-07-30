@@ -4,7 +4,7 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
 #include "linkinout/LinkInOut.h"
-#include "shared/LevelMeter.h"
+#include "processor/LevelMeter.h"
 
 namespace pe {
 namespace gui {

@@ -1,6 +1,6 @@
 #include "LevelMeter.h"
 
-namespace pe::dsp {
+namespace pe::processor {
 namespace {
 float constexpr gMinusInfinity = -36.0f;
 
@@ -43,4 +43,4 @@ std::tuple<std::atomic<T>&, std::atomic<T>&> LevelMeter<T>::getAmplification() {
 
 template class LevelMeter<float>;
 template class LevelMeter<double>;
-}  // namespace pe::dsp
+}  // namespace pe::shared

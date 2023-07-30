@@ -4,9 +4,10 @@
 #include "PluginEditor.h"
 
 //==============================================================================
+namespace pe::processor {
+
 namespace {
-[[nodiscard]] pe::processor::ClippingType parameterChoiceToClippingType(int const &parameterChoice) {
-    using ClippingType = pe::processor::ClippingType;
+[[nodiscard]] ClippingType parameterChoiceToClippingType(int const &parameterChoice) {
     ClippingType clippingType = ClippingType::HARD;
     switch (parameterChoice) {
         case 0:
@@ -70,9 +71,9 @@ PeakEaterAudioProcessor::PeakEaterAudioProcessor()
           mParameters->getParameter(pe::params::ParametersProvider::getInstance().getOversampleRate().getId().getParamID()))),
       mDryWet(static_cast<juce::AudioParameterFloat *>(
           mParameters->getParameter(pe::params::ParametersProvider::getInstance().getDryWet().getId().getParamID()))),
-      mLevelMeterPostIn(std::make_shared<pe::dsp::LevelMeter<float>>()),
-      mLevelMeterPostClipper(std::make_shared<pe::dsp::LevelMeter<float>>()),
-      mLevelMeterPostOut(std::make_shared<pe::dsp::LevelMeter<float>>()),
+      mLevelMeterPostIn(std::make_shared<processor::LevelMeter<float>>()),
+      mLevelMeterPostClipper(std::make_shared<processor::LevelMeter<float>>()),
+      mLevelMeterPostOut(std::make_shared<processor::LevelMeter<float>>()),
       mPluginSizeState({mPluginSizeConstraints.minWidth, mPluginSizeConstraints.minHeight}) {
 }
 
@@ -129,17 +130,21 @@ void PeakEaterAudioProcessor::changeProgramName(int /* index */, juce::String co
 
 void PeakEaterAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
     juce::dsp::ProcessSpec const spec{sampleRate, static_cast<juce::uint32>(samplesPerBlock), 2};
-    pe::processor::MainProcessor::EvenHandlers const handlers{
-        .postInput = std::bind_front(&pe::dsp::LevelMeter<float>::updateLevels, mLevelMeterPostIn),
-        .postClipping = std::bind_front(&pe::dsp::LevelMeter<float>::updateLevels, mLevelMeterPostClipper),
-        .postOutput = std::bind_front(&pe::dsp::LevelMeter<float>::updateLevels, mLevelMeterPostOut)};
-    mainProcessor.prepare(spec, handlers);
+    inputGain.prepare(spec);
+    for (auto &clipper : clippers) {
+        clipper.prepare(spec);
+    }
+    outputGain.prepare(spec);
 }
 
 void PeakEaterAudioProcessor::releaseResources() {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    mainProcessor.reset();
+    outputGain.reset();
+    for (auto &clipper : clippers) {
+        clipper.reset();
+    }
+    inputGain.reset();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -171,49 +176,60 @@ bool PeakEaterAudioProcessor::isBusesLayoutSupported(BusesLayout const &layouts)
 
 void PeakEaterAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer & /* midiMessages */) {
     juce::ScopedNoDenormals const noDenormals;
+    //-----------------------------------------------------------
+    // Handle link-in-out
     if (*mLinkInOut) {
         //-----------------------------------------------------------
-        // We need to sync Input and Output.
-        // Sync means that Input and Output are having opposite values.
+        // Linking means that Input and Output are having opposite values.
         // For ex. when input = -16 then output = +16.
         // First - detect which value has changed, it could be only one at time
         float const nextInputGainValue = *mInputGain;
         float const nextOutputGainValue = *mOutputGain;
-        float const currentInGainValue = mainProcessor.inputGain.getGainDecibels();
-        float const currentOutGainValue = mainProcessor.outputGain.getGainDecibels();
+        float const currentInGainValue = inputGain.getGainDecibels();
+        float const currentOutGainValue = outputGain.getGainDecibels();
         if (!cmpf(nextInputGainValue, currentInGainValue)) {
             //-----------------------------------------------------------
-            // Input gain changed - sync output with it
+            // Input gain changed - link output with it
             *mOutputGain = -nextInputGainValue;
         } else if (!cmpf(nextOutputGainValue, currentOutGainValue)) {
             //-----------------------------------------------------------
-            // Output gain changed - sync input with it
+            // Output gain changed - link input with it
             *mInputGain = -nextOutputGainValue;
         } else if (!cmpf(currentInGainValue, currentOutGainValue)) {
             //-----------------------------------------------------------
-            // Nothing changed but link is on and current input is different
-            // from current output. Means we have turned link-in-out ON but
-            // haven't moved any slider yet, so we have to sync then now
+            // Nor input not output has changed. but link is on and
+            // current input and output are still different. Means we
+            // have turned link-in-out ON but haven't moved any slider yet,
+            // so we have to sync then now
             *mOutputGain = -nextInputGainValue;
         } else {
-            //-----------------------------------------------------------
-            // Everything already synced - do nothing
+            // Already linked - do nothing
         }
     }
     //-----------------------------------------------------------
-    // Propagate params to DSP
-    mainProcessor.updateParameters({.inputGain = *mInputGain,
-                                    .factorOversampling = static_cast<size_t>(*mOversampleRate),
-                                    .clippingType = parameterChoiceToClippingType(*mClippingType),
-                                    .ceiling = *mCeiling,
-                                    .outputGain = *mOutputGain,
-                                    .dryWetProportion = *mDryWet});
+    // Propagate params to DSP processors
+    inputGain.setGainDecibels(*mInputGain);
+    for (auto &clipper : clippers) {
+        clipper.setClippingType(parameterChoiceToClippingType(*mClippingType));
+        clipper.setThreshold(*mCeiling);
+        clipper.setDryWetProportion(*mDryWet);
+    }
+    outputGain.setGainDecibels(*mOutputGain);
     //-----------------------------------------------------------
-    // Avoid any processing when bypass enabled to save resources
+    // Do actual DSP
     juce::dsp::AudioBlock<float> audioBlock(buffer);
     juce::dsp::ProcessContextReplacing const context(audioBlock);
     if (!*mBypass) {
-        mainProcessor.process(context);
+        inputGain.process(context);
+        mLevelMeterPostIn->updateLevels(context.getOutputBlock());
+        for (auto &clipper : clippers) {
+            if (clipper.getOversamplingFactor() == static_cast<size_t>(*mOversampleRate)) {
+                clipper.process(context);
+            }
+        }
+        mLevelMeterPostClipper->updateLevels(context.getOutputBlock());
+        outputGain.process(context);
+        mLevelMeterPostOut->updateLevels(context.getOutputBlock());
     }
 }
 
@@ -254,6 +270,8 @@ void PeakEaterAudioProcessor::setPluginSizeState(PluginSizeState const &&pluginS
 
 PeakEaterAudioProcessor::PluginSizeState PeakEaterAudioProcessor::getPluginSizeState() const { return mPluginSizeState; }
 
+}  // namespace pe::processor
+
 //==============================================================================
 // This creates new instances of the plugin..
-juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() { return new PeakEaterAudioProcessor(); }
+juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() { return new pe::processor::PeakEaterAudioProcessor(); }

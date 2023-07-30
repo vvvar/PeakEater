@@ -2,15 +2,15 @@
 
 #include "../Dial.h"
 #include "CeilingDialLookAndFeel.h"
-#include "shared/LevelMeter.h"
+#include "processor/LevelMeter.h"
 
 namespace pe {
 namespace gui {
 class CeilingDial : public Dial {
    public:
     CeilingDial(std::string const& labelText, std::shared_ptr<juce::AudioProcessorValueTreeState> parameters,
-                std::string const& parameterId, std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter,
-                std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter);
+                std::string const& parameterId, std::shared_ptr<processor::LevelMeter<float>> inputLevelMeter,
+                std::shared_ptr<processor::LevelMeter<float>> clippingLevelMeter);
     ~CeilingDial();
 
    private:

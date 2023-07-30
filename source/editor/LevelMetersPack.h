@@ -1,11 +1,11 @@
 #pragma once
 
-#include "shared/LevelMeter.h"
+#include "processor/LevelMeter.h"
 
 namespace pe::gui {
 struct LevelMetersPack {
-    std::shared_ptr<pe::dsp::LevelMeter<float>> inputLevelMeter;
-    std::shared_ptr<pe::dsp::LevelMeter<float>> clippingLevelMeter;
-    std::shared_ptr<pe::dsp::LevelMeter<float>> outputLevelMeter;
+    std::shared_ptr<processor::LevelMeter<float>> inputLevelMeter;
+    std::shared_ptr<processor::LevelMeter<float>> clippingLevelMeter;
+    std::shared_ptr<processor::LevelMeter<float>> outputLevelMeter;
 };
 }  // namespace pe::gui

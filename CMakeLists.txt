@@ -30,8 +30,8 @@ juce_add_plugin(${CMAKE_PROJECT_NAME}
 target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
 
-    # Units shared between GUI and DSP
-    source/shared/LevelMeter.cpp
+    # DSP
+    source/processor/LevelMeter.cpp
 
     # GUI
     source/editor/clipmeter/ClipMeter.cpp
@@ -60,9 +60,6 @@ target_sources(${CMAKE_PROJECT_NAME}
     source/editor/Header.cpp
     source/editor/WorkingPanel.cpp
     source/editor/MainComponent.cpp
-
-    # DSP
-    source/processor/MainProcessor.cpp
 
     # Entry point
     source/PluginEditor.cpp

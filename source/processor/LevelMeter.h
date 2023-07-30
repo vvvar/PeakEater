@@ -6,7 +6,7 @@
 #include <atomic>
 #include <tuple>
 
-namespace pe::dsp {
+namespace pe::processor {
 
 template <typename T>
 class LevelMeter {
@@ -24,4 +24,4 @@ class LevelMeter {
     std::atomic<T> mAmplificationR;
 };
 
-}  // namespace pe::dsp
+}  // namespace pe::processor
