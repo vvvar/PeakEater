@@ -41,22 +41,17 @@ class Clipper {
      */
     void setClippingType(ClippingType const type);
 
-    /*! \brief Set dry/wet mixing proportion.
-     *
-     * Signal would be mixed right after the wave shaping.
-     */
-    void setDryWetProportion(SampleType const proportion);
-
     [[nodiscard]] size_t getOversamplingFactor() const;
 
-    juce::dsp::Oversampling<SampleType> oversampler;
+    /*! \brief Get latency in samples */
+    [[nodiscard]] int getLatency() const;
 
    private:
     size_t oversamplingFactor = 0;
 
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<SampleType>, juce::dsp::IIR::Coefficients<SampleType>> preFilter;
     juce::dsp::Gain<SampleType> preGain;
-    juce::dsp::DryWetMixer<SampleType> dryWet;
+    juce::dsp::Oversampling<SampleType> oversampler;
     juce::dsp::WaveShaper<SampleType> waveShaper;
     juce::dsp::Gain<SampleType> postGain;
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<SampleType>, juce::dsp::IIR::Coefficients<SampleType>> postFilter;

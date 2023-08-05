@@ -52,9 +52,6 @@ void Clipper<SampleType>::prepare(juce::dsp::ProcessSpec const& spec) {
     preGain.prepare(oversampledSpec);
     preGain.setRampDurationSeconds(0.1f);
     //-----------------------------------------------------------
-    // Setup dry/wet
-    dryWet.prepare(oversampledSpec);
-    //-----------------------------------------------------------
     // Prepare wave shaper
     waveShaper.prepare(oversampledSpec);
     //-----------------------------------------------------------
@@ -73,7 +70,6 @@ void Clipper<SampleType>::reset() {
     oversampler.reset();
     preFilter.reset();
     preGain.reset();
-    dryWet.reset();
     waveShaper.reset();
     postGain.reset();
     postFilter.reset();
@@ -180,17 +176,13 @@ void Clipper<SampleType>::setClippingType(ClippingType const type) {
 }
 
 template <typename SampleType>
-void Clipper<SampleType>::setDryWetProportion(SampleType const proportion) {
-    // 0.0 - fully dry(un-clipped)
-    // 1.0 - fully wet(clipped)
-    // Everything above/beyond - incorrect
-    jassert(proportion >= static_cast<SampleType>(0.0) && proportion <= static_cast<SampleType>(1.0));
-    dryWet.setWetMixProportion(proportion);
+[[nodiscard]] size_t Clipper<SampleType>::getOversamplingFactor() const {
+    return oversamplingFactor;
 }
 
 template <typename SampleType>
-[[nodiscard]] size_t Clipper<SampleType>::getOversamplingFactor() const {
-    return oversamplingFactor;
+[[nodiscard]] int Clipper<SampleType>::getLatency() const {
+    return static_cast<int>(oversampler.getLatencyInSamples());
 }
 
 }  // namespace pe::processor

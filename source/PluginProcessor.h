@@ -69,7 +69,7 @@ class PeakEaterAudioProcessor : public juce::AudioProcessor {
     juce::AudioParameterChoice* mOversampleRate;
     juce::AudioParameterFloat* mDryWet;
 
-    juce::dsp::DryWetMixer<float> dryWet;
+    juce::dsp::DryWetMixer<float> dryWet{66};
     juce::dsp::Gain<float> inputGain;
     std::array<Clipper<float>, 6> clippers{Clipper<float>{0}, Clipper<float>{1}, Clipper<float>{2},
                                            Clipper<float>{3}, Clipper<float>{4}, Clipper<float>{5}};
