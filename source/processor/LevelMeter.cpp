@@ -11,7 +11,8 @@ T gMagnitudeToDecibels(T const& magnitude) {
 
 template <typename T>
 T gCalculateAmplification(juce::dsp::AudioBlock<T> const& audioBlock) {
-    return audioBlock.findMinAndMax().getEnd();
+    auto const range = audioBlock.findMinAndMax();
+    return juce::jmax(range.getStart(), -range.getStart(), range.getEnd(), -range.getEnd());
 }
 
 template <typename T>
@@ -43,4 +44,4 @@ std::tuple<std::atomic<T>&, std::atomic<T>&> LevelMeter<T>::getAmplification() {
 
 template class LevelMeter<float>;
 template class LevelMeter<double>;
-}  // namespace pe::shared
+}  // namespace pe::processor
