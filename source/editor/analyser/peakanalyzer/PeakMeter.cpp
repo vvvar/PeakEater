@@ -20,7 +20,7 @@ void PeakMeter::push(float const& nextValue) {
     mBuffer.push_back(nextValue);
 }
 
-float PeakMeter::getMaxPeak() { return *std::ranges::max_element(mBuffer); }
+float PeakMeter::getMaxPeak() { return *std::max_element(mBuffer.begin(), mBuffer.end()); }
 
 void PeakMeter::reset() {
     mBuffer.clear();

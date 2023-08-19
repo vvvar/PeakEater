@@ -217,7 +217,7 @@ void PeakEaterAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juc
         clipper.setThreshold(*mCeiling);
         if (clipper.getOversamplingFactor() == static_cast<size_t>(*mOversampleRate)) {
             auto const latency = clipper.getLatency();
-            setLatencySamples(latency);
+            setLatencySamples(static_cast<int>(latency));
             dryWet.setWetLatency(latency);
         }
     }
