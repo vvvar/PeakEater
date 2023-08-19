@@ -91,7 +91,12 @@
         "regex": "cpp",
         "valarray": "cpp",
         "random": "cpp",
-        "*.mm": "cpp"
+        "*.mm": "cpp",
+        "any": "cpp",
+        "charconv": "cpp",
+        "format": "cpp",
+        "__std_stream": "cpp",
+        "iterator": "cpp"
     },
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter"
@@ -150,6 +155,7 @@
         "cmpf",
         "codesign",
         "cppstd",
+        "DBFS",
         "Downsample",
         "hexlabs",
         "jassert",
@@ -165,6 +171,7 @@
         "Nyquist",
         "oversampled",
         "peakeater",
+        "PLOGD",
         "pluginval",
         "Polyphase",
         "resdirs",

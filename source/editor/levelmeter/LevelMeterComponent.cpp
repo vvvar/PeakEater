@@ -34,7 +34,7 @@ LevelMeterComponent::LevelMeterComponent(std::shared_ptr<processor::LevelMeter<f
       mTicks(ticks),
       mLevelMeter(levelMeter),
       mRange(-36.0f, 0.0f, 0.1f, 1.0f),
-      mSmoothedGain(levelMeter->getDecibels()),
+      mSmoothedGain(levelMeter->getDBFS()),
       mLabel() {
     auto const refreshRate = 60;
     mSmoothedGain.reset(refreshRate, 0.5f);
@@ -52,7 +52,7 @@ void LevelMeterComponent::paint(juce::Graphics& g) {
     auto const width = static_cast<float>(bounds.getWidth());
     auto const height = static_cast<float>(bounds.getHeight());
 
-    auto const dB = smoothDbValue(mLevelMeter->getDecibels(), mSmoothedGain);
+    auto const dB = smoothDbValue(mLevelMeter->getDBFS(), mSmoothedGain);
     auto const poxY = gDbToYPos(dB, height, mTicks->isLinear());
     auto const poxX = 0.0f;
 

@@ -33,10 +33,10 @@ ClipMeter::~ClipMeter() { setLookAndFeel (nullptr); }
 void ClipMeter::paint (juce::Graphics& g)
 {
     mInputBuffer.pop_front();
-    mInputBuffer.push_back (mInputLevelMeter->getDecibels());
+    mInputBuffer.push_back (mInputLevelMeter->getDBFS());
 
     mClippingBuffer.pop_front();
-    mClippingBuffer.push_back (mClippingLevelMeter->getDecibels());
+    mClippingBuffer.push_back (mClippingLevelMeter->getDBFS());
 
     g.fillAll (colourscheme::BackgroundPrimary);
     drawBuffer (mInputBuffer, colourscheme::ForegroundSecondary, g);

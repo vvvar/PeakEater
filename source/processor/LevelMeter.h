@@ -15,13 +15,10 @@ class LevelMeter {
 
     void updateLevels(juce::dsp::AudioBlock<T> const& audioBlock);
 
-    std::atomic<T>& getDecibels();
-    std::tuple<std::atomic<T>&, std::atomic<T>&> getAmplification();
+    std::atomic<T>& getDBFS();
 
    private:
-    std::atomic<T> mDecibels;
-    std::atomic<T> mAmplificationL;
-    std::atomic<T> mAmplificationR;
+    std::atomic<T> dbfs;
 };
 
 }  // namespace pe::processor

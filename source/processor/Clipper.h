@@ -44,7 +44,7 @@ class Clipper {
     [[nodiscard]] size_t getOversamplingFactor() const;
 
     /*! \brief Get latency in samples */
-    [[nodiscard]] int getLatency() const;
+    [[nodiscard]] SampleType getLatency() const;
 
    private:
     size_t oversamplingFactor = 0;

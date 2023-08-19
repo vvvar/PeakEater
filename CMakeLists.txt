@@ -66,7 +66,7 @@ target_sources(${CMAKE_PROJECT_NAME}
     source/PluginEditor.cpp
     source/PluginProcessor.cpp)
 
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE source)
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC source)
 
 target_compile_definitions(${CMAKE_PROJECT_NAME}
     PUBLIC

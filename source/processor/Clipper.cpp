@@ -14,7 +14,8 @@ template <typename T>
     // so that we have a steep cutoff that ends at the end of the spectrum
     auto const nyquistFrequency = static_cast<T>(sampleRate) / static_cast<T>(2.0);
     auto const smoothing = static_cast<T>(0.98);
-    return static_cast<T>(nyquistFrequency * smoothing);
+    auto const cutoff = static_cast<T>(nyquistFrequency * smoothing);
+    return cutoff;
 }
 
 [[nodiscard]] juce::dsp::ProcessSpec createOversampledSpec(juce::dsp::ProcessSpec const& src, size_t const oversamplingFactor) {
@@ -29,7 +30,7 @@ template <typename T>
 template <typename SampleType>
 Clipper<SampleType>::Clipper(size_t const oversampleFactorToUse)
     : oversamplingFactor(oversampleFactorToUse),
-      oversampler(2, oversampleFactorToUse, juce::dsp::Oversampling<SampleType>::FilterType::filterHalfBandFIREquiripple) {}
+      oversampler(2, oversampleFactorToUse, juce::dsp::Oversampling<SampleType>::FilterType::filterHalfBandFIREquiripple, false, true) {}
 
 template <typename SampleType>
 Clipper<SampleType>::Clipper() : Clipper(0) {}
@@ -99,16 +100,8 @@ void Clipper<SampleType>::process(juce::dsp::ProcessContextReplacing<SampleType>
     // function in wave shaper(and limit it)
     preGain.process(oversampledContext);
     //-----------------------------------------------------------
-    // Right before we've clipped the signal - remember dry signal.
-    // We will use it to mix with clipped signal later on
-    // dryWet.pushDrySamples(oversampledContext.getInputBlock());
-    //-----------------------------------------------------------
     // Finally, we can pass samples to the sigmoid and limit them
     waveShaper.process(oversampledContext);
-    //-----------------------------------------------------------
-    // Immediately mix them with dry signal to avoid any comb
-    // filter effect because gain and filter has slight delays
-    // dryWet.mixWetSamples(oversampledContext.getOutputBlock());
     //-----------------------------------------------------------
     // Bring original gain back
     postGain.process(oversampledContext);
@@ -181,8 +174,8 @@ template <typename SampleType>
 }
 
 template <typename SampleType>
-[[nodiscard]] int Clipper<SampleType>::getLatency() const {
-    return static_cast<int>(oversampler.getLatencyInSamples());
+[[nodiscard]] SampleType Clipper<SampleType>::getLatency() const {
+    return oversampler.getLatencyInSamples();
 }
 
 }  // namespace pe::processor

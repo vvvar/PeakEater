@@ -22,8 +22,8 @@ CeilingDialLookAndFeel::CeilingDialLookAndFeel(std::shared_ptr<processor::LevelM
     : mInputMeter(inputMeter),
       mClippingMeter(clippingMeter),
       mRange(-36.0f, 0.0f, 0.1f, 1.9f),
-      mSmoothedInput(inputMeter->getDecibels()),
-      mSmoothedClipping(clippingMeter->getDecibels()) {
+      mSmoothedInput(inputMeter->getDBFS()),
+      mSmoothedClipping(clippingMeter->getDBFS()) {
     auto const refreshRate = 20;
     mSmoothedInput.reset(refreshRate, 0.5f);
     mSmoothedClipping.reset(refreshRate, 0.5f);
@@ -32,9 +32,9 @@ CeilingDialLookAndFeel::CeilingDialLookAndFeel(std::shared_ptr<processor::LevelM
 void CeilingDialLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
                                               const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider) {
     DialLookAndFeel::drawRotarySlider(g, x, y, width, height, sliderPos, rotaryStartAngle, rotaryEndAngle, slider);
-    drawProgress(g, smoothDbValue(mInputMeter->getDecibels(), mSmoothedInput), colourscheme::ForegroundTertiary, x, y, width, height,
+    drawProgress(g, smoothDbValue(mInputMeter->getDBFS(), mSmoothedInput), colourscheme::ForegroundTertiary, x, y, width, height,
                  rotaryStartAngle, rotaryEndAngle);
-    //  drawProgress (g, smoothDbValue (mClippingMeter->getDecibels(), mSmoothedClipping), colourscheme::ForegroundTertiary, x, y, width,
+    //  drawProgress (g, smoothDbValue (mClippingMeter->getDBFS(), mSmoothedClipping), colourscheme::ForegroundTertiary, x, y, width,
     //  height, rotaryStartAngle, rotaryEndAngle);
     drawStick(g, x, y, width, height, sliderPos, rotaryStartAngle, rotaryEndAngle, slider);
 }
