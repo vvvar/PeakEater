@@ -29,35 +29,44 @@ juce_add_plugin(${CMAKE_PROJECT_NAME}
 
 target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
-    source/GUIv2/clipmeter/ClipMeter.cpp
-    source/GUIv2/editableparameter/EditableParameterComponentLookAndFeel.cpp
-    source/GUIv2/editableparameter/EditableLabelAttachment.cpp
-    source/GUIv2/editableparameter/EditableParameterComponent.cpp
-    source/GUIv2/dial/DialLookAndFeel.cpp
-    source/GUIv2/dial/Dial.cpp
-    source/GUIv2/dial/gaindial/GainDialLookAndFeel.cpp
-    source/GUIv2/dial/gaindial/GainDial.cpp
-    source/GUIv2/dial/ceilingdial/CeilingDial.cpp
-    source/GUIv2/dial/ceilingdial/CeilingDialLookAndFeel.cpp
-    source/GUIv2/linkinout/LinkInOut.cpp
-    source/GUIv2/bypass/BypassButton.cpp
-    source/GUIv2/scaling/ScalingSwitch.cpp
-    source/GUIv2/levelmeter/LevelMeterComponent.cpp
-    source/GUIv2/analyser/peakanalyzer/PeakMeter.cpp
-    source/GUIv2/analyser/peakanalyzer/PeakAnalyzerComponent.cpp
-    source/GUIv2/analyser/cliptype/ClipTypeComponent.cpp
-    source/GUIv2/analyser/AnalyserComponent.cpp
-    source/GUIv2/ControlPanel.cpp
-    source/GUIv2/LinkingPanel.cpp
-    source/GUIv2/LeftPanel.cpp
-    source/GUIv2/CentralPanel.cpp
-    source/GUIv2/RightPanel.cpp
-    source/GUIv2/Header.cpp
-    source/GUIv2/WorkingPanel.cpp
-    source/GUIv2/MainComponent.cpp
-    source/DSP/LevelMeter.cpp
+
+    # DSP
+    source/processor/Clipper.cpp
+    source/processor/LevelMeter.cpp
+
+    # GUI
+    source/editor/clipmeter/ClipMeter.cpp
+    source/editor/editableparameter/EditableParameterComponentLookAndFeel.cpp
+    source/editor/editableparameter/EditableLabelAttachment.cpp
+    source/editor/editableparameter/EditableParameterComponent.cpp
+    source/editor/dial/DialLookAndFeel.cpp
+    source/editor/dial/Dial.cpp
+    source/editor/dial/gaindial/GainDialLookAndFeel.cpp
+    source/editor/dial/gaindial/GainDial.cpp
+    source/editor/dial/ceilingdial/CeilingDial.cpp
+    source/editor/dial/ceilingdial/CeilingDialLookAndFeel.cpp
+    source/editor/linkinout/LinkInOut.cpp
+    source/editor/bypass/BypassButton.cpp
+    source/editor/scaling/ScalingSwitch.cpp
+    source/editor/levelmeter/LevelMeterComponent.cpp
+    source/editor/analyser/peakanalyzer/PeakMeter.cpp
+    source/editor/analyser/peakanalyzer/PeakAnalyzerComponent.cpp
+    source/editor/analyser/cliptype/ClipTypeComponent.cpp
+    source/editor/analyser/AnalyserComponent.cpp
+    source/editor/ControlPanel.cpp
+    source/editor/LinkingPanel.cpp
+    source/editor/LeftPanel.cpp
+    source/editor/CentralPanel.cpp
+    source/editor/RightPanel.cpp
+    source/editor/Header.cpp
+    source/editor/WorkingPanel.cpp
+    source/editor/MainComponent.cpp
+
+    # Entry point
     source/PluginEditor.cpp
     source/PluginProcessor.cpp)
+
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC source)
 
 target_compile_definitions(${CMAKE_PROJECT_NAME}
     PUBLIC
